@@ -66,37 +66,32 @@ ESP32 cần nạp firmware.
 
 ---
 
-## 📂 Cấu trúc Thẻ SD
+## 💻 FlashPorter: Trợ thủ Đắc lực (PC Tool)
 
-Thẻ SD (FAT32) cần có các file sau:
+Không cần chỉnh file JSON thủ công dễ sai sót!  
+Dự án đi kèm **tool FlashPorter** giúp bạn chuẩn bị thẻ SD **chỉ trong vài cú click**.
 
-- Các file firmware `.bin`
-- File `index.txt` ở thư mục gốc
+### ⚡ Chức năng của FlashPorter:
 
-### 🧩 Ví dụ `index.txt`
+- 📁 **Quản lý Thư viện:** Tổ chức các phiên bản firmware gọn gàng (Bootloader, Partition, App).  
+- 🔐 **Tự động MD5:** Tính toán hash MD5 đảm bảo nạp an toàn.  
+- 💾 **Xuất ra Thẻ SD:** Tạo cấu trúc thư mục chuẩn và file `index.txt` tự động.
 
-```json
-[
-  {
-    "fw_id": "FW_S3_V1.0",
-    "device_type": "ESP32-S3",
-    "version": "1.0.0",
-    "path": "/firmware/s3_app_v1.bin",
-    "md5": "a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4",
-    "path_bootloader": "/firmware/bootloader.bin",
-    "md5_bootloader": "b1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4",
-    "path_partition": "/firmware/partitions.bin",
-    "md5_partition": "c1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4"
-  },
-  {
-    "fw_id": "FW_C3_V2.1",
-    "device_type": "ESP32-C3",
-    "version": "2.1.0",
-    "path": "/app_c3_v21.bin",
-    "md5": "d1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4",
-    "path_bootloader": "/firmware/bootloader.bin",
-    "md5_bootloader": "b1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4",
-    "path_partition": "/firmware/partitions.bin",
-    "md5_partition": "c1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4"
-  }
-]
+### 🧠 Cách dùng:
+
+1. Mở **FlashPorter.exe** trên máy tính.  
+2. Nhập thông tin phiên bản (Ví dụ: `ESP32-S3_V1.0`).  
+3. Chọn các file `.bin` tương ứng (Bootloader, Partition, Firmware).  
+4. Nhấn **Export to SD Card** và chọn ổ đĩa thẻ nhớ của bạn.  
+   → Tool sẽ tự động tạo cấu trúc và file `index.txt`.
+
+### 📂 Cấu trúc Thẻ SD (Sau khi dùng FlashPorter)
+
+SD_ROOT/
+├── index.txt # File quản lý chính (Tự động tạo)
+├── FW_S3_V1/
+│ ├── app.bin
+│ ├── bootloader.bin
+│ └── partitions.bin
+└── FW_C3_V2/
+└── ...
