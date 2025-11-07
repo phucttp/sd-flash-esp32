@@ -85,6 +85,11 @@ Dự án đi kèm **tool FlashPorter** giúp bạn chuẩn bị thẻ SD **chỉ
 4. Nhấn **Export to SD Card** và chọn ổ đĩa thẻ nhớ của bạn.  
    → Tool sẽ tự động tạo cấu trúc và file `index.txt`.
 
+<p align="center">
+  <img src="image/host1.jpg" alt="System Diagram" width="600">
+</p>
+
+
 ### 📂 Cấu trúc Thẻ SD (Sau khi dùng FlashPorter)
 
 SD_ROOT/
