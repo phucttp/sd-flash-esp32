@@ -1,0 +1,64 @@
+[0;32mI (102) esp_image: segment 1: paddr=0001d3f8 vaddr=3fc8ccESP-ROM:esp32c3-api1-20210207
+Build:Feb  7 2021
+rst:0x15 (USB_UART_CHIP_RESET),boot:0xf (SPI_FAST_FLASH_BOOT)
+Saved PC:0x40383aec
+SPIWP:0xee
+mode:DIO, clock div:1
+load:0x3fcd5820,len:0x170c
+load:0x403cc710,len:0x968
+load:0x403ce710,len:0x2fa8
+entry 0x403cc710
+[0;32mI (24) boot: ESP-IDF v5.1.6-dirty 2nd stage bootloader[0m
+[0;32mI (24) boot: compile time Oct 16 2025 01:02:32[0m
+[0;32mI (25) boot: chip revision: v0.4[0m
+[0;32mI (28) boot.esp32c3: SPI Speed      : 80MHz[0m
+[0;32mI (33) boot.esp32c3: SPI Mode       : DIO[0m
+[0;32mI (37) boot.esp32c3: SPI Flash Size : 2MB[0m
+[0;32mI (42) boot: Enabling RNG early entropy source...[0m
+[0;32mI (47) boot: Partition Table:[0m
+[0;32mI (51) boot: ## Label            Usage          Type ST Offset   Length[0m
+[0;32mI (58) boot:  0 nvs              WiFi data        01 02 00009000 00006000[0m
+[0;32mI (66) boot:  1 phy_init         RF data          01 01 0000f000 00001000[0m
+[0;32mI (73) boot:  2 factory          factory app      00 00 00010000 00100000[0m
+[0;32mI (81) boot: End of partition table[0m
+[0;32mI (85) esp_image: segment 0: paddr=00010020 vaddr=3c040020 size=0d3d0h ( 54224) map[0m
+[0;32mI (102) esp_image: segment 1: paddr=0001d3f8 vaddr=3fc8cc00 size=013e0h (  5088) load[0m
+[0;32mI (104) esp_image: segment 2: paddr=0001e7e0 vaddr=40380000 size=01838h (  6200) load[0m
+[0;32mI (111) esp_image: segment 3: paddr=00020020 vaddr=42000020 size=30988h (199048) map[0m
+[0;32mI (151) esp_image: segment 4: paddr=000509b0 vaddr=40381838 size=0b23ch ( 45628) load[0m
+[0;32mI (164) boot: Loaded app from partition at offset 0x10000[0m
+[0;32mI (164) boot: Disabling RNG early entropy source...[0m
+[0;32mI (175) cpu_start: Unicore app[0m
+[0;32mI (176) cpu_start: Pro cpu up.[0m
+[0;32mI (186) cpu_start: Pro cpu start user code[0m
+[0;32mI (186) cpu_start: cpu freq: 160000000 Hz[0m
+[0;32mI (186) cpu_start: Application information:[0m
+[0;32mI (189) cpu_start: Project name:     ESP_MultiFlasher[0m
+[0;32mI (195) cpu_start: App version:      1[0m
+[0;32mI (199) cpu_start: Compile time:     Oct 16 2025 00:52:28[0m
+[0;32mI (205) cpu_start: ELF file SHA256:  d6059b532613e95d...[0m
+[0;32mI (211) cpu_start: ESP-IDF:          v5.1.6-dirty[0m
+[0;32mI (216) cpu_start: Min chip rev:     v0.3[0m
+[0;32mI (221) cpu_start: Max chip rev:     v1.99 [0m
+[0;32mI (226) cpu_start: Chip rev:         v0.4[0m
+[0;32mI (231) heap_init: Initializing. RAM available for dynamic allocation:[0m
+[0;32mI (238) heap_init: At 3FC8F2E0 len 00030D20 (195 KiB): DRAM[0m
+[0;32mI (244) heap_init: At 3FCC0000 len 0001C710 (113 KiB): DRAM/RETENTION[0m
+[0;32mI (251) heap_init: At 3FCDC710 len 00002950 (10 KiB): DRAM/RETENTION/STACK[0m
+[0;32mI (259) heap_init: At 50000010 len 00001FD8 (7 KiB): RTCRAM[0m
+[0;32mI (266) spi_flash: detected chip: generic[0m
+[0;32mI (270) spi_flash: flash io: dio[0m
+[0;33mW (274) spi_flash: Detected size(4096k) larger than the size in the binary image header(2048k). Using the size in the binary image header.[0m
+[0;32mI (287) sleep: Configure to isolate all GPIO pins in sleep state[0m
+[0;32mI (294) sleep: Enable automatic switching of GPIO sleep configuration[0m
+[0;32mI (301) app_start: Starting scheduler on CPU0[0m
+[0;32mI (306) main_task: Started on CPU0[0m
+[0;32mI (310) main_task: Calling app_main()[0m
+[0;32mI (1318) gpio: GPIO[4]| InputEn: 1| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (1318) gpio: GPIO[5]| InputEn: 1| OutputEn: 0| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (1326) gpio: GPIO[6]| InputEn: 1| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (1335) gpio: GPIO[7]| InputEn: 1| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (1355) SD_CARD: SD initialized OK![0m
+[0;32mI (1379) SD_ARDUINO: Write success![0m
+[  1380][E][vfs_api.cpp:99] open(): /sd/index.JSON does not exist, no permits for creation
+[0;31mE (1391) SD_METADATA: Failed to open metadata file[0m

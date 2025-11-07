@@ -1,0 +1,15 @@
+[0;33m--- Warning: GDB cannot open serial ports accessed as COMx[0m
+[0;33m--- Using \\.\COM10 instead...[0m
+[0;33m--- esp-idf-monitor 1.8.0 on \\.\COM10 115200[0m
+[0;33m--- Quit: Ctrl+] | Menu: Ctrl+T | Help: Ctrl+T followed by Ctrl+H[0m
+[0m--- 0x4004c0dc: [0;33muart_tx_one_char_uart.part.0[0m[0m in [0;32mROM[0m
+[0;33m--- Warning: Checksum mismatch between flashed and built applications. Checksum of built application is e31e9523eb9862168bc39b84a22dccde5a594713c7a11436fcd1fa503fe629fd[0m
+[0m--- 0x40048b82: [0;33msoftware_reset[0m[0m in [0;32mROM[0m
+[0;33m--- Warning: Checksum mismatch between flashed and built applications. Checksum of built application is e31e9523eb9862168bc39b84a22dccde5a594713c7a11436fcd1fa503fe629fd[0m
+[0m--- 0x40048b82: [0;33msoftware_reset[0m[0m in [0;32mROM[0m
+[0;33m--- Warning: Checksum mismatch between flashed and built applications. Checksum of built application is e31e9523eb9862168bc39b84a22dccde5a594713c7a11436fcd1fa503fe629fd[0m
+[0m--- 0x40048b82: [0;33msoftware_reset[0m[0m in [0;32mROM[0m
+[0;33m--- Warning: Checksum mismatch between flashed and built applications. Checksum of built application is e31e9523eb9862168bc39b84a22dccde5a594713c7a11436fcd1fa503fe629fd[0m
+[0m--- 0x40048b82: [0;33msoftware_reset[0m[0m in [0;32mROM[0m
+[0;33m--- Warning: Checksum mismatch between flashed and built applications. Checksum of built application is e31e9523eb9862168bc39b84a22dccde5a594713c7a11436fcd1fa503fe629fd[0m
+[0m

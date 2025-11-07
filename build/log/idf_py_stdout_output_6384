@@ -1,0 +1,610 @@
+[0;32mI (105) esp_image: segment 1: paddr=00021788 vaddr=3fc8e2ESP-ROM:esp32c3-api1-20210207
+Build:Feb  7 2021
+rst:0x15 (USB_UART_CHIP_RESET),boot:0xf (SPI_FAST_FLASH_BOOT)
+Saved PC:0x40383f90
+SPIWP:0xee
+mode:DIO, clock div:1
+load:0x3fcd5820,len:0x170c
+load:0x403cc710,len:0x968
+load:0x403ce710,len:0x2fa8
+entry 0x403cc710
+[0;32mI (24) boot: ESP-IDF v5.1.6-dirty 2nd stage bootloader[0m
+[0;32mI (24) boot: compile time Oct 16 2025 01:02:32[0m
+[0;32mI (25) boot: chip revision: v0.4[0m
+[0;32mI (28) boot.esp32c3: SPI Speed      : 80MHz[0m
+[0;32mI (33) boot.esp32c3: SPI Mode       : DIO[0m
+[0;32mI (37) boot.esp32c3: SPI Flash Size : 2MB[0m
+[0;32mI (42) boot: Enabling RNG early entropy source...[0m
+[0;32mI (47) boot: Partition Table:[0m
+[0;32mI (51) boot: ## Label            Usage          Type ST Offset   Length[0m
+[0;32mI (58) boot:  0 nvs              WiFi data        01 02 00009000 00006000[0m
+[0;32mI (66) boot:  1 phy_init         RF data          01 01 0000f000 00001000[0m
+[0;32mI (73) boot:  2 factory          factory app      00 00 00010000 00100000[0m
+[0;32mI (81) boot: End of partition table[0m
+[0;32mI (85) esp_image: segment 0: paddr=00010020 vaddr=3c040020 size=11760h ( 71520) map[0m
+[0;32mI (105) esp_image: segment 1: paddr=00021788 vaddr=3fc8e200 size=01420h (  5152) load[0m
+[0;32mI (106) esp_image: segment 2: paddr=00022bb0 vaddr=40380000 size=0d468h ( 54376) load[0m
+[0;32mI (121) esp_image: segment 3: paddr=00030020 vaddr=42000020 size=3e034h (254004) map[0m
+[0;32mI (163) esp_image: segment 4: paddr=0006e05c vaddr=4038d468 size=00c80h (  3200) load[0m
+[0;32mI (168) boot: Loaded app from partition at offset 0x10000[0m
+[0;32mI (168) boot: Disabling RNG early entropy source...[0m
+[0;32mI (183) cpu_start: Unicore app[0m
+[0;32mI (183) cpu_start: Pro cpu up.[0m
+[0;32mI (192) cpu_start: Pro cpu start user code[0m
+[0;32mI (192) cpu_start: cpu freq: 160000000 Hz[0m
+[0;32mI (192) cpu_start: Application information:[0m
+[0;32mI (195) cpu_start: Project name:     ESP_MultiFlasher[0m
+[0;32mI (200) cpu_start: App version:      1[0m
+[0;32mI (205) cpu_start: Compile time:     Oct 16 2025 00:52:28[0m
+[0;32mI (211) cpu_start: ELF file SHA256:  81e2d18668c80579...[0m
+[0;32mI (217) cpu_start: ESP-IDF:          v5.1.6-dirty[0m
+[0;32mI (222) cpu_start: Min chip rev:     v0.3[0m
+[0;32mI (227) cpu_start: Max chip rev:     v1.99 [0m
+[0;32mI (232) cpu_start: Chip rev:         v0.4[0m
+[0;32mI (237) heap_init: Initializing. RAM available for dynamic allocation:[0m
+[0;32mI (244) heap_init: At 3FC90B30 len 0002F4D0 (189 KiB): DRAM[0m
+[0;32mI (250) heap_init: At 3FCC0000 len 0001C710 (113 KiB): DRAM/RETENTION[0m
+[0;32mI (257) heap_init: At 3FCDC710 len 00002950 (10 KiB): DRAM/RETENTION/STACK[0m
+[0;32mI (265) heap_init: At 50000010 len 00001FD8 (7 KiB): RTCRAM[0m
+[0;32mI (272) spi_flash: detected chip: generic[0m
+[0;32mI (276) spi_flash: flash io: dio[0m
+[0;33mW (279) spi_flash: Detected size(4096k) larger than the size in the binary image header(2048k). Using the size in the binary image header.[0m
+[0;32mI (293) sleep: Configure to isolate all GPIO pins in sleep state[0m
+[0;32mI (299) sleep: Enable automatic switching of GPIO sleep configuration[0m
+[0;32mI (307) app_start: Starting scheduler on CPU0[0m
+[0;32mI (312) main_task: Started on CPU0[0m
+[0;32mI (316) main_task: Calling app_main()[0m
+[0;32mI (324) MAIN: --- BAT DAU KHOI DONG HE THONG ---[0m
+[0;32mI (842) gpio: GPIO[4]| InputEn: 1| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (843) gpio: GPIO[5]| InputEn: 1| OutputEn: 0| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (850) gpio: GPIO[6]| InputEn: 1| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (859) gpio: GPIO[7]| InputEn: 1| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (879) SD_CARD: SD initialized OK![0m
+[0;32mI (1443) SD_CARD: Tải Metadata hoàn tất. Tổng cộng 7 firmware được tải.[0m
+[0;32mI (1444) MAIN: Dang lay menu tu sd_card module...[0m
+[0;32mI (1446) gpio: GPIO[21]| InputEn: 1| OutputEn: 0| OpenDrain: 0| Pullup: 1| Pulldown: 0| Intr:0 [0m
+[0;32mI (1456) gpio: GPIO[20]| InputEn: 1| OutputEn: 0| OpenDrain: 0| Pullup: 1| Pulldown: 0| Intr:0 [0m
+[0;32mI (1465) gpio: GPIO[10]| InputEn: 1| OutputEn: 0| OpenDrain: 0| Pullup: 1| Pulldown: 0| Intr:0 [0m
+[0;32mI (1489) MAIN: Khoi dong hoan tat. Hien thi menu.[0m
+[0;32mI (4205) MAIN: Da chon: Index 4, FW ID: test_01[0m
+[0;32mI (4205) MAIN: Bat dau flash firmware: test_01[0m
+[0;32mI (4218) SD_CARD: SD initialized OK![0m
+[0;32mI (4232) gpio: GPIO[2]| InputEn: 0| OutputEn: 0| OpenDrain: 0| Pullup: 1| Pulldown: 0| Intr:0 [0m
+[0;32mI (4232) gpio: GPIO[3]| InputEn: 0| OutputEn: 0| OpenDrain: 0| Pullup: 1| Pulldown: 0| Intr:0 [0m
+[0;32mI (4240) FLASHER: UART connection initialized at baud rate 115200[0m
+[0;32mI (4246) MAIN: Flasher da san sang.[0m
+[0;32mI (4251) SD_METADATA: Firmware ID test_01 found: Path=/test_01/FW.bin, Version=v1.0[0m
+[0;32mI (4259) FLASHER: Reset sequence start...[0m
+[0;32mI (4734) FLASHER: Reset sequence done![0m
+[0;32mI (5212) FLASHER: Connected to target device.[0m
+[0;32mI (5216) FLASHER: Baudrate boosted to 460800[0m
+[0;32mI (5217) FLASHER: ==== Writing segment ====[0m
+[0;32mI (5217) FLASHER: File: /test_01/BOTL.bin | Offset: 0x00001000[0m
+[0;32mI (5244) FLASHER: Segment size: 24864 bytes[0m
+[0;32mI (5651) FLASHER: Progress: 16%[0m
+[0;32mI (5790) FLASHER: Progress: 32%[0m
+[0;32mI (5933) FLASHER: Progress: 49%[0m
+[0;32mI (6075) FLASHER: Progress: 65%[0m
+[0;32mI (6225) FLASHER: Progress: 82%[0m
+[0;32mI (6371) FLASHER: Progress: 98%[0m
+[0;32mI (6492) FLASHER: Progress: 100%[0m
+[0;32mI (6507) FLASHER: Segment written 24864 / 24864 bytes OK[0m
+[0;32mI (6546) FLASHER: MD5 verified OK for segment![0m
+[0;32mI (6546) FLASHER: Segment at 0x00001000 written successfully.[0m
+[0;32mI (6547) FLASHER: ==== Writing segment ====[0m
+[0;32mI (6551) FLASHER: File: /test_01/PART.bin | Offset: 0x00008000[0m
+[0;32mI (6579) FLASHER: Segment size: 3072 bytes[0m
+[0;32mI (6729) FLASHER: Progress: 100%[0m
+[0;32mI (6744) FLASHER: Segment written 3072 / 3072 bytes OK[0m
+[0;32mI (6752) FLASHER: MD5 verified OK for segment![0m
+[0;32mI (6753) FLASHER: Segment at 0x00008000 written successfully.[0m
+[0;32mI (6753) FLASHER: ==== Writing segment ====[0m
+[0;32mI (6758) FLASHER: File: /test_01/FW.bin | Offset: 0x00010000[0m
+[0;32mI (6785) FLASHER: Segment size: 124416 bytes[0m
+[0;32mI (8046) FLASHER: Progress: 3%[0m
+[0;32mI (8181) FLASHER: Progress: 6%[0m
+[0;32mI (8315) FLASHER: Progress: 9%[0m
+[0;32mI (8450) FLASHER: Progress: 13%[0m
+[0;32mI (8590) FLASHER: Progress: 16%[0m
+[0;32mI (8731) FLASHER: Progress: 19%[0m
+[0;32mI (8876) FLASHER: Progress: 23%[0m
+[0;32mI (9020) FLASHER: Progress: 26%[0m
+[0;32mI (9177) FLASHER: Progress: 29%[0m
+[0;32mI (9333) FLASHER: Progress: 32%[0m
+[0;32mI (9486) FLASHER: Progress: 36%[0m
+[0;32mI (9628) FLASHER: Progress: 39%[0m
+[0;32mI (9764) FLASHER: Progress: 42%[0m
+[0;32mI (9898) FLASHER: Progress: 46%[0m
+[0;32mI (10032) FLASHER: Progress: 49%[0m
+[0;32mI (10166) FLASHER: Progress: 52%[0m
+[0;32mI (10303) FLASHER: Progress: 55%[0m
+[0;32mI (10443) FLASHER: Progress: 59%[0m
+[0;32mI (10582) FLASHER: Progress: 62%[0m
+[0;32mI (10719) FLASHER: Progress: 65%[0m
+[0;32mI (10854) FLASHER: Progress: 69%[0m
+[0;32mI (10990) FLASHER: Progress: 72%[0m
+[0;32mI (11128) FLASHER: Progress: 75%[0m
+[0;32mI (11263) FLASHER: Progress: 79%[0m
+[0;32mI (11399) FLASHER: Progress: 82%[0m
+[0;32mI (11536) FLASHER: Progress: 85%[0m
+[0;32mI (11672) FLASHER: Progress: 88%[0m
+[0;32mI (11809) FLASHER: Progress: 92%[0m
+[0;32mI (11945) FLASHER: Progress: 95%[0m
+[0;32mI (12085) FLASHER: Progress: 98%[0m
+[0;32mI (12215) FLASHER: Progress: 100%[0m
+[0;32mI (12229) FLASHER: Segment written 124416 / 124416 bytes OK[0m
+[0;32mI (12408) FLASHER: MD5 verified OK for segment![0m
+[0;32mI (12408) FLASHER: Segment at 0x00010000 written successfully.[0m
+[0;32mI (12509) FLASHER: Resetting target to run app...[0m
+[0;32mI (12809) FLASHER: Target restarted in normal mode.[0m
+[0;32mI (12809) FLASHER: Full firmware update completed successfully![0m
+[0;32mI (12810) SD_CARD: SD Unmounted[0m
+[0;32mI (12813) MAIN: Flash hoan tat.[0m
+[0;32mI (15136) MAIN: Hello world!
+[0m
+[0;32mI (16136) MAIN: Hello world!
+[0m
+[0;32mI (17136) MAIN: Hello world!
+[0m
+[0;32mI (18136) MAIN: Hello world!
+[0m
+[0;32mI (19136) MAIN: Hello world!
+[0m
+[0;32mI (19808) MAIN: Da chon: Index 5, FW ID: qr4_01[0m
+[0;32mI (19808) MAIN: Bat dau flash firmware: qr4_01[0m
+[0;32mI (19821) gpio: GPIO[7]| InputEn: 1| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (19831) SD_CARD: SD initialized OK![0m
+[0;31mE (19845) uart: UART driver already installed[0m
+[0;31mE (19846) FLASHER: serial initialization failed.[0m
+[0;32mI (19846) MAIN: Flasher da san sang.[0m
+[0;32mI (19849) SD_METADATA: Firmware ID qr4_01 found: Path=/qr4_01/FW.bin, Version=v1[0m
+[0;32mI (19857) FLASHER: Reset sequence start...[0m
+[0;32mI (20136) MAIN: Hello world!
+[0m
+[0;32mI (20332) FLASHER: Reset sequence done![0m
+[0;31mE (20830) FLASHER: Failed to connect to target device.[0m
+[0;31mE (20830) MAIN: Flash that bai do loi flasher.[0m
+[0;32mI (21136) MAIN: Hello world!
+[0m
+[0;32mI (22136) MAIN: Hello world!
+[0m
+[0;32mI (23137) MAIN: Hello world!
+[0m
+[0;32mI (24137) MAIN: Hello world!
+[0m
+[0;32mI (25137) MAIN: Hello world!
+[0m
+[0;32mI (26137) MAIN: Hello world!
+[0m
+[0;32mI (27137) MAIN: Hello world!
+[0m
+[0;32mI (28137) MAIN: Hello world!
+[0m
+[0;32mI (29137) MAIN: Hello world!
+[0m
+[0;32mI (30137) MAIN: Hello world!
+[0m
+[0;32mI (31137) MAIN: Hello world!
+[0m
+[0;32mI (32137) MAIN: Hello world!
+[0m
+[0;32mI (33137) MAIN: Hello world!
+[0m
+[0;32mI (34137) MAIN: Hello world!
+[0m
+[0;32mI (35137) MAIN: Hello world!
+[0m
+[0;32mI (36137) MAIN: Hello world!
+[0m
+[0;32mI (37137) MAIN: Hello world!
+[0m
+[0;32mI (38137) MAIN: Hello world!
+[0m
+[0;32mI (39137) MAIN: Hello world!
+[0m
+[0;32mI (40137) MAIN: Hello world!
+[0m
+[0;32mI (41137) MAIN: Hello world!
+[0m
+[0;32mI (42137) MAIN: Hello world!
+[0m
+[0;32mI (43137) MAIN: Hello world!
+[0m
+[0;32mI (44137) MAIN: Hello world!
+[0m
+[0;32mI (45137) MAIN: Hello world!
+[0m
+[0;32mI (46137) MAIN: Hello world!
+[0m
+[0;32mI (47137) MAIN: Hello world!
+[0m
+[0;32mI (48137) MAIN: Hello world!
+[0m
+[0;32mI (49137) MAIN: Hello world!
+[0m
+[0;32mI (50137) MAIN: Hello world!
+[0m
+[0;32mI (51138) MAIN: Hello world!
+[0m
+[0;32mI (52138) MAIN: Hello world!
+[0m
+[0;32mI (53138) MAIN: Hello world!
+[0m
+[0;32mI (54138) MAIN: Hello world!
+[0m
+[0;32mI (55138) MAIN: Hello world!
+[0m
+[0;32mI (56138) MAIN: Hello world!
+[0m
+[0;32mI (57138) MAIN: Hello world!
+[0m
+[0;32mI (58138) MAIN: Hello world!
+[0m
+[0;32mI (59138) MAIN: Hello world!
+[0m
+[0;32mI (60138) MAIN: Hello world!
+[0m
+[0;32mI (61138) MAIN: Hello world!
+[0m
+[0;32mI (62138) MAIN: Hello world!
+[0m
+[0;32mI (63138) MAIN: Hello world!
+[0m
+[0;32mI (64138) MAIN: Hello world!
+[0m
+[0;32mI (65138) MAIN: Hello world!
+[0m
+[0;32mI (66138) MAIN: Hello world!
+[0m
+[0;32mI (67138) MAIN: Hello world!
+[0m
+[0;32mI (68138) MAIN: Hello world!
+[0m
+[0;32mI (69138) MAIN: Hello world!
+[0m
+[0;32mI (70138) MAIN: Hello world!
+[0m
+[0;32mI (71138) MAIN: Hello world!
+[0m
+[0;32mI (72138) MAIN: Hello world!
+[0m
+[0;32mI (73138) MAIN: Hello world!
+[0m
+[0;32mI (74138) MAIN: Hello world!
+[0m
+[0;32mI (75138) MAIN: Hello world!
+[0m
+[0;32mI (76138) MAIN: Hello world!
+[0m
+[0;32mI (77138) MAIN: Hello world!
+[0m
+[0;32mI (78139) MAIN: Hello world!
+[0m
+[0;32mI (79139) MAIN: Hello world!
+[0m
+[0;32mI (80139) MAIN: Hello world!
+[0m
+[0;32mI (81139) MAIN: Hello world!
+[0m
+[0;32mI (82139) MAIN: Hello world!
+[0m
+[0;32mI (83139) MAIN: Hello world!
+[0m
+[0;32mI (84139) MAIN: Hello world!
+[0m
+[0;32mI (85139) MAIN: Hello world!
+[0m
+[0;32mI (86139) MAIN: Hello world!
+[0m
+[0;32mI (87139) MAIN: Hello world!
+[0m
+[0;32mI (88139) MAIN: Hello world!
+[0m
+[0;32mI (89139) MAIN: Hello world!
+[0m
+[0;32mI (90139) MAIN: Hello world!
+[0m
+[0;32mI (91139) MAIN: Hello world!
+[0m
+[0;32mI (92139) MAIN: Hello world!
+[0m
+[0;32mI (93139) MAIN: Hello world!
+[0m
+[0;32mI (94139) MAIN: Hello world!
+[0m
+[0;32mI (95139) MAIN: Hello world!
+[0m
+[0;32mI (96139) MAIN: Hello world!
+[0m
+[0;32mI (97139) MAIN: Hello world!
+[0m
+[0;32mI (98139) MAIN: Hello world!
+[0m
+[0;32mI (99139) MAIN: Hello world!
+[0m
+[0;32mI (100139) MAIN: Hello world!
+[0m
+[0;32mI (101139) MAIN: Hello world!
+[0m
+[0;32mI (102139) MAIN: Hello world!
+[0m
+[0;32mI (103139) MAIN: Hello world!
+[0m
+[0;32mI (104139) MAIN: Hello world!
+[0m
+[0;32mI (105140) MAIN: Hello world!
+[0m
+[0;32mI (106140) MAIN: Hello world!
+[0m
+[0;32mI (107140) MAIN: Hello world!
+[0m
+[0;32mI (108140) MAIN: Hello world!
+[0m
+[0;32mI (109140) MAIN: Hello world!
+[0m
+[0;32mI (110140) MAIN: Hello world!
+[0m
+[0;32mI (111140) MAIN: Hello world!
+[0m
+[0;32mI (112140) MAIN: Hello world!
+[0m
+[0;32mI (113140) MAIN: Hello world!
+[0m
+[0;32mI (114140) MAIN: Hello world!
+[0m
+[0;32mI (115140) MAIN: Hello world!
+[0m
+[0;32mI (116140) MAIN: Hello world!
+[0m
+[0;32mI (117140) MAIN: Hello world!
+[0m
+[0;32mI (118140) MAIN: Hello world!
+[0m
+[0;32mI (119140) MAIN: Hello world!
+[0m
+[0;32mI (120140) MAIN: Hello world!
+[0m
+[0;32mI (121140) MAIN: Hello world!
+[0m
+[0;32mI (122140) MAIN: Hello world!
+[0m
+[0;32mI (123140) MAIN: Hello world!
+[0m
+[0;32mI (124140) MAIN: Hello world!
+[0m
+[0;32mI (125140) MAIN: Hello world!
+[0m
+[0;32mI (126140) MAIN: Hello world!
+[0m
+[0;32mI (127140) MAIN: Hello world!
+[0m
+[0;32mI (128140) MAIN: Hello world!
+[0m
+[0;32mI (129140) MAIN: Hello world!
+[0m
+[0;32mI (130140) MAIN: Hello world!
+[0m
+[0;32mI (131140) MAIN: Hello world!
+[0m
+[0;32mI (132141) MAIN: Hello world!
+[0m
+[0;32mI (133141) MAIN: Hello world!
+[0m
+[0;32mI (134141) MAIN: Hello world!
+[0m
+[0;32mI (135141) MAIN: Hello world!
+[0m
+[0;32mI (136141) MAIN: Hello world!
+[0m
+[0;32mI (137141) MAIN: Hello world!
+[0m
+[0;32mI (138141) MAIN: Hello world!
+[0m
+[0;32mI (139141) MAIN: Hello world!
+[0m
+[0;32mI (140141) MAIN: Hello world!
+[0m
+[0;32mI (141141) MAIN: Hello world!
+[0m
+[0;32mI (142141) MAIN: Hello world!
+[0m
+[0;32mI (143141) MAIN: Hello world!
+[0m
+[0;32mI (144141) MAIN: Hello world!
+[0m
+[0;32mI (145141) MAIN: Hello world!
+[0m
+[0;32mI (146141) MAIN: Hello world!
+[0m
+[0;32mI (147141) MAIN: Hello world!
+[0m
+[0;32mI (148141) MAIN: Hello world!
+[0m
+[0;32mI (149141) MAIN: Hello world!
+[0m
+[0;32mI (150141) MAIN: Hello world!
+[0m
+[0;32mI (151141) MAIN: Hello world!
+[0m
+[0;32mI (152141) MAIN: Hello world!
+[0m
+[0;32mI (153141) MAIN: Hello world!
+[0m
+[0;32mI (154141) MAIN: Hello world!
+[0m
+[0;32mI (155141) MAIN: Hello world!
+[0m
+[0;32mI (156141) MAIN: Hello world!
+[0m
+[0;32mI (157141) MAIN: Hello world!
+[0m
+[0;32mI (158141) MAIN: Hello world!
+[0m
+[0;32mI (159141) MAIN: Hello world!
+[0m
+[0;32mI (160142) MAIN: Hello world!
+[0m
+[0;32mI (161142) MAIN: Hello world!
+[0m
+[0;32mI (162142) MAIN: Hello world!
+[0m
+[0;32mI (163142) MAIN: Hello world!
+[0m
+[0;32mI (164142) MAIN: Hello world!
+[0m
+[0;32mI (165142) MAIN: Hello world!
+[0m
+[0;32mI (166142) MAIN: Hello world!
+[0m
+[0;32mI (167142) MAIN: Hello world!
+[0m
+[0;32mI (168142) MAIN: Hello world!
+[0m
+[0;32mI (169142) MAIN: Hello world!
+[0m
+[0;32mI (170142) MAIN: Hello world!
+[0m
+[0;32mI (171142) MAIN: Hello world!
+[0m
+[0;32mI (172142) MAIN: Hello world!
+[0m
+[0;32mI (173142) MAIN: Hello world!
+[0m
+[0;32mI (174142) MAIN: Hello world!
+[0m
+[0;32mI (175142) MAIN: Hello world!
+[0m
+[0;32mI (176142) MAIN: Hello world!
+[0m
+[0;32mI (177142) MAIN: Hello world!
+[0m
+[0;32mI (178142) MAIN: Hello world!
+[0m
+[0;32mI (179142) MAIN: Hello world!
+[0m
+[0;32mI (180142) MAIN: Hello world!
+[0m
+[0;32mI (181142) MAIN: Hello world!
+[0m
+[0;32mI (182142) MAIN: Hello world!
+[0m
+[0;32mI (183142) MAIN: Hello world!
+[0m
+[0;32mI (184142) MAIN: Hello world!
+[0m
+[0;32mI (185142) MAIN: Hello world!
+[0m
+[0;32mI (186142) MAIN: Hello world!
+[0m
+[0;32mI (187143) MAIN: Hello world!
+[0m
+[0;32mI (188143) MAIN: Hello world!
+[0m
+[0;32mI (189143) MAIN: Hello world!
+[0m
+[0;32mI (190143) MAIN: Hello world!
+[0m
+[0;32mI (191143) MAIN: Hello world!
+[0m
+[0;32mI (192143) MAIN: Hello world!
+[0m
+[0;32mI (193143) MAIN: Hello world!
+[0m
+[0;32mI (194143) MAIN: Hello world!
+[0m
+[0;32mI (195143) MAIN: Hello world!
+[0m
+[0;32mI (196143) MAIN: Hello world!
+[0m
+[0;32mI (197143) MAIN: Hello world!
+[0m
+[0;32mI (198143) MAIN: Hello world!
+[0m
+[0;32mI (199143) MAIN: Hello world!
+[0m
+[0;32mI (200143) MAIN: Hello world!
+[0m
+[0;32mI (201143) MAIN: Hello world!
+[0m
+[0;32mI (202143) MAIN: Hello world!
+[0m
+[0;32mI (203143) MAIN: Hello world!
+[0m
+[0;32mI (204143) MAIN: Hello world!
+[0m
+[0;32mI (205143) MAIN: Hello world!
+[0m
+[0;32mI (206143) MAIN: Hello world!
+[0m
+[0;32mI (207143) MAIN: Hello world!
+[0m
+[0;32mI (208143) MAIN: Hello world!
+[0m
+[0;32mI (209143) MAIN: Hello world!
+[0m
+[0;32mI (210143) MAIN: Hello world!
+[0m
+[0;32mI (211143) MAIN: Hello world!
+[0m
+[0;32mI (212143) MAIN: Hello world!
+[0m
+[0;32mI (213143) MAIN: Hello world!
+[0m
+[0;32mI (214144) MAIN: Hello world!
+[0m
+[0;32mI (215144) MAIN: Hello world!
+[0m
+[0;32mI (216144) MAIN: Hello world!
+[0m
+[0;32mI (217144) MAIN: Hello world!
+[0m
+[0;32mI (218144) MAIN: Hello world!
+[0m
+[0;32mI (219144) MAIN: Hello world!
+[0m
+[0;32mI (220144) MAIN: Hello world!
+[0m
+[0;32mI (221144) MAIN: Hello world!
+[0m
+[0;32mI (222144) MAIN: Hello world!
+[0m
+[0;32mI (223144) MAIN: Hello world!
+[0m
+[0;32mI (224144) MAIN: Hello world!
+[0m
+[0;32mI (225144) MAIN: Hello world!
+[0m
+[0;32mI (226144) MAIN: Hello world!
+[0m
+[0;32mI (227144) MAIN: Hello world!
+[0m
+[0;32mI (228144) MAIN: Hello world!
+[0m
+[0;32mI (229144) MAIN: Hello world!
+[0m
+[0;32mI (230144) MAIN: Hello world!
+[0m
+[0;32mI (231144) MAIN: Hello world!
+[0m
+[0;32mI (232144) MAIN: Hello world!
+[0m
+[0;32mI (233144) MAIN: Hello world!
+[0m
+[0;32mI (234144) MAIN: Hello world!
+[0m
+[0;32mI (235144) MAIN: Hello world!
+[0m
+[0;32mI (236144) MAIN: Hello world!
+[0m
+[0;32mI (237144) MAIN: Hello world!
+[0m
+[0;32mI (238144) MAIN: Hello world!
+[0m
+[0;32mI (239144) MAIN: Hello world!
+[0m
+[0;32mI (240144) MAIN: Hello world!
+[0m
+[0;32mI (241144) MAIN: Hello world!
+[0m
+[0;32mI (242145) MAIN: Hello world!
+[0m

@@ -1,0 +1,122 @@
+[0;32mI (104) esp_image: segment 1: paddr=0001f4f8 vaddr=3fc8dcESP-ROM:esp32c3-api1-20210207
+Build:Feb  7 2021
+rst:0x15 (USB_UART_CHIP_RESET),boot:0xf (SPI_FAST_FLASH_BOOT)
+Saved PC:0x40383aec
+SPIWP:0xee
+mode:DIO, clock div:1
+load:0x3fcd5820,len:0x170c
+load:0x403cc710,len:0x968
+load:0x403ce710,len:0x2fa8
+entry 0x403cc710
+[0;32mI (24) boot: ESP-IDF v5.1.6-dirty 2nd stage bootloader[0m
+[0;32mI (24) boot: compile time Oct 16 2025 01:02:32[0m
+[0;32mI (25) boot: chip revision: v0.4[0m
+[0;32mI (28) boot.esp32c3: SPI Speed      : 80MHz[0m
+[0;32mI (33) boot.esp32c3: SPI Mode       : DIO[0m
+[0;32mI (37) boot.esp32c3: SPI Flash Size : 2MB[0m
+[0;32mI (42) boot: Enabling RNG early entropy source...[0m
+[0;32mI (47) boot: Partition Table:[0m
+[0;32mI (51) boot: ## Label            Usage          Type ST Offset   Length[0m
+[0;32mI (58) boot:  0 nvs              WiFi data        01 02 00009000 00006000[0m
+[0;32mI (66) boot:  1 phy_init         RF data          01 01 0000f000 00001000[0m
+[0;32mI (73) boot:  2 factory          factory app      00 00 00010000 00100000[0m
+[0;32mI (81) boot: End of partition table[0m
+[0;32mI (85) esp_image: segment 0: paddr=00010020 vaddr=3c040020 size=0f4d0h ( 62672) map[0m
+[0;32mI (104) esp_image: segment 1: paddr=0001f4f8 vaddr=3fc8dc00 size=00b20h (  2848) load[0m
+[0;32mI (104) esp_image: segment 2: paddr=00020020 vaddr=42000020 size=397cch (235468) map[0m
+[0;32mI (148) esp_image: segment 3: paddr=000597f4 vaddr=3fc8e720 size=008d8h (  2264) load[0m
+[0;32mI (149) esp_image: segment 4: paddr=0005a0d4 vaddr=40380000 size=0da08h ( 55816) load[0m
+[0;32mI (169) boot: Loaded app from partition at offset 0x10000[0m
+[0;32mI (169) boot: Disabling RNG early entropy source...[0m
+[0;32mI (180) cpu_start: Unicore app[0m
+[0;32mI (181) cpu_start: Pro cpu up.[0m
+[0;32mI (191) cpu_start: Pro cpu start user code[0m
+[0;32mI (191) cpu_start: cpu freq: 160000000 Hz[0m
+[0;32mI (191) cpu_start: Application information:[0m
+[0;32mI (194) cpu_start: Project name:     ESP_MultiFlasher[0m
+[0;32mI (200) cpu_start: App version:      1[0m
+[0;32mI (204) cpu_start: Compile time:     Oct 16 2025 00:52:28[0m
+[0;32mI (210) cpu_start: ELF file SHA256:  d4dc656f18ee991c...[0m
+[0;32mI (216) cpu_start: ESP-IDF:          v5.1.6-dirty[0m
+[0;32mI (221) cpu_start: Min chip rev:     v0.3[0m
+[0;32mI (226) cpu_start: Max chip rev:     v1.99 [0m
+[0;32mI (231) cpu_start: Chip rev:         v0.4[0m
+[0;32mI (236) heap_init: Initializing. RAM available for dynamic allocation:[0m
+[0;32mI (243) heap_init: At 3FC90410 len 0002FBF0 (190 KiB): DRAM[0m
+[0;32mI (249) heap_init: At 3FCC0000 len 0001C710 (113 KiB): DRAM/RETENTION[0m
+[0;32mI (256) heap_init: At 3FCDC710 len 00002950 (10 KiB): DRAM/RETENTION/STACK[0m
+[0;32mI (264) heap_init: At 50000010 len 00001FD8 (7 KiB): RTCRAM[0m
+[0;32mI (271) spi_flash: detected chip: generic[0m
+[0;32mI (275) spi_flash: flash io: dio[0m
+[0;33mW (279) spi_flash: Detected size(4096k) larger than the size in the binary image header(2048k). Using the size in the binary image header.[0m
+[0;32mI (292) sleep: Configure to isolate all GPIO pins in sleep state[0m
+[0;32mI (299) sleep: Enable automatic switching of GPIO sleep configuration[0m
+[0;32mI (306) app_start: Starting scheduler on CPU0[0m
+[0;32mI (311) main_task: Started on CPU0[0m
+[0;32mI (315) main_task: Calling app_main()[0m
+[0;32mI (1323) gpio: GPIO[4]| InputEn: 1| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (1323) gpio: GPIO[5]| InputEn: 1| OutputEn: 0| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (1331) gpio: GPIO[6]| InputEn: 1| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (1340) gpio: GPIO[7]| InputEn: 1| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (1360) SD_CARD: SD initialized OK![0m
+[0;33mW (1376) SD_METADATA: Firmware entry without fw_id, skipping[0m
+[0;32mI (1377) SD_CARD: Tải Metadata hoàn tất. Tổng cộng 3 firmware được tải.[0m
+[0;32mI (1381) SD_METADATA: Firmware ID esp32_cam_v1 found: Path=/HELLO.bin, Version=1.0.2[0m
+[0;32mI (1390) gpio: GPIO[2]| InputEn: 0| OutputEn: 0| OpenDrain: 0| Pullup: 1| Pulldown: 0| Intr:0 [0m
+[0;32mI (1398) gpio: GPIO[3]| InputEn: 0| OutputEn: 0| OpenDrain: 0| Pullup: 1| Pulldown: 0| Intr:0 [0m
+[0;32mI (1407) FLASHER: UART connection initialized at baud rate 115200[0m
+[0;32mI (1414) SD_METADATA: Firmware ID esp32_cam_v1 found: Path=/HELLO.bin, Version=1.0.2[0m
+[0;32mI (1432) FLASHER: Firmware file opened: /HELLO.bin, size: 170512 bytes[0m
+[0;32mI (3715) FLASHER: Connected to target device.[0m
+[0;32mI (3716) FLASHER: Bắt đầu nạp 170512 bytes vào 0x10000...[0m
+[0;32mI (5505) FLASHER: Progress: 2%[0m
+[0;32mI (5914) FLASHER: Progress: 4%[0m
+[0;32mI (6321) FLASHER: Progress: 7%[0m
+[0;32mI (6729) FLASHER: Progress: 9%[0m
+[0;32mI (7137) FLASHER: Progress: 12%[0m
+[0;32mI (7545) FLASHER: Progress: 14%[0m
+[0;32mI (7953) FLASHER: Progress: 16%[0m
+[0;32mI (8361) FLASHER: Progress: 19%[0m
+[0;32mI (8769) FLASHER: Progress: 21%[0m
+[0;32mI (9179) FLASHER: Progress: 24%[0m
+[0;32mI (9589) FLASHER: Progress: 26%[0m
+[0;32mI (10001) FLASHER: Progress: 28%[0m
+[0;32mI (10415) FLASHER: Progress: 31%[0m
+[0;32mI (10827) FLASHER: Progress: 33%[0m
+[0;32mI (11238) FLASHER: Progress: 36%[0m
+[0;32mI (11649) FLASHER: Progress: 38%[0m
+[0;32mI (12060) FLASHER: Progress: 40%[0m
+[0;32mI (12471) FLASHER: Progress: 43%[0m
+[0;32mI (12881) FLASHER: Progress: 45%[0m
+[0;32mI (13291) FLASHER: Progress: 48%[0m
+[0;32mI (13701) FLASHER: Progress: 50%[0m
+[0;32mI (14113) FLASHER: Progress: 52%[0m
+[0;32mI (14523) FLASHER: Progress: 55%[0m
+[0;32mI (14933) FLASHER: Progress: 57%[0m
+[0;32mI (15346) FLASHER: Progress: 60%[0m
+[0;32mI (15759) FLASHER: Progress: 62%[0m
+[0;32mI (16170) FLASHER: Progress: 64%[0m
+[0;32mI (16583) FLASHER: Progress: 67%[0m
+[0;32mI (16997) FLASHER: Progress: 69%[0m
+[0;32mI (17408) FLASHER: Progress: 72%[0m
+[0;32mI (17821) FLASHER: Progress: 74%[0m
+[0;32mI (18236) FLASHER: Progress: 76%[0m
+[0;32mI (18646) FLASHER: Progress: 79%[0m
+[0;32mI (19059) FLASHER: Progress: 81%[0m
+[0;32mI (19472) FLASHER: Progress: 84%[0m
+[0;32mI (19885) FLASHER: Progress: 86%[0m
+[0;32mI (20296) FLASHER: Progress: 88%[0m
+[0;32mI (20707) FLASHER: Progress: 91%[0m
+[0;32mI (21119) FLASHER: Progress: 93%[0m
+[0;32mI (21528) FLASHER: Progress: 96%[0m
+[0;32mI (21939) FLASHER: Progress: 98%[0m
+[0;32mI (22344) FLASHER: Progress: 100%[0m
+[0;32mI (22344) FLASHER: Written 170512 / 170512 bytes, finalizing...[0m
+[0;32mI (22344) FLASHER: Verifying MD5: fc21d12c8ee87448e818b395eff3b98f[0m
+DEBUG: Error: MD5 checksum does not match
+DEBUG: Expected:
+DEBUG: �!�,��tH�������
+DEBUG: Actual:
+DEBUG: fc21d12c8ee87448e818b395eff3b98f
+[0;31mE (22927) FLASHER: MD5 Verification FAILED! Dữ liệu trên target KHÁC file gốc![0m
+[0;32mI (22936) main_task: Returned from app_main()[0m

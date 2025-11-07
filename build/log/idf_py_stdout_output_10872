@@ -1,0 +1,228 @@
+ESP-ROM:esp32c3-api1-20210207
+Build:Feb  7 2021
+rst:0x15 (USB_UART_CHIP_RESET),boot:0xf (SPI_FAST_FLASH_BOOT)
+Saved PC:0x420081ba
+SPIWP:0xee
+mode:DIO, clock div:1
+load:0x3fcd5820,len:0x170c
+load:0x403cc710,len:0x968
+load:0x403ce710,len:0x2fa8
+entry 0x403cc710
+[0;32mI (24) boot: ESP-IDF v5.1.6-dirty 2nd stage bootloader[0m
+[0;32mI (24) boot: compile time Oct 16 2025 01:02:32[0m
+[0;32mI (25) boot: chip revision: v0.4[0m
+[0;32mI (28) boot.esp32c3: SPI Speed      : 80MHz[0m
+[0;32mI (33) boot.esp32c3: SPI Mode       : DIO[0m
+[0;32mI (37) boot.esp32c3: SPI Flash Size : 2MB[0m
+[0;32mI (42) boot: Enabling RNG early entropy source...[0m
+[0;32mI (47) boot: Partition Table:[0m
+[0;32mI (51) boot: ## Label            Usage          Type ST Offset   Length[0m
+[0;32mI (58) boot:  0 nvs              WiFi data        01 02 00009000 00006000[0m
+[0;32mI (66) boot:  1 phy_init         RF data          01 01 0000f000 00001000[0m
+[0;32mI (73) boot:  2 factory          factory app      00 00 00010000 00100000[0m
+[0;32mI (81) boot: End of partition table[0m
+[0;32mI (85) esp_image: segment 0: paddr=00010020 vaddr=3c040020 size=11760h ( 71520) map[0m
+[0;32mI (105) esp_image: segment 1: paddr=00021788 vaddr=3fc8e200 size=01420h (  5152) load[0m
+[0;32mI (106) esp_image: segment 2: paddr=00022bb0 vaddr=40380000 size=0d468h ( 54376) load[0m
+[0;32mI (121) esp_image: segment 3: paddr=00030020 vaddr=42000020 size=3e034h (254004) map[0m
+[0;32mI (163) esp_image: segment 4: paddr=0006e05c vaddr=4038d468 size=00c80h (  3200) load[0m
+[0;32mI (168) boot: Loaded app from partition at offset 0x10000[0m
+[0;32mI (168) boot: Disabling RNG early entropy source...[0m
+[0;32mI (183) cpu_start: Unicore app[0m
+[0;32mI (183) cpu_start: Pro cpu up.[0m
+[0;32mI (192) cpu_start: Pro cpu start user code[0m
+[0;32mI (192) cpu_start: cpu freq: 160000000 Hz[0m
+[0;32mI (192) cpu_start: Application information:[0m
+[0;32mI (195) cpu_start: Project name:     ESP_MultiFlasher[0m
+[0;32mI (200) cpu_start: App version:      1[0m
+[0;32mI (205) cpu_start: Compile time:     Oct 16 2025 00:52:28[0m
+[0;32mI (211) cpu_start: ELF file SHA256:  7c6b67dd16a96edb...[0m
+[0;32mI (217) cpu_start: ESP-IDF:          v5.1.6-dirty[0m
+[0;32mI (222) cpu_start: Min chip rev:     v0.3[0m
+[0;32mI (227) cpu_start: Max chip rev:     v1.99 [0m
+[0;32mI (232) cpu_start: Chip rev:         v0.4[0m
+[0;32mI (237) heap_init: Initializing. RAM available for dynamic allocation:[0m
+[0;32mI (244) heap_init: At 3FC90B30 len 0002F4D0 (189 KiB): DRAM[0m
+[0;32mI (250) heap_init: At 3FCC0000 len 0001C710 (113 KiB): DRAM/RETENTION[0m
+[0;32mI (257) heap_init: At 3FCDC710 len 00002950 (10 KiB): DRAM/RETENTION/STACK[0m
+[0;32mI (265) heap_init: At 50000010 len 00001FD8 (7 KiB): RTCRAM[0m
+[0;32mI (272) spi_flash: detected chip: generic[0m
+[0;32mI (276) spi_flash: flash io: dio[0m
+[0;33mW (279) spi_flash: Detected size(4096k) larger than the size in the binary image header(2048k). Using the size in the binary image header.[0m
+[0;32mI (293) sleep: Configure to isolate all GPIO pins in sleep state[0m
+[0;32mI (299) sleep: Enable automatic switching of GPIO sleep configuration[0m
+[0;32mI (307) app_start: Starting scheduler on CPU0[0m
+[0;32mI (312) main_task: Started on CPU0[0m
+[0;32mI (316) main_task: Calling app_main()[0m
+[0;32mI (324) MAIN: --- BAT DAU KHOI DONG HE THONG ---[0m
+[0;32mI (842) gpio: GPIO[4]| InputEn: 1| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (843) gpio: GPIO[5]| InputEn: 1| OutputEn: 0| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (850) gpio: GPIO[6]| InputEn: 1| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (859) gpio: GPIO[7]| InputEn: 1| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (878) SD_CARD: SD initialized OK![0m
+[0;32mI (1442) SD_CARD: Tải Metadata hoàn tất. Tổng cộng 7 firmware được tải.[0m
+[0;32mI (1443) MAIN: Dang lay menu tu sd_card module...[0m
+[0;32mI (1445) gpio: GPIO[21]| InputEn: 1| OutputEn: 0| OpenDrain: 0| Pullup: 1| Pulldown: 0| Intr:0 [0m
+[0;32mI (1455) gpio: GPIO[20]| InputEn: 1| OutputEn: 0| OpenDrain: 0| Pullup: 1| Pulldown: 0| Intr:0 [0m
+[0;32mI (1464) gpio: GPIO[10]| InputEn: 1| OutputEn: 0| OpenDrain: 0| Pullup: 1| Pulldown: 0| Intr:0 [0m
+[0;32mI (1488) MAIN: Khoi dong hoan tat. Hien thi menu.[0m
+[0;32mI (20395) MAIN: Da chon: Index 4, FW ID: test_01[0m
+[0;32mI (20395) MAIN: Bat dau flash firmware: test_01[0m
+[0;32mI (20408) SD_CARD: SD initialized OK![0m
+[0;32mI (20422) gpio: GPIO[2]| InputEn: 0| OutputEn: 0| OpenDrain: 0| Pullup: 1| Pulldown: 0| Intr:0 [0m
+[0;32mI (20422) gpio: GPIO[3]| InputEn: 0| OutputEn: 0| OpenDrain: 0| Pullup: 1| Pulldown: 0| Intr:0 [0m
+[0;32mI (20430) FLASHER: UART connection initialized at baud rate 115200[0m
+[0;32mI (20437) MAIN: Flasher da san sang.[0m
+[0;32mI (20441) SD_METADATA: Firmware ID test_01 found: Path=/test_01/FW.bin, Version=v1.0[0m
+[0;32mI (20449) FLASHER: Reset sequence start...[0m
+[0;32mI (20924) FLASHER: Reset sequence done![0m
+[0;32mI (21601) FLASHER: Connected to target device.[0m
+[0;32mI (21605) FLASHER: Baudrate boosted to 460800[0m
+[0;32mI (21606) FLASHER: ==== Writing segment ====[0m
+[0;32mI (21606) FLASHER: File: /test_01/BOTL.bin | Offset: 0x00001000[0m
+[0;32mI (21633) FLASHER: Segment size: 24864 bytes[0m
+[0;32mI (22029) FLASHER: Progress: 16%[0m
+[0;32mI (22168) FLASHER: Progress: 32%[0m
+[0;32mI (22311) FLASHER: Progress: 49%[0m
+[0;32mI (22453) FLASHER: Progress: 65%[0m
+[0;32mI (22602) FLASHER: Progress: 82%[0m
+[0;32mI (22749) FLASHER: Progress: 98%[0m
+[0;32mI (22870) FLASHER: Progress: 100%[0m
+[0;32mI (22884) FLASHER: Segment written 24864 / 24864 bytes OK[0m
+[0;32mI (22924) FLASHER: MD5 verified OK for segment![0m
+[0;32mI (22924) FLASHER: Segment at 0x00001000 written successfully.[0m
+[0;32mI (22925) FLASHER: ==== Writing segment ====[0m
+[0;32mI (22929) FLASHER: File: /test_01/PART.bin | Offset: 0x00008000[0m
+[0;32mI (22957) FLASHER: Segment size: 3072 bytes[0m
+[0;32mI (23106) FLASHER: Progress: 100%[0m
+[0;32mI (23120) FLASHER: Segment written 3072 / 3072 bytes OK[0m
+[0;32mI (23129) FLASHER: MD5 verified OK for segment![0m
+[0;32mI (23130) FLASHER: Segment at 0x00008000 written successfully.[0m
+[0;32mI (23130) FLASHER: ==== Writing segment ====[0m
+[0;32mI (23135) FLASHER: File: /test_01/FW.bin | Offset: 0x00010000[0m
+[0;32mI (23163) FLASHER: Segment size: 124416 bytes[0m
+[0;32mI (24350) FLASHER: Progress: 3%[0m
+[0;32mI (24485) FLASHER: Progress: 6%[0m
+[0;32mI (24619) FLASHER: Progress: 9%[0m
+[0;32mI (24754) FLASHER: Progress: 13%[0m
+[0;32mI (24894) FLASHER: Progress: 16%[0m
+[0;32mI (25035) FLASHER: Progress: 19%[0m
+[0;32mI (25180) FLASHER: Progress: 23%[0m
+[0;32mI (25324) FLASHER: Progress: 26%[0m
+[0;32mI (25481) FLASHER: Progress: 29%[0m
+[0;32mI (25637) FLASHER: Progress: 32%[0m
+[0;32mI (25790) FLASHER: Progress: 36%[0m
+[0;32mI (25932) FLASHER: Progress: 39%[0m
+[0;32mI (26068) FLASHER: Progress: 42%[0m
+[0;32mI (26202) FLASHER: Progress: 46%[0m
+[0;32mI (26336) FLASHER: Progress: 49%[0m
+[0;32mI (26470) FLASHER: Progress: 52%[0m
+[0;32mI (26607) FLASHER: Progress: 55%[0m
+[0;32mI (26747) FLASHER: Progress: 59%[0m
+[0;32mI (26885) FLASHER: Progress: 62%[0m
+[0;32mI (27023) FLASHER: Progress: 65%[0m
+[0;32mI (27158) FLASHER: Progress: 69%[0m
+[0;32mI (27294) FLASHER: Progress: 72%[0m
+[0;32mI (27431) FLASHER: Progress: 75%[0m
+[0;32mI (27567) FLASHER: Progress: 79%[0m
+[0;32mI (27703) FLASHER: Progress: 82%[0m
+[0;32mI (27840) FLASHER: Progress: 85%[0m
+[0;32mI (27976) FLASHER: Progress: 88%[0m
+[0;32mI (28113) FLASHER: Progress: 92%[0m
+[0;32mI (28249) FLASHER: Progress: 95%[0m
+[0;32mI (28389) FLASHER: Progress: 98%[0m
+[0;32mI (28518) FLASHER: Progress: 100%[0m
+[0;32mI (28533) FLASHER: Segment written 124416 / 124416 bytes OK[0m
+[0;32mI (28711) FLASHER: MD5 verified OK for segment![0m
+[0;32mI (28712) FLASHER: Segment at 0x00010000 written successfully.[0m
+[0;32mI (28812) FLASHER: Resetting target to run app...[0m
+[0;32mI (29112) FLASHER: Target restarted in normal mode.[0m
+[0;32mI (29112) FLASHER: Full firmware update completed successfully![0m
+[0;32mI (29113) SD_CARD: SD Unmounted[0m
+[0;32mI (29116) MAIN: Flash hoan tat.[0m
+[0;32mI (31439) MAIN: Hello world!
+[0m
+[0;32mI (32440) MAIN: Hello world!
+[0m
+[0;32mI (33440) MAIN: Hello world!
+[0m
+[0;32mI (34440) MAIN: Hello world!
+[0m
+[0;32mI (35440) MAIN: Hello world!
+[0m
+[0;32mI (36440) MAIN: Hello world!
+[0m
+[0;32mI (37440) MAIN: Hello world!
+[0m
+[0;32mI (38440) MAIN: Hello world!
+[0m
+[0;32mI (39440) MAIN: Hello world!
+[0m
+[0;32mI (40440) MAIN: Hello world!
+[0m
+[0;32mI (41440) MAIN: Hello world!
+[0m
+[0;32mI (42440) MAIN: Hello world!
+[0m
+[0;32mI (43440) MAIN: Hello world!
+[0m
+[0;32mI (44440) MAIN: Hello world!
+[0m
+[0;32mI (45440) MAIN: Hello world!
+[0m
+[0;32mI (46440) MAIN: Hello world!
+[0m
+[0;32mI (47440) MAIN: Hello world!
+[0m
+[0;32mI (48440) MAIN: Hello world!
+[0m
+[0;32mI (49440) MAIN: Hello world!
+[0m
+[0;32mI (50440) MAIN: Hello world!
+[0m
+[0;32mI (51440) MAIN: Hello world!
+[0m
+[0;32mI (52440) MAIN: Hello world!
+[0m
+[0;32mI (53440) MAIN: Hello world!
+[0m
+[0;32mI (54440) MAIN: Hello world!
+[0m
+[0;32mI (55440) MAIN: Hello world!
+[0m
+[0;32mI (56440) MAIN: Hello world!
+[0m
+[0;32mI (57440) MAIN: Hello world!
+[0m
+[0;32mI (58440) MAIN: Hello world!
+[0m
+[0;32mI (59440) MAIN: Hello world!
+[0m
+[0;32mI (60441) MAIN: Hello world!
+[0m
+[0;32mI (61441) MAIN: Hello world!
+[0m
+[0;32mI (62441) MAIN: Hello world!
+[0m
+[0;32mI (63441) MAIN: Hello world!
+[0m
+[0;32mI (64441) MAIN: Hello world!
+[0m
+[0;32mI (65441) MAIN: Hello world!
+[0m
+[0;32mI (66441) MAIN: Hello world!
+[0m
+[0;32mI (67441) MAIN: Hello world!
+[0m
+[0;32mI (68441) MAIN: Hello world!
+[0m
+[0;32mI (69441) MAIN: Hello world!
+[0m
+[0;32mI (70441) MAIN: Hello world!
+[0m
+[0;32mI (71441) MAIN: Hello world!
+[0m
+[0;32mI (72441) MAIN: Hello world!
+[0m
+[0;32mI (73441) MAIN: Hello world!
+[0m

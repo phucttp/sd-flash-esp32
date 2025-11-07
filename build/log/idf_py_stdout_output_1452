@@ -1,0 +1,163 @@
+[0;32mI (105) esp_image: segment 1: paddr=00021820 vaddr=3fc8e2ESP-ROM:esp32c3-api1-20210207
+Build:Feb  7 2021
+rst:0x15 (USB_UART_CHIP_RESET),boot:0xf (SPI_FAST_FLASH_BOOT)
+Saved PC:0x40383f90
+SPIWP:0xee
+mode:DIO, clock div:1
+load:0x3fcd5820,len:0x170c
+load:0x403cc710,len:0x968
+load:0x403ce710,len:0x2fa8
+entry 0x403cc710
+[0;32mI (24) boot: ESP-IDF v5.1.6-dirty 2nd stage bootloader[0m
+[0;32mI (24) boot: compile time Oct 16 2025 01:02:32[0m
+[0;32mI (25) boot: chip revision: v0.4[0m
+[0;32mI (28) boot.esp32c3: SPI Speed      : 80MHz[0m
+[0;32mI (33) boot.esp32c3: SPI Mode       : DIO[0m
+[0;32mI (37) boot.esp32c3: SPI Flash Size : 2MB[0m
+[0;32mI (42) boot: Enabling RNG early entropy source...[0m
+[0;32mI (47) boot: Partition Table:[0m
+[0;32mI (51) boot: ## Label            Usage          Type ST Offset   Length[0m
+[0;32mI (58) boot:  0 nvs              WiFi data        01 02 00009000 00006000[0m
+[0;32mI (66) boot:  1 phy_init         RF data          01 01 0000f000 00001000[0m
+[0;32mI (73) boot:  2 factory          factory app      00 00 00010000 00100000[0m
+[0;32mI (81) boot: End of partition table[0m
+[0;32mI (85) esp_image: segment 0: paddr=00010020 vaddr=3c040020 size=117f8h ( 71672) map[0m
+[0;32mI (105) esp_image: segment 1: paddr=00021820 vaddr=3fc8e200 size=014c8h (  5320) load[0m
+[0;32mI (106) esp_image: segment 2: paddr=00022cf0 vaddr=40380000 size=0d328h ( 54056) load[0m
+[0;32mI (121) esp_image: segment 3: paddr=00030020 vaddr=42000020 size=3d30ch (250636) map[0m
+[0;32mI (162) esp_image: segment 4: paddr=0006d334 vaddr=4038d328 size=00dc0h (  3520) load[0m
+[0;32mI (167) boot: Loaded app from partition at offset 0x10000[0m
+[0;32mI (168) boot: Disabling RNG early entropy source...[0m
+[0;32mI (182) cpu_start: Unicore app[0m
+[0;32mI (183) cpu_start: Pro cpu up.[0m
+[0;32mI (193) cpu_start: Pro cpu start user code[0m
+[0;32mI (193) cpu_start: cpu freq: 160000000 Hz[0m
+[0;32mI (193) cpu_start: Application information:[0m
+[0;32mI (196) cpu_start: Project name:     ESP_MultiFlasher[0m
+[0;32mI (201) cpu_start: App version:      1[0m
+[0;32mI (206) cpu_start: Compile time:     Oct 16 2025 00:52:28[0m
+[0;32mI (212) cpu_start: ELF file SHA256:  79a010e4f1e9f3cd...[0m
+[0;32mI (218) cpu_start: ESP-IDF:          v5.1.6-dirty[0m
+[0;32mI (223) cpu_start: Min chip rev:     v0.3[0m
+[0;32mI (228) cpu_start: Max chip rev:     v1.99 [0m
+[0;32mI (233) cpu_start: Chip rev:         v0.4[0m
+[0;32mI (238) heap_init: Initializing. RAM available for dynamic allocation:[0m
+[0;32mI (245) heap_init: At 3FC90B30 len 0002F4D0 (189 KiB): DRAM[0m
+[0;32mI (251) heap_init: At 3FCC0000 len 0001C710 (113 KiB): DRAM/RETENTION[0m
+[0;32mI (258) heap_init: At 3FCDC710 len 00002950 (10 KiB): DRAM/RETENTION/STACK[0m
+[0;32mI (266) heap_init: At 50000010 len 00001FD8 (7 KiB): RTCRAM[0m
+[0;32mI (273) spi_flash: detected chip: generic[0m
+[0;32mI (277) spi_flash: flash io: dio[0m
+[0;33mW (280) spi_flash: Detected size(4096k) larger than the size in the binary image header(2048k). Using the size in the binary image header.[0m
+[0;32mI (294) sleep: Configure to isolate all GPIO pins in sleep state[0m
+[0;32mI (300) sleep: Enable automatic switching of GPIO sleep configuration[0m
+[0;32mI (308) app_start: Starting scheduler on CPU0[0m
+[0;32mI (313) main_task: Started on CPU0[0m
+[0;32mI (317) main_task: Calling app_main()[0m
+[0;32mI (325) MAIN: --- BAT DAU KHOI DONG HE THONG ---[0m
+[0;32mI (843) gpio: GPIO[4]| InputEn: 1| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (844) gpio: GPIO[5]| InputEn: 1| OutputEn: 0| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (851) gpio: GPIO[6]| InputEn: 1| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (860) gpio: GPIO[7]| InputEn: 1| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (878) SD_CARD: SD initialized OK![0m
+[0;33mW (1410) SD_METADATA: Firmware entry without fw_id, skipping[0m
+[0;32mI (1410) SD_CARD: Tải Metadata hoàn tất. Tổng cộng 3 firmware được tải.[0m
+[0;32mI (1415) gpio: GPIO[2]| InputEn: 0| OutputEn: 0| OpenDrain: 0| Pullup: 1| Pulldown: 0| Intr:0 [0m
+[0;32mI (1423) gpio: GPIO[3]| InputEn: 0| OutputEn: 0| OpenDrain: 0| Pullup: 1| Pulldown: 0| Intr:0 [0m
+[0;32mI (1432) FLASHER: UART connection initialized at baud rate 115200[0m
+[0;32mI (1439) MAIN: Flasher da san sang.[0m
+[0;32mI (1956) gpio: GPIO[21]| InputEn: 1| OutputEn: 0| OpenDrain: 0| Pullup: 1| Pulldown: 0| Intr:0 [0m
+[0;32mI (1956) gpio: GPIO[20]| InputEn: 1| OutputEn: 0| OpenDrain: 0| Pullup: 1| Pulldown: 0| Intr:0 [0m
+[0;32mI (1964) gpio: GPIO[10]| InputEn: 1| OutputEn: 0| OpenDrain: 0| Pullup: 1| Pulldown: 0| Intr:0 [0m
+[0;32mI (1988) MAIN: Khoi dong hoan tat. Hien thi menu.[0m
+[0;32mI (3038) MAIN: Da chon: Index 0, FW ID: esp32_cam_v1[0m
+[0;32mI (3038) MAIN: Bat dau flash firmware: esp32_cam_v1[0m
+[0;32mI (3051) SD_METADATA: Firmware ID esp32_cam_v1 found: Path=/HELLO.bin, Version=1.0.2[0m
+[0;32mI (5334) FLASHER: Connected to target device.[0m
+[0;32mI (5339) FLASHER: Baudrate boosted to 460800[0m
+[0;32mI (5339) FLASHER: ==== Writing segment ====[0m
+[0;32mI (5339) FLASHER: File: /BOTL.bin | Offset: 0x00000000[0m
+[0;32mI (5357) FLASHER: Segment size: 19152 bytes[0m
+[0;32mI (5719) FLASHER: Progress: 21%[0m
+[0;32mI (5860) FLASHER: Progress: 42%[0m
+[0;32mI (5999) FLASHER: Progress: 64%[0m
+[0;32mI (6138) FLASHER: Progress: 85%[0m
+[0;32mI (6274) FLASHER: Progress: 100%[0m
+[0;32mI (6274) FLASHER: Segment written 19152 / 19152 bytes OK[0m
+[0;32mI (6342) FLASHER: MD5 verified OK for segment![0m
+[0;32mI (6342) FLASHER: Segment at 0x00000000 written successfully.[0m
+[0;32mI (6343) FLASHER: ==== Writing segment ====[0m
+[0;32mI (6348) FLASHER: File: /PART.bin | Offset: 0x00008000[0m
+[0;32mI (6367) FLASHER: Segment size: 3072 bytes[0m
+[0;32mI (6535) FLASHER: Progress: 100%[0m
+[0;32mI (6536) FLASHER: Segment written 3072 / 3072 bytes OK[0m
+[0;32mI (6550) FLASHER: MD5 verified OK for segment![0m
+[0;32mI (6551) FLASHER: Segment at 0x00008000 written successfully.[0m
+[0;32mI (6551) FLASHER: ==== Writing segment ====[0m
+[0;32mI (6556) FLASHER: File: /HELLO.bin | Offset: 0x00010000[0m
+[0;32mI (6575) FLASHER: Segment size: 170512 bytes[0m
+[0;32mI (8074) FLASHER: Progress: 2%[0m
+[0;32mI (8213) FLASHER: Progress: 4%[0m
+[0;32mI (8351) FLASHER: Progress: 7%[0m
+[0;32mI (8489) FLASHER: Progress: 9%[0m
+[0;32mI (8627) FLASHER: Progress: 12%[0m
+[0;32mI (8765) FLASHER: Progress: 14%[0m
+[0;32mI (8903) FLASHER: Progress: 16%[0m
+[0;32mI (9040) FLASHER: Progress: 19%[0m
+[0;32mI (9178) FLASHER: Progress: 21%[0m
+[0;32mI (9317) FLASHER: Progress: 24%[0m
+[0;32mI (9456) FLASHER: Progress: 26%[0m
+[0;32mI (9597) FLASHER: Progress: 28%[0m
+[0;32mI (9737) FLASHER: Progress: 31%[0m
+[0;32mI (9877) FLASHER: Progress: 33%[0m
+[0;32mI (10017) FLASHER: Progress: 36%[0m
+[0;32mI (10157) FLASHER: Progress: 38%[0m
+[0;32mI (10296) FLASHER: Progress: 40%[0m
+[0;32mI (10437) FLASHER: Progress: 43%[0m
+[0;32mI (10576) FLASHER: Progress: 45%[0m
+[0;32mI (10715) FLASHER: Progress: 48%[0m
+[0;32mI (10854) FLASHER: Progress: 50%[0m
+[0;32mI (10994) FLASHER: Progress: 52%[0m
+[0;32mI (11133) FLASHER: Progress: 55%[0m
+[0;32mI (11272) FLASHER: Progress: 57%[0m
+[0;32mI (11413) FLASHER: Progress: 60%[0m
+[0;32mI (11553) FLASHER: Progress: 62%[0m
+[0;32mI (11693) FLASHER: Progress: 64%[0m
+[0;32mI (11833) FLASHER: Progress: 67%[0m
+[0;32mI (11974) FLASHER: Progress: 69%[0m
+[0;32mI (12114) FLASHER: Progress: 72%[0m
+[0;32mI (12255) FLASHER: Progress: 74%[0m
+[0;32mI (12396) FLASHER: Progress: 76%[0m
+[0;32mI (12537) FLASHER: Progress: 79%[0m
+[0;32mI (12677) FLASHER: Progress: 81%[0m
+[0;32mI (12818) FLASHER: Progress: 84%[0m
+[0;32mI (12958) FLASHER: Progress: 86%[0m
+[0;32mI (13098) FLASHER: Progress: 88%[0m
+[0;32mI (13238) FLASHER: Progress: 91%[0m
+[0;32mI (13378) FLASHER: Progress: 93%[0m
+[0;32mI (13516) FLASHER: Progress: 96%[0m
+[0;32mI (13656) FLASHER: Progress: 98%[0m
+[0;32mI (13790) FLASHER: Progress: 100%[0m
+[0;32mI (13791) FLASHER: Segment written 170512 / 170512 bytes OK[0m
+[0;32mI (14357) FLASHER: MD5 verified OK for segment![0m
+[0;32mI (14357) FLASHER: Segment at 0x00010000 written successfully.[0m
+[0;32mI (14458) FLASHER: Resetting target to run app...[0m
+[0;32mI (14758) FLASHER: Target restarted in normal mode.[0m
+[0;32mI (14758) FLASHER: Full firmware update completed successfully![0m
+[0;32mI (14759) SD_CARD: SD Unmounted[0m
+[0;32mI (14762) MAIN: Flash hoan tat.[0m
+[0;32mI (852) gpio: GPIO[4]| InputEn: 1| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (853) gpio: GPIO[5]| InputEn: 1| OutputEn: 0| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (860) gpio: GPIO[6]| InputEn: 1| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (869) gpio: GPIO[7]| InputEn: 1| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (888) SD_CARD: SD initialized OK![0m
+[0;33mW (1420) SD_METADATA: Firmware entry without fw_id, skipping[0m
+[0;32mI (1420) SD_CARD: Tải Metadata hoàn tất. Tổng cộng 3 firmware được tải.[0m
+[0;32mI (1425) gpio: GPIO[2]| InputEn: 0| OutputEn: 0| OpenDrain: 0| Pullup: 1| Pulldown: 0| Intr:0 [0m
+[0;32mI (1433) gpio: GPIO[3]| InputEn: 0| OutputEn: 0| OpenDrain: 0| Pullup: 1| Pulldown: 0| Intr:0 [0m
+[0;32mI (1443) FLASHER: UART connection initialized at baud rate 115200[0m
+[0;32mI (1449) MAIN: Flasher da san sang.[0m
+[0;32mI (1966) gpio: GPIO[21]| InputEn: 1| OutputEn: 0| OpenDrain: 0| Pullup: 1| Pulldown: 0| Intr:0 [0m
+[0;32mI (1966) gpio: GPIO[20]| InputEn: 1| OutputEn: 0| OpenDrain: 0| Pullup: 1| Pulldown: 0| Intr:0 [0m
+[0;32mI (1974) gpio: GPIO[10]| InputEn: 1| OutputEn: 0| OpenDrain: 0| Pullup: 1| Pulldown: 0| Intr:0 [0m
+[0;32mI (1998) MAIN: Khoi dong hoan tat. Hien thi menu.[0m

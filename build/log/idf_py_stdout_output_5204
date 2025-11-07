@@ -1,0 +1,798 @@
+[0;32mI (105) esp_image: segment 1: paddr=00021788 vaddr=3fc8e2ESP-ROM:esp32c3-api1-20210207
+Build:Feb  7 2021
+rst:0x15 (USB_UART_CHIP_RESET),boot:0xf (SPI_FAST_FLASH_BOOT)
+Saved PC:0x40383f90
+SPIWP:0xee
+mode:DIO, clock div:1
+load:0x3fcd5820,len:0x170c
+load:0x403cc710,len:0x968
+load:0x403ce710,len:0x2fa8
+entry 0x403cc710
+[0;32mI (24) boot: ESP-IDF v5.1.6-dirty 2nd stage bootloader[0m
+[0;32mI (24) boot: compile time Oct 16 2025 01:02:32[0m
+[0;32mI (25) boot: chip revision: v0.4[0m
+[0;32mI (28) boot.esp32c3: SPI Speed      : 80MHz[0m
+[0;32mI (33) boot.esp32c3: SPI Mode       : DIO[0m
+[0;32mI (37) boot.esp32c3: SPI Flash Size : 2MB[0m
+[0;32mI (42) boot: Enabling RNG early entropy source...[0m
+[0;32mI (47) boot: Partition Table:[0m
+[0;32mI (51) boot: ## Label            Usage          Type ST Offset   Length[0m
+[0;32mI (58) boot:  0 nvs              WiFi data        01 02 00009000 00006000[0m
+[0;32mI (66) boot:  1 phy_init         RF data          01 01 0000f000 00001000[0m
+[0;32mI (73) boot:  2 factory          factory app      00 00 00010000 00100000[0m
+[0;32mI (81) boot: End of partition table[0m
+[0;32mI (85) esp_image: segment 0: paddr=00010020 vaddr=3c040020 size=11760h ( 71520) map[0m
+[0;32mI (105) esp_image: segment 1: paddr=00021788 vaddr=3fc8e200 size=01420h (  5152) load[0m
+[0;32mI (106) esp_image: segment 2: paddr=00022bb0 vaddr=40380000 size=0d468h ( 54376) load[0m
+[0;32mI (121) esp_image: segment 3: paddr=00030020 vaddr=42000020 size=3e034h (254004) map[0m
+[0;32mI (163) esp_image: segment 4: paddr=0006e05c vaddr=4038d468 size=00c80h (  3200) load[0m
+[0;32mI (168) boot: Loaded app from partition at offset 0x10000[0m
+[0;32mI (168) boot: Disabling RNG early entropy source...[0m
+[0;32mI (183) cpu_start: Unicore app[0m
+[0;32mI (183) cpu_start: Pro cpu up.[0m
+[0;32mI (192) cpu_start: Pro cpu start user code[0m
+[0;32mI (192) cpu_start: cpu freq: 160000000 Hz[0m
+[0;32mI (192) cpu_start: Application information:[0m
+[0;32mI (195) cpu_start: Project name:     ESP_MultiFlasher[0m
+[0;32mI (200) cpu_start: App version:      1[0m
+[0;32mI (205) cpu_start: Compile time:     Oct 16 2025 00:52:28[0m
+[0;32mI (211) cpu_start: ELF file SHA256:  7c6b67dd16a96edb...[0m
+[0;32mI (217) cpu_start: ESP-IDF:          v5.1.6-dirty[0m
+[0;32mI (222) cpu_start: Min chip rev:     v0.3[0m
+[0;32mI (227) cpu_start: Max chip rev:     v1.99 [0m
+[0;32mI (232) cpu_start: Chip rev:         v0.4[0m
+[0;32mI (237) heap_init: Initializing. RAM available for dynamic allocation:[0m
+[0;32mI (244) heap_init: At 3FC90B30 len 0002F4D0 (189 KiB): DRAM[0m
+[0;32mI (250) heap_init: At 3FCC0000 len 0001C710 (113 KiB): DRAM/RETENTION[0m
+[0;32mI (257) heap_init: At 3FCDC710 len 00002950 (10 KiB): DRAM/RETENTION/STACK[0m
+[0;32mI (265) heap_init: At 50000010 len 00001FD8 (7 KiB): RTCRAM[0m
+[0;32mI (272) spi_flash: detected chip: generic[0m
+[0;32mI (276) spi_flash: flash io: dio[0m
+[0;33mW (280) spi_flash: Detected size(4096k) larger than the size in the binary image header(2048k). Using the size in the binary image header.[0m
+[0;32mI (293) sleep: Configure to isolate all GPIO pins in sleep state[0m
+[0;32mI (299) sleep: Enable automatic switching of GPIO sleep configuration[0m
+[0;32mI (307) app_start: Starting scheduler on CPU0[0m
+[0;32mI (312) main_task: Started on CPU0[0m
+[0;32mI (316) main_task: Calling app_main()[0m
+[0;32mI (324) MAIN: --- BAT DAU KHOI DONG HE THONG ---[0m
+[0;32mI (842) gpio: GPIO[4]| InputEn: 1| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (843) gpio: GPIO[5]| InputEn: 1| OutputEn: 0| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (850) gpio: GPIO[6]| InputEn: 1| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (859) gpio: GPIO[7]| InputEn: 1| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (877) SD_CARD: SD initialized OK![0m
+[0;32mI (1441) SD_CARD: Tải Metadata hoàn tất. Tổng cộng 7 firmware được tải.[0m
+[0;32mI (1442) MAIN: Dang lay menu tu sd_card module...[0m
+[0;32mI (1444) gpio: GPIO[21]| InputEn: 1| OutputEn: 0| OpenDrain: 0| Pullup: 1| Pulldown: 0| Intr:0 [0m
+[0;32mI (1453) gpio: GPIO[20]| InputEn: 1| OutputEn: 0| OpenDrain: 0| Pullup: 1| Pulldown: 0| Intr:0 [0m
+[0;32mI (1463) gpio: GPIO[10]| InputEn: 1| OutputEn: 0| OpenDrain: 0| Pullup: 1| Pulldown: 0| Intr:0 [0m
+[0;32mI (1487) MAIN: Khoi dong hoan tat. Hien thi menu.[0m
+[0;32mI (4673) MAIN: Da chon: Index 4, FW ID: test_01[0m
+[0;32mI (4673) MAIN: Bat dau flash firmware: test_01[0m
+[0;32mI (4686) SD_CARD: SD initialized OK![0m
+[0;32mI (4700) gpio: GPIO[2]| InputEn: 0| OutputEn: 0| OpenDrain: 0| Pullup: 1| Pulldown: 0| Intr:0 [0m
+[0;32mI (4700) gpio: GPIO[3]| InputEn: 0| OutputEn: 0| OpenDrain: 0| Pullup: 1| Pulldown: 0| Intr:0 [0m
+[0;32mI (4708) FLASHER: UART connection initialized at baud rate 115200[0m
+[0;32mI (4714) MAIN: Flasher da san sang.[0m
+[0;32mI (4719) SD_METADATA: Firmware ID test_01 found: Path=/test_01/FW.bin, Version=v1.0[0m
+[0;32mI (4727) FLASHER: Reset sequence start...[0m
+[0;32mI (5202) FLASHER: Reset sequence done![0m
+[0;32mI (5680) FLASHER: Connected to target device.[0m
+[0;32mI (5684) FLASHER: Baudrate boosted to 460800[0m
+[0;32mI (5685) FLASHER: ==== Writing segment ====[0m
+[0;32mI (5685) FLASHER: File: /test_01/BOTL.bin | Offset: 0x00001000[0m
+[0;32mI (5712) FLASHER: Segment size: 24864 bytes[0m
+[0;32mI (6107) FLASHER: Progress: 16%[0m
+[0;32mI (6246) FLASHER: Progress: 32%[0m
+[0;32mI (6389) FLASHER: Progress: 49%[0m
+[0;32mI (6531) FLASHER: Progress: 65%[0m
+[0;32mI (6681) FLASHER: Progress: 82%[0m
+[0;32mI (6827) FLASHER: Progress: 98%[0m
+[0;32mI (6948) FLASHER: Progress: 100%[0m
+[0;32mI (6963) FLASHER: Segment written 24864 / 24864 bytes OK[0m
+[0;32mI (7002) FLASHER: MD5 verified OK for segment![0m
+[0;32mI (7002) FLASHER: Segment at 0x00001000 written successfully.[0m
+[0;32mI (7003) FLASHER: ==== Writing segment ====[0m
+[0;32mI (7007) FLASHER: File: /test_01/PART.bin | Offset: 0x00008000[0m
+[0;32mI (7035) FLASHER: Segment size: 3072 bytes[0m
+[0;32mI (7186) FLASHER: Progress: 100%[0m
+[0;32mI (7200) FLASHER: Segment written 3072 / 3072 bytes OK[0m
+[0;32mI (7209) FLASHER: MD5 verified OK for segment![0m
+[0;32mI (7210) FLASHER: Segment at 0x00008000 written successfully.[0m
+[0;32mI (7210) FLASHER: ==== Writing segment ====[0m
+[0;32mI (7215) FLASHER: File: /test_01/FW.bin | Offset: 0x00010000[0m
+[0;32mI (7242) FLASHER: Segment size: 124416 bytes[0m
+[0;32mI (8509) FLASHER: Progress: 3%[0m
+[0;32mI (8644) FLASHER: Progress: 6%[0m
+[0;32mI (8777) FLASHER: Progress: 9%[0m
+[0;32mI (8912) FLASHER: Progress: 13%[0m
+[0;32mI (9053) FLASHER: Progress: 16%[0m
+[0;32mI (9193) FLASHER: Progress: 19%[0m
+[0;32mI (9339) FLASHER: Progress: 23%[0m
+[0;32mI (9483) FLASHER: Progress: 26%[0m
+[0;32mI (9640) FLASHER: Progress: 29%[0m
+[0;32mI (9795) FLASHER: Progress: 32%[0m
+[0;32mI (9949) FLASHER: Progress: 36%[0m
+[0;32mI (10091) FLASHER: Progress: 39%[0m
+[0;32mI (10227) FLASHER: Progress: 42%[0m
+[0;32mI (10361) FLASHER: Progress: 46%[0m
+[0;32mI (10495) FLASHER: Progress: 49%[0m
+[0;32mI (10629) FLASHER: Progress: 52%[0m
+[0;32mI (10766) FLASHER: Progress: 55%[0m
+[0;32mI (10906) FLASHER: Progress: 59%[0m
+[0;32mI (11045) FLASHER: Progress: 62%[0m
+[0;32mI (11182) FLASHER: Progress: 65%[0m
+[0;32mI (11317) FLASHER: Progress: 69%[0m
+[0;32mI (11453) FLASHER: Progress: 72%[0m
+[0;32mI (11591) FLASHER: Progress: 75%[0m
+[0;32mI (11726) FLASHER: Progress: 79%[0m
+[0;32mI (11862) FLASHER: Progress: 82%[0m
+[0;32mI (11999) FLASHER: Progress: 85%[0m
+[0;32mI (12135) FLASHER: Progress: 88%[0m
+[0;32mI (12272) FLASHER: Progress: 92%[0m
+[0;32mI (12408) FLASHER: Progress: 95%[0m
+[0;32mI (12549) FLASHER: Progress: 98%[0m
+[0;32mI (12678) FLASHER: Progress: 100%[0m
+[0;32mI (12692) FLASHER: Segment written 124416 / 124416 bytes OK[0m
+[0;32mI (12871) FLASHER: MD5 verified OK for segment![0m
+[0;32mI (12871) FLASHER: Segment at 0x00010000 written successfully.[0m
+[0;32mI (12972) FLASHER: Resetting target to run app...[0m
+[0;32mI (13272) FLASHER: Target restarted in normal mode.[0m
+[0;32mI (13272) FLASHER: Full firmware update completed successfully![0m
+[0;32mI (13273) SD_CARD: SD Unmounted[0m
+[0;32mI (13276) MAIN: Flash hoan tat.[0m
+[0;32mI (15599) MAIN: Hello world!
+[0m
+[0;32mI (16599) MAIN: Hello world!
+[0m
+[0;32mI (17599) MAIN: Hello world!
+[0m
+[0;32mI (18599) MAIN: Hello world!
+[0m
+[0;32mI (19599) MAIN: Hello world!
+[0m
+[0;32mI (20599) MAIN: Hello world!
+[0m
+[0;32mI (21599) MAIN: Hello world!
+[0m
+[0;32mI (22599) MAIN: Hello world!
+[0m
+[0;32mI (23599) MAIN: Hello world!
+[0m
+[0;32mI (24600) MAIN: Hello world!
+[0m
+[0;32mI (25600) MAIN: Hello world!
+[0m
+[0;32mI (26600) MAIN: Hello world!
+[0m
+[0;32mI (27600) MAIN: Hello world!
+[0m
+[0;32mI (28600) MAIN: Hello world!
+[0m
+[0;32mI (29600) MAIN: Hello world!
+[0m
+[0;32mI (30600) MAIN: Hello world!
+[0m
+[0;32mI (31600) MAIN: Hello world!
+[0m
+[0;32mI (32600) MAIN: Hello world!
+[0m
+[0;32mI (33600) MAIN: Hello world!
+[0m
+[0;32mI (34600) MAIN: Hello world!
+[0m
+[0;32mI (35600) MAIN: Hello world!
+[0m
+[0;32mI (36600) MAIN: Hello world!
+[0m
+[0;32mI (37600) MAIN: Hello world!
+[0m
+[0;32mI (38600) MAIN: Hello world!
+[0m
+[0;32mI (39600) MAIN: Hello world!
+[0m
+[0;32mI (40600) MAIN: Hello world!
+[0m
+[0;32mI (41600) MAIN: Hello world!
+[0m
+[0;32mI (42600) MAIN: Hello world!
+[0m
+[0;32mI (43600) MAIN: Hello world!
+[0m
+[0;32mI (44600) MAIN: Hello world!
+[0m
+[0;32mI (45600) MAIN: Hello world!
+[0m
+[0;32mI (46600) MAIN: Hello world!
+[0m
+[0;32mI (47600) MAIN: Hello world!
+[0m
+[0;32mI (48600) MAIN: Hello world!
+[0m
+[0;32mI (49600) MAIN: Hello world!
+[0m
+[0;32mI (50600) MAIN: Hello world!
+[0m
+[0;32mI (51601) MAIN: Hello world!
+[0m
+[0;32mI (52601) MAIN: Hello world!
+[0m
+[0;32mI (53601) MAIN: Hello world!
+[0m
+[0;32mI (54601) MAIN: Hello world!
+[0m
+[0;32mI (55601) MAIN: Hello world!
+[0m
+[0;32mI (56601) MAIN: Hello world!
+[0m
+[0;32mI (57601) MAIN: Hello world!
+[0m
+[0;32mI (58601) MAIN: Hello world!
+[0m
+[0;32mI (59601) MAIN: Hello world!
+[0m
+[0;32mI (60601) MAIN: Hello world!
+[0m
+[0;32mI (60665) MAIN: Da chon: Index 6, FW ID: qr_05[0m
+[0;32mI (60665) MAIN: Bat dau flash firmware: qr_05[0m
+[0;32mI (60678) gpio: GPIO[7]| InputEn: 1| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (60688) SD_CARD: SD initialized OK![0m
+[0;31mE (60702) uart: UART driver already installed[0m
+[0;31mE (60703) FLASHER: serial initialization failed.[0m
+[0;32mI (60703) MAIN: Flasher da san sang.[0m
+[0;32mI (60706) SD_METADATA: Firmware ID qr_05 found: Path=/qr_05/FW.bin, Version=v1[0m
+[0;32mI (60714) FLASHER: Reset sequence start...[0m
+[0;32mI (61189) FLASHER: Reset sequence done![0m
+[0;32mI (61601) MAIN: Hello world!
+[0m
+[0;31mE (61895) FLASHER: Failed to connect to target device.[0m
+[0;31mE (61895) MAIN: Flash that bai do loi flasher.[0m
+[0;32mI (62601) MAIN: Hello world!
+[0m
+[0;32mI (63601) MAIN: Hello world!
+[0m
+[0;32mI (1474) SD_CARD: Tải Metadata hoàn tất. Tổng cộng 7 firmware được tải.[0m
+[0;32mI (1475) MAIN: Dang lay menu tu sd_card module...[0m
+[0;32mI (1477) gpio: GPIO[21]| InputEn: 1| OutputEn: 0| OpenDrain: 0| Pullup: 1| Pulldown: 0| Intr:0 [0m
+[0;32mI (1487) gpio: GPIO[20]| InputEn: 1| OutputEn: 0| OpenDrain: 0| Pullup: 1| Pulldown: 0| Intr:0 [0m
+[0;32mI (1496) gpio: GPIO[10]| InputEn: 1| OutputEn: 0| OpenDrain: 0| Pullup: 1| Pulldown: 0| Intr:0 [0m
+[0;32mI (1520) MAIN: Khoi dong hoan tat. Hien thi menu.[0m
+[0;32mI (7353) MAIN: Da chon: Index 6, FW ID: qr_05[0m
+[0;32mI (7353) MAIN: Bat dau flash firmware: qr_05[0m
+[0;32mI (7366) SD_CARD: SD initialized OK![0m
+[0;32mI (7380) gpio: GPIO[2]| InputEn: 0| OutputEn: 0| OpenDrain: 0| Pullup: 1| Pulldown: 0| Intr:0 [0m
+[0;32mI (7380) gpio: GPIO[3]| InputEn: 0| OutputEn: 0| OpenDrain: 0| Pullup: 1| Pulldown: 0| Intr:0 [0m
+[0;32mI (7388) FLASHER: UART connection initialized at baud rate 115200[0m
+[0;32mI (7394) MAIN: Flasher da san sang.[0m
+[0;32mI (7399) SD_METADATA: Firmware ID qr_05 found: Path=/qr_05/FW.bin, Version=v1[0m
+[0;32mI (7406) FLASHER: Reset sequence start...[0m
+[0;32mI (7881) FLASHER: Reset sequence done![0m
+[0;32mI (8359) FLASHER: Connected to target device.[0m
+[0;32mI (8363) FLASHER: Baudrate boosted to 460800[0m
+[0;32mI (8364) FLASHER: ==== Writing segment ====[0m
+[0;32mI (8364) FLASHER: File: /qr_05/BOTL.bin | Offset: 0x00001000[0m
+[0;32mI (8390) FLASHER: Segment size: 17536 bytes[0m
+[0;32mI (8722) FLASHER: Progress: 23%[0m
+[0;32mI (8864) FLASHER: Progress: 46%[0m
+[0;32mI (9014) FLASHER: Progress: 70%[0m
+[0;32mI (9162) FLASHER: Progress: 93%[0m
+[0;32mI (9289) FLASHER: Progress: 100%[0m
+[0;32mI (9303) FLASHER: Segment written 17536 / 17536 bytes OK[0m
+[0;32mI (9332) FLASHER: MD5 verified OK for segment![0m
+[0;32mI (9333) FLASHER: Segment at 0x00001000 written successfully.[0m
+[0;32mI (9333) FLASHER: ==== Writing segment ====[0m
+[0;32mI (9338) FLASHER: File: /qr_05/PART.bin | Offset: 0x00008000[0m
+[0;32mI (9365) FLASHER: Segment size: 3072 bytes[0m
+[0;32mI (9515) FLASHER: Progress: 100%[0m
+[0;32mI (9529) FLASHER: Segment written 3072 / 3072 bytes OK[0m
+[0;32mI (9538) FLASHER: MD5 verified OK for segment![0m
+[0;32mI (9538) FLASHER: Segment at 0x00008000 written successfully.[0m
+[0;32mI (9539) FLASHER: ==== Writing segment ====[0m
+[0;32mI (9544) FLASHER: File: /qr_05/FW.bin | Offset: 0x00010000[0m
+[0;32mI (9571) FLASHER: Segment size: 1939200 bytes[0m
+[0;32mI (14000) FLASHER: Progress: 0%[0m
+[0;32mI (14135) FLASHER: Progress: 0%[0m
+[0;32mI (14271) FLASHER: Progress: 0%[0m
+[0;32mI (14406) FLASHER: Progress: 0%[0m
+[0;32mI (14542) FLASHER: Progress: 1%[0m
+[0;32mI (14677) FLASHER: Progress: 1%[0m
+[0;32mI (14805) FLASHER: Progress: 1%[0m
+[0;32mI (14934) FLASHER: Progress: 1%[0m
+[0;32mI (15063) FLASHER: Progress: 1%[0m
+[0;32mI (15195) FLASHER: Progress: 2%[0m
+[0;32mI (15325) FLASHER: Progress: 2%[0m
+[0;32mI (15456) FLASHER: Progress: 2%[0m
+[0;32mI (15587) FLASHER: Progress: 2%[0m
+[0;32mI (15717) FLASHER: Progress: 2%[0m
+[0;32mI (15846) FLASHER: Progress: 3%[0m
+[0;32mI (15974) FLASHER: Progress: 3%[0m
+[0;32mI (16103) FLASHER: Progress: 3%[0m
+[0;32mI (16232) FLASHER: Progress: 3%[0m
+[0;32mI (16360) FLASHER: Progress: 4%[0m
+[0;32mI (16488) FLASHER: Progress: 4%[0m
+[0;32mI (16616) FLASHER: Progress: 4%[0m
+[0;32mI (16745) FLASHER: Progress: 4%[0m
+[0;32mI (16873) FLASHER: Progress: 4%[0m
+[0;32mI (17001) FLASHER: Progress: 5%[0m
+[0;32mI (17130) FLASHER: Progress: 5%[0m
+[0;32mI (17258) FLASHER: Progress: 5%[0m
+[0;32mI (17386) FLASHER: Progress: 5%[0m
+[0;32mI (17514) FLASHER: Progress: 5%[0m
+[0;32mI (17642) FLASHER: Progress: 6%[0m
+[0;32mI (17770) FLASHER: Progress: 6%[0m
+[0;32mI (17899) FLASHER: Progress: 6%[0m
+[0;32mI (18027) FLASHER: Progress: 6%[0m
+[0;32mI (18155) FLASHER: Progress: 6%[0m
+[0;32mI (18283) FLASHER: Progress: 7%[0m
+[0;32mI (18411) FLASHER: Progress: 7%[0m
+[0;32mI (18539) FLASHER: Progress: 7%[0m
+[0;32mI (18668) FLASHER: Progress: 7%[0m
+[0;32mI (18796) FLASHER: Progress: 8%[0m
+[0;32mI (18924) FLASHER: Progress: 8%[0m
+[0;32mI (19054) FLASHER: Progress: 8%[0m
+[0;32mI (19182) FLASHER: Progress: 8%[0m
+[0;32mI (19310) FLASHER: Progress: 8%[0m
+[0;32mI (19439) FLASHER: Progress: 9%[0m
+[0;32mI (19576) FLASHER: Progress: 9%[0m
+[0;32mI (19710) FLASHER: Progress: 9%[0m
+[0;32mI (19840) FLASHER: Progress: 9%[0m
+[0;32mI (19970) FLASHER: Progress: 9%[0m
+[0;32mI (20101) FLASHER: Progress: 10%[0m
+[0;32mI (20234) FLASHER: Progress: 10%[0m
+[0;32mI (20362) FLASHER: Progress: 10%[0m
+[0;32mI (20492) FLASHER: Progress: 10%[0m
+[0;32mI (20626) FLASHER: Progress: 10%[0m
+[0;32mI (20759) FLASHER: Progress: 11%[0m
+[0;32mI (20893) FLASHER: Progress: 11%[0m
+[0;32mI (21027) FLASHER: Progress: 11%[0m
+[0;32mI (21160) FLASHER: Progress: 11%[0m
+[0;32mI (21294) FLASHER: Progress: 12%[0m
+[0;32mI (21427) FLASHER: Progress: 12%[0m
+[0;32mI (21561) FLASHER: Progress: 12%[0m
+[0;32mI (21695) FLASHER: Progress: 12%[0m
+[0;32mI (21828) FLASHER: Progress: 12%[0m
+[0;32mI (21962) FLASHER: Progress: 13%[0m
+[0;32mI (22095) FLASHER: Progress: 13%[0m
+[0;32mI (22229) FLASHER: Progress: 13%[0m
+[0;32mI (22362) FLASHER: Progress: 13%[0m
+[0;32mI (22496) FLASHER: Progress: 13%[0m
+[0;32mI (22629) FLASHER: Progress: 14%[0m
+[0;32mI (22763) FLASHER: Progress: 14%[0m
+[0;32mI (22896) FLASHER: Progress: 14%[0m
+[0;32mI (23030) FLASHER: Progress: 14%[0m
+[0;32mI (23163) FLASHER: Progress: 14%[0m
+[0;32mI (23296) FLASHER: Progress: 15%[0m
+[0;32mI (23429) FLASHER: Progress: 15%[0m
+[0;32mI (23562) FLASHER: Progress: 15%[0m
+[0;32mI (23694) FLASHER: Progress: 15%[0m
+[0;32mI (23827) FLASHER: Progress: 16%[0m
+[0;32mI (23961) FLASHER: Progress: 16%[0m
+[0;32mI (24094) FLASHER: Progress: 16%[0m
+[0;32mI (24227) FLASHER: Progress: 16%[0m
+[0;32mI (24418) FLASHER: Progress: 16%[0m
+[0;32mI (24591) FLASHER: Progress: 17%[0m
+[0;32mI (24719) FLASHER: Progress: 17%[0m
+[0;32mI (24847) FLASHER: Progress: 17%[0m
+[0;32mI (24975) FLASHER: Progress: 17%[0m
+[0;32mI (25105) FLASHER: Progress: 17%[0m
+[0;32mI (25236) FLASHER: Progress: 18%[0m
+[0;32mI (25366) FLASHER: Progress: 18%[0m
+[0;32mI (25495) FLASHER: Progress: 18%[0m
+[0;32mI (25624) FLASHER: Progress: 18%[0m
+[0;32mI (25761) FLASHER: Progress: 19%[0m
+[0;32mI (25898) FLASHER: Progress: 19%[0m
+[0;32mI (26036) FLASHER: Progress: 19%[0m
+[0;32mI (26172) FLASHER: Progress: 19%[0m
+[0;32mI (26306) FLASHER: Progress: 19%[0m
+[0;32mI (26443) FLASHER: Progress: 20%[0m
+[0;32mI (26577) FLASHER: Progress: 20%[0m
+[0;32mI (26711) FLASHER: Progress: 20%[0m
+[0;32mI (26846) FLASHER: Progress: 20%[0m
+[0;32mI (26980) FLASHER: Progress: 20%[0m
+[0;32mI (27114) FLASHER: Progress: 21%[0m
+[0;32mI (27249) FLASHER: Progress: 21%[0m
+[0;32mI (27384) FLASHER: Progress: 21%[0m
+[0;32mI (27518) FLASHER: Progress: 21%[0m
+[0;32mI (27652) FLASHER: Progress: 21%[0m
+[0;32mI (27786) FLASHER: Progress: 22%[0m
+[0;32mI (27919) FLASHER: Progress: 22%[0m
+[0;32mI (28053) FLASHER: Progress: 22%[0m
+[0;32mI (28187) FLASHER: Progress: 22%[0m
+[0;32mI (28321) FLASHER: Progress: 23%[0m
+[0;32mI (28455) FLASHER: Progress: 23%[0m
+[0;32mI (28588) FLASHER: Progress: 23%[0m
+[0;32mI (28722) FLASHER: Progress: 23%[0m
+[0;32mI (28855) FLASHER: Progress: 23%[0m
+[0;32mI (28989) FLASHER: Progress: 24%[0m
+[0;32mI (29123) FLASHER: Progress: 24%[0m
+[0;32mI (29257) FLASHER: Progress: 24%[0m
+[0;32mI (29391) FLASHER: Progress: 24%[0m
+[0;32mI (29524) FLASHER: Progress: 24%[0m
+[0;32mI (29658) FLASHER: Progress: 25%[0m
+[0;32mI (29791) FLASHER: Progress: 25%[0m
+[0;32mI (29925) FLASHER: Progress: 25%[0m
+[0;32mI (30058) FLASHER: Progress: 25%[0m
+[0;32mI (30192) FLASHER: Progress: 25%[0m
+[0;32mI (30326) FLASHER: Progress: 26%[0m
+[0;32mI (30464) FLASHER: Progress: 26%[0m
+[0;32mI (30599) FLASHER: Progress: 26%[0m
+[0;32mI (30733) FLASHER: Progress: 26%[0m
+[0;32mI (30868) FLASHER: Progress: 27%[0m
+[0;32mI (31004) FLASHER: Progress: 27%[0m
+[0;32mI (31137) FLASHER: Progress: 27%[0m
+[0;32mI (31270) FLASHER: Progress: 27%[0m
+[0;32mI (31406) FLASHER: Progress: 27%[0m
+[0;32mI (31541) FLASHER: Progress: 28%[0m
+[0;32mI (31675) FLASHER: Progress: 28%[0m
+[0;32mI (31809) FLASHER: Progress: 28%[0m
+[0;32mI (31944) FLASHER: Progress: 28%[0m
+[0;32mI (32079) FLASHER: Progress: 28%[0m
+[0;32mI (32212) FLASHER: Progress: 29%[0m
+[0;32mI (32346) FLASHER: Progress: 29%[0m
+[0;32mI (32479) FLASHER: Progress: 29%[0m
+[0;32mI (32613) FLASHER: Progress: 29%[0m
+[0;32mI (32746) FLASHER: Progress: 29%[0m
+[0;32mI (32880) FLASHER: Progress: 30%[0m
+[0;32mI (33013) FLASHER: Progress: 30%[0m
+[0;32mI (33147) FLASHER: Progress: 30%[0m
+[0;32mI (33280) FLASHER: Progress: 30%[0m
+[0;32mI (33413) FLASHER: Progress: 31%[0m
+[0;32mI (33547) FLASHER: Progress: 31%[0m
+[0;32mI (33680) FLASHER: Progress: 31%[0m
+[0;32mI (33814) FLASHER: Progress: 31%[0m
+[0;32mI (33947) FLASHER: Progress: 31%[0m
+[0;32mI (34081) FLASHER: Progress: 32%[0m
+[0;32mI (34214) FLASHER: Progress: 32%[0m
+[0;32mI (34348) FLASHER: Progress: 32%[0m
+[0;32mI (34481) FLASHER: Progress: 32%[0m
+[0;32mI (34615) FLASHER: Progress: 32%[0m
+[0;32mI (34748) FLASHER: Progress: 33%[0m
+[0;32mI (34882) FLASHER: Progress: 33%[0m
+[0;32mI (35015) FLASHER: Progress: 33%[0m
+[0;32mI (35149) FLASHER: Progress: 33%[0m
+[0;32mI (35282) FLASHER: Progress: 34%[0m
+[0;32mI (35416) FLASHER: Progress: 34%[0m
+[0;32mI (35549) FLASHER: Progress: 34%[0m
+[0;32mI (35683) FLASHER: Progress: 34%[0m
+[0;32mI (35816) FLASHER: Progress: 34%[0m
+[0;32mI (35950) FLASHER: Progress: 35%[0m
+[0;32mI (36087) FLASHER: Progress: 35%[0m
+[0;32mI (36235) FLASHER: Progress: 35%[0m
+[0;32mI (36371) FLASHER: Progress: 35%[0m
+[0;32mI (36504) FLASHER: Progress: 35%[0m
+[0;32mI (36639) FLASHER: Progress: 36%[0m
+[0;32mI (36772) FLASHER: Progress: 36%[0m
+[0;32mI (36906) FLASHER: Progress: 36%[0m
+[0;32mI (37040) FLASHER: Progress: 36%[0m
+[0;32mI (37173) FLASHER: Progress: 36%[0m
+[0;32mI (37307) FLASHER: Progress: 37%[0m
+[0;32mI (37440) FLASHER: Progress: 37%[0m
+[0;32mI (37574) FLASHER: Progress: 37%[0m
+[0;32mI (37707) FLASHER: Progress: 37%[0m
+[0;32mI (37841) FLASHER: Progress: 38%[0m
+[0;32mI (37975) FLASHER: Progress: 38%[0m
+[0;32mI (38110) FLASHER: Progress: 38%[0m
+[0;32mI (38244) FLASHER: Progress: 38%[0m
+[0;32mI (38378) FLASHER: Progress: 38%[0m
+[0;32mI (38512) FLASHER: Progress: 39%[0m
+[0;32mI (38646) FLASHER: Progress: 39%[0m
+[0;32mI (38780) FLASHER: Progress: 39%[0m
+[0;32mI (38914) FLASHER: Progress: 39%[0m
+[0;32mI (39048) FLASHER: Progress: 39%[0m
+[0;32mI (39182) FLASHER: Progress: 40%[0m
+[0;32mI (39315) FLASHER: Progress: 40%[0m
+[0;32mI (39449) FLASHER: Progress: 40%[0m
+[0;32mI (39583) FLASHER: Progress: 40%[0m
+[0;32mI (39717) FLASHER: Progress: 40%[0m
+[0;32mI (39851) FLASHER: Progress: 41%[0m
+[0;32mI (39985) FLASHER: Progress: 41%[0m
+[0;32mI (40119) FLASHER: Progress: 41%[0m
+[0;32mI (40252) FLASHER: Progress: 41%[0m
+[0;32mI (40386) FLASHER: Progress: 42%[0m
+[0;32mI (40520) FLASHER: Progress: 42%[0m
+[0;32mI (40654) FLASHER: Progress: 42%[0m
+[0;32mI (40800) FLASHER: Progress: 42%[0m
+[0;32mI (40940) FLASHER: Progress: 42%[0m
+[0;32mI (41084) FLASHER: Progress: 43%[0m
+[0;32mI (41224) FLASHER: Progress: 43%[0m
+[0;32mI (41366) FLASHER: Progress: 43%[0m
+[0;32mI (41513) FLASHER: Progress: 43%[0m
+[0;32mI (41656) FLASHER: Progress: 43%[0m
+[0;32mI (41791) FLASHER: Progress: 44%[0m
+[0;32mI (41926) FLASHER: Progress: 44%[0m
+[0;32mI (42060) FLASHER: Progress: 44%[0m
+[0;32mI (42194) FLASHER: Progress: 44%[0m
+[0;32mI (42329) FLASHER: Progress: 44%[0m
+[0;32mI (42468) FLASHER: Progress: 45%[0m
+[0;32mI (42605) FLASHER: Progress: 45%[0m
+[0;32mI (42741) FLASHER: Progress: 45%[0m
+[0;32mI (42879) FLASHER: Progress: 45%[0m
+[0;32mI (43019) FLASHER: Progress: 46%[0m
+[0;32mI (43157) FLASHER: Progress: 46%[0m
+[0;32mI (43295) FLASHER: Progress: 46%[0m
+[0;32mI (43431) FLASHER: Progress: 46%[0m
+[0;32mI (43566) FLASHER: Progress: 46%[0m
+[0;32mI (43702) FLASHER: Progress: 47%[0m
+[0;32mI (43840) FLASHER: Progress: 47%[0m
+[0;32mI (43978) FLASHER: Progress: 47%[0m
+[0;32mI (44115) FLASHER: Progress: 47%[0m
+[0;32mI (44251) FLASHER: Progress: 47%[0m
+[0;32mI (44385) FLASHER: Progress: 48%[0m
+[0;32mI (44524) FLASHER: Progress: 48%[0m
+[0;32mI (44658) FLASHER: Progress: 48%[0m
+[0;32mI (44797) FLASHER: Progress: 48%[0m
+[0;32mI (44936) FLASHER: Progress: 49%[0m
+[0;32mI (45077) FLASHER: Progress: 49%[0m
+[0;32mI (45213) FLASHER: Progress: 49%[0m
+[0;32mI (45350) FLASHER: Progress: 49%[0m
+[0;32mI (45488) FLASHER: Progress: 49%[0m
+[0;32mI (45627) FLASHER: Progress: 50%[0m
+[0;32mI (45763) FLASHER: Progress: 50%[0m
+[0;32mI (45901) FLASHER: Progress: 50%[0m
+[0;32mI (46037) FLASHER: Progress: 50%[0m
+[0;32mI (46171) FLASHER: Progress: 50%[0m
+[0;32mI (46306) FLASHER: Progress: 51%[0m
+[0;32mI (46443) FLASHER: Progress: 51%[0m
+[0;32mI (46580) FLASHER: Progress: 51%[0m
+[0;32mI (46718) FLASHER: Progress: 51%[0m
+[0;32mI (46854) FLASHER: Progress: 51%[0m
+[0;32mI (46991) FLASHER: Progress: 52%[0m
+[0;32mI (47127) FLASHER: Progress: 52%[0m
+[0;32mI (47264) FLASHER: Progress: 52%[0m
+[0;32mI (47401) FLASHER: Progress: 52%[0m
+[0;32mI (47539) FLASHER: Progress: 53%[0m
+[0;32mI (47677) FLASHER: Progress: 53%[0m
+[0;32mI (47812) FLASHER: Progress: 53%[0m
+[0;32mI (47948) FLASHER: Progress: 53%[0m
+[0;32mI (48084) FLASHER: Progress: 53%[0m
+[0;32mI (48221) FLASHER: Progress: 54%[0m
+[0;32mI (48358) FLASHER: Progress: 54%[0m
+[0;32mI (48494) FLASHER: Progress: 54%[0m
+[0;32mI (48629) FLASHER: Progress: 54%[0m
+[0;32mI (48766) FLASHER: Progress: 54%[0m
+[0;32mI (48904) FLASHER: Progress: 55%[0m
+[0;32mI (49041) FLASHER: Progress: 55%[0m
+[0;32mI (49178) FLASHER: Progress: 55%[0m
+[0;32mI (49317) FLASHER: Progress: 55%[0m
+[0;32mI (49455) FLASHER: Progress: 55%[0m
+[0;32mI (49591) FLASHER: Progress: 56%[0m
+[0;32mI (49726) FLASHER: Progress: 56%[0m
+[0;32mI (49862) FLASHER: Progress: 56%[0m
+[0;32mI (50000) FLASHER: Progress: 56%[0m
+[0;32mI (50135) FLASHER: Progress: 57%[0m
+[0;32mI (50270) FLASHER: Progress: 57%[0m
+[0;32mI (50406) FLASHER: Progress: 57%[0m
+[0;32mI (50541) FLASHER: Progress: 57%[0m
+[0;32mI (50679) FLASHER: Progress: 57%[0m
+[0;32mI (50814) FLASHER: Progress: 58%[0m
+[0;32mI (50949) FLASHER: Progress: 58%[0m
+[0;32mI (51086) FLASHER: Progress: 58%[0m
+[0;32mI (51223) FLASHER: Progress: 58%[0m
+[0;32mI (51363) FLASHER: Progress: 58%[0m
+[0;32mI (51499) FLASHER: Progress: 59%[0m
+[0;32mI (51641) FLASHER: Progress: 59%[0m
+[0;32mI (51782) FLASHER: Progress: 59%[0m
+[0;32mI (51924) FLASHER: Progress: 59%[0m
+[0;32mI (52066) FLASHER: Progress: 59%[0m
+[0;32mI (52208) FLASHER: Progress: 60%[0m
+[0;32mI (52361) FLASHER: Progress: 60%[0m
+[0;32mI (52504) FLASHER: Progress: 60%[0m
+[0;32mI (52645) FLASHER: Progress: 60%[0m
+[0;32mI (52784) FLASHER: Progress: 61%[0m
+[0;32mI (52926) FLASHER: Progress: 61%[0m
+[0;32mI (53070) FLASHER: Progress: 61%[0m
+[0;32mI (53209) FLASHER: Progress: 61%[0m
+[0;32mI (53349) FLASHER: Progress: 61%[0m
+[0;32mI (53506) FLASHER: Progress: 62%[0m
+[0;32mI (53645) FLASHER: Progress: 62%[0m
+[0;32mI (53787) FLASHER: Progress: 62%[0m
+[0;32mI (53927) FLASHER: Progress: 62%[0m
+[0;32mI (54069) FLASHER: Progress: 62%[0m
+[0;32mI (54213) FLASHER: Progress: 63%[0m
+[0;32mI (54353) FLASHER: Progress: 63%[0m
+[0;32mI (54498) FLASHER: Progress: 63%[0m
+[0;32mI (54640) FLASHER: Progress: 63%[0m
+[0;32mI (54779) FLASHER: Progress: 64%[0m
+[0;32mI (54921) FLASHER: Progress: 64%[0m
+[0;32mI (55063) FLASHER: Progress: 64%[0m
+[0;32mI (55204) FLASHER: Progress: 64%[0m
+[0;32mI (55345) FLASHER: Progress: 64%[0m
+[0;32mI (55485) FLASHER: Progress: 65%[0m
+[0;32mI (55628) FLASHER: Progress: 65%[0m
+[0;32mI (55771) FLASHER: Progress: 65%[0m
+[0;32mI (55916) FLASHER: Progress: 65%[0m
+[0;32mI (56060) FLASHER: Progress: 65%[0m
+[0;32mI (56204) FLASHER: Progress: 66%[0m
+[0;32mI (56343) FLASHER: Progress: 66%[0m
+[0;32mI (56487) FLASHER: Progress: 66%[0m
+[0;32mI (56631) FLASHER: Progress: 66%[0m
+[0;32mI (56771) FLASHER: Progress: 66%[0m
+[0;32mI (56911) FLASHER: Progress: 67%[0m
+[0;32mI (57055) FLASHER: Progress: 67%[0m
+[0;32mI (57194) FLASHER: Progress: 67%[0m
+[0;32mI (57336) FLASHER: Progress: 67%[0m
+[0;32mI (57477) FLASHER: Progress: 68%[0m
+[0;32mI (57618) FLASHER: Progress: 68%[0m
+[0;32mI (57761) FLASHER: Progress: 68%[0m
+[0;32mI (57902) FLASHER: Progress: 68%[0m
+[0;32mI (58046) FLASHER: Progress: 68%[0m
+[0;32mI (58188) FLASHER: Progress: 69%[0m
+[0;32mI (58329) FLASHER: Progress: 69%[0m
+[0;32mI (58470) FLASHER: Progress: 69%[0m
+[0;32mI (58611) FLASHER: Progress: 69%[0m
+[0;32mI (58754) FLASHER: Progress: 69%[0m
+[0;32mI (58896) FLASHER: Progress: 70%[0m
+[0;32mI (59039) FLASHER: Progress: 70%[0m
+[0;32mI (59177) FLASHER: Progress: 70%[0m
+[0;32mI (59314) FLASHER: Progress: 70%[0m
+[0;32mI (59454) FLASHER: Progress: 70%[0m
+[0;32mI (59593) FLASHER: Progress: 71%[0m
+[0;32mI (59734) FLASHER: Progress: 71%[0m
+[0;32mI (59877) FLASHER: Progress: 71%[0m
+[0;32mI (60021) FLASHER: Progress: 71%[0m
+[0;32mI (60163) FLASHER: Progress: 72%[0m
+[0;32mI (60304) FLASHER: Progress: 72%[0m
+[0;32mI (60444) FLASHER: Progress: 72%[0m
+[0;32mI (60583) FLASHER: Progress: 72%[0m
+[0;32mI (60726) FLASHER: Progress: 72%[0m
+[0;32mI (60868) FLASHER: Progress: 73%[0m
+[0;32mI (61011) FLASHER: Progress: 73%[0m
+[0;32mI (61152) FLASHER: Progress: 73%[0m
+[0;32mI (61293) FLASHER: Progress: 73%[0m
+[0;32mI (61436) FLASHER: Progress: 73%[0m
+[0;32mI (61577) FLASHER: Progress: 74%[0m
+[0;32mI (61719) FLASHER: Progress: 74%[0m
+[0;32mI (61860) FLASHER: Progress: 74%[0m
+[0;32mI (61999) FLASHER: Progress: 74%[0m
+[0;32mI (62140) FLASHER: Progress: 74%[0m
+[0;32mI (62278) FLASHER: Progress: 75%[0m
+[0;32mI (62415) FLASHER: Progress: 75%[0m
+[0;32mI (62552) FLASHER: Progress: 75%[0m
+[0;32mI (62693) FLASHER: Progress: 75%[0m
+[0;32mI (62832) FLASHER: Progress: 76%[0m
+[0;32mI (62970) FLASHER: Progress: 76%[0m
+[0;32mI (63110) FLASHER: Progress: 76%[0m
+[0;32mI (63250) FLASHER: Progress: 76%[0m
+[0;32mI (63392) FLASHER: Progress: 76%[0m
+[0;32mI (63529) FLASHER: Progress: 77%[0m
+[0;32mI (63671) FLASHER: Progress: 77%[0m
+[0;32mI (63813) FLASHER: Progress: 77%[0m
+[0;32mI (63955) FLASHER: Progress: 77%[0m
+[0;32mI (64096) FLASHER: Progress: 77%[0m
+[0;32mI (64236) FLASHER: Progress: 78%[0m
+[0;32mI (64377) FLASHER: Progress: 78%[0m
+[0;32mI (64514) FLASHER: Progress: 78%[0m
+[0;32mI (64656) FLASHER: Progress: 78%[0m
+[0;32mI (64797) FLASHER: Progress: 78%[0m
+[0;32mI (64939) FLASHER: Progress: 79%[0m
+[0;32mI (65081) FLASHER: Progress: 79%[0m
+[0;32mI (65224) FLASHER: Progress: 79%[0m
+[0;32mI (65366) FLASHER: Progress: 79%[0m
+[0;32mI (65509) FLASHER: Progress: 80%[0m
+[0;32mI (65654) FLASHER: Progress: 80%[0m
+[0;32mI (65795) FLASHER: Progress: 80%[0m
+[0;32mI (65937) FLASHER: Progress: 80%[0m
+[0;32mI (66077) FLASHER: Progress: 80%[0m
+[0;32mI (66218) FLASHER: Progress: 81%[0m
+[0;32mI (66363) FLASHER: Progress: 81%[0m
+[0;32mI (66507) FLASHER: Progress: 81%[0m
+[0;32mI (66650) FLASHER: Progress: 81%[0m
+[0;32mI (66791) FLASHER: Progress: 81%[0m
+[0;32mI (66931) FLASHER: Progress: 82%[0m
+[0;32mI (67075) FLASHER: Progress: 82%[0m
+[0;32mI (67215) FLASHER: Progress: 82%[0m
+[0;32mI (67356) FLASHER: Progress: 82%[0m
+[0;32mI (67495) FLASHER: Progress: 83%[0m
+[0;32mI (67635) FLASHER: Progress: 83%[0m
+[0;32mI (67775) FLASHER: Progress: 83%[0m
+[0;32mI (67917) FLASHER: Progress: 83%[0m
+[0;32mI (68058) FLASHER: Progress: 83%[0m
+[0;32mI (68203) FLASHER: Progress: 84%[0m
+[0;32mI (68346) FLASHER: Progress: 84%[0m
+[0;32mI (68488) FLASHER: Progress: 84%[0m
+[0;32mI (68631) FLASHER: Progress: 84%[0m
+[0;32mI (68776) FLASHER: Progress: 84%[0m
+[0;32mI (68917) FLASHER: Progress: 85%[0m
+[0;32mI (69061) FLASHER: Progress: 85%[0m
+[0;32mI (69213) FLASHER: Progress: 85%[0m
+[0;32mI (69366) FLASHER: Progress: 85%[0m
+[0;32mI (69500) FLASHER: Progress: 85%[0m
+[0;32mI (69639) FLASHER: Progress: 86%[0m
+[0;32mI (69778) FLASHER: Progress: 86%[0m
+[0;32mI (69916) FLASHER: Progress: 86%[0m
+[0;32mI (70056) FLASHER: Progress: 86%[0m
+[0;32mI (70193) FLASHER: Progress: 87%[0m
+[0;32mI (70332) FLASHER: Progress: 87%[0m
+[0;32mI (70471) FLASHER: Progress: 87%[0m
+[0;32mI (70609) FLASHER: Progress: 87%[0m
+[0;32mI (70744) FLASHER: Progress: 87%[0m
+[0;32mI (70879) FLASHER: Progress: 88%[0m
+[0;32mI (71015) FLASHER: Progress: 88%[0m
+[0;32mI (71150) FLASHER: Progress: 88%[0m
+[0;32mI (71284) FLASHER: Progress: 88%[0m
+[0;32mI (71419) FLASHER: Progress: 88%[0m
+[0;32mI (71558) FLASHER: Progress: 89%[0m
+[0;32mI (71695) FLASHER: Progress: 89%[0m
+[0;32mI (71831) FLASHER: Progress: 89%[0m
+[0;32mI (71967) FLASHER: Progress: 89%[0m
+[0;32mI (72102) FLASHER: Progress: 89%[0m
+[0;32mI (72238) FLASHER: Progress: 90%[0m
+[0;32mI (72374) FLASHER: Progress: 90%[0m
+[0;32mI (72510) FLASHER: Progress: 90%[0m
+[0;32mI (72644) FLASHER: Progress: 90%[0m
+[0;32mI (72777) FLASHER: Progress: 91%[0m
+[0;32mI (72911) FLASHER: Progress: 91%[0m
+[0;32mI (73046) FLASHER: Progress: 91%[0m
+[0;32mI (73180) FLASHER: Progress: 91%[0m
+[0;32mI (73314) FLASHER: Progress: 91%[0m
+[0;32mI (73449) FLASHER: Progress: 92%[0m
+[0;32mI (73583) FLASHER: Progress: 92%[0m
+[0;32mI (73719) FLASHER: Progress: 92%[0m
+[0;32mI (73853) FLASHER: Progress: 92%[0m
+[0;32mI (73987) FLASHER: Progress: 92%[0m
+[0;32mI (74122) FLASHER: Progress: 93%[0m
+[0;32mI (74257) FLASHER: Progress: 93%[0m
+[0;32mI (74391) FLASHER: Progress: 93%[0m
+[0;32mI (74525) FLASHER: Progress: 93%[0m
+[0;32mI (74659) FLASHER: Progress: 93%[0m
+[0;32mI (74794) FLASHER: Progress: 94%[0m
+[0;32mI (74932) FLASHER: Progress: 94%[0m
+[0;32mI (75076) FLASHER: Progress: 94%[0m
+[0;32mI (75217) FLASHER: Progress: 94%[0m
+[0;32mI (75358) FLASHER: Progress: 95%[0m
+[0;32mI (75496) FLASHER: Progress: 95%[0m
+[0;32mI (75638) FLASHER: Progress: 95%[0m
+[0;32mI (75782) FLASHER: Progress: 95%[0m
+[0;32mI (75927) FLASHER: Progress: 95%[0m
+[0;32mI (76070) FLASHER: Progress: 96%[0m
+[0;32mI (76213) FLASHER: Progress: 96%[0m
+[0;32mI (76354) FLASHER: Progress: 96%[0m
+[0;32mI (76500) FLASHER: Progress: 96%[0m
+[0;32mI (76644) FLASHER: Progress: 96%[0m
+[0;32mI (76783) FLASHER: Progress: 97%[0m
+[0;32mI (76923) FLASHER: Progress: 97%[0m
+[0;32mI (77064) FLASHER: Progress: 97%[0m
+[0;32mI (77203) FLASHER: Progress: 97%[0m
+[0;32mI (77340) FLASHER: Progress: 98%[0m
+[0;32mI (77487) FLASHER: Progress: 98%[0m
+[0;32mI (77626) FLASHER: Progress: 98%[0m
+[0;32mI (77770) FLASHER: Progress: 98%[0m
+[0;32mI (77918) FLASHER: Progress: 98%[0m
+[0;32mI (78067) FLASHER: Progress: 99%[0m
+[0;32mI (78219) FLASHER: Progress: 99%[0m
+[0;32mI (78378) FLASHER: Progress: 99%[0m
+[0;32mI (78520) FLASHER: Progress: 99%[0m
+[0;32mI (78668) FLASHER: Progress: 99%[0m
+[0;32mI (78796) FLASHER: Progress: 100%[0m
+[0;32mI (78811) FLASHER: Segment written 1939200 / 1939200 bytes OK[0m
+[0;32mI (81531) FLASHER: MD5 verified OK for segment![0m
+[0;32mI (81532) FLASHER: Segment at 0x00010000 written successfully.[0m
+[0;32mI (81632) FLASHER: Resetting target to run app...[0m
+[0;32mI (81932) FLASHER: Target restarted in normal mode.[0m
+[0;32mI (81932) FLASHER: Full firmware update completed successfully![0m
+[0;32mI (81933) SD_CARD: SD Unmounted[0m
+[0;32mI (81936) MAIN: Flash hoan tat.[0m
+[0;32mI (85117) MAIN: E (2353) lcd_panel.io.i2c: panel_io_i2c_rx_buffer(128): i2c transaction failed
+[  2359][E][CST816SDriver.cpp:110] cst816s_read_[0m
+[0;32mI (85119) MAIN: info(): Unable to read CST816S_REG_CHIP_ID
+[  2374][E][CST816SDriver.cpp:616] esp_lcd_touch_new_i2c_cst816s(): CST816S read inf[0m
+[0;32mI (85233) MAIN: o failed
+[0m
+[0;32mI (93809) MAIN: ets Jul 29 2019 12:21:46
+
+rst:0x1 (POWERON_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_dr[0m
+[0;32mI (93815) MAIN: v:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:132[0m
+[0;32mI (93925) MAIN: 32
+load:0x40080400,len:3028
+entry 0x400805e4
+[0m
+[0;32mI (96937) MAIN: E (2353) lcd_panel.io.i2c: panel_io_i2c_rx_buffer(128): i2c transaction failed
+[  2359][E][CST816SDriver.cpp:110] cst816s_read_[0m
+[0;32mI (96940) MAIN: info(): Unable to read CST816S_REG_CHIP_ID
+[  2374][E][CST816SDriver.cpp:616] esp_lcd_touch_new_i2c_cst816s(): CST816S read inf[0m
+[0;32mI (97054) MAIN: o failed
+[0m

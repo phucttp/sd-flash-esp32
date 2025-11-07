@@ -1,0 +1,5171 @@
+ESP-ROM:esp32c3-api1-20210207
+Build:Feb  7 2021
+rst:0x15 (USB_UART_CHIP_RESET),boot:0xf (SPI_FAST_FLASH_BOOT)
+Saved PC:0x40383f90
+SPIWP:0xee
+mode:DIO, clock div:1
+load:0x3fcd5820,len:0x170c
+load:0x403cc710,len:0x968
+load:0x403ce710,len:0x2fa8
+entry 0x403cc710
+[0;32mI (24) boot: ESP-IDF v5.1.6-dirty 2nd stage bootloader[0m
+[0;32mI (24) boot: compile time Oct 16 2025 01:02:32[0m
+[0;32mI (25) boot: chip revision: v0.4[0m
+[0;32mI (28) boot.esp32c3: SPI Speed      : 80MHz[0m
+[0;32mI (33) boot.esp32c3: SPI Mode       : DIO[0m
+[0;32mI (37) boot.esp32c3: SPI Flash Size : 2MB[0m
+[0;32mI (42) boot: Enabling RNG early entropy source...[0m
+[0;32mI (47) boot: Partition Table:[0m
+[0;32mI (51) boot: ## Label            Usage          Type ST Offset   Length[0m
+[0;32mI (58) boot:  0 nvs              WiFi data        01 02 00009000 00006000[0m
+[0;32mI (66) boot:  1 phy_init         RF data          01 01 0000f000 00001000[0m
+[0;32mI (73) boot:  2 factory          factory app      00 00 00010000 00100000[0m
+[0;32mI (81) boot: End of partition table[0m
+[0;32mI (85) esp_image: segment 0: paddr=00010020 vaddr=3c040020 size=11760h ( 71520) map[0m
+[0;32mI (105) esp_image: segment 1: paddr=00021788 vaddr=3fc8e200 size=01420h (  5152) load[0m
+[0;32mI (106) esp_image: segment 2: paddr=00022bb0 vaddr=40380000 size=0d468h ( 54376) load[0m
+[0;32mI (121) esp_image: segment 3: paddr=00030020 vaddr=42000020 size=3e034h (254004) map[0m
+[0;32mI (163) esp_image: segment 4: paddr=0006e05c vaddr=4038d468 size=00c80h (  3200) load[0m
+[0;32mI (168) boot: Loaded app from partition at offset 0x10000[0m
+[0;32mI (168) boot: Disabling RNG early entropy source...[0m
+[0;32mI (183) cpu_start: Unicore app[0m
+[0;32mI (183) cpu_start: Pro cpu up.[0m
+[0;32mI (192) cpu_start: Pro cpu start user code[0m
+[0;32mI (192) cpu_start: cpu freq: 160000000 Hz[0m
+[0;32mI (192) cpu_start: Application information:[0m
+[0;32mI (195) cpu_start: Project name:     ESP_MultiFlasher[0m
+[0;32mI (200) cpu_start: App version:      1[0m
+[0;32mI (205) cpu_start: Compile time:     Oct 16 2025 00:52:28[0m
+[0;32mI (211) cpu_start: ELF file SHA256:  03ab9c7b14197079...[0m
+[0;32mI (217) cpu_start: ESP-IDF:          v5.1.6-dirty[0m
+[0;32mI (222) cpu_start: Min chip rev:     v0.3[0m
+[0;32mI (227) cpu_start: Max chip rev:     v1.99 [0m
+[0;32mI (232) cpu_start: Chip rev:         v0.4[0m
+[0;32mI (237) heap_init: Initializing. RAM available for dynamic allocation:[0m
+[0;32mI (244) heap_init: At 3FC90B30 len 0002F4D0 (189 KiB): DRAM[0m
+[0;32mI (250) heap_init: At 3FCC0000 len 0001C710 (113 KiB): DRAM/RETENTION[0m
+[0;32mI (257) heap_init: At 3FCDC710 len 00002950 (10 KiB): DRAM/RETENTION/STACK[0m
+[0;32mI (265) heap_init: At 50000010 len 00001FD8 (7 KiB): RTCRAM[0m
+[0;32mI (272) spi_flash: detected chip: generic[0m
+[0;32mI (276) spi_flash: flash io: dio[0m
+[0;33mW (280) spi_flash: Detected size(4096k) larger than the size in the binary image header(2048k). Using the size in the binary image header.[0m
+[0;32mI (293) sleep: Configure to isolate all GPIO pins in sleep state[0m
+[0;32mI (299) sleep: Enable automatic switching of GPIO sleep configuration[0m
+[0;32mI (307) app_start: Starting scheduler on CPU0[0m
+[0;32mI (312) main_task: Started on CPU0[0m
+[0;32mI (316) main_task: Calling app_main()[0m
+[0;32mI (324) MAIN: --- BAT DAU KHOI DONG HE THONG ---[0m
+[0;32mI (842) gpio: GPIO[4]| InputEn: 1| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (843) gpio: GPIO[5]| InputEn: 1| OutputEn: 0| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (850) gpio: GPIO[6]| InputEn: 1| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (859) gpio: GPIO[7]| InputEn: 1| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (879) SD_CARD: SD initialized OK![0m
+[0;32mI (1438) SD_CARD: Tải Metadata hoàn tất. Tổng cộng 6 firmware được tải.[0m
+[0;32mI (1439) MAIN: Dang lay menu tu sd_card module...[0m
+[0;32mI (1441) gpio: GPIO[21]| InputEn: 1| OutputEn: 0| OpenDrain: 0| Pullup: 1| Pulldown: 0| Intr:0 [0m
+[0;32mI (1451) gpio: GPIO[20]| InputEn: 1| OutputEn: 0| OpenDrain: 0| Pullup: 1| Pulldown: 0| Intr:0 [0m
+[0;32mI (1460) gpio: GPIO[10]| InputEn: 1| OutputEn: 0| OpenDrain: 0| Pullup: 1| Pulldown: 0| Intr:0 [0m
+[0;32mI (1484) MAIN: Khoi dong hoan tat. Hien thi menu.[0m
+[0;32mI (5934) MAIN: Da chon: Index 0, FW ID: phuc[0m
+[0;32mI (5934) MAIN: Bat dau flash firmware: phuc[0m
+[0;32mI (5947) SD_CARD: SD initialized OK![0m
+[0;32mI (5961) gpio: GPIO[2]| InputEn: 0| OutputEn: 0| OpenDrain: 0| Pullup: 1| Pulldown: 0| Intr:0 [0m
+[0;32mI (5961) gpio: GPIO[3]| InputEn: 0| OutputEn: 0| OpenDrain: 0| Pullup: 1| Pulldown: 0| Intr:0 [0m
+[0;32mI (5969) FLASHER: UART connection initialized at baud rate 115200[0m
+[0;32mI (5975) MAIN: Flasher da san sang.[0m
+[0;32mI (5979) SD_METADATA: Firmware ID phuc found: Path=/phuc/FW.bin, Version=1.0.2[0m
+[0;32mI (5987) FLASHER: Reset sequence start...[0m
+[0;32mI (6462) FLASHER: Reset sequence done![0m
+[0;32mI (7139) FLASHER: Connected to target device.[0m
+[0;32mI (7143) FLASHER: Baudrate boosted to 460800[0m
+[0;32mI (7144) FLASHER: ==== Writing segment ====[0m
+[0;32mI (7144) FLASHER: File: /phuc/BOTL.bin | Offset: 0x00001000[0m
+[0;32mI (7170) FLASHER: Segment size: 19152 bytes[0m
+[0;32mI (7494) FLASHER: Progress: 21%[0m
+[0;32mI (7631) FLASHER: Progress: 42%[0m
+[0;32mI (7765) FLASHER: Progress: 64%[0m
+[0;32mI (7900) FLASHER: Progress: 85%[0m
+[0;32mI (8032) FLASHER: Progress: 100%[0m
+[0;32mI (8046) FLASHER: Segment written 19152 / 19152 bytes OK[0m
+[0;32mI (8077) FLASHER: MD5 verified OK for segment![0m
+[0;32mI (8078) FLASHER: Segment at 0x00001000 written successfully.[0m
+[0;32mI (8078) FLASHER: ==== Writing segment ====[0m
+[0;32mI (8083) FLASHER: File: /phuc/PART.bin | Offset: 0x00008000[0m
+[0;32mI (8110) FLASHER: Segment size: 3072 bytes[0m
+[0;32mI (8265) FLASHER: Progress: 100%[0m
+[0;32mI (8279) FLASHER: Segment written 3072 / 3072 bytes OK[0m
+[0;32mI (8288) FLASHER: MD5 verified OK for segment![0m
+[0;32mI (8288) FLASHER: Segment at 0x00008000 written successfully.[0m
+[0;32mI (8289) FLASHER: ==== Writing segment ====[0m
+[0;32mI (8294) FLASHER: File: /phuc/FW.bin | Offset: 0x00010000[0m
+[0;32mI (8321) FLASHER: Segment size: 170512 bytes[0m
+[0;32mI (9527) FLASHER: Progress: 2%[0m
+[0;32mI (9661) FLASHER: Progress: 4%[0m
+[0;32mI (9795) FLASHER: Progress: 7%[0m
+[0;32mI (9928) FLASHER: Progress: 9%[0m
+[0;32mI (10062) FLASHER: Progress: 12%[0m
+[0;32mI (10196) FLASHER: Progress: 14%[0m
+[0;32mI (10329) FLASHER: Progress: 16%[0m
+[0;32mI (10463) FLASHER: Progress: 19%[0m
+[0;32mI (10597) FLASHER: Progress: 21%[0m
+[0;32mI (10732) FLASHER: Progress: 24%[0m
+[0;32mI (10866) FLASHER: Progress: 26%[0m
+[0;32mI (11002) FLASHER: Progress: 28%[0m
+[0;32mI (11139) FLASHER: Progress: 31%[0m
+[0;32mI (11274) FLASHER: Progress: 33%[0m
+[0;32mI (11410) FLASHER: Progress: 36%[0m
+[0;32mI (11545) FLASHER: Progress: 38%[0m
+[0;32mI (11680) FLASHER: Progress: 40%[0m
+[0;32mI (11815) FLASHER: Progress: 43%[0m
+[0;32mI (11950) FLASHER: Progress: 45%[0m
+[0;32mI (12085) FLASHER: Progress: 48%[0m
+[0;32mI (12220) FLASHER: Progress: 50%[0m
+[0;32mI (12355) FLASHER: Progress: 52%[0m
+[0;32mI (12490) FLASHER: Progress: 55%[0m
+[0;32mI (12625) FLASHER: Progress: 57%[0m
+[0;32mI (12761) FLASHER: Progress: 60%[0m
+[0;32mI (12897) FLASHER: Progress: 62%[0m
+[0;32mI (13033) FLASHER: Progress: 64%[0m
+[0;32mI (13169) FLASHER: Progress: 67%[0m
+[0;32mI (13306) FLASHER: Progress: 69%[0m
+[0;32mI (13441) FLASHER: Progress: 72%[0m
+[0;32mI (13577) FLASHER: Progress: 74%[0m
+[0;32mI (13714) FLASHER: Progress: 76%[0m
+[0;32mI (13849) FLASHER: Progress: 79%[0m
+[0;32mI (13985) FLASHER: Progress: 81%[0m
+[0;32mI (14121) FLASHER: Progress: 84%[0m
+[0;32mI (14257) FLASHER: Progress: 86%[0m
+[0;32mI (14392) FLASHER: Progress: 88%[0m
+[0;32mI (14527) FLASHER: Progress: 91%[0m
+[0;32mI (14663) FLASHER: Progress: 93%[0m
+[0;32mI (14797) FLASHER: Progress: 96%[0m
+[0;32mI (14932) FLASHER: Progress: 98%[0m
+[0;32mI (15062) FLASHER: Progress: 100%[0m
+[0;32mI (15076) FLASHER: Segment written 170512 / 170512 bytes OK[0m
+[0;32mI (15320) FLASHER: MD5 verified OK for segment![0m
+[0;32mI (15320) FLASHER: Segment at 0x00010000 written successfully.[0m
+[0;32mI (15421) FLASHER: Resetting target to run app...[0m
+[0;32mI (15721) FLASHER: Target restarted in normal mode.[0m
+[0;32mI (15721) FLASHER: Full firmware update completed successfully![0m
+[0;32mI (15722) SD_CARD: SD Unmounted[0m
+[0;32mI (15725) MAIN: Flash hoan tat.[0m
+[0;32mI (17996) MAIN: wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x00[0m
+[0;32mI (18114) MAIN: 05
+wrong chip id 0x0005
+ets Jul 29 2019 12:21:46
+
+rst:0x10 (RTCWDT_RTC_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+wrong chip id[0m
+[0;32mI (18382) MAIN:  0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chi[0m
+[0;32mI (18500) MAIN: p id 0x0005
+wrong chip id 0x0005
+ets Jul 29 2019 12:21:46
+
+rst:0x10 (RTCWDT_RTC_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+wron[0m
+[0;32mI (18722) MAIN: g chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+[0m
+[0;32mI (18846) MAIN: wrong chip id 0x0005
+wrong chip id 0x0005
+ets Jul 29 2019 12:21:46
+
+rst:0x10 (RTCWDT_RTC_RESET),boot:0x17 (SPI_FAST_FLASH_BO[0m
+[0;32mI (19107) MAIN: OT)
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id[0m
+[0;32mI (19231) MAIN:  0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+ets Jul 29 2019 12:21:46
+
+rst:0x10 (RTCWDT_RTC_RESET),boot:0x17 (SPI_FAST[0m
+[0;32mI (19493) MAIN: _FLASH_BOOT)
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wron[0m
+[0;32mI (19616) MAIN: g chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+ets Jul 29 2019 12:21:46
+
+rst:0x10 (RTCWDT_RTC_RESET),boot:0x17 [0m
+[0;32mI (19833) MAIN: (SPI_FAST_FLASH_BOOT)
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0[0m
+[0;32mI (20001) MAIN: 005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+ets Jul 29 2019 12:21:46
+
+rst:0x10 (RTCWDT_RTC_RESET),b[0m
+[0;32mI (20218) MAIN: oot:0x17 (SPI_FAST_FLASH_BOOT)
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong ch[0m
+[0;32mI (20386) MAIN: ip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+ets Jul 29 2019 12:21:46
+
+rst:0x10 (RTCWDT_RTC[0m
+[0;32mI (20559) MAIN: _RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005[0m
+[0;32mI (20771) MAIN: 
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+ets Jul 29 2019 12:21:46
+
+rst:0x10 (R[0m
+[0;32mI (20944) MAIN: TCWDT_RTC_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip i[0m
+[0;32mI (21156) MAIN: d 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+ets Jul 29 2019 12:21:46
+
+rs[0m
+[0;32mI (21329) MAIN: t:0x10 (RTCWDT_RTC_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wro[0m
+[0;32mI (21541) MAIN: ng chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+ets Jul 29 2019 12:21[0m
+[0;32mI (21669) MAIN: :46
+
+rst:0x10 (RTCWDT_RTC_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x[0m
+[0;32mI (21926) MAIN: 0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+ets Jul 29 2[0m
+[0;32mI (22054) MAIN: 019 12:21:46
+
+rst:0x10 (RTCWDT_RTC_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong c[0m
+[0;32mI (22311) MAIN: hip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+ets[0m
+[0;32mI (22395) MAIN:  Jul 29 2019 12:21:46
+
+rst:0x10 (RTCWDT_RTC_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+wrong chip id 0x0005
+wrong chip id 0x0005[0m
+[0;32mI (22662) MAIN: 
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x[0m
+[0;32mI (22779) MAIN: 0005
+ets Jul 29 2019 12:21:46
+
+rst:0x10 (RTCWDT_RTC_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+wrong chip id 0x0005
+wrong chip [0m
+[0;32mI (23046) MAIN: id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong c[0m
+[0;32mI (23164) MAIN: hip id 0x0005
+ets Jul 29 2019 12:21:46
+
+rst:0x10 (RTCWDT_RTC_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+wrong chip id 0x0005
+wr[0m
+[0;32mI (23387) MAIN: ong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005[0m
+[0;32mI (23505) MAIN: 
+wrong chip id 0x0005
+ets Jul 29 2019 12:21:46
+
+rst:0x10 (RTCWDT_RTC_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+wrong chip id 0[0m
+[0;32mI (23772) MAIN: x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip [0m
+[0;32mI (23889) MAIN: id 0x0005
+wrong chip id 0x0005
+ets Jul 29 2019 12:21:46
+
+rst:0x10 (RTCWDT_RTC_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+wrong [0m
+[0;32mI (24157) MAIN: chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wr[0m
+[0;32mI (24235) MAIN: ong chip id 0x0005
+wrong chip id 0x0005
+ets Jul 29 2019 12:21:46
+
+[0;32mI (860) gpio: GPIO[6]| InputEn: 1| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (867) gpio: GPIO[7]| InputEn: 1| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (890) SD_CARD: SD initialized OK![0m
+[0;32mI (1450) SD_CARD: Tải Metadata hoàn tất. Tổng cộng 6 firmware được tải.[0m
+[0;32mI (1451) MAIN: Dang lay menu tu sd_card module...[0m
+[0;32mI (1453) gpio: GPIO[21]| InputEn: 1| OutputEn: 0| OpenDrain: 0| Pullup: 1| Pulldown: 0| Intr:0 [0m
+[0;32mI (1463) gpio: GPIO[20]| InputEn: 1| OutputEn: 0| OpenDrain: 0| Pullup: 1| Pulldown: 0| Intr:0 [0m
+[0;32mI (1472) gpio: GPIO[10]| InputEn: 1| OutputEn: 0| OpenDrain: 0| Pullup: 1| Pulldown: 0| Intr:0 [0m
+[0;32mI (1496) MAIN: Khoi dong hoan tat. Hien thi menu.[0m
+[0;32mI (11517) MAIN: Da chon: Index 5, FW ID: qr4_01[0m
+[0;32mI (11517) MAIN: Bat dau flash firmware: qr4_01[0m
+[0;32mI (11530) SD_CARD: SD initialized OK![0m
+[0;32mI (11544) gpio: GPIO[2]| InputEn: 0| OutputEn: 0| OpenDrain: 0| Pullup: 1| Pulldown: 0| Intr:0 [0m
+[0;32mI (11544) gpio: GPIO[3]| InputEn: 0| OutputEn: 0| OpenDrain: 0| Pullup: 1| Pulldown: 0| Intr:0 [0m
+[0;32mI (11552) FLASHER: UART connection initialized at baud rate 115200[0m
+[0;32mI (11559) MAIN: Flasher da san sang.[0m
+[0;32mI (11563) SD_METADATA: Firmware ID qr4_01 found: Path=/qr4_01/FW.bin, Version=v1[0m
+[0;32mI (11571) FLASHER: Reset sequence start...[0m
+[0;32mI (12046) FLASHER: Reset sequence done![0m
+[0;32mI (12723) FLASHER: Connected to target device.[0m
+[0;32mI (12727) FLASHER: Baudrate boosted to 460800[0m
+[0;32mI (12728) FLASHER: ==== Writing segment ====[0m
+[0;32mI (12728) FLASHER: File: /qr4_01/BOTL.bin | Offset: 0x00001000[0m
+[0;32mI (12755) FLASHER: Segment size: 17536 bytes[0m
+[0;32mI (13092) FLASHER: Progress: 23%[0m
+[0;32mI (13233) FLASHER: Progress: 46%[0m
+[0;32mI (13384) FLASHER: Progress: 70%[0m
+[0;32mI (13532) FLASHER: Progress: 93%[0m
+[0;32mI (13658) FLASHER: Progress: 100%[0m
+[0;32mI (13673) FLASHER: Segment written 17536 / 17536 bytes OK[0m
+[0;32mI (13702) FLASHER: MD5 verified OK for segment![0m
+[0;32mI (13702) FLASHER: Segment at 0x00001000 written successfully.[0m
+[0;32mI (13703) FLASHER: ==== Writing segment ====[0m
+[0;32mI (13707) FLASHER: File: /qr4_01/PART.bin | Offset: 0x00008000[0m
+[0;32mI (13735) FLASHER: Segment size: 3072 bytes[0m
+[0;32mI (13887) FLASHER: Progress: 100%[0m
+[0;32mI (13901) FLASHER: Segment written 3072 / 3072 bytes OK[0m
+[0;32mI (13910) FLASHER: MD5 verified OK for segment![0m
+[0;32mI (13910) FLASHER: Segment at 0x00008000 written successfully.[0m
+[0;32mI (13911) FLASHER: ==== Writing segment ====[0m
+[0;32mI (13916) FLASHER: File: /qr4_01/FW.bin | Offset: 0x00010000[0m
+[0;32mI (13943) FLASHER: Segment size: 1235568 bytes[0m
+[0;32mI (17138) FLASHER: Progress: 0%[0m
+[0;32mI (17270) FLASHER: Progress: 0%[0m
+[0;32mI (17400) FLASHER: Progress: 0%[0m
+[0;32mI (17534) FLASHER: Progress: 1%[0m
+[0;32mI (17668) FLASHER: Progress: 1%[0m
+[0;32mI (17802) FLASHER: Progress: 1%[0m
+[0;32mI (17936) FLASHER: Progress: 2%[0m
+[0;32mI (18069) FLASHER: Progress: 2%[0m
+[0;32mI (18199) FLASHER: Progress: 2%[0m
+[0;32mI (18330) FLASHER: Progress: 3%[0m
+[0;32mI (18459) FLASHER: Progress: 3%[0m
+[0;32mI (18589) FLASHER: Progress: 3%[0m
+[0;32mI (18719) FLASHER: Progress: 4%[0m
+[0;32mI (18847) FLASHER: Progress: 4%[0m
+[0;32mI (18976) FLASHER: Progress: 4%[0m
+[0;32mI (19105) FLASHER: Progress: 5%[0m
+[0;32mI (19235) FLASHER: Progress: 5%[0m
+[0;32mI (19365) FLASHER: Progress: 5%[0m
+[0;32mI (19495) FLASHER: Progress: 6%[0m
+[0;32mI (19628) FLASHER: Progress: 6%[0m
+[0;32mI (19762) FLASHER: Progress: 6%[0m
+[0;32mI (19895) FLASHER: Progress: 7%[0m
+[0;32mI (20026) FLASHER: Progress: 7%[0m
+[0;32mI (20157) FLASHER: Progress: 7%[0m
+[0;32mI (20291) FLASHER: Progress: 8%[0m
+[0;32mI (20424) FLASHER: Progress: 8%[0m
+[0;32mI (20555) FLASHER: Progress: 8%[0m
+[0;32mI (20685) FLASHER: Progress: 9%[0m
+[0;32mI (20815) FLASHER: Progress: 9%[0m
+[0;32mI (20945) FLASHER: Progress: 9%[0m
+[0;32mI (21074) FLASHER: Progress: 10%[0m
+[0;32mI (21203) FLASHER: Progress: 10%[0m
+[0;32mI (21336) FLASHER: Progress: 10%[0m
+[0;32mI (21469) FLASHER: Progress: 11%[0m
+[0;32mI (21605) FLASHER: Progress: 11%[0m
+[0;32mI (21740) FLASHER: Progress: 11%[0m
+[0;32mI (21876) FLASHER: Progress: 12%[0m
+[0;32mI (22012) FLASHER: Progress: 12%[0m
+[0;32mI (22148) FLASHER: Progress: 12%[0m
+[0;32mI (22283) FLASHER: Progress: 13%[0m
+[0;32mI (22418) FLASHER: Progress: 13%[0m
+[0;32mI (22554) FLASHER: Progress: 13%[0m
+[0;32mI (22690) FLASHER: Progress: 14%[0m
+[0;32mI (22825) FLASHER: Progress: 14%[0m
+[0;32mI (22961) FLASHER: Progress: 14%[0m
+[0;32mI (23097) FLASHER: Progress: 15%[0m
+[0;32mI (23232) FLASHER: Progress: 15%[0m
+[0;32mI (23366) FLASHER: Progress: 15%[0m
+[0;32mI (23499) FLASHER: Progress: 16%[0m
+[0;32mI (23633) FLASHER: Progress: 16%[0m
+[0;32mI (23767) FLASHER: Progress: 16%[0m
+[0;32mI (23900) FLASHER: Progress: 17%[0m
+[0;32mI (24034) FLASHER: Progress: 17%[0m
+[0;32mI (24167) FLASHER: Progress: 17%[0m
+[0;32mI (24302) FLASHER: Progress: 18%[0m
+[0;32mI (24437) FLASHER: Progress: 18%[0m
+[0;32mI (24572) FLASHER: Progress: 18%[0m
+[0;32mI (24705) FLASHER: Progress: 19%[0m
+[0;32mI (24839) FLASHER: Progress: 19%[0m
+[0;32mI (24972) FLASHER: Progress: 19%[0m
+[0;32mI (25106) FLASHER: Progress: 20%[0m
+[0;32mI (25239) FLASHER: Progress: 20%[0m
+[0;32mI (25372) FLASHER: Progress: 20%[0m
+[0;32mI (25506) FLASHER: Progress: 21%[0m
+[0;32mI (25639) FLASHER: Progress: 21%[0m
+[0;32mI (25773) FLASHER: Progress: 21%[0m
+[0;32mI (25906) FLASHER: Progress: 22%[0m
+[0;32mI (26041) FLASHER: Progress: 22%[0m
+[0;32mI (26175) FLASHER: Progress: 22%[0m
+[0;32mI (26308) FLASHER: Progress: 23%[0m
+[0;32mI (26442) FLASHER: Progress: 23%[0m
+[0;32mI (26575) FLASHER: Progress: 23%[0m
+[0;32mI (26708) FLASHER: Progress: 24%[0m
+[0;32mI (26842) FLASHER: Progress: 24%[0m
+[0;32mI (26975) FLASHER: Progress: 24%[0m
+[0;32mI (27109) FLASHER: Progress: 25%[0m
+[0;32mI (27242) FLASHER: Progress: 25%[0m
+[0;32mI (27376) FLASHER: Progress: 25%[0m
+[0;32mI (27509) FLASHER: Progress: 26%[0m
+[0;32mI (27642) FLASHER: Progress: 26%[0m
+[0;32mI (27775) FLASHER: Progress: 26%[0m
+[0;32mI (27910) FLASHER: Progress: 27%[0m
+[0;32mI (28044) FLASHER: Progress: 27%[0m
+[0;32mI (28177) FLASHER: Progress: 27%[0m
+[0;32mI (28310) FLASHER: Progress: 28%[0m
+[0;32mI (28444) FLASHER: Progress: 28%[0m
+[0;32mI (28579) FLASHER: Progress: 28%[0m
+[0;32mI (28713) FLASHER: Progress: 29%[0m
+[0;32mI (28847) FLASHER: Progress: 29%[0m
+[0;32mI (28980) FLASHER: Progress: 29%[0m
+[0;32mI (29115) FLASHER: Progress: 30%[0m
+[0;32mI (29249) FLASHER: Progress: 30%[0m
+[0;32mI (29383) FLASHER: Progress: 30%[0m
+[0;32mI (29517) FLASHER: Progress: 31%[0m
+[0;32mI (29652) FLASHER: Progress: 31%[0m
+[0;32mI (29786) FLASHER: Progress: 31%[0m
+[0;32mI (29920) FLASHER: Progress: 32%[0m
+[0;32mI (30054) FLASHER: Progress: 32%[0m
+[0;32mI (30188) FLASHER: Progress: 32%[0m
+[0;32mI (30321) FLASHER: Progress: 33%[0m
+[0;32mI (30455) FLASHER: Progress: 33%[0m
+[0;32mI (30589) FLASHER: Progress: 33%[0m
+[0;32mI (30723) FLASHER: Progress: 34%[0m
+[0;32mI (30857) FLASHER: Progress: 34%[0m
+[0;32mI (30991) FLASHER: Progress: 34%[0m
+[0;32mI (31125) FLASHER: Progress: 35%[0m
+[0;32mI (31259) FLASHER: Progress: 35%[0m
+[0;32mI (31393) FLASHER: Progress: 35%[0m
+[0;32mI (31526) FLASHER: Progress: 36%[0m
+[0;32mI (31660) FLASHER: Progress: 36%[0m
+[0;32mI (31794) FLASHER: Progress: 36%[0m
+[0;32mI (31929) FLASHER: Progress: 37%[0m
+[0;32mI (32064) FLASHER: Progress: 37%[0m
+[0;32mI (32199) FLASHER: Progress: 37%[0m
+[0;32mI (32336) FLASHER: Progress: 38%[0m
+[0;32mI (32475) FLASHER: Progress: 38%[0m
+[0;32mI (32612) FLASHER: Progress: 38%[0m
+[0;32mI (32747) FLASHER: Progress: 39%[0m
+[0;32mI (32883) FLASHER: Progress: 39%[0m
+[0;32mI (33019) FLASHER: Progress: 39%[0m
+[0;32mI (33155) FLASHER: Progress: 40%[0m
+[0;32mI (33296) FLASHER: Progress: 40%[0m
+[0;32mI (33432) FLASHER: Progress: 40%[0m
+[0;32mI (33569) FLASHER: Progress: 41%[0m
+[0;32mI (33704) FLASHER: Progress: 41%[0m
+[0;32mI (33839) FLASHER: Progress: 41%[0m
+[0;32mI (33976) FLASHER: Progress: 42%[0m
+[0;32mI (34111) FLASHER: Progress: 42%[0m
+[0;32mI (34247) FLASHER: Progress: 42%[0m
+[0;32mI (34382) FLASHER: Progress: 43%[0m
+[0;32mI (34519) FLASHER: Progress: 43%[0m
+[0;32mI (34655) FLASHER: Progress: 43%[0m
+[0;32mI (34791) FLASHER: Progress: 44%[0m
+[0;32mI (34928) FLASHER: Progress: 44%[0m
+[0;32mI (35064) FLASHER: Progress: 44%[0m
+[0;32mI (35201) FLASHER: Progress: 45%[0m
+[0;32mI (35339) FLASHER: Progress: 45%[0m
+[0;32mI (35477) FLASHER: Progress: 45%[0m
+[0;32mI (35612) FLASHER: Progress: 46%[0m
+[0;32mI (35748) FLASHER: Progress: 46%[0m
+[0;32mI (35885) FLASHER: Progress: 46%[0m
+[0;32mI (36021) FLASHER: Progress: 47%[0m
+[0;32mI (36159) FLASHER: Progress: 47%[0m
+[0;32mI (36299) FLASHER: Progress: 47%[0m
+[0;32mI (36437) FLASHER: Progress: 48%[0m
+[0;32mI (36573) FLASHER: Progress: 48%[0m
+[0;32mI (36710) FLASHER: Progress: 48%[0m
+[0;32mI (36845) FLASHER: Progress: 49%[0m
+[0;32mI (36982) FLASHER: Progress: 49%[0m
+[0;32mI (37121) FLASHER: Progress: 49%[0m
+[0;32mI (37258) FLASHER: Progress: 50%[0m
+[0;32mI (37395) FLASHER: Progress: 50%[0m
+[0;32mI (37539) FLASHER: Progress: 50%[0m
+[0;32mI (37687) FLASHER: Progress: 51%[0m
+[0;32mI (37825) FLASHER: Progress: 51%[0m
+[0;32mI (37961) FLASHER: Progress: 51%[0m
+[0;32mI (38102) FLASHER: Progress: 52%[0m
+[0;32mI (38244) FLASHER: Progress: 52%[0m
+[0;32mI (38385) FLASHER: Progress: 52%[0m
+[0;32mI (38528) FLASHER: Progress: 53%[0m
+[0;32mI (38672) FLASHER: Progress: 53%[0m
+[0;32mI (38815) FLASHER: Progress: 53%[0m
+[0;32mI (38959) FLASHER: Progress: 54%[0m
+[0;32mI (39099) FLASHER: Progress: 54%[0m
+[0;32mI (39244) FLASHER: Progress: 54%[0m
+[0;32mI (39385) FLASHER: Progress: 55%[0m
+[0;32mI (39523) FLASHER: Progress: 55%[0m
+[0;32mI (39664) FLASHER: Progress: 55%[0m
+[0;32mI (39807) FLASHER: Progress: 56%[0m
+[0;32mI (39951) FLASHER: Progress: 56%[0m
+[0;32mI (40097) FLASHER: Progress: 56%[0m
+[0;32mI (40239) FLASHER: Progress: 57%[0m
+[0;32mI (40384) FLASHER: Progress: 57%[0m
+[0;32mI (40524) FLASHER: Progress: 57%[0m
+[0;32mI (40668) FLASHER: Progress: 58%[0m
+[0;32mI (40809) FLASHER: Progress: 58%[0m
+[0;32mI (40948) FLASHER: Progress: 58%[0m
+[0;32mI (41089) FLASHER: Progress: 59%[0m
+[0;32mI (41232) FLASHER: Progress: 59%[0m
+[0;32mI (41374) FLASHER: Progress: 59%[0m
+[0;32mI (41512) FLASHER: Progress: 60%[0m
+[0;32mI (41652) FLASHER: Progress: 60%[0m
+[0;32mI (41787) FLASHER: Progress: 60%[0m
+[0;32mI (41921) FLASHER: Progress: 60%[0m
+[0;32mI (42055) FLASHER: Progress: 61%[0m
+[0;32mI (42190) FLASHER: Progress: 61%[0m
+[0;32mI (42324) FLASHER: Progress: 61%[0m
+[0;32mI (42459) FLASHER: Progress: 62%[0m
+[0;32mI (42595) FLASHER: Progress: 62%[0m
+[0;32mI (42732) FLASHER: Progress: 62%[0m
+[0;32mI (42867) FLASHER: Progress: 63%[0m
+[0;32mI (43002) FLASHER: Progress: 63%[0m
+[0;32mI (43136) FLASHER: Progress: 63%[0m
+[0;32mI (43271) FLASHER: Progress: 64%[0m
+[0;32mI (43405) FLASHER: Progress: 64%[0m
+[0;32mI (43543) FLASHER: Progress: 64%[0m
+[0;32mI (43688) FLASHER: Progress: 65%[0m
+[0;32mI (43834) FLASHER: Progress: 65%[0m
+[0;32mI (43978) FLASHER: Progress: 65%[0m
+[0;32mI (44123) FLASHER: Progress: 66%[0m
+[0;32mI (44268) FLASHER: Progress: 66%[0m
+[0;32mI (44411) FLASHER: Progress: 66%[0m
+[0;32mI (44554) FLASHER: Progress: 67%[0m
+[0;32mI (44695) FLASHER: Progress: 67%[0m
+[0;32mI (44841) FLASHER: Progress: 67%[0m
+[0;32mI (44987) FLASHER: Progress: 68%[0m
+[0;32mI (45141) FLASHER: Progress: 68%[0m
+[0;32mI (45291) FLASHER: Progress: 68%[0m
+[0;32mI (45435) FLASHER: Progress: 69%[0m
+[0;32mI (45577) FLASHER: Progress: 69%[0m
+[0;32mI (45719) FLASHER: Progress: 69%[0m
+[0;32mI (45859) FLASHER: Progress: 70%[0m
+[0;32mI (45998) FLASHER: Progress: 70%[0m
+[0;32mI (46139) FLASHER: Progress: 70%[0m
+[0;32mI (46285) FLASHER: Progress: 71%[0m
+[0;32mI (46428) FLASHER: Progress: 71%[0m
+[0;32mI (46572) FLASHER: Progress: 71%[0m
+[0;32mI (46714) FLASHER: Progress: 72%[0m
+[0;32mI (46856) FLASHER: Progress: 72%[0m
+[0;32mI (46999) FLASHER: Progress: 72%[0m
+[0;32mI (47144) FLASHER: Progress: 73%[0m
+[0;32mI (47284) FLASHER: Progress: 73%[0m
+[0;32mI (47422) FLASHER: Progress: 73%[0m
+[0;32mI (47562) FLASHER: Progress: 74%[0m
+[0;32mI (47705) FLASHER: Progress: 74%[0m
+[0;32mI (47845) FLASHER: Progress: 74%[0m
+[0;32mI (47986) FLASHER: Progress: 75%[0m
+[0;32mI (48125) FLASHER: Progress: 75%[0m
+[0;32mI (48267) FLASHER: Progress: 75%[0m
+[0;32mI (48408) FLASHER: Progress: 76%[0m
+[0;32mI (48548) FLASHER: Progress: 76%[0m
+[0;32mI (48689) FLASHER: Progress: 76%[0m
+[0;32mI (48833) FLASHER: Progress: 77%[0m
+[0;32mI (48973) FLASHER: Progress: 77%[0m
+[0;32mI (49116) FLASHER: Progress: 77%[0m
+[0;32mI (49258) FLASHER: Progress: 78%[0m
+[0;32mI (49398) FLASHER: Progress: 78%[0m
+[0;32mI (49543) FLASHER: Progress: 78%[0m
+[0;32mI (49685) FLASHER: Progress: 79%[0m
+[0;32mI (49829) FLASHER: Progress: 79%[0m
+[0;32mI (49972) FLASHER: Progress: 79%[0m
+[0;32mI (50113) FLASHER: Progress: 80%[0m
+[0;32mI (50250) FLASHER: Progress: 80%[0m
+[0;32mI (50393) FLASHER: Progress: 80%[0m
+[0;32mI (50533) FLASHER: Progress: 81%[0m
+[0;32mI (50674) FLASHER: Progress: 81%[0m
+[0;32mI (50814) FLASHER: Progress: 81%[0m
+[0;32mI (50955) FLASHER: Progress: 82%[0m
+[0;32mI (51094) FLASHER: Progress: 82%[0m
+[0;32mI (51234) FLASHER: Progress: 82%[0m
+[0;32mI (51373) FLASHER: Progress: 83%[0m
+[0;32mI (51513) FLASHER: Progress: 83%[0m
+[0;32mI (51655) FLASHER: Progress: 83%[0m
+[0;32mI (51798) FLASHER: Progress: 84%[0m
+[0;32mI (51941) FLASHER: Progress: 84%[0m
+[0;32mI (52086) FLASHER: Progress: 84%[0m
+[0;32mI (52229) FLASHER: Progress: 85%[0m
+[0;32mI (52377) FLASHER: Progress: 85%[0m
+[0;32mI (52516) FLASHER: Progress: 85%[0m
+[0;32mI (52660) FLASHER: Progress: 86%[0m
+[0;32mI (52802) FLASHER: Progress: 86%[0m
+[0;32mI (52946) FLASHER: Progress: 86%[0m
+[0;32mI (53084) FLASHER: Progress: 87%[0m
+[0;32mI (53221) FLASHER: Progress: 87%[0m
+[0;32mI (53356) FLASHER: Progress: 87%[0m
+[0;32mI (53492) FLASHER: Progress: 88%[0m
+[0;32mI (53630) FLASHER: Progress: 88%[0m
+[0;32mI (53773) FLASHER: Progress: 88%[0m
+[0;32mI (53915) FLASHER: Progress: 89%[0m
+[0;32mI (54059) FLASHER: Progress: 89%[0m
+[0;32mI (54200) FLASHER: Progress: 89%[0m
+[0;32mI (54345) FLASHER: Progress: 90%[0m
+[0;32mI (54489) FLASHER: Progress: 90%[0m
+[0;32mI (54631) FLASHER: Progress: 90%[0m
+[0;32mI (54774) FLASHER: Progress: 91%[0m
+[0;32mI (54917) FLASHER: Progress: 91%[0m
+[0;32mI (55060) FLASHER: Progress: 91%[0m
+[0;32mI (55204) FLASHER: Progress: 92%[0m
+[0;32mI (55340) FLASHER: Progress: 92%[0m
+[0;32mI (55477) FLASHER: Progress: 92%[0m
+[0;32mI (55614) FLASHER: Progress: 93%[0m
+[0;32mI (55755) FLASHER: Progress: 93%[0m
+[0;32mI (55890) FLASHER: Progress: 93%[0m
+[0;32mI (56024) FLASHER: Progress: 94%[0m
+[0;32mI (56157) FLASHER: Progress: 94%[0m
+[0;32mI (56292) FLASHER: Progress: 94%[0m
+[0;32mI (56433) FLASHER: Progress: 95%[0m
+[0;32mI (56579) FLASHER: Progress: 95%[0m
+[0;32mI (56721) FLASHER: Progress: 95%[0m
+[0;32mI (56861) FLASHER: Progress: 96%[0m
+[0;32mI (57006) FLASHER: Progress: 96%[0m
+[0;32mI (57155) FLASHER: Progress: 96%[0m
+[0;32mI (57300) FLASHER: Progress: 97%[0m
+[0;32mI (57441) FLASHER: Progress: 97%[0m
+[0;32mI (57587) FLASHER: Progress: 97%[0m
+[0;32mI (57729) FLASHER: Progress: 98%[0m
+[0;32mI (57871) FLASHER: Progress: 98%[0m
+[0;32mI (58018) FLASHER: Progress: 98%[0m
+[0;32mI (58156) FLASHER: Progress: 99%[0m
+[0;32mI (58308) FLASHER: Progress: 99%[0m
+[0;32mI (58465) FLASHER: Progress: 99%[0m
+[0;32mI (58608) FLASHER: Progress: 100%[0m
+[0;32mI (58623) FLASHER: Segment written 1235568 / 1235568 bytes OK[0m
+[0;32mI (60358) FLASHER: MD5 verified OK for segment![0m
+[0;32mI (60358) FLASHER: Segment at 0x00010000 written successfully.[0m
+[0;32mI (60459) FLASHER: Resetting target to run app...[0m
+[0;32mI (60759) FLASHER: Target restarted in normal mode.[0m
+[0;32mI (60759) FLASHER: Full firmware update completed successfully![0m
+[0;32mI (60760) SD_CARD: SD Unmounted[0m
+[0;32mI (60763) MAIN: Flash hoan tat.[0m
+[0;32mI (63251) MAIN: ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x0[0m
+[0;32mI (63257) MAIN: 0,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+l[0m
+[0;32mI (63368) MAIN: oad:0x40080400,len:3028
+entry 0x400805e4
+[0m
+[0;32mI (63738) MAIN: ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x0[0m
+[0;32mI (63744) MAIN: 0,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+l[0m
+[0;32mI (63855) MAIN: oad:0x40080400,len:3028
+entry 0x400805e4
+[0m
+[0;32mI (64225) MAIN: ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x0[0m
+[0;32mI (64231) MAIN: 0,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+l[0m
+[0;32mI (64342) MAIN: oad:0x40080400,len:3028
+entry 0x400805e4
+[0m
+[0;32mI (64712) MAIN: ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x0[0m
+[0;32mI (64718) MAIN: 0,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+l[0m
+[0;32mI (64829) MAIN: oad:0x40080400,len:3028
+entry 0x400805e4
+[0m
+[0;32mI (65199) MAIN: ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x0[0m
+[0;32mI (65205) MAIN: 0,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+l[0m
+[0;32mI (65316) MAIN: oad:0x40080400,len:3028
+entry 0x400805e4
+[0m
+[0;32mI (65686) MAIN: ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x0[0m
+[0;32mI (65692) MAIN: 0,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+l[0m
+[0;32mI (65803) MAIN: oad:0x40080400,len:3028
+entry 0x400805e4
+[0m
+[0;32mI (66173) MAIN: ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x0[0m
+[0;32mI (66179) MAIN: 0,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+l[0m
+[0;32mI (66290) MAIN: oad:0x40080400,len:3028
+entry 0x400805e4
+[0m
+[0;32mI (66660) MAIN: ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x0[0m
+[0;32mI (66666) MAIN: 0,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+l[0m
+[0;32mI (66777) MAIN: oad:0x40080400,len:3028
+entry 0x400805e4
+[0m
+[0;32mI (67147) MAIN: ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x0[0m
+[0;32mI (67153) MAIN: 0,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+l[0m
+[0;32mI (67264) MAIN: oad:0x40080400,len:3028
+entry 0x400805e4
+[0m
+[0;32mI (67634) MAIN: ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x0[0m
+[0;32mI (67640) MAIN: 0,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+l[0m
+[0;32mI (67751) MAIN: oad:0x40080400,len:3028
+entry 0x400805e4
+[0m
+[0;32mI (68121) MAIN: ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x0[0m
+[0;32mI (68127) MAIN: 0,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+l[0m
+[0;32mI (68238) MAIN: oad:0x40080400,len:3028
+entry 0x400805e4
+[0m
+[0;32mI (68608) MAIN: ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x0[0m
+[0;32mI (68614) MAIN: 0,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+l[0m
+[0;32mI (68725) MAIN: oad:0x40080400,len:3028
+entry 0x400805e4
+[0m
+[0;32mI (69095) MAIN: ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x0[0m
+[0;32mI (69101) MAIN: 0,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+l[0m
+[0;32mI (69212) MAIN: oad:0x40080400,len:3028
+entry 0x400805e4
+[0m
+[0;32mI (69583) MAIN: ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x0[0m
+[0;32mI (69589) MAIN: 0,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+l[0m
+[0;32mI (69699) MAIN: oad:0x40080400,len:3028
+entry 0x400805e4
+[0m
+[0;32mI (70070) MAIN: ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x0[0m
+[0;32mI (70076) MAIN: 0,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+l[0m
+[0;32mI (70186) MAIN: oad:0x40080400,len:3028
+entry 0x400805e4
+[0m
+[0;32mI (70557) MAIN: ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x0[0m
+[0;32mI (70563) MAIN: 0,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+l[0m
+[0;32mI (70674) MAIN: oad:0x40080400,len:3028
+entry 0x400805e4
+[0m
+[0;32mI (71044) MAIN: ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x0[0m
+[0;32mI (71050) MAIN: 0,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+l[0m
+[0;32mI (71161) MAIN: oad:0x40080400,len:3028
+entry 0x400805e4
+[0m
+[0;32mI (71531) MAIN: ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x0[0m
+[0;32mI (71537) MAIN: 0,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+l[0m
+[0;32mI (71648) MAIN: oad:0x40080400,len:3028
+entry 0x400805e4
+[0m
+[0;32mI (72018) MAIN: ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x0[0m
+[0;32mI (72024) MAIN: 0,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+l[0m
+[0;32mI (72135) MAIN: oad:0x40080400,len:3028
+entry 0x400805e4
+[0m
+[0;32mI (72505) MAIN: ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x0[0m
+[0;32mI (72511) MAIN: 0,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+l[0m
+[0;32mI (72622) MAIN: oad:0x40080400,len:3028
+entry 0x400805e4
+[0m
+[0;32mI (72992) MAIN: ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x0[0m
+[0;32mI (72998) MAIN: 0,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+l[0m
+[0;32mI (890) gpio: GPIO[6]| InputEn: 1| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (897) gpio: GPIO[7]| InputEn: 1| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (917) SD_CARD: SD initialized OK![0m
+[0;32mI (1477) SD_CARD: Tải Metadata hoàn tất. Tổng cộng 6 firmware được tải.[0m
+[0;32mI (1478) MAIN: Dang lay menu tu sd_card module...[0m
+[0;32mI (1480) gpio: GPIO[21]| InputEn: 1| OutputEn: 0| OpenDrain: 0| Pullup: 1| Pulldown: 0| Intr:0 [0m
+[0;32mI (1490) gpio: GPIO[20]| InputEn: 1| OutputEn: 0| OpenDrain: 0| Pullup: 1| Pulldown: 0| Intr:0 [0m
+[0;32mI (1499) gpio: GPIO[10]| InputEn: 1| OutputEn: 0| OpenDrain: 0| Pullup: 1| Pulldown: 0| Intr:0 [0m
+[0;32mI (1523) MAIN: Khoi dong hoan tat. Hien thi menu.[0m
+[0;32mI (5682) MAIN: Da chon: Index 2, FW ID: qr4_02[0m
+[0;32mI (5682) MAIN: Bat dau flash firmware: qr4_02[0m
+[0;32mI (5695) SD_CARD: SD initialized OK![0m
+[0;32mI (5709) gpio: GPIO[2]| InputEn: 0| OutputEn: 0| OpenDrain: 0| Pullup: 1| Pulldown: 0| Intr:0 [0m
+[0;32mI (5709) gpio: GPIO[3]| InputEn: 0| OutputEn: 0| OpenDrain: 0| Pullup: 1| Pulldown: 0| Intr:0 [0m
+[0;32mI (5717) FLASHER: UART connection initialized at baud rate 115200[0m
+[0;32mI (5723) MAIN: Flasher da san sang.[0m
+[0;32mI (5728) SD_METADATA: Firmware ID qr4_02 found: Path=/qr4_02/FW.bin, Version=v0.1.2[0m
+[0;32mI (5736) FLASHER: Reset sequence start...[0m
+[0;32mI (6211) FLASHER: Reset sequence done![0m
+[0;32mI (6888) FLASHER: Connected to target device.[0m
+[0;32mI (6892) FLASHER: Baudrate boosted to 460800[0m
+[0;32mI (6893) FLASHER: ==== Writing segment ====[0m
+[0;32mI (6893) FLASHER: File: /qr4_02/BOTL.bin | Offset: 0x00001000[0m
+[0;32mI (6920) FLASHER: Segment size: 17536 bytes[0m
+[0;32mI (7256) FLASHER: Progress: 23%[0m
+[0;32mI (7397) FLASHER: Progress: 46%[0m
+[0;32mI (7548) FLASHER: Progress: 70%[0m
+[0;32mI (7696) FLASHER: Progress: 93%[0m
+[0;32mI (7822) FLASHER: Progress: 100%[0m
+[0;32mI (7837) FLASHER: Segment written 17536 / 17536 bytes OK[0m
+[0;32mI (7866) FLASHER: MD5 verified OK for segment![0m
+[0;32mI (7866) FLASHER: Segment at 0x00001000 written successfully.[0m
+[0;32mI (7866) FLASHER: ==== Writing segment ====[0m
+[0;32mI (7871) FLASHER: File: /qr4_02/PART.bin | Offset: 0x00008000[0m
+[0;32mI (7899) FLASHER: Segment size: 3072 bytes[0m
+[0;32mI (8048) FLASHER: Progress: 100%[0m
+[0;32mI (8062) FLASHER: Segment written 3072 / 3072 bytes OK[0m
+[0;32mI (8071) FLASHER: MD5 verified OK for segment![0m
+[0;32mI (8071) FLASHER: Segment at 0x00008000 written successfully.[0m
+[0;32mI (8071) FLASHER: ==== Writing segment ====[0m
+[0;32mI (8076) FLASHER: File: /qr4_02/FW.bin | Offset: 0x00010000[0m
+[0;32mI (8104) FLASHER: Segment size: 1238384 bytes[0m
+[0;32mI (11285) FLASHER: Progress: 0%[0m
+[0;32mI (11417) FLASHER: Progress: 0%[0m
+[0;32mI (11547) FLASHER: Progress: 0%[0m
+[0;32mI (11681) FLASHER: Progress: 1%[0m
+[0;32mI (11815) FLASHER: Progress: 1%[0m
+[0;32mI (11949) FLASHER: Progress: 1%[0m
+[0;32mI (12082) FLASHER: Progress: 2%[0m
+[0;32mI (12216) FLASHER: Progress: 2%[0m
+[0;32mI (12347) FLASHER: Progress: 2%[0m
+[0;32mI (12477) FLASHER: Progress: 3%[0m
+[0;32mI (12607) FLASHER: Progress: 3%[0m
+[0;32mI (12737) FLASHER: Progress: 3%[0m
+[0;32mI (12867) FLASHER: Progress: 4%[0m
+[0;32mI (12996) FLASHER: Progress: 4%[0m
+[0;32mI (13125) FLASHER: Progress: 4%[0m
+[0;32mI (13254) FLASHER: Progress: 5%[0m
+[0;32mI (13383) FLASHER: Progress: 5%[0m
+[0;32mI (13512) FLASHER: Progress: 5%[0m
+[0;32mI (13642) FLASHER: Progress: 6%[0m
+[0;32mI (13772) FLASHER: Progress: 6%[0m
+[0;32mI (13905) FLASHER: Progress: 6%[0m
+[0;32mI (14038) FLASHER: Progress: 7%[0m
+[0;32mI (14171) FLASHER: Progress: 7%[0m
+[0;32mI (14304) FLASHER: Progress: 7%[0m
+[0;32mI (14434) FLASHER: Progress: 8%[0m
+[0;32mI (14566) FLASHER: Progress: 8%[0m
+[0;32mI (14699) FLASHER: Progress: 8%[0m
+[0;32mI (14831) FLASHER: Progress: 9%[0m
+[0;32mI (14961) FLASHER: Progress: 9%[0m
+[0;32mI (15090) FLASHER: Progress: 9%[0m
+[0;32mI (15220) FLASHER: Progress: 10%[0m
+[0;32mI (15349) FLASHER: Progress: 10%[0m
+[0;32mI (15479) FLASHER: Progress: 10%[0m
+[0;32mI (15611) FLASHER: Progress: 11%[0m
+[0;32mI (15743) FLASHER: Progress: 11%[0m
+[0;32mI (15879) FLASHER: Progress: 11%[0m
+[0;32mI (16014) FLASHER: Progress: 12%[0m
+[0;32mI (16150) FLASHER: Progress: 12%[0m
+[0;32mI (16286) FLASHER: Progress: 12%[0m
+[0;32mI (16422) FLASHER: Progress: 13%[0m
+[0;32mI (16557) FLASHER: Progress: 13%[0m
+[0;32mI (16693) FLASHER: Progress: 13%[0m
+[0;32mI (16828) FLASHER: Progress: 14%[0m
+[0;32mI (16964) FLASHER: Progress: 14%[0m
+[0;32mI (17099) FLASHER: Progress: 14%[0m
+[0;32mI (17236) FLASHER: Progress: 15%[0m
+[0;32mI (17371) FLASHER: Progress: 15%[0m
+[0;32mI (17506) FLASHER: Progress: 15%[0m
+[0;32mI (17640) FLASHER: Progress: 16%[0m
+[0;32mI (17774) FLASHER: Progress: 16%[0m
+[0;32mI (17907) FLASHER: Progress: 16%[0m
+[0;32mI (18041) FLASHER: Progress: 17%[0m
+[0;32mI (18174) FLASHER: Progress: 17%[0m
+[0;32mI (18308) FLASHER: Progress: 17%[0m
+[0;32mI (18441) FLASHER: Progress: 18%[0m
+[0;32mI (18576) FLASHER: Progress: 18%[0m
+[0;32mI (18712) FLASHER: Progress: 18%[0m
+[0;32mI (18846) FLASHER: Progress: 19%[0m
+[0;32mI (18980) FLASHER: Progress: 19%[0m
+[0;32mI (19113) FLASHER: Progress: 19%[0m
+[0;32mI (19247) FLASHER: Progress: 20%[0m
+[0;32mI (19380) FLASHER: Progress: 20%[0m
+[0;32mI (19513) FLASHER: Progress: 20%[0m
+[0;32mI (19647) FLASHER: Progress: 21%[0m
+[0;32mI (19780) FLASHER: Progress: 21%[0m
+[0;32mI (19913) FLASHER: Progress: 21%[0m
+[0;32mI (20047) FLASHER: Progress: 22%[0m
+[0;32mI (20181) FLASHER: Progress: 22%[0m
+[0;32mI (20315) FLASHER: Progress: 22%[0m
+[0;32mI (20448) FLASHER: Progress: 23%[0m
+[0;32mI (20582) FLASHER: Progress: 23%[0m
+[0;32mI (20715) FLASHER: Progress: 23%[0m
+[0;32mI (20849) FLASHER: Progress: 24%[0m
+[0;32mI (20982) FLASHER: Progress: 24%[0m
+[0;32mI (21115) FLASHER: Progress: 24%[0m
+[0;32mI (21249) FLASHER: Progress: 25%[0m
+[0;32mI (21383) FLASHER: Progress: 25%[0m
+[0;32mI (21517) FLASHER: Progress: 25%[0m
+[0;32mI (21650) FLASHER: Progress: 26%[0m
+[0;32mI (21783) FLASHER: Progress: 26%[0m
+[0;32mI (21916) FLASHER: Progress: 26%[0m
+[0;32mI (22050) FLASHER: Progress: 27%[0m
+[0;32mI (22184) FLASHER: Progress: 27%[0m
+[0;32mI (22318) FLASHER: Progress: 27%[0m
+[0;32mI (22451) FLASHER: Progress: 28%[0m
+[0;32mI (22585) FLASHER: Progress: 28%[0m
+[0;32mI (22718) FLASHER: Progress: 28%[0m
+[0;32mI (22853) FLASHER: Progress: 29%[0m
+[0;32mI (22987) FLASHER: Progress: 29%[0m
+[0;32mI (23121) FLASHER: Progress: 29%[0m
+[0;32mI (23254) FLASHER: Progress: 30%[0m
+[0;32mI (23388) FLASHER: Progress: 30%[0m
+[0;32mI (23522) FLASHER: Progress: 30%[0m
+[0;32mI (23656) FLASHER: Progress: 31%[0m
+[0;32mI (23790) FLASHER: Progress: 31%[0m
+[0;32mI (23924) FLASHER: Progress: 31%[0m
+[0;32mI (24058) FLASHER: Progress: 32%[0m
+[0;32mI (24192) FLASHER: Progress: 32%[0m
+[0;32mI (24326) FLASHER: Progress: 32%[0m
+[0;32mI (24461) FLASHER: Progress: 33%[0m
+[0;32mI (24595) FLASHER: Progress: 33%[0m
+[0;32mI (24729) FLASHER: Progress: 33%[0m
+[0;32mI (24863) FLASHER: Progress: 34%[0m
+[0;32mI (24997) FLASHER: Progress: 34%[0m
+[0;32mI (25130) FLASHER: Progress: 34%[0m
+[0;32mI (25264) FLASHER: Progress: 35%[0m
+[0;32mI (25398) FLASHER: Progress: 35%[0m
+[0;32mI (25532) FLASHER: Progress: 35%[0m
+[0;32mI (25666) FLASHER: Progress: 36%[0m
+[0;32mI (25800) FLASHER: Progress: 36%[0m
+[0;32mI (25934) FLASHER: Progress: 36%[0m
+[0;32mI (26068) FLASHER: Progress: 37%[0m
+[0;32mI (26202) FLASHER: Progress: 37%[0m
+[0;32mI (26336) FLASHER: Progress: 37%[0m
+[0;32mI (26469) FLASHER: Progress: 38%[0m
+[0;32mI (26603) FLASHER: Progress: 38%[0m
+[0;32mI (26737) FLASHER: Progress: 38%[0m
+[0;32mI (26878) FLASHER: Progress: 39%[0m
+[0;32mI (27023) FLASHER: Progress: 39%[0m
+[0;32mI (27166) FLASHER: Progress: 39%[0m
+[0;32mI (27305) FLASHER: Progress: 40%[0m
+[0;32mI (27451) FLASHER: Progress: 40%[0m
+[0;32mI (27600) FLASHER: Progress: 40%[0m
+[0;32mI (27745) FLASHER: Progress: 41%[0m
+[0;32mI (27886) FLASHER: Progress: 41%[0m
+[0;32mI (28032) FLASHER: Progress: 41%[0m
+[0;32mI (28174) FLASHER: Progress: 42%[0m
+[0;32mI (28316) FLASHER: Progress: 42%[0m
+[0;32mI (28452) FLASHER: Progress: 42%[0m
+[0;32mI (28588) FLASHER: Progress: 42%[0m
+[0;32mI (28726) FLASHER: Progress: 43%[0m
+[0;32mI (28864) FLASHER: Progress: 43%[0m
+[0;32mI (29001) FLASHER: Progress: 43%[0m
+[0;32mI (29137) FLASHER: Progress: 44%[0m
+[0;32mI (29273) FLASHER: Progress: 44%[0m
+[0;32mI (29408) FLASHER: Progress: 44%[0m
+[0;32mI (29545) FLASHER: Progress: 45%[0m
+[0;32mI (29686) FLASHER: Progress: 45%[0m
+[0;32mI (29822) FLASHER: Progress: 45%[0m
+[0;32mI (29957) FLASHER: Progress: 46%[0m
+[0;32mI (30093) FLASHER: Progress: 46%[0m
+[0;32mI (30228) FLASHER: Progress: 46%[0m
+[0;32mI (30364) FLASHER: Progress: 47%[0m
+[0;32mI (30499) FLASHER: Progress: 47%[0m
+[0;32mI (30635) FLASHER: Progress: 47%[0m
+[0;32mI (30771) FLASHER: Progress: 48%[0m
+[0;32mI (30907) FLASHER: Progress: 48%[0m
+[0;32mI (31043) FLASHER: Progress: 48%[0m
+[0;32mI (31179) FLASHER: Progress: 49%[0m
+[0;32mI (31316) FLASHER: Progress: 49%[0m
+[0;32mI (31452) FLASHER: Progress: 49%[0m
+[0;32mI (31590) FLASHER: Progress: 50%[0m
+[0;32mI (31728) FLASHER: Progress: 50%[0m
+[0;32mI (31865) FLASHER: Progress: 50%[0m
+[0;32mI (32001) FLASHER: Progress: 51%[0m
+[0;32mI (32137) FLASHER: Progress: 51%[0m
+[0;32mI (32274) FLASHER: Progress: 51%[0m
+[0;32mI (32409) FLASHER: Progress: 52%[0m
+[0;32mI (32548) FLASHER: Progress: 52%[0m
+[0;32mI (32688) FLASHER: Progress: 52%[0m
+[0;32mI (32825) FLASHER: Progress: 53%[0m
+[0;32mI (32963) FLASHER: Progress: 53%[0m
+[0;32mI (33099) FLASHER: Progress: 53%[0m
+[0;32mI (33234) FLASHER: Progress: 54%[0m
+[0;32mI (33371) FLASHER: Progress: 54%[0m
+[0;32mI (33507) FLASHER: Progress: 54%[0m
+[0;32mI (33645) FLASHER: Progress: 55%[0m
+[0;32mI (33784) FLASHER: Progress: 55%[0m
+[0;32mI (33929) FLASHER: Progress: 55%[0m
+[0;32mI (34075) FLASHER: Progress: 56%[0m
+[0;32mI (34210) FLASHER: Progress: 56%[0m
+[0;32mI (34348) FLASHER: Progress: 56%[0m
+[0;32mI (34490) FLASHER: Progress: 57%[0m
+[0;32mI (34633) FLASHER: Progress: 57%[0m
+[0;32mI (34773) FLASHER: Progress: 57%[0m
+[0;32mI (34918) FLASHER: Progress: 58%[0m
+[0;32mI (35061) FLASHER: Progress: 58%[0m
+[0;32mI (35204) FLASHER: Progress: 58%[0m
+[0;32mI (35346) FLASHER: Progress: 59%[0m
+[0;32mI (35489) FLASHER: Progress: 59%[0m
+[0;32mI (35632) FLASHER: Progress: 59%[0m
+[0;32mI (35772) FLASHER: Progress: 60%[0m
+[0;32mI (35910) FLASHER: Progress: 60%[0m
+[0;32mI (36052) FLASHER: Progress: 60%[0m
+[0;32mI (36196) FLASHER: Progress: 61%[0m
+[0;32mI (36341) FLASHER: Progress: 61%[0m
+[0;32mI (36486) FLASHER: Progress: 61%[0m
+[0;32mI (36630) FLASHER: Progress: 62%[0m
+[0;32mI (36772) FLASHER: Progress: 62%[0m
+[0;32mI (36914) FLASHER: Progress: 62%[0m
+[0;32mI (37056) FLASHER: Progress: 63%[0m
+[0;32mI (37196) FLASHER: Progress: 63%[0m
+[0;32mI (37337) FLASHER: Progress: 63%[0m
+[0;32mI (37478) FLASHER: Progress: 64%[0m
+[0;32mI (37621) FLASHER: Progress: 64%[0m
+[0;32mI (37762) FLASHER: Progress: 64%[0m
+[0;32mI (37897) FLASHER: Progress: 65%[0m
+[0;32mI (38038) FLASHER: Progress: 65%[0m
+[0;32mI (38172) FLASHER: Progress: 65%[0m
+[0;32mI (38306) FLASHER: Progress: 66%[0m
+[0;32mI (38440) FLASHER: Progress: 66%[0m
+[0;32mI (38575) FLASHER: Progress: 66%[0m
+[0;32mI (38710) FLASHER: Progress: 67%[0m
+[0;32mI (38845) FLASHER: Progress: 67%[0m
+[0;32mI (38980) FLASHER: Progress: 67%[0m
+[0;32mI (39117) FLASHER: Progress: 68%[0m
+[0;32mI (39252) FLASHER: Progress: 68%[0m
+[0;32mI (39387) FLASHER: Progress: 68%[0m
+[0;32mI (39522) FLASHER: Progress: 69%[0m
+[0;32mI (39655) FLASHER: Progress: 69%[0m
+[0;32mI (39790) FLASHER: Progress: 69%[0m
+[0;32mI (39932) FLASHER: Progress: 70%[0m
+[0;32mI (40078) FLASHER: Progress: 70%[0m
+[0;32mI (40223) FLASHER: Progress: 70%[0m
+[0;32mI (40367) FLASHER: Progress: 71%[0m
+[0;32mI (40515) FLASHER: Progress: 71%[0m
+[0;32mI (40658) FLASHER: Progress: 71%[0m
+[0;32mI (40800) FLASHER: Progress: 72%[0m
+[0;32mI (40943) FLASHER: Progress: 72%[0m
+[0;32mI (41086) FLASHER: Progress: 72%[0m
+[0;32mI (41234) FLASHER: Progress: 73%[0m
+[0;32mI (41380) FLASHER: Progress: 73%[0m
+[0;32mI (41537) FLASHER: Progress: 73%[0m
+[0;32mI (41683) FLASHER: Progress: 74%[0m
+[0;32mI (41824) FLASHER: Progress: 74%[0m
+[0;32mI (41966) FLASHER: Progress: 74%[0m
+[0;32mI (42107) FLASHER: Progress: 75%[0m
+[0;32mI (42249) FLASHER: Progress: 75%[0m
+[0;32mI (42388) FLASHER: Progress: 75%[0m
+[0;32mI (42532) FLASHER: Progress: 76%[0m
+[0;32mI (42673) FLASHER: Progress: 76%[0m
+[0;32mI (42818) FLASHER: Progress: 76%[0m
+[0;32mI (42964) FLASHER: Progress: 77%[0m
+[0;32mI (43105) FLASHER: Progress: 77%[0m
+[0;32mI (43248) FLASHER: Progress: 77%[0m
+[0;32mI (43391) FLASHER: Progress: 78%[0m
+[0;32mI (43534) FLASHER: Progress: 78%[0m
+[0;32mI (43673) FLASHER: Progress: 78%[0m
+[0;32mI (43813) FLASHER: Progress: 79%[0m
+[0;32mI (43953) FLASHER: Progress: 79%[0m
+[0;32mI (44096) FLASHER: Progress: 79%[0m
+[0;32mI (44236) FLASHER: Progress: 80%[0m
+[0;32mI (44376) FLASHER: Progress: 80%[0m
+[0;32mI (44516) FLASHER: Progress: 80%[0m
+[0;32mI (44658) FLASHER: Progress: 81%[0m
+[0;32mI (44797) FLASHER: Progress: 81%[0m
+[0;32mI (44938) FLASHER: Progress: 81%[0m
+[0;32mI (45081) FLASHER: Progress: 82%[0m
+[0;32mI (45222) FLASHER: Progress: 82%[0m
+[0;32mI (45363) FLASHER: Progress: 82%[0m
+[0;32mI (45506) FLASHER: Progress: 83%[0m
+[0;32mI (45648) FLASHER: Progress: 83%[0m
+[0;32mI (45790) FLASHER: Progress: 83%[0m
+[0;32mI (45933) FLASHER: Progress: 84%[0m
+[0;32mI (46075) FLASHER: Progress: 84%[0m
+[0;32mI (46219) FLASHER: Progress: 84%[0m
+[0;32mI (46364) FLASHER: Progress: 85%[0m
+[0;32mI (46500) FLASHER: Progress: 85%[0m
+[0;32mI (46644) FLASHER: Progress: 85%[0m
+[0;32mI (46782) FLASHER: Progress: 85%[0m
+[0;32mI (46922) FLASHER: Progress: 86%[0m
+[0;32mI (47066) FLASHER: Progress: 86%[0m
+[0;32mI (47204) FLASHER: Progress: 86%[0m
+[0;32mI (47343) FLASHER: Progress: 87%[0m
+[0;32mI (47484) FLASHER: Progress: 87%[0m
+[0;32mI (47623) FLASHER: Progress: 87%[0m
+[0;32mI (47762) FLASHER: Progress: 88%[0m
+[0;32mI (47903) FLASHER: Progress: 88%[0m
+[0;32mI (48046) FLASHER: Progress: 88%[0m
+[0;32mI (48188) FLASHER: Progress: 89%[0m
+[0;32mI (48332) FLASHER: Progress: 89%[0m
+[0;32mI (48476) FLASHER: Progress: 89%[0m
+[0;32mI (48620) FLASHER: Progress: 90%[0m
+[0;32mI (48765) FLASHER: Progress: 90%[0m
+[0;32mI (48906) FLASHER: Progress: 90%[0m
+[0;32mI (49049) FLASHER: Progress: 91%[0m
+[0;32mI (49192) FLASHER: Progress: 91%[0m
+[0;32mI (49332) FLASHER: Progress: 91%[0m
+[0;32mI (49473) FLASHER: Progress: 92%[0m
+[0;32mI (49607) FLASHER: Progress: 92%[0m
+[0;32mI (49741) FLASHER: Progress: 92%[0m
+[0;32mI (49878) FLASHER: Progress: 93%[0m
+[0;32mI (50020) FLASHER: Progress: 93%[0m
+[0;32mI (50162) FLASHER: Progress: 93%[0m
+[0;32mI (50305) FLASHER: Progress: 94%[0m
+[0;32mI (50447) FLASHER: Progress: 94%[0m
+[0;32mI (50592) FLASHER: Progress: 94%[0m
+[0;32mI (50735) FLASHER: Progress: 95%[0m
+[0;32mI (50878) FLASHER: Progress: 95%[0m
+[0;32mI (51021) FLASHER: Progress: 95%[0m
+[0;32mI (51163) FLASHER: Progress: 96%[0m
+[0;32mI (51307) FLASHER: Progress: 96%[0m
+[0;32mI (51450) FLASHER: Progress: 96%[0m
+[0;32mI (51591) FLASHER: Progress: 97%[0m
+[0;32mI (51725) FLASHER: Progress: 97%[0m
+[0;32mI (51862) FLASHER: Progress: 97%[0m
+[0;32mI (52003) FLASHER: Progress: 98%[0m
+[0;32mI (52144) FLASHER: Progress: 98%[0m
+[0;32mI (52287) FLASHER: Progress: 98%[0m
+[0;32mI (52428) FLASHER: Progress: 99%[0m
+[0;32mI (52581) FLASHER: Progress: 99%[0m
+[0;32mI (52739) FLASHER: Progress: 99%[0m
+[0;32mI (52871) FLASHER: Progress: 100%[0m
+[0;32mI (52885) FLASHER: Segment written 1238384 / 1238384 bytes OK[0m
+[0;32mI (54624) FLASHER: MD5 verified OK for segment![0m
+[0;32mI (54625) FLASHER: Segment at 0x00010000 written successfully.[0m
+[0;32mI (54725) FLASHER: Resetting target to run app...[0m
+[0;32mI (55025) FLASHER: Target restarted in normal mode.[0m
+[0;32mI (55025) FLASHER: Full firmware update completed successfully![0m
+[0;32mI (55026) SD_CARD: SD Unmounted[0m
+[0;32mI (55029) MAIN: Flash hoan tat.[0m
+[0;32mI (57078) MAIN: x80x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SP[0m
+[0;32mI (57089) MAIN: I_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO,[0m
+[0;32mI (57106) MAIN:  clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019 1[0m
+[0;32mI (57117) MAIN: 2:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_[0m
+[0;32mI (57123) MAIN: drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,le[0m
+[0;32mI (57137) MAIN: n:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0x[0m
+[0;32mI (57151) MAIN: ee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+lo[0m
+[0;32mI (57165) MAIN: ad:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (S[0m
+[0;32mI (57179) MAIN: PI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO[0m
+[0;32mI (57193) MAIN: , clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019 [0m
+[0;32mI (57207) MAIN: 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0[0m
+[0;32mI (57221) MAIN: _drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,l[0m
+[0;32mI (57235) MAIN: en:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0[0m
+[0;32mI (57249) MAIN: xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+l[0m
+[0;32mI (57263) MAIN: oad:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 ([0m
+[0;32mI (57277) MAIN: SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DI[0m
+[0;32mI (57291) MAIN: O, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019[0m
+[0;32mI (57305) MAIN:  12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs[0m
+[0;32mI (57319) MAIN: 0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,[0m
+[0;32mI (57333) MAIN: len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:[0m
+[0;32mI (57347) MAIN: 0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+[0m
+[0;32mI (57361) MAIN: load:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 [0m
+[0;32mI (57375) MAIN: (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:D[0m
+[0;32mI (57389) MAIN: IO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 201[0m
+[0;32mI (57403) MAIN: 9 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,c[0m
+[0;32mI (57417) MAIN: s0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400[0m
+[0;32mI (57431) MAIN: ,len:3028
+entry 0x400805e4
+ets Jul 290,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+[0m
+[0;32mI (57445) MAIN: load:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 [0m
+[0;32mI (57459) MAIN: (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:D[0m
+[0;32mI (57473) MAIN: IO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 201[0m
+[0;32mI (57487) MAIN: 9 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,c[0m
+[0;32mI (57501) MAIN: s0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400[0m
+[0;32mI (57515) MAIN: ,len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP[0m
+[0;32mI (57529) MAIN: :0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mo2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 [0m
+[0;32mI (57543) MAIN: (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:D[0m
+[0;32mI (57557) MAIN: IO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 201[0m
+[0;32mI (57571) MAIN: 9 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,c[0m
+[0;32mI (57585) MAIN: s0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400[0m
+[0;32mI (57599) MAIN: ,len:3028
+entry 0x400805e4
+ets Jul 29 2019 12v:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+[0m
+[0;32mI (57613) MAIN: load:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 [0m
+[0;32mI (57627) MAIN: (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:D[0m
+[0;32mI (57641) MAIN: IO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 201[0m
+[0;32mI (57655) MAIN: 9 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,c[0m
+[0;32mI (57669) MAIN: s0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400[0m
+[0;32mI (57683) MAIN: ,len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP[0m
+[0;32mI (57697) MAIN: :0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184[0m
+[0;32mI (57711) MAIN: 
+load:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x00,wp_drv:0x00
+mode:D[0m
+[0;32mI (57725) MAIN: IO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 201[0m
+[0;32mI (57740) MAIN: 9 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,c[0m
+[0;32mI (57754) MAIN: s0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400[0m
+[0;32mI (57767) MAIN: ,len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_REv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+[0m
+[0;32mI (57782) MAIN: load:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 [0m
+[0;32mI (57796) MAIN: (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:D[0m
+[0;32mI (57810) MAIN: IO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 201[0m
+[0;32mI (57824) MAIN: 9 12:21:46
+
+rst:0x3 (SW_RESET),boot:0e:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,[0m
+[0;32mI (57838) MAIN: len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:[0m
+[0;32mI (57852) MAIN: 0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+[0m
+[0;32mI (57866) MAIN: load:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 [0m
+[0;32mI (57880) MAIN: (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:D[0m
+[0;32mI (57894) MAIN: IO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 201[0m
+[0;32mI (57908) MAIN: 9 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPIlock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,[0m
+[0;32mI (57922) MAIN: len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:[0m
+[0;32mI (57936) MAIN: 0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+[0m
+[0;32mI (57950) MAIN: load:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 [0m
+[0;32mI (57964) MAIN: (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:D[0m
+[0;32mI (57978) MAIN: IO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 201[0m
+[0;32mI (57992) MAIN: 9 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPIlock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,[0m
+[0;32mI (58006) MAIN: len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:[0m
+[0;32mI (58020) MAIN: 0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+[0m
+[0;32mI (58034) MAIN: load:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 [0m
+[0;32mI (58048) MAIN: (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:D[0m
+[0;32mI (58062) MAIN: IO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 201[0m
+[0;32mI (58076) MAIN: 9 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPIlock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,[0m
+[0;32mI (58090) MAIN: len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:[0m
+[0;32mI (58104) MAIN: 0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+[0m
+[0;32mI (58118) MAIN: load:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 [0m
+[0;32mI (58132) MAIN: (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:D[0m
+[0;32mI (58146) MAIN: IO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 201[0m
+[0;32mI (58160) MAIN: 9 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPIlock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,[0m
+[0;32mI (58174) MAIN: len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:[0m
+[0;32mI (58188) MAIN: 0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+[0m
+[0;32mI (58202) MAIN: load:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 [0m
+[0;32mI (58216) MAIN: (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:D[0m
+[0;32mI (58230) MAIN: IO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 201[0m
+[0;32mI (58244) MAIN: 9 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPIlock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,[0m
+[0;32mI (58258) MAIN: len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:[0m
+[0;32mI (58272) MAIN: 0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+[0m
+[0;32mI (58286) MAIN: load:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 [0m
+[0;32mI (58300) MAIN: (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:D[0m
+[0;32mI (58314) MAIN: IO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 201[0m
+[0;32mI (58328) MAIN: 9 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FASTdiv:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,[0m
+[0;32mI (58342) MAIN: len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:[0m
+[0;32mI (58356) MAIN: 0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+[0m
+[0;32mI (58370) MAIN: load:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 [0m
+[0;32mI (58385) MAIN: (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:D[0m
+[0;32mI (58398) MAIN: IO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078SH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs[0m
+[0;32mI (58412) MAIN: 0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,[0m
+[0;32mI (58426) MAIN: len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:[0m
+[0;32mI (58440) MAIN: 0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+[0m
+[0;32mI (58454) MAIN: load:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 [0m
+[0;32mI (58468) MAIN: (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:D[0m
+[0;32mI (58482) MAIN: IO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078SH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs[0m
+[0;32mI (58496) MAIN: 0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,[0m
+[0;32mI (58510) MAIN: len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:[0m
+[0;32mI (58524) MAIN: 0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+[0m
+[0;32mI (58538) MAIN: load:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 [0m
+[0;32mI (58552) MAIN: (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:D[0m
+[0;32mI (58566) MAIN: IO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078SH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs[0m
+[0;32mI (58580) MAIN: 0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,[0m
+[0;32mI (58594) MAIN: len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:[0m
+[0;32mI (58608) MAIN: 0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+[0m
+[0;32mI (58622) MAIN: load:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 [0m
+[0;32mI (58636) MAIN: (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:D[0m
+[0;32mI (58650) MAIN: IO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078SH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs[0m
+[0;32mI (58664) MAIN: 0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,[0m
+[0;32mI (58678) MAIN: len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:[0m
+[0;32mI (58692) MAIN: 0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+[0m
+[0;32mI (58706) MAIN: load:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 [0m
+[0;32mI (58720) MAIN: (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:D[0m
+[0;32mI (58734) MAIN: IO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,OOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs[0m
+[0;32mI (58748) MAIN: 0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,[0m
+[0;32mI (58762) MAIN: len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:[0m
+[0;32mI (58776) MAIN: 0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+[0m
+[0;32mI (58790) MAIN: load:0x40078000,leT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DI[0m
+[0;32mI (58804) MAIN: O, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019[0m
+[0;32mI (58818) MAIN:  12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs[0m
+[0;32mI (58832) MAIN: 0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,[0m
+[0;32mI (58846) MAIN: len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:[0m
+[0;32mI (58860) MAIN: 0xee
+clk_drv:0x00,q3232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 ([0m
+[0;32mI (58874) MAIN: SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DI[0m
+[0;32mI (58888) MAIN: O, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019[0m
+[0;32mI (58902) MAIN:  12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs[0m
+[0;32mI (58916) MAIN: 0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,[0m
+[0;32mI (58930) MAIN: len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:[0m
+[0;32mI (58944) MAIN: 0xee
+clk_drv:0x00,q3232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 ([0m
+[0;32mI (58958) MAIN: SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DI[0m
+[0;32mI (58972) MAIN: O, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019[0m
+[0;32mI (58986) MAIN:  12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs[0m
+[0;32mI (59000) MAIN: 0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,[0m
+[0;32mI (59014) MAIN: len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:[0m
+[0;32mI (59028) MAIN: 0xee
+clk_drv:0x00,q3232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 ([0m
+[0;32mI (59042) MAIN: SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DI[0m
+[0;32mI (59056) MAIN: O, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019[0m
+[0;32mI (59070) MAIN:  12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs[0m
+[0;32mI (59084) MAIN: 0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,[0m
+[0;32mI (59098) MAIN: len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:[0m
+[0;32mI (59112) MAIN: 0xee
+clk_drv:0x00,q3232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 ([0m
+[0;32mI (59127) MAIN: SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DI[0m
+[0;32mI (59140) MAIN: O, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019[0m
+[0;32mI (59154) MAIN:  12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs[0m
+[0;32mI (59168) MAIN: 0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,[0m
+[0;32mI (59182) MAIN: len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:[0m
+[0;32mI (59196) MAIN: 0xee
+clk_drv:0x00,q3232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 ([0m
+[0;32mI (59211) MAIN: SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DI[0m
+[0;32mI (59224) MAIN: O, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019[0m
+[0;32mI (59239) MAIN:  12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs[0m
+[0;32mI (59253) MAIN: 0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,[0m
+[0;32mI (59267) MAIN: len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:[0m
+[0;32mI (59281) MAIN: 0xee
+clk_drv:0x00,q3232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 ([0m
+[0;32mI (59295) MAIN: SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DI[0m
+[0;32mI (59309) MAIN: O, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019[0m
+[0;32mI (59323) MAIN:  12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs[0m
+[0;32mI (59337) MAIN: 0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,[0m
+[0;32mI (59351) MAIN: len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:[0m
+[0;32mI (59365) MAIN: 0xee
+clk_drv:0x00,q3232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 ([0m
+[0;32mI (59379) MAIN: SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DI[0m
+[0;32mI (59393) MAIN: O, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019[0m
+[0;32mI (59407) MAIN:  12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs[0m
+[0;32mI (59421) MAIN: 0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,[0m
+[0;32mI (59435) MAIN: len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:[0m
+[0;32mI (59449) MAIN: 0xee
+clk_drv:0x00,q_drv:
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 ([0m
+[0;32mI (59463) MAIN: SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DI[0m
+[0;32mI (59477) MAIN: O, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019[0m
+[0;32mI (59491) MAIN:  12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs[0m
+[0;32mI (59505) MAIN: 0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,[0m
+[0;32mI (59519) MAIN: len:3028
+entry 0x400805e4
+,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+l[0m
+[0;32mI (59533) MAIN: oad:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 ([0m
+[0;32mI (59547) MAIN: SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DI[0m
+[0;32mI (59561) MAIN: O, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019[0m
+[0;32mI (59575) MAIN:  12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs[0m
+[0;32mI (59589) MAIN: 0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,[0m
+[0;32mI (59603) MAIN: len:3028
+entry 0x400805e4
+,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+l[0m
+[0;32mI (59617) MAIN: oad:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 ([0m
+[0;32mI (59631) MAIN: SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DI[0m
+[0;32mI (59645) MAIN: O, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019[0m
+[0;32mI (59659) MAIN:  12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs[0m
+[0;32mI (59673) MAIN: 0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,[0m
+[0;32mI (59687) MAIN: len:3028
+entry 0x400805e4
+,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+l[0m
+[0;32mI (59701) MAIN: oad:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 ([0m
+[0;32mI (59715) MAIN: SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DI[0m
+[0;32mI (59729) MAIN: O, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019[0m
+[0;32mI (59743) MAIN:  12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs[0m
+[0;32mI (59757) MAIN: 0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,[0m
+[0;32mI (59771) MAIN: len:3028
+entry 0x400805e4
+,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+l[0m
+[0;32mI (59785) MAIN: oad:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 ([0m
+[0;32mI (59799) MAIN: SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DI[0m
+[0;32mI (59813) MAIN: O, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019[0m
+[0;32mI (59827) MAIN:  12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs[0m
+[0;32mI (59841) MAIN: 0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,[0m
+[0;32mI (59855) MAIN: len:3028
+entry 0x400805e4
+,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+l[0m
+[0;32mI (59869) MAIN: oad:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 ([0m
+[0;32mI (59883) MAIN: SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DI[0m
+[0;32mI (59897) MAIN: O, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019[0m
+[0;32mI (59911) MAIN:  12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs[0m
+[0;32mI (59925) MAIN: 0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,[0m
+[0;32mI (59939) MAIN: len:3028
+entry 0x400805e4
+,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+l[0m
+[0;32mI (59953) MAIN: oad:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 ([0m
+[0;32mI (59967) MAIN: SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DI[0m
+[0;32mI (59981) MAIN: O, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019[0m
+[0;32mI (59995) MAIN:  12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs[0m
+[0;32mI (60009) MAIN: 0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,[0m
+[0;32mI (60023) MAIN: len:3028
+entry 0x400805e4
+,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+l[0m
+[0;32mI (60037) MAIN: oad:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 ([0m
+[0;32mI (60051) MAIN: SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DI[0m
+[0;32mI (60065) MAIN: O, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019[0m
+[0;32mI (60079) MAIN:  12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs[0m
+[0;32mI (60093) MAIN: 0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,[0m
+[0;32mI (60107) MAIN: len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:[0m
+[0;32mI (60121) MAIN: 0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+[0m
+[0;32mI (60135) MAIN: load:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x400805e4
+et_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DI[0m
+[0;32mI (60149) MAIN: O, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019[0m
+[0;32mI (60163) MAIN:  12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs[0m
+[0;32mI (60177) MAIN: 0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,[0m
+[0;32mI (60191) MAIN: len:3028
+entry 0x400805e4
+ets Jul 29 20s0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+l[0m
+[0;32mI (60205) MAIN: oad:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 ([0m
+[0;32mI (60219) MAIN: SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DI[0m
+[0;32mI (60233) MAIN: O, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019[0m
+[0;32mI (60247) MAIN:  12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs[0m
+[0;32mI (60261) MAIN: 0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,[0m
+[0;32mI (60275) MAIN: len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:[0m
+[0;32mI (60289) MAIN: 0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+[0m
+[0;32mI (60303) MAIN: load:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+d_drv:0x00,wp_drv:0x00
+mode:DI[0m
+[0;32mI (60317) MAIN: O, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019[0m
+[0;32mI (60331) MAIN:  12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs[0m
+[0;32mI (60345) MAIN: 0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,[0m
+[0;32mI (60359) MAIN: len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+l[0m
+[0;32mI (60373) MAIN: oad:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 ([0m
+[0;32mI (60387) MAIN: SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DI[0m
+[0;32mI (60401) MAIN: O, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019[0m
+[0;32mI (60415) MAIN:  12:21:46
+
+rst:0x3 (SW_RESET),b
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,l[0m
+[0;32mI (60430) MAIN: en:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0[0m
+[0;32mI (60444) MAIN: xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+l[0m
+[0;32mI (60458) MAIN: oad:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 ([0m
+[0;32mI (60472) MAIN: SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DI[0m
+[0;32mI (60485) MAIN: O, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019[0m
+[0;32mI (60500) MAIN:  12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs[0m
+[0;32mI (60514) MAIN: 0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO,:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0[0m
+[0;32mI (60528) MAIN: xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+l[0m
+[0;32mI (60541) MAIN: oad:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 ([0m
+[0;32mI (60556) MAIN: SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DI[0m
+[0;32mI (60569) MAIN: O, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019[0m
+[0;32mI (60583) MAIN:  12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs[0m
+[0;32mI (60597) MAIN: 0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,[0m
+[0;32mI (60611) MAIN: len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPIlock div:2
+load:0x3fff0030,len:1184
+l[0m
+[0;32mI (60626) MAIN: oad:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 ([0m
+[0;32mI (60640) MAIN: SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DI[0m
+[0;32mI (60654) MAIN: O, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019[0m
+[0;32mI (60668) MAIN:  12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPIlock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,l[0m
+[0;32mI (60682) MAIN: en:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0[0m
+[0;32mI (60696) MAIN: xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+l[0m
+[0;32mI (60710) MAIN: oad:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 ([0m
+[0;32mI (60724) MAIN: SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DI[0m
+[0;32mI (60738) MAIN: O, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019[0m
+[0;32mI (60752) MAIN:  12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPIlock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,l[0m
+[0;32mI (60766) MAIN: en:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0[0m
+[0;32mI (60780) MAIN: xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+l[0m
+[0;32mI (60794) MAIN: oad:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 ([0m
+[0;32mI (60808) MAIN: SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DI[0m
+[0;32mI (60822) MAIN: O, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019[0m
+[0;32mI (60836) MAIN:  12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPIlock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,l[0m
+[0;32mI (60850) MAIN: en:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0[0m
+[0;32mI (60864) MAIN: xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+l[0m
+[0;32mI (60878) MAIN: oad:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 ([0m
+[0;32mI (60892) MAIN: SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DI[0m
+[0;32mI (60906) MAIN: O, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019[0m
+[0;32mI (60920) MAIN:  12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPIlock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,l[0m
+[0;32mI (60934) MAIN: en:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0[0m
+[0;32mI (60948) MAIN: xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+l[0m
+[0;32mI (60962) MAIN: oad:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 ([0m
+[0;32mI (60976) MAIN: SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DI[0m
+[0;32mI (60990) MAIN: O, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019[0m
+[0;32mI (61004) MAIN:  12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPIlock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,l[0m
+[0;32mI (61018) MAIN: en:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0[0m
+[0;32mI (61032) MAIN: xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+l[0m
+[0;32mI (61046) MAIN: oad:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 ([0m
+[0;32mI (61060) MAIN: SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DI[0m
+[0;32mI (61074) MAIN: O, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019[0m
+[0;32mI (61088) MAIN:  12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_ock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,l[0m
+[0;32mI (61102) MAIN: en:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0[0m
+[0;32mI (61116) MAIN: xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+l[0m
+[0;32mI (61130) MAIN: oad:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 ([0m
+[0;32mI (61144) MAIN: SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DI[0m
+[0;32mI (61158) MAIN: O, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019[0m
+[0;32mI (61172) MAIN:  12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_Fv:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,l[0m
+[0;32mI (61186) MAIN: en:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0[0m
+[0;32mI (61200) MAIN: xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+l[0m
+[0;32mI (61214) MAIN: oad:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 ([0m
+[0;32mI (61228) MAIN: SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DI[0m
+[0;32mI (61242) MAIN: O, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078SH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0[0m
+[0;32mI (61256) MAIN: _drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,l[0m
+[0;32mI (61270) MAIN: en:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0[0m
+[0;32mI (61284) MAIN: xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+l[0m
+[0;32mI (61298) MAIN: oad:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 ([0m
+[0;32mI (61312) MAIN: SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DI[0m
+[0;32mI (61326) MAIN: O, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078SH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0[0m
+[0;32mI (61340) MAIN: _drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,l[0m
+[0;32mI (61354) MAIN: en:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0[0m
+[0;32mI (61368) MAIN: xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+l[0m
+[0;32mI (61382) MAIN: oad:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 ([0m
+[0;32mI (61396) MAIN: SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DI[0m
+[0;32mI (61410) MAIN: O, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078SH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0[0m
+[0;32mI (61424) MAIN: _drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,l[0m
+[0;32mI (61438) MAIN: en:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0[0m
+[0;32mI (61452) MAIN: xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+l[0m
+[0;32mI (61466) MAIN: oad:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 ([0m
+[0;32mI (61480) MAIN: SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DI[0m
+[0;32mI (61494) MAIN: O, clock div:2
+load:0x3fff0030,len:1184
+load:0x4007800_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0[0m
+[0;32mI (61508) MAIN: _drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,l[0m
+[0;32mI (61522) MAIN: en:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0[0m
+[0;32mI (61536) MAIN: xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+l[0m
+[0;32mI (61550) MAIN: oad:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 ([0m
+[0;32mI (61564) MAIN: SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DI[0m
+[0;32mI (61578) MAIN: O, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,leT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0[0m
+[0;32mI (61592) MAIN: _drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,l[0m
+[0;32mI (61606) MAIN: en:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0[0m
+[0;32mI (61620) MAIN: xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+l[0m
+[0;32mI (61634) MAIN: oad:0x40078000,len:
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO[0m
+[0;32mI (61648) MAIN: , clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019 [0m
+[0;32mI (61662) MAIN: 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0[0m
+[0;32mI (61676) MAIN: _drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,l[0m
+[0;32mI (61690) MAIN: en:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0[0m
+[0;32mI (61704) MAIN: xee
+clk_drv:0x00,q3232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (S[0m
+[0;32mI (61718) MAIN: PI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO[0m
+[0;32mI (61732) MAIN: , clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019 [0m
+[0;32mI (61746) MAIN: 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0[0m
+[0;32mI (61760) MAIN: _drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,l[0m
+[0;32mI (61774) MAIN: en:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0[0m
+[0;32mI (61788) MAIN: xee
+clk_drv:0x00,q3232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (S[0m
+[0;32mI (61802) MAIN: PI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO[0m
+[0;32mI (61816) MAIN: , clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019 [0m
+[0;32mI (61830) MAIN: 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0[0m
+[0;32mI (61844) MAIN: _drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,l[0m
+[0;32mI (61858) MAIN: en:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0[0m
+[0;32mI (61872) MAIN: xee
+clk_drv:0x00,q3232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (S[0m
+[0;32mI (61886) MAIN: PI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO[0m
+[0;32mI (61900) MAIN: , clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019 [0m
+[0;32mI (61914) MAIN: 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0[0m
+[0;32mI (61928) MAIN: _drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,l[0m
+[0;32mI (61942) MAIN: en:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0[0m
+[0;32mI (61956) MAIN: xee
+clk_drv:0x00,q3232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (S[0m
+[0;32mI (61970) MAIN: PI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO[0m
+[0;32mI (61984) MAIN: , clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019 [0m
+[0;32mI (61998) MAIN: 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0[0m
+[0;32mI (62012) MAIN: _drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,l[0m
+[0;32mI (62026) MAIN: en:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0[0m
+[0;32mI (62040) MAIN: xee
+clk_drv:0x00,q3232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (S[0m
+[0;32mI (62055) MAIN: PI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO[0m
+[0;32mI (62068) MAIN: , clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019 [0m
+[0;32mI (62082) MAIN: 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0[0m
+[0;32mI (62096) MAIN: _drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,l[0m
+[0;32mI (62110) MAIN: en:3028
+entry 0x400805e4
+[0;31mE (62116) task_wdt: Task watchdog got triggered. The following tasks/users did not reset the watchdog in time:[0m
+[0;31mE (62116) task_wdt:  - IDLE (CPU 0)[0m
+[0;31mE (62116) task_wdt: Tasks currently running:[0m
+[0;31mE (62116) task_wdt: CPU 0: slave_monitor[0m
+[0;31mE (62116) task_wdt: Print CPU 0 (current core) registers[0m
+Core  4 register dump:
+MEPC    : 0x42006e4a  RA      : 0x42007fe8  SP      : 0x3fc96250  GP      : 0x3fc8ea00  
+TP      : 0x3fc85d24  T0      : 0x6c0a0d32  T1      : 0x60000000  T2      : 0x3a766964  
+S0/FP   : 0x00000012  S1      : 0x00000000  A0      : 0x00000000  A1      : 0x0000003a  
+A2      : 0x00000004  A3      : 0x60000000  A4      : 0x00000001  A5      : 0xe07f8000  
+A6      : 0x42006636  A7      : 0x0000000a  S2      : 0x0000003a  S3      : 0x0000001a  
+S4      : 0x3fc914c0  S5      : 0x3fc963f0  S6      : 0x3fc901d7  S7      : 0x00000000  
+S8      : 0x0000001a  S9      : 0x00000073  S10     : 0x00000000  S11     : 0x00000002  
+T3      : 0x00000000  T4      : 0x30306666  T5      : 0x66337830  T6      : 0x3a64616f  
+MSTATUS : 0x00000000  MTVEC   : 0x30306666  MCAUSE  : 0x3fc91410  MTVAL   : 0x3a007fa8  
+MHARTID : 0x00000004  
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0[0m
+[0;32mI (62229) MAIN: xee
+clk_drv:0x00,q3232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (S[0m
+[0;32mI (62244) MAIN: PI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO[0m
+[0;32mI (62257) MAIN: , clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x400805e4
+load:0x40080400,[0m
+[0;32mI (62271) MAIN: lenrv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+3028
+entry 0x40[0m
+[0;32mI (62285) MAIN: 0805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q[0m
+[0;32mI (62300) MAIN: _drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:[0m
+[0;32mI (62313) MAIN: 13232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESETx00
+mode:DIO, clock div:2
+load[0m
+[0;32mI (62328) MAIN: :0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3[0m
+[0;32mI (62342) MAIN:  (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x[0m
+[0;32mI (62356) MAIN: 00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x40[0m
+[0;32mI (62370) MAIN: 0805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17IO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:1[0m
+[0;32mI (62384) MAIN: 3232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)[0m
+[0;32mI (62398) MAIN: 
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load[0m
+[0;32mI (62412) MAIN: :0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3[0m
+[0;32mI (62426) MAIN:  (SW_RESET),boot:0x17 (SPIlock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x400[0m
+[0;32mI (62440) MAIN: 805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_[0m
+[0;32mI (62454) MAIN: drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:1[0m
+[0;32mI (62468) MAIN: 3232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)[0m
+[0;32mI (62482) MAIN: 
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load[0m
+[0;32mI (62496) MAIN: :0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3[0m
+[0;32mI (62510) MAIN:  (SW_RESET),boot:0x17 (SPI_ock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x400[0m
+[0;32mI (62524) MAIN: 805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_[0m
+[0;32mI (62538) MAIN: drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:1[0m
+[0;32mI (62552) MAIN: 3232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)[0m
+[0;32mI (62566) MAIN: 
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load[0m
+[0;32mI (62580) MAIN: :0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3[0m
+[0;32mI (62594) MAIN:  (SW_RESET),boot:0x17 (SPI_FAST_iv:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x400[0m
+[0;32mI (62608) MAIN: 805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_[0m
+[0;32mI (62622) MAIN: drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:1[0m
+[0;32mI (62636) MAIN: 3232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)[0m
+[0;32mI (62650) MAIN: 
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load[0m
+[0;32mI (62664) MAIN: :0x3fff0030,len:1184
+load:0x40078SH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x0[0m
+[0;32mI (62678) MAIN: 0,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x400[0m
+[0;32mI (62692) MAIN: 805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_[0m
+[0;32mI (62706) MAIN: drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:1[0m
+[0;32mI (62720) MAIN: 3232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)[0m
+[0;32mI (62734) MAIN: 
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load[0m
+[0;32mI (62748) MAIN: :0x3fff0030,len:1184
+load:0x40078SH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x0[0m
+[0;32mI (62762) MAIN: 0,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x400[0m
+[0;32mI (62776) MAIN: 805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_[0m
+[0;32mI (62790) MAIN: drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:1[0m
+[0;32mI (62804) MAIN: 3232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)[0m
+[0;32mI (62818) MAIN: 
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load[0m
+[0;32mI (62832) MAIN: :0x3fff0030,len:1184
+load:0x40078SH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x0[0m
+[0;32mI (62846) MAIN: 0,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x400[0m
+[0;32mI (62860) MAIN: 805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_[0m
+[0;32mI (62874) MAIN: drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:1[0m
+[0;32mI (62888) MAIN: 3232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)[0m
+[0;32mI (62902) MAIN: 
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load[0m
+[0;32mI (62916) MAIN: :0x3fff0030,len:1184
+load:0x4007800_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x0[0m
+[0;32mI (62930) MAIN: 0,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x400[0m
+[0;32mI (62944) MAIN: 805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_[0m
+[0;32mI (62958) MAIN: drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:1[0m
+[0;32mI (62972) MAIN: 3232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)[0m
+[0;32mI (62986) MAIN: 
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load[0m
+[0;32mI (63000) MAIN: :0x3fff0030,len:1184
+load:0x40078000,lOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x0[0m
+[0;32mI (63014) MAIN: 0,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x400[0m
+[0;32mI (63028) MAIN: 805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_[0m
+[0;32mI (63042) MAIN: drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:1[0m
+[0;32mI (63056) MAIN: 3232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)[0m
+[0;32mI (63070) MAIN: 
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q3232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 [0m
+[0;32mI (63084) MAIN: (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x0[0m
+[0;32mI (63098) MAIN: 0,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x400[0m
+[0;32mI (63112) MAIN: 805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_[0m
+[0;32mI (63126) MAIN: drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:1[0m
+[0;32mI (63140) MAIN: 3232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)[0m
+[0;32mI (63154) MAIN: 
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q3232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 [0m
+[0;32mI (63168) MAIN: (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x0[0m
+[0;32mI (63182) MAIN: 0,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x400[0m
+[0;32mI (63196) MAIN: 805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_[0m
+[0;32mI (63210) MAIN: drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:1[0m
+[0;32mI (63224) MAIN: 3232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)[0m
+[0;32mI (63238) MAIN: 
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q3232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 [0m
+[0;32mI (63252) MAIN: (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x0[0m
+[0;32mI (63266) MAIN: 0,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x400[0m
+[0;32mI (63280) MAIN: 805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_[0m
+[0;32mI (63294) MAIN: drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:1[0m
+[0;32mI (63308) MAIN: 3232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)[0m
+[0;32mI (63322) MAIN: 
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q3232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 [0m
+[0;32mI (63336) MAIN: (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x0[0m
+[0;32mI (63350) MAIN: 0,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x400[0m
+[0;32mI (63364) MAIN: 805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_[0m
+[0;32mI (63378) MAIN: drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:1[0m
+[0;32mI (63392) MAIN: 3232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)[0m
+[0;32mI (63406) MAIN: 
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q3232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 [0m
+[0;32mI (63420) MAIN: (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x0[0m
+[0;32mI (63434) MAIN: 0,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x400[0m
+[0;32mI (63448) MAIN: 805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_[0m
+[0;32mI (63462) MAIN: drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:1[0m
+[0;32mI (63476) MAIN: 3232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)[0m
+[0;32mI (63490) MAIN: 
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q3232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 [0m
+[0;32mI (63505) MAIN: (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x0[0m
+[0;32mI (63518) MAIN: 0,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x400[0m
+[0;32mI (63532) MAIN: 805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_[0m
+[0;32mI (63546) MAIN: drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:1[0m
+[0;32mI (63560) MAIN: 3232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)[0m
+[0;32mI (63574) MAIN: 
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q3232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 [0m
+[0;32mI (63589) MAIN: (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x0[0m
+[0;32mI (63603) MAIN: 0,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x400[0m
+[0;32mI (63617) MAIN: 805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_[0m
+[0;32mI (63631) MAIN: drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:1[0m
+[0;32mI (63644) MAIN: 3232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)[0m
+[0;32mI (63659) MAIN: 
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 [0m
+[0;32mI (63673) MAIN: (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x0[0m
+[0;32mI (63687) MAIN: 0,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x400[0m
+[0;32mI (63701) MAIN: 805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_[0m
+[0;32mI (63715) MAIN: drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:1[0m
+[0;32mI (63729) MAIN: 3232
+load:0x40080400,len:3028
+entry 0x400805e4
+,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:[0m
+[0;32mI (63743) MAIN: 0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 [0m
+[0;32mI (63757) MAIN: (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x0[0m
+[0;32mI (63771) MAIN: 0,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x400[0m
+[0;32mI (63785) MAIN: 805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_[0m
+[0;32mI (63799) MAIN: drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:1[0m
+[0;32mI (63813) MAIN: 3232
+load:0x40080400,len:3028
+entry 0x400805e4
+,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:[0m
+[0;32mI (63827) MAIN: 0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 [0m
+[0;32mI (63841) MAIN: (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x0[0m
+[0;32mI (63855) MAIN: 0,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x400[0m
+[0;32mI (63869) MAIN: 805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_[0m
+[0;32mI (63883) MAIN: drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:1[0m
+[0;32mI (63897) MAIN: 3232
+load:0x40080400,len:3028
+entry 0x400805e4
+,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:[0m
+[0;32mI (63911) MAIN: 0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 [0m
+[0;32mI (63925) MAIN: (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x0[0m
+[0;32mI (63939) MAIN: 0,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x400[0m
+[0;32mI (63953) MAIN: 805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_[0m
+[0;32mI (63967) MAIN: drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:1[0m
+[0;32mI (63981) MAIN: 3232
+load:0x40080400,len:3028
+entry 0x400805e4
+,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:[0m
+[0;32mI (63995) MAIN: 0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 [0m
+[0;32mI (64009) MAIN: (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x0[0m
+[0;32mI (64023) MAIN: 0,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x400[0m
+[0;32mI (64037) MAIN: 805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_[0m
+[0;32mI (64051) MAIN: drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:1[0m
+[0;32mI (64065) MAIN: 3232
+load:0x40080400,len:3028
+entry 0x400805e4
+,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:[0m
+[0;32mI (64079) MAIN: 0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 [0m
+[0;32mI (64093) MAIN: (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x0[0m
+[0;32mI (64107) MAIN: 0,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x400[0m
+[0;32mI (64121) MAIN: 805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_[0m
+[0;32mI (64135) MAIN: drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:1[0m
+[0;32mI (64149) MAIN: 3232
+load:0x40080400,len:3028
+entry 0x400805e4
+,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:[0m
+[0;32mI (64163) MAIN: 0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 [0m
+[0;32mI (64177) MAIN: (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x0[0m
+[0;32mI (64191) MAIN: 0,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x400[0m
+[0;32mI (64205) MAIN: 805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_[0m
+[0;32mI (64219) MAIN: drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:1[0m
+[0;32mI (64233) MAIN: 3232
+load:0x40080400,len:3028
+entry 0x400805e4
+,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:[0m
+[0;32mI (64247) MAIN: 0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 [0m
+[0;32mI (64261) MAIN: (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x0[0m
+[0;32mI (64275) MAIN: 0,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x400[0m
+[0;32mI (64289) MAIN: 805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_[0m
+[0;32mI (64303) MAIN: drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:1[0m
+[0;32mI (64317) MAIN: 3232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)[0m
+[0;32mI (64331) MAIN: 
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load[0m
+[0;32mI (64345) MAIN: :0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x400805e4
+et_drv:0x00,cs0_drv:0x00,hd_drv:0x0[0m
+[0;32mI (64359) MAIN: 0,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x400[0m
+[0;32mI (64373) MAIN: 805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_[0m
+[0;32mI (64387) MAIN: drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:1[0m
+[0;32mI (64401) MAIN: 3232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 20s0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:[0m
+[0;32mI (64415) MAIN: 0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 [0m
+[0;32mI (64429) MAIN: (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x0[0m
+[0;32mI (64443) MAIN: 0,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x400[0m
+[0;32mI (64457) MAIN: 805e4
+ets Jul 29 2019 12:21:46,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13[0m
+[0;32mI (64471) MAIN: 232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)[0m
+[0;32mI (64485) MAIN: 
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:[0m
+[0;32mI (64499) MAIN: 0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 [0m
+[0;32mI (64513) MAIN: (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x0[0m
+[0;32mI (64527) MAIN: 0,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x400[0m
+[0;32mI (64541) MAIN: 805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_[0m
+[0;32mI (64555) MAIN: drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mo2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)[0m
+[0;32mI (64569) MAIN: 
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:[0m
+[0;32mI (64583) MAIN: 0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 [0m
+[0;32mI (64597) MAIN: (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x0[0m
+[0;32mI (64611) MAIN: 0,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x400[0m
+[0;32mI (64625) MAIN: 805e4
+ets Jul 29 2019 drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13[0m
+[0;32mI (64639) MAIN: 232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)[0m
+[0;32mI (64653) MAIN: 
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:[0m
+[0;32mI (64667) MAIN: 0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 [0m
+[0;32mI (64681) MAIN: (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x0[0m
+[0;32mI (64695) MAIN: 0,wp_drv:0x00
+mo2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_d[0m
+[0;32mI (64709) MAIN: rv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13[0m
+[0;32mI (64723) MAIN: 232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)[0m
+[0;32mI (64737) MAIN: 
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:[0m
+[0;32mI (64751) MAIN: 0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 [0m
+[0;32mI (64765) MAIN: (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x0[0m
+[0;32mI (64779) MAIN: 0,wp_drv:0x00
+mode19 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_d[0m
+[0;32mI (64793) MAIN: rv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13[0m
+[0;32mI (64807) MAIN: 232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)[0m
+[0;32mI (64821) MAIN: 
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:[0m
+[0;32mI (64835) MAIN: 0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 [0m
+[0;32mI (64849) MAIN: (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x0[0m
+[0;32mI (64863) MAIN: 0,wp_drv:0x00
+mode:DI12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_d[0m
+[0;32mI (64877) MAIN: rv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13[0m
+[0;32mI (64891) MAIN: 232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)[0m
+[0;32mI (64905) MAIN: 
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:[0m
+[0;32mI (64919) MAIN: 0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 [0m
+[0;32mI (64933) MAIN: (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x0[0m
+[0;32mI (64947) MAIN: 0,wp_drv:0x00
+mode:DIO, 21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_d[0m
+[0;32mI (64961) MAIN: rv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13[0m
+[0;32mI (64974) MAIN: 232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)[0m
+[0;32mI (64989) MAIN: 
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:[0m
+[0;32mI (65002) MAIN: 0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 [0m
+[0;32mI (65017) MAIN: (SW_RESET),boot:0x17 (SPIlock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x4008[0m
+[0;32mI (65031) MAIN: 05e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_d[0m
+[0;32mI (65045) MAIN: rv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13[0m
+[0;32mI (65059) MAIN: 232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)[0m
+[0;32mI (65073) MAIN: 
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:[0m
+[0;32mI (65087) MAIN: 0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 [0m
+[0;32mI (65101) MAIN: (SW_RESET),boot:0x17 (SPIlock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x4008[0m
+[0;32mI (65115) MAIN: 05e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_d[0m
+[0;32mI (65129) MAIN: rv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13[0m
+[0;32mI (65143) MAIN: 232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)[0m
+[0;32mI (65157) MAIN: 
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:[0m
+[0;32mI (65171) MAIN: 0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 [0m
+[0;32mI (65185) MAIN: (SW_RESET),boot:0x17 (SPIlock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x4008[0m
+[0;32mI (65199) MAIN: 05e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_d[0m
+[0;32mI (65213) MAIN: rv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13[0m
+[0;32mI (65227) MAIN: 232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)[0m
+[0;32mI (65241) MAIN: 
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:[0m
+[0;32mI (65255) MAIN: 0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 [0m
+[0;32mI (65269) MAIN: (SW_RESET),boot:0x17 (SPIlock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x4008[0m
+[0;32mI (65283) MAIN: 05e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_d[0m
+[0;32mI (65297) MAIN: rv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13[0m
+[0;32mI (65311) MAIN: 232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)[0m
+[0;32mI (65325) MAIN: 
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:[0m
+[0;32mI (65339) MAIN: 0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 [0m
+[0;32mI (65353) MAIN: (SW_RESET),boot:0x17 (SPIlock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x4008[0m
+[0;32mI (65367) MAIN: 05e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_d[0m
+[0;32mI (65381) MAIN: rv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13[0m
+[0;32mI (65395) MAIN: 232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)[0m
+[0;32mI (65409) MAIN: 
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:[0m
+[0;32mI (65423) MAIN: 0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 [0m
+[0;32mI (65437) MAIN: (SW_RESET),boot:0x17 (SPIlock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x4008[0m
+[0;32mI (65451) MAIN: 05e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_d[0m
+[0;32mI (65465) MAIN: rv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13[0m
+[0;32mI (65479) MAIN: 232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)[0m
+[0;32mI (65493) MAIN: 
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:[0m
+[0;32mI (65507) MAIN: 0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 [0m
+[0;32mI (65521) MAIN: (SW_RESET),boot:0x17 (SPI_FAS div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x4008[0m
+[0;32mI (65535) MAIN: 05e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_d[0m
+[0;32mI (65549) MAIN: rv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13[0m
+[0;32mI (65563) MAIN: 232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)[0m
+[0;32mI (65577) MAIN: 
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:[0m
+[0;32mI (65591) MAIN: 0x3fff0030,len:1184
+load:0x40078SH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00[0m
+[0;32mI (65605) MAIN: ,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x4008[0m
+[0;32mI (65619) MAIN: 05e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_d[0m
+[0;32mI (65633) MAIN: rv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13[0m
+[0;32mI (65647) MAIN: 232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)[0m
+[0;32mI (65661) MAIN: 
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:[0m
+[0;32mI (65675) MAIN: 0x3fff0030,len:1184
+load:0x40078SH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00[0m
+[0;32mI (65689) MAIN: ,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x4008[0m
+[0;32mI (65703) MAIN: 05e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_d[0m
+[0;32mI (65717) MAIN: rv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13[0m
+[0;32mI (65731) MAIN: 232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)[0m
+[0;32mI (65745) MAIN: 
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:[0m
+[0;32mI (65759) MAIN: 0x3fff0030,len:1184
+load:0x40078SH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00[0m
+[0;32mI (65773) MAIN: ,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x4008[0m
+[0;32mI (65787) MAIN: 05e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_d[0m
+[0;32mI (65801) MAIN: rv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13[0m
+[0;32mI (65815) MAIN: 232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)[0m
+[0;32mI (65829) MAIN: 
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:[0m
+[0;32mI (65843) MAIN: 0x3fff0030,len:1184
+load:0x40078SH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00[0m
+[0;32mI (65857) MAIN: ,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x4008[0m
+[0;32mI (65871) MAIN: 05e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_d[0m
+[0;32mI (65885) MAIN: rv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13[0m
+[0;32mI (65899) MAIN: 232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)[0m
+[0;32mI (65913) MAIN: 
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:[0m
+[0;32mI (65927) MAIN: 0x3fff0030,len:1184
+load:0x40078000BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00[0m
+[0;32mI (65941) MAIN: ,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x4008[0m
+[0;32mI (65955) MAIN: 05e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_d[0m
+[0;32mI (65969) MAIN: rv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13[0m
+[0;32mI (65983) MAIN: 232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)[0m
+[0;32mI (65997) MAIN: 
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:[0m
+[0;32mI (66011) MAIN: 0x3fff0030,len:1184
+load:0x40078000,leT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00[0m
+[0;32mI (66025) MAIN: ,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x4008[0m
+[0;32mI (66039) MAIN: 05e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_d[0m
+[0;32mI (66053) MAIN: rv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13[0m
+[0;32mI (66067) MAIN: 232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)[0m
+[0;32mI (66081) MAIN: 
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q3232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 ([0m
+[0;32mI (66095) MAIN: SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00[0m
+[0;32mI (66109) MAIN: ,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x4008[0m
+[0;32mI (66123) MAIN: 05e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_d[0m
+[0;32mI (66137) MAIN: rv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13[0m
+[0;32mI (66151) MAIN: 232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)[0m
+[0;32mI (66165) MAIN: 
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q3232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 ([0m
+[0;32mI (66179) MAIN: SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00[0m
+[0;32mI (66193) MAIN: ,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x4008[0m
+[0;32mI (66207) MAIN: 05e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_d[0m
+[0;32mI (66221) MAIN: rv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13[0m
+[0;32mI (66235) MAIN: 232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)[0m
+[0;32mI (66249) MAIN: 
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q3232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 ([0m
+[0;32mI (66263) MAIN: SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00[0m
+[0;32mI (66277) MAIN: ,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x4008[0m
+[0;32mI (66291) MAIN: 05e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_d[0m
+[0;32mI (66305) MAIN: rv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13[0m
+[0;32mI (66319) MAIN: 232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)[0m
+[0;32mI (66333) MAIN: 
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q3232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 ([0m
+[0;32mI (66347) MAIN: SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00[0m
+[0;32mI (66361) MAIN: ,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x4008[0m
+[0;32mI (66375) MAIN: 05e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_d[0m
+[0;32mI (66389) MAIN: rv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13[0m
+[0;32mI (66403) MAIN: 232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)[0m
+[0;32mI (66417) MAIN: 
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q3232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 ([0m
+[0;32mI (66432) MAIN: SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00[0m
+[0;32mI (66445) MAIN: ,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x4008[0m
+[0;32mI (66459) MAIN: 05e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_d[0m
+[0;32mI (66473) MAIN: rv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13[0m
+[0;32mI (66487) MAIN: 232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)[0m
+[0;32mI (66501) MAIN: 
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q3232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 ([0m
+[0;32mI (66516) MAIN: SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00[0m
+[0;32mI (66530) MAIN: ,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x4008[0m
+[0;32mI (66543) MAIN: 05e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_d[0m
+[0;32mI (66558) MAIN: rv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13[0m
+[0;32mI (66571) MAIN: 232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)[0m
+[0;32mI (66586) MAIN: 
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_d32
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 ([0m
+[0;32mI (66600) MAIN: SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00[0m
+[0;32mI (66614) MAIN: ,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x4008[0m
+[0;32mI (66628) MAIN: 05e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_d[0m
+[0;32mI (66642) MAIN: rv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13[0m
+[0;32mI (66656) MAIN: 232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)[0m
+[0;32mI (66670) MAIN: 
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0xoad:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 ([0m
+[0;32mI (66684) MAIN: SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00[0m
+[0;32mI (66698) MAIN: ,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x4008[0m
+[0;32mI (66712) MAIN: 05e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_d[0m
+[0;32mI (66726) MAIN: rv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13[0m
+[0;32mI (66740) MAIN: 232
+load:0x40080400,len:3028
+entry 0x400805e4
+,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0[0m
+[0;32mI (66754) MAIN: x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 ([0m
+[0;32mI (66768) MAIN: SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00[0m
+[0;32mI (66782) MAIN: ,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x4008[0m
+[0;32mI (66796) MAIN: 05e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_d[0m
+[0;32mI (66810) MAIN: rv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13[0m
+[0;32mI (66824) MAIN: 232
+load:0x40080400,len:3028
+entry 0x400805e4
+,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0[0m
+[0;32mI (66838) MAIN: x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 ([0m
+[0;32mI (66852) MAIN: SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00[0m
+[0;32mI (66866) MAIN: ,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x4008[0m
+[0;32mI (66880) MAIN: 05e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_d[0m
+[0;32mI (66894) MAIN: rv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13[0m
+[0;32mI (66908) MAIN: 232
+load:0x40080400,len:3028
+entry 0x400805e4
+,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0[0m
+[0;32mI (66922) MAIN: x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 ([0m
+[0;32mI (66936) MAIN: SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00[0m
+[0;32mI (66950) MAIN: ,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x4008[0m
+[0;32mI (66964) MAIN: 05e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_d[0m
+[0;32mI (66978) MAIN: rv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13[0m
+[0;32mI (66992) MAIN: 232
+load:0x40080400,len:3028
+entry 0x400805e4
+,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0[0m
+[0;32mI (67006) MAIN: x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x400805e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 ([0m
+[0;32mI (67020) MAIN: SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00[0m
+[0;32mI (67034) MAIN: ,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x4008[0m
+[0;32mI (67048) MAIN: 05e4
+ets Jul 29 2019 12:21:46
+
+rst:0x3 (SW_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_d[0m
+[0;32mI (67062) MAIN: rv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13[0m
+[0;32mI (67076) MAIN: 232
+load:0x40080400,len:3028
+entry

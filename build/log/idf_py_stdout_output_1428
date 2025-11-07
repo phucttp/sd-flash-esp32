@@ -1,0 +1,20 @@
+[0/1] Re-running CMake...
+-- ccache will be used for faster recompilation
+-- git rev-parse returned 'fatal: not a git repository (or any of the parent directories): .git'
+-- Could not use 'git describe' to determine PROJECT_VER.
+-- Building ESP-IDF components for target esp32c3
+NOTICE: Manifest files have changed, solving dependencies.
+NOTICE: Using component placed at C:\Users\DELL\workspace\IDF\ESP_MUL\Muti for dependency "k0i05/esp_type_utils"(introduced by component "esp_ssd1306")
+.NOTICE: Skipping optional dependency: espressif/esp-sr
+.........................................NOTICE: Skipping optional dependency: espressif/usb_host_cdc_acm
+.NOTICE: Skipping optional dependency: espressif/usb_host_ch34x_vcp
+NOTICE: Skipping optional dependency: espressif/usb_host_cp210x_vcp
+..................NOTICE: Using component placed at C:\Users\DELL\workspace\IDF\ESP_MUL\Muti for dependency "k0i05/esp_type_utils", specified in C:\Users\DELL\workspace\IDF\ESP_MUL\Muti\components\esp_ssd1306\idf_component.yml
+.NOTICE: Using component placed at C:\Users\DELL\workspace\IDF\ESP_MUL\Muti for dependency "k0i05/esp_type_utils"(introduced by component "esp_ssd1306")
+..................................................................NOTICE: Skipping optional dependency: espressif/esp_hosted
+NOTICE: Skipping optional dependency: espressif/esp_wifi_remote
+...................NOTICE: Skipping optional dependency: espressif/lan867x
+....NOTICE: Using component placed at C:\Users\DELL\workspace\IDF\ESP_MUL\Muti for dependency "k0i05/esp_type_utils", specified in C:\Users\DELL\workspace\IDF\ESP_MUL\Muti\components\esp_ssd1306\idf_component.yml
+.-- Configuring incomplete, errors occurred!
+FAILED: build.ninja 
+C:\Espressif\tools\cmake\3.30.2\bin\cmake.exe --regenerate-during-build -SC:\Users\DELL\workspace\IDF\ESP_MUL\Muti -BC:\Users\DELL\workspace\IDF\ESP_MUL\Muti\build

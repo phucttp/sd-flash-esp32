@@ -1,0 +1,33 @@
+CMake Error at C:/Espressif/frameworks/esp-idf-v5.1.6/tools/cmake/build.cmake:548 (message):
+  ERROR: Because no versions of garag/esp-idf-pn532 match >=0.0.0,<0.1.1 ||
+  >0.1.1,<0.1.2 || >0.1.2,<0.1.3 || >0.1.3,<0.1.4 || >0.1.4,<0.1.5 ||
+  >0.1.5,<0.1.6 || >0.1.6,<0.1.8 || >0.1.8,<0.1.9 || >0.1.9,<0.2.0 || >0.2.0
+
+   and garag/esp-idf-pn532 (0.1.1) depends on idf (^5.2), garag/esp-idf-pn532 (>=0.0.0,<0.1.2 || >0.1.2,<0.1.3 || >0.1.3,<0.1.4 || >0.1.4,<0.1.5 || >0.1.5,<0.1.6 || >0.1.6,<0.1.8 || >0.1.8,<0.1.9 || >0.1.9,<0.2.0 || >0.2.0) requires idf (^5.2).
+
+  And because garag/esp-idf-pn532 (0.1.2) depends on both idf (^5.2) and idf
+  (^5.2), garag/esp-idf-pn532 (>=0.0.0,<0.1.4 || >0.1.4,<0.1.5 ||
+  >0.1.5,<0.1.6 || >0.1.6,<0.1.8 || >0.1.8,<0.1.9 || >0.1.9,<0.2.0 || >0.2.0)
+  requires idf (>=5.2.0,<6.0.0).
+
+  And because garag/esp-idf-pn532 (0.1.4) depends on both idf (^5.2) and idf
+  (^5.2), garag/esp-idf-pn532 (>=0.0.0,<0.1.6 || >0.1.6,<0.1.8 ||
+  >0.1.8,<0.1.9 || >0.1.9,<0.2.0 || >0.2.0) requires idf (>=5.2.0,<6.0.0).
+
+  And because garag/esp-idf-pn532 (0.1.6) depends on both idf (^5.2) and idf
+  (^5.2), garag/esp-idf-pn532 (>=0.0.0,<0.1.9 || >0.1.9,<0.2.0 || >0.2.0)
+  requires idf (>=5.2.0,<6.0.0).
+
+  And because garag/esp-idf-pn532 (0.1.9) depends on both idf (^5.2) and idf
+  (^5.2), garag/esp-idf-pn532 (>=0.0.0) requires idf (>=5.2.0,<6.0.0).
+
+  So, because no versions of idf match >=5.2.0,<6.0.0
+
+   and project depends on garag/esp-idf-pn532 (*), version solving failed.
+
+Call Stack (most recent call first):
+  C:/Espressif/frameworks/esp-idf-v5.1.6/tools/cmake/project.cmake:604 (idf_build_process)
+  CMakeLists.txt:11 (project)
+
+
+ninja: error: rebuilding 'build.ninja': subcommand failed

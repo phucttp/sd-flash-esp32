@@ -1,0 +1,27 @@
+[0;33m--- Warning: GDB cannot open serial ports accessed as COMx[0m
+[0;33m--- Using \\.\COM10 instead...[0m
+[0;33m--- esp-idf-monitor 1.8.0 on \\.\COM10 115200[0m
+[0;33m--- Quit: Ctrl+] | Menu: Ctrl+T | Help: Ctrl+T followed by Ctrl+H[0m
+[0m--- 0x4038283c: [0;33mbootloader_flash_execute_command_common[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/bootloader_support/bootloader_flash/src/bootloader_flash.c[0m[0m:[1;31m539[0m
+[0;33m--- Warning: Checksum mismatch between flashed and built applications. Checksum of built application is a4617c12f7332795d29398d18ee599c3a1b726a5c47f2be419fc6d5375017edf[0m
+[0m--- 0x40048b82: [0;33msoftware_reset[0m[0m in [0;32mROM[0m
+[0;33m--- Warning: Checksum mismatch between flashed and built applications. Checksum of built application is a4617c12f7332795d29398d18ee599c3a1b726a5c47f2be419fc6d5375017edf[0m
+[0m--- 0x40048b82: [0;33msoftware_reset[0m[0m in [0;32mROM[0m
+[0;33m--- Warning: Checksum mismatch between flashed and built applications. Checksum of built application is a4617c12f7332795d29398d18ee599c3a1b726a5c47f2be419fc6d5375017edf[0m
+[0m--- 0x40048b82: [0;33msoftware_reset[0m[0m in [0;32mROM[0m
+[0;33m--- Warning: Checksum mismatch between flashed and built applications. Checksum of built application is a4617c12f7332795d29398d18ee599c3a1b726a5c47f2be419fc6d5375017edf[0m
+[0m--- 0x40048b82: [0;33msoftware_reset[0m[0m in [0;32mROM[0m
+[0;33m--- Warning: Checksum mismatch between flashed and built applications. Checksum of built application is a4617c12f7332795d29398d18ee599c3a1b726a5c47f2be419fc6d5375017edf[0m
+[0m--- 0x40048b82: [0;33msoftware_reset[0m[0m in [0;32mROM[0m
+[0;33m--- Warning: Checksum mismatch between flashed and built applications. Checksum of built application is a4617c12f7332795d29398d18ee599c3a1b726a5c47f2be419fc6d5375017edf[0m
+[0m--- 0x40048b82: [0;33msoftware_reset[0m[0m in [0;32mROM[0m
+[0;33m--- Warning: Checksum mismatch between flashed and built applications. Checksum of built application is a4617c12f7332795d29398d18ee599c3a1b726a5c47f2be419fc6d5375017edf[0m
+[0m--- 0x40048b82: [0;33msoftware_reset[0m[0m in [0;32mROM[0m
+[0;33m--- Warning: Checksum mismatch between flashed and built applications. Checksum of built application is a4617c12f7332795d29398d18ee599c3a1b726a5c47f2be419fc6d5375017edf[0m
+[0m--- 0x40048b82: [0;33msoftware_reset[0m[0m in [0;32mROM[0m
+[0;33m--- Warning: Checksum mismatch between flashed and built applications. Checksum of built application is a4617c12f7332795d29398d18ee599c3a1b726a5c47f2be419fc6d5375017edf[0m
+[0m--- 0x40048b82: [0;33msoftware_reset[0m[0m in [0;32mROM[0m
+[0;33m--- Warning: Checksum mismatch between flashed and built applications. Checksum of built application is a4617c12f7332795d29398d18ee599c3a1b726a5c47f2be419fc6d5375017edf[0m
+[0m--- 0x40048b82: [0;33msoftware_reset[0m[0m in [0;32mROM[0m
+[0;33m--- Warning: Checksum mismatch between flashed and built applications. Checksum of built application is a4617c12f7332795d29398d18ee599c3a1b726a5c47f2be419fc6d5375017edf[0m
+[0m

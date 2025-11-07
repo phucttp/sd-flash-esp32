@@ -1,0 +1,1139 @@
+[0;32mI (105) esp_image: segment 1: paddr=00021788 vaddr=3fc8e2ESP-ROM:esp32c3-api1-20210207
+Build:Feb  7 2021
+rst:0x15 (USB_UART_CHIP_RESET),boot:0xf (SPI_FAST_FLASH_BOOT)
+Saved PC:0x40383f90
+SPIWP:0xee
+mode:DIO, clock div:1
+load:0x3fcd5820,len:0x170c
+load:0x403cc710,len:0x968
+load:0x403ce710,len:0x2fa8
+entry 0x403cc710
+[0;32mI (24) boot: ESP-IDF v5.1.6-dirty 2nd stage bootloader[0m
+[0;32mI (24) boot: compile time Oct 16 2025 01:02:32[0m
+[0;32mI (25) boot: chip revision: v0.4[0m
+[0;32mI (28) boot.esp32c3: SPI Speed      : 80MHz[0m
+[0;32mI (33) boot.esp32c3: SPI Mode       : DIO[0m
+[0;32mI (37) boot.esp32c3: SPI Flash Size : 2MB[0m
+[0;32mI (42) boot: Enabling RNG early entropy source...[0m
+[0;32mI (47) boot: Partition Table:[0m
+[0;32mI (51) boot: ## Label            Usage          Type ST Offset   Length[0m
+[0;32mI (58) boot:  0 nvs              WiFi data        01 02 00009000 00006000[0m
+[0;32mI (66) boot:  1 phy_init         RF data          01 01 0000f000 00001000[0m
+[0;32mI (73) boot:  2 factory          factory app      00 00 00010000 00100000[0m
+[0;32mI (81) boot: End of partition table[0m
+[0;32mI (85) esp_image: segment 0: paddr=00010020 vaddr=3c040020 size=11760h ( 71520) map[0m
+[0;32mI (105) esp_image: segment 1: paddr=00021788 vaddr=3fc8e200 size=01420h (  5152) load[0m
+[0;32mI (106) esp_image: segment 2: paddr=00022bb0 vaddr=40380000 size=0d468h ( 54376) load[0m
+[0;32mI (121) esp_image: segment 3: paddr=00030020 vaddr=42000020 size=3dff8h (253944) map[0m
+[0;32mI (163) esp_image: segment 4: paddr=0006e020 vaddr=4038d468 size=00c80h (  3200) load[0m
+[0;32mI (168) boot: Loaded app from partition at offset 0x10000[0m
+[0;32mI (168) boot: Disabling RNG early entropy source...[0m
+[0;32mI (183) cpu_start: Unicore app[0m
+[0;32mI (183) cpu_start: Pro cpu up.[0m
+[0;32mI (192) cpu_start: Pro cpu start user code[0m
+[0;32mI (192) cpu_start: cpu freq: 160000000 Hz[0m
+[0;32mI (192) cpu_start: Application information:[0m
+[0;32mI (195) cpu_start: Project name:     ESP_MultiFlasher[0m
+[0;32mI (200) cpu_start: App version:      1[0m
+[0;32mI (205) cpu_start: Compile time:     Oct 16 2025 00:52:28[0m
+[0;32mI (211) cpu_start: ELF file SHA256:  d821dbca8300281c...[0m
+[0;32mI (217) cpu_start: ESP-IDF:          v5.1.6-dirty[0m
+[0;32mI (222) cpu_start: Min chip rev:     v0.3[0m
+[0;32mI (227) cpu_start: Max chip rev:     v1.99 [0m
+[0;32mI (232) cpu_start: Chip rev:         v0.4[0m
+[0;32mI (237) heap_init: Initializing. RAM available for dynamic allocation:[0m
+[0;32mI (244) heap_init: At 3FC90BB0 len 0002F450 (189 KiB): DRAM[0m
+[0;32mI (250) heap_init: At 3FCC0000 len 0001C710 (113 KiB): DRAM/RETENTION[0m
+[0;32mI (257) heap_init: At 3FCDC710 len 00002950 (10 KiB): DRAM/RETENTION/STACK[0m
+[0;32mI (265) heap_init: At 50000010 len 00001FD8 (7 KiB): RTCRAM[0m
+[0;32mI (272) spi_flash: detected chip: generic[0m
+[0;32mI (276) spi_flash: flash io: dio[0m
+[0;33mW (280) spi_flash: Detected size(4096k) larger than the size in the binary image header(2048k). Using the size in the binary image header.[0m
+[0;32mI (293) sleep: Configure to isolate all GPIO pins in sleep state[0m
+[0;32mI (299) sleep: Enable automatic switching of GPIO sleep configuration[0m
+[0;32mI (307) app_start: Starting scheduler on CPU0[0m
+[0;32mI (312) main_task: Started on CPU0[0m
+[0;32mI (316) main_task: Calling app_main()[0m
+[0;32mI (324) MAIN: --- BAT DAU KHOI DONG HE THONG ---[0m
+[0;32mI (842) gpio: GPIO[4]| InputEn: 1| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (843) gpio: GPIO[5]| InputEn: 1| OutputEn: 0| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (850) gpio: GPIO[6]| InputEn: 1| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (859) gpio: GPIO[7]| InputEn: 1| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (879) SD_CARD: SD initialized OK![0m
+[0;32mI (1438) SD_CARD: Tải Metadata hoàn tất. Tổng cộng 6 firmware được tải.[0m
+[0;31mE (1439) uart: uart_flush_input(1350): uart driver error[0m
+[0;32mI (1442) MAIN: Dang lay menu tu sd_card module...[0m
+[0;32mI (1448) gpio: GPIO[21]| InputEn: 1| OutputEn: 0| OpenDrain: 0| Pullup: 1| Pulldown: 0| Intr:0 [0m
+[0;32mI (1457) gpio: GPIO[20]| InputEn: 1| OutputEn: 0| OpenDrain: 0| Pullup: 1| Pulldown: 0| Intr:0 [0m
+[0;32mI (1466) gpio: GPIO[10]| InputEn: 1| OutputEn: 0| OpenDrain: 0| Pullup: 1| Pulldown: 0| Intr:0 [0m
+[0;32mI (1491) MAIN: Khoi dong hoan tat. Hien thi menu.[0m
+[0;31mE (1491) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (1501) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (1511) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (1521) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (1531) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (1541) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (1551) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (1561) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (1571) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (1581) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (1591) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (1601) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (1611) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (1621) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (1631) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (1641) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (1651) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (1661) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (1671) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (1681) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (1691) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (1701) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (1711) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (1721) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (1731) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (1741) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (1751) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (1761) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (1771) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (1781) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (1791) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (1801) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (1811) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (1821) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (1831) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (1841) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (1851) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (1861) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (1871) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (1881) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (1891) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (1901) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (1911) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (1921) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (1931) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (1941) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (1951) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (1961) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (1971) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (1981) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (1991) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2001) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2011) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2021) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2031) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2041) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2051) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2061) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2071) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2081) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2091) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2101) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2111) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2121) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2131) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2141) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2151) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2161) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2171) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2181) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2191) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2201) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2211) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2221) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2231) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2241) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2251) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2261) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2271) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2281) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2291) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2301) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2311) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2321) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2331) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2341) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2351) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2361) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2371) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2381) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2391) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2401) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2411) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2421) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2431) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2441) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2451) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2461) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2471) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2481) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2491) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2501) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2511) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2521) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2531) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2541) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2551) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2561) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2571) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2581) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2591) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2601) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2611) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2621) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2631) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2641) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2651) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2661) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2671) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2681) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2691) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2701) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2711) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2721) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2731) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2741) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2751) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2761) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2771) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2781) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2791) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2801) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2811) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2821) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2831) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2841) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2851) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2861) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2871) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2881) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2891) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2901) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2911) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2921) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2931) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2941) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2951) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2961) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2971) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2981) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2991) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3001) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3011) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3021) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3031) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3041) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3051) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3061) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3071) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3081) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3091) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3101) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3111) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3121) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3131) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3141) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3151) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3161) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3171) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3181) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3191) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3201) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3211) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3221) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3231) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3241) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3251) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3261) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3271) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3281) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3291) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3301) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3311) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3321) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3331) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3341) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3351) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3361) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3371) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3381) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3391) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3401) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3411) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3421) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3431) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3441) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3451) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3461) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3471) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3481) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3491) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3501) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3511) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3521) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3531) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3541) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3551) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3561) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3571) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3581) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3591) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3601) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3611) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3621) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3631) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3641) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3651) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3661) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3671) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3681) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3691) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3701) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3711) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3721) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3731) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3741) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3751) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3761) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3771) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3781) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3791) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3801) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3811) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3821) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3831) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3841) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3851) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3861) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3871) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3881) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3891) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3901) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3911) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3921) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3931) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3941) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3951) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3961) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3971) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3981) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3991) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4001) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4011) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4021) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4031) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4041) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4051) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4061) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4071) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4081) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4091) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4101) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4111) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4121) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4131) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4141) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4151) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4161) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4171) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4181) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4191) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4201) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4211) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4221) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4231) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4241) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4251) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4261) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4271) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4281) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4291) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4301) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4311) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4321) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4331) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4341) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4351) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4361) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4371) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4381) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4391) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4401) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4411) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4421) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4431) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4441) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4451) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4461) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4471) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4481) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4491) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4501) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4511) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4521) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4531) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4541) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4551) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4561) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4571) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4581) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4591) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4601) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4611) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4621) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4631) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4641) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4651) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4661) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4671) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4681) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4691) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4701) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4711) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4721) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4731) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4741) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4751) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4761) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4771) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4781) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4805) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4815) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4825) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4835) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4845) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4855) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4865) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4875) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4885) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4895) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4905) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4915) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4925) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4935) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4945) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4955) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4965) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4975) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4985) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4995) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5005) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5015) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5025) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5035) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5045) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5055) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5065) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5075) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5085) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5095) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5105) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5115) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5125) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5135) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5145) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5155) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5165) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5175) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5185) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5195) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5205) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5215) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5225) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5235) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5245) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5255) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5265) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5275) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5285) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5295) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5305) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5315) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5325) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5335) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5345) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5355) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5365) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5375) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5385) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5395) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5405) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5415) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5425) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5435) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5445) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5455) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5465) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5475) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5485) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5495) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5505) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5515) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5525) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5535) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5545) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5555) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5565) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5575) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5585) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5595) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5605) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5615) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5625) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5635) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5645) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5655) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5665) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5675) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5685) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5695) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5705) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5715) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5725) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5735) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5745) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5755) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5765) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5775) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5785) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5795) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5805) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5815) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5825) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5835) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5845) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5855) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5865) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5875) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5885) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5895) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5905) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5915) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5925) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5935) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5945) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5955) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5965) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5975) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5985) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5995) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6005) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6015) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6025) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6035) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6045) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6055) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6065) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6075) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6085) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6095) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6105) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6115) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6125) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6135) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6145) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6155) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6165) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6175) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6185) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6195) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6205) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6215) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6225) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6235) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6245) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6255) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6265) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6275) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6285) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6295) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6305) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6315) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6325) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6335) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6345) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6355) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6365) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6375) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6385) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6395) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6405) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6415) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6425) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6435) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6445) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6455) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6465) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6475) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6485) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6495) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6505) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6515) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6525) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6535) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6545) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6555) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6565) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6575) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6585) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6595) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6605) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6615) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6625) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6635) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6645) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6655) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6665) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6675) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6685) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6695) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6705) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6715) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6725) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6735) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6745) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6755) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6765) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6775) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6785) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6795) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6805) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6815) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6825) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6835) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6845) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6855) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6865) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6875) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6885) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6895) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6905) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6915) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6925) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6935) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6945) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6955) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6965) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6975) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6985) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6995) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7005) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7015) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7025) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7035) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7045) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7055) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7065) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7075) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7085) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7095) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7105) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7115) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7125) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7135) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7145) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7155) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7165) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7175) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7185) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7195) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7205) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7215) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7225) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7235) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7245) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7255) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7265) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7275) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7285) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7295) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7305) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7315) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7325) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7335) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7345) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7355) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7365) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7375) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7385) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7395) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7405) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7415) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7425) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7435) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7445) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7455) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7465) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7475) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7485) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7495) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7505) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7515) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7525) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7535) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7545) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7555) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7565) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7575) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7585) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7595) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7605) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7615) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7625) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7635) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7645) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7655) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7665) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7675) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7685) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7695) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7705) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7715) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7725) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7735) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7745) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7755) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7765) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7775) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7785) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7795) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7805) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7815) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7825) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7835) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7845) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7855) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7865) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7875) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7885) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7895) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7905) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7915) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7925) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7935) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7945) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7955) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7965) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7975) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7985) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7995) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (8005) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (8015) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (8025) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (8035) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (8045) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (8055) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (8065) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (8075) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (8085) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (8095) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (8105) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (8115) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (8125) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (8135) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (8145) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (8155) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (8165) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (8175) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (8185) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (8195) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (8205) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (8215) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (8225) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (8235) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (8245) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (8255) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (8265) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (8275) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (8285) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (8295) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (8305) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (8315) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (8325) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (8335) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (8345) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (8355) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (8365) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (8375) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (8385) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (8395) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (8405) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (8415) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (8425) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (8435) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (8445) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (8455) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (8465) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (8475) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (8485) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (8495) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (8505) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (8515) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (8525) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (8535) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (8545) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (8555) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (8565) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (8575) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (8585) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (8595) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (8605) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (8615) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (8625) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (8635) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (8645) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (8655) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (8665) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (8675) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (8685) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (8695) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (8705) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (8715) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (8725) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (8735) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (8745) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (8755) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (8779) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (8789) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (8799) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (8809) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (8819) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (8829) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (8839) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (8849) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (8859) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (8869) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (8879) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (8889) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (8899) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (8909) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (8919) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (8929) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (8939) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (8949) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (8959) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (8969) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (8979) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (8989) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (8999) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (9009) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (9019) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (9029) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (9039) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (9049) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (9059) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (9069) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (9079) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (9089) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (9099) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (9109) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (9119) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (9129) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (9139) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (9149) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (9159) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (9169) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (9179) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (9189) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (9199) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (9209) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (9219) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (9229) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (9239) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (9249) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (9259) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (9269) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (9279) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (9289) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (9299) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (9309) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (9319) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (9329) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (9339) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (9349) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (9359) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (9369) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (9379) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (9389) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (9399) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (9409) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (9419) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (9429) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (9439) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (9449) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (9459) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (9469) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (9479) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (9489) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (9499) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (9509) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (9519) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (9529) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (9539) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (9549) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (9559) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (9569) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (9579) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (9589) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (9599) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (9609) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (9619) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (9629) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (9639) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (9649) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (9659) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (9669) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (9679) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (9689) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (9713) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (9723) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (9733) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (9743) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (9753) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (9763) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (9773) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (9783) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (9793) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (9803) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (9813) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (9823) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (9833) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (9843) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (9853) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (9863) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (9873) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (9883) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (9893) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (9903) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (9913) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (9923) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (9933) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (9943) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (9953) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (9963) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (9973) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (9983) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (9993) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (10003) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (10013) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (10023) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (10033) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (10057) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (10067) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (10077) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (10087) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (10097) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (10107) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (10117) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (10127) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (10137) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (10147) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (10157) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (10167) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (10177) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (10187) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (10197) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (10207) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (10217) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (10227) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (10237) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (10247) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (10257) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (10267) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (10277) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (10287) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (10297) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (10307) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (10317) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (10327) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (10337) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (10347) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (10357) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (10367) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (10377) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (10387) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (10397) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (10407) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (10417) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (10427) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (10437) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (10447) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (10457) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (10467) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (10477) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (10487) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (10497) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (10507) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (10517) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (10527) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (10537) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (10547) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (10557) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (10567) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (10577) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (10587) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (10597) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (10607) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (10617) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (10627) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (10637) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (10647) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (10657) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (10667) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (10677) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (10687) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (10697) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (10707) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (10717) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (10727) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (10737) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (10747) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (10757) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (10767) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (10777) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (10787) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (10797) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (10807) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (10817) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (10827) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (10837) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (10847) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (10857) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (10867) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (10877) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (10887) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (10897) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (10907) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (10917) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (10927) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (10937) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (10947) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (10957) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (10967) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (10977) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (10987) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (10997) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (11007) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (11017) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (11027) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (11037) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (11047) uart: uart_read_bytes(1289): uart driver error[0m
+[0;32mI (11057) MAIN: Da chon: Index 5, FW ID: test_01[0m
+[0;32mI (11057) MAIN: Bat dau flash firmware: test_01[0m
+[0;32mI (11070) SD_CARD: SD initialized OK![0m
+[0;32mI (11084) gpio: GPIO[2]| InputEn: 0| OutputEn: 0| OpenDrain: 0| Pullup: 1| Pulldown: 0| Intr:0 [0m
+[0;32mI (11084) gpio: GPIO[3]| InputEn: 0| OutputEn: 0| OpenDrain: 0| Pullup: 1| Pulldown: 0| Intr:0 [0m
+[0;32mI (11092) FLASHER: UART connection initialized at baud rate 115200[0m
+[0;32mI (11099) MAIN: Flasher da san sang.[0m
+[0;32mI (11103) SD_METADATA: Firmware ID test_01 found: Path=/test_01/FW.bin, Version=v1.0[0m
+[0;32mI (11111) FLASHER: Reset sequence start...[0m
+[0;32mI (11586) FLASHER: Reset sequence done![0m
+[0;32mI (12259) FLASHER: Connected to target device.[0m
+[0;32mI (12263) FLASHER: Baudrate boosted to 460800[0m
+[0;32mI (12264) FLASHER: ==== Writing segment ====[0m
+[0;32mI (12264) FLASHER: File: /test_01/BOTL.bin | Offset: 0x00001000[0m
+[0;32mI (12291) FLASHER: Segment size: 24864 bytes[0m
+[0;32mI (12612) FLASHER: Progress: 16%[0m
+[0;32mI (12750) FLASHER: Progress: 32%[0m
+[0;32mI (12893) FLASHER: Progress: 49%[0m
+[0;32mI (13035) FLASHER: Progress: 65%[0m
+[0;32mI (13185) FLASHER: Progress: 82%[0m
+[0;32mI (13331) FLASHER: Progress: 98%[0m
+[0;32mI (13453) FLASHER: Progress: 100%[0m
+[0;32mI (13467) FLASHER: Segment written 24864 / 24864 bytes OK[0m
+[0;32mI (13506) FLASHER: MD5 verified OK for segment![0m
+[0;32mI (13507) FLASHER: Segment at 0x00001000 written successfully.[0m
+[0;32mI (13507) FLASHER: ==== Writing segment ====[0m
+[0;32mI (13512) FLASHER: File: /test_01/PART.bin | Offset: 0x00008000[0m
+[0;32mI (13540) FLASHER: Segment size: 3072 bytes[0m
+[0;32mI (13681) FLASHER: Progress: 100%[0m
+[0;32mI (13695) FLASHER: Segment written 3072 / 3072 bytes OK[0m
+[0;32mI (13704) FLASHER: MD5 verified OK for segment![0m
+[0;32mI (13704) FLASHER: Segment at 0x00008000 written successfully.[0m
+[0;32mI (13705) FLASHER: ==== Writing segment ====[0m
+[0;32mI (13710) FLASHER: File: /test_01/FW.bin | Offset: 0x00010000[0m
+[0;32mI (13737) FLASHER: Segment size: 124416 bytes[0m
+[0;32mI (14659) FLASHER: Progress: 3%[0m
+[0;32mI (14794) FLASHER: Progress: 6%[0m
+[0;32mI (14928) FLASHER: Progress: 9%[0m
+[0;32mI (15062) FLASHER: Progress: 13%[0m
+[0;32mI (15203) FLASHER: Progress: 16%[0m
+[0;32mI (15343) FLASHER: Progress: 19%[0m
+[0;32mI (15488) FLASHER: Progress: 23%[0m
+[0;32mI (15632) FLASHER: Progress: 26%[0m
+[0;32mI (15788) FLASHER: Progress: 29%[0m
+[0;32mI (15943) FLASHER: Progress: 32%[0m
+[0;32mI (16096) FLASHER: Progress: 36%[0m
+[0;32mI (16238) FLASHER: Progress: 39%[0m
+[0;32mI (16374) FLASHER: Progress: 42%[0m
+[0;32mI (16507) FLASHER: Progress: 46%[0m
+[0;32mI (16641) FLASHER: Progress: 49%[0m
+[0;32mI (16774) FLASHER: Progress: 52%[0m
+[0;32mI (16911) FLASHER: Progress: 55%[0m
+[0;32mI (17051) FLASHER: Progress: 59%[0m
+[0;32mI (17189) FLASHER: Progress: 62%[0m
+[0;32mI (17326) FLASHER: Progress: 65%[0m
+[0;32mI (17461) FLASHER: Progress: 69%[0m
+[0;32mI (17597) FLASHER: Progress: 72%[0m
+[0;32mI (17734) FLASHER: Progress: 75%[0m
+[0;32mI (17869) FLASHER: Progress: 79%[0m
+[0;32mI (18005) FLASHER: Progress: 82%[0m
+[0;32mI (18142) FLASHER: Progress: 85%[0m
+[0;32mI (18277) FLASHER: Progress: 88%[0m
+[0;32mI (18414) FLASHER: Progress: 92%[0m
+[0;32mI (18550) FLASHER: Progress: 95%[0m
+[0;32mI (18690) FLASHER: Progress: 98%[0m
+[0;32mI (18819) FLASHER: Progress: 100%[0m
+[0;32mI (18833) FLASHER: Segment written 124416 / 124416 bytes OK[0m
+[0;32mI (19012) FLASHER: MD5 verified OK for segment![0m
+[0;32mI (19012) FLASHER: Segment at 0x00010000 written successfully.[0m
+[0;32mI (19113) FLASHER: Resetting target to run app...[0m
+[0;32mI (19413) FLASHER: Target restarted in normal mode.[0m
+[0;32mI (19413) FLASHER: Full firmware update completed successfully![0m
+[0;32mI (19414) SD_CARD: SD Unmounted[0m
+[0;32mI (19417) MAIN: Flash hoan tat.[0m
+[0;32mI (21448) MAIN: UART1 received: x�x�x�x��xxxx�x����x�[0m
+[0;32mI (21468) MAIN: UART1 received: x�x�x��
+[0;32mI (21649) MAIN: UART1 received: [0m
+[0;32mI (22649) MAIN: UART1 received: [0m
+[0;32mI (23649) MAIN: UART1 received: [0m
+[0;32mI (24649) MAIN: UART1 received: [0m
+[0;32mI (25649) MAIN: UART1 received: [0m
+[0;32mI (26649) MAIN: UART1 received: [0m
+[0;32mI (27649) MAIN: UART1 received: [0m
+[0;32mI (28649) MAIN: UART1 received: [0m
+[0;32mI (29649) MAIN: UART1 received: [0m
+[0;32mI (30649) MAIN: UART1 received: [0m
+[0;32mI (31649) MAIN: UART1 received: [0m
+[0;32mI (32649) MAIN: UART1 received: [0m
+[0;32mI (33649) MAIN: UART1 received: [0m
+[0;32mI (34649) MAIN: UART1 received: [0m
+[0;32mI (35649) MAIN: UART1 received: [0m
+[0;32mI (36649) MAIN: UART1 received: [0m
+[0;32mI (37649) MAIN: UART1 received: [0m
+[0;32mI (38649) MAIN: UART1 received: [0m
+[0;32mI (39650) MAIN: UART1 received: [0m
+[0;32mI (40650) MAIN: UART1 received: [0m
+[0;32mI (41650) MAIN: UART1 received: [0m
+[0;32mI (42650) MAIN: UART1 received: [0m
+[0;32mI (43650) MAIN: UART1 received: [0m
+[0;32mI (44650) MAIN: UART1 received: [0m
+[0;32mI (45650) MAIN: UART1 received: [0m
+[0;32mI (46650) MAIN: UART1 received: [0m
+[0;32mI (47650) MAIN: UART1 received: [0m
+[0;32mI (48650) MAIN: UART1 received: [0m
+[0;32mI (49650) MAIN: UART1 received: [0m
+[0;32mI (50650) MAIN: UART1 received: [0m
+[0;32mI (51650) MAIN: UART1 received: [0m
+[0;32mI (52650) MAIN: UART1 received: [0m
+[0;32mI (53650) MAIN: UART1 received: [0m
+[0;32mI (54650) MAIN: UART1 received: [0m
+[0;32mI (55650) MAIN: UART1 received: [0m
+[0;32mI (56650) MAIN: UART1 received: [0m
+[0;32mI (57650) MAIN: UART1 received: [0m
+[0;32mI (58650) MAIN: UART1 received: [0m
+[0;32mI (59650) MAIN: UART1 received: [0m
+[0;32mI (60650) MAIN: UART1 received: [0m
+[0;32mI (61650) MAIN: UART1 received: [0m
+[0;32mI (62650) MAIN: UART1 received: [0m
+[0;32mI (63650) MAIN: UART1 received: [0m

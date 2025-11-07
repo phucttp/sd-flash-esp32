@@ -1,0 +1,15 @@
+[1/9] Building CXX object esp-idf/main/CMakeFiles/__idf_main.dir/main.cpp.obj
+[2/9] Performing build step for 'bootloader'
+[1/1] C:\Windows\system32\cmd.exe /C "cd /D C:\Users\DELL\workspace\IDF\ESP_MUL\Muti\build\bootloader\esp-idf\esptool_py && C:\Espressif\python_env\idf5.1_py3.11_env\Scripts\python.exe C:/Espressif/frameworks/esp-idf-v5.1.6/components/partition_table/check_sizes.py --offset 0x8000 bootloader 0x0 C:/Users/DELL/workspace/IDF/ESP_MUL/Muti/build/bootloader/bootloader.bin"
+Bootloader binary size 0x5070 bytes. 0x2f90 bytes (37%) free.
+[3/9] No install step for 'bootloader'
+[4/9] Linking C static library esp-idf\main\libmain.a
+[5/9] Completed 'bootloader'
+[6/9] Generating ld/sections.ld
+[7/9] Linking CXX executable ESP_MultiFlasher.elf
+FAILED: ESP_MultiFlasher.elf 
+C:\Windows\system32\cmd.exe /C "cd . && C:\Espressif\tools\riscv32-esp-elf\esp-12.2.0_20230208\riscv32-esp-elf\bin\riscv32-esp-elf-g++.exe -march=rv32imc_zicsr_zifencei -nostartfiles -march=rv32imc_zicsr_zifencei --specs=nosys.specs    -Wl,--cref -Wl,--defsym=IDF_TARGET_ESP32C3=0 -Wl,--Map=C:/Users/DELL/workspace/IDF/ESP_MUL/Muti/build/ESP_MultiFlasher.map -Wl,--no-warn-rwx-segments -fno-rtti -fno-lto -Wl,--gc-sections -Wl,--warn-common -T esp32c3.peripherals.ld -T esp32c3.rom.ld -T esp32c3.rom.api.ld -T esp32c3.rom.bt_funcs.ld -T esp32c3.rom.libgcc.ld -T esp32c3.rom.newlib.ld -T esp32c3.rom.version.ld -T esp32c3.rom.eco3.ld -T esp32c3.rom.eco3_bt_funcs.ld -T memory.ld -T sections.ld @CMakeFiles\ESP_MultiFlasher.elf.rsp -o ESP_MultiFlasher.elf && cd ."
+c:/espressif/tools/riscv32-esp-elf/esp-12.2.0_20230208/riscv32-esp-elf/bin/../lib/gcc/riscv32-esp-elf/12.2.0/../../../../riscv32-esp-elf/bin/ld.exe: esp-idf/main/libmain.a(main.cpp.obj): in function `setup()':
+C:/Users/DELL/workspace/IDF/ESP_MUL/Muti/main/main.cpp:15: undefined reference to `sd_mount(int)'
+collect2.exe: error: ld returned 1 exit status
+ninja: build stopped: subcommand failed.

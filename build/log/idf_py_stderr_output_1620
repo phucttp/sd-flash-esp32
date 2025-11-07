@@ -1,0 +1,90 @@
+[0;33m--- Warning: GDB cannot open serial ports accessed as COMx[0m
+[0;33m--- Using \\.\COM5 instead...[0m
+[0;33m--- esp-idf-monitor 1.8.0 on \\.\COM5 115200[0m
+[0;33m--- Quit: Ctrl+] | Menu: Ctrl+T | Help: Ctrl+T followed by Ctrl+H[0m
+[0m--- 0x40383f90: [0;33mrv_utils_wait_for_intr[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/riscv/include/riscv/rv_utils.h[0m[0m:[1;31m33[0m
+[0m--- (inlined by) [0;33mesp_cpu_wait_for_intr[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_hw_support/cpu.c[0m[0m:[1;31m119[0m
+[1;31m--- Error: ClearCommError failed (PermissionError(13, 'The device does not recognize the command.', None, 22))[0m
+[0;33m--- Waiting for the device to reconnect[0m[0;33m.[0m[0;33m[0m
+[0;33m--- Stack dump detected[0m
+[0m--- 0x42006e54: [0;33muart_ll_get_txfifo_len[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/hal/esp32c3/include/hal/uart_ll.h[0m[0m:[1;31m344[0m
+[0m--- (inlined by) [0;33muart_tx_char[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/vfs/vfs_uart.c[0m[0m:[1;31m189[0m
+[0m--- 0x42007fe8: [0;33muart_write[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/vfs/vfs_uart.c[0m[0m:[1;31m234[0m
+[0m--- 0x42006636: [0;33mconsole_write[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/vfs/vfs_console.c[0m[0m:[1;31m84[0m
+[0m--- 0x4202d64c: [0;33m_fflush_r[0m[0m at [0;32m??[0m[0m:[1;31m?[0m
+[0m--- 0x4202e300: [0;33m__sfvwrite_r[0m[0m at [0;32m??[0m[0m:[1;31m?[0m
+[0m--- 0x42006e4a: [0;33muart_ll_get_txfifo_len[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/hal/esp32c3/include/hal/uart_ll.h[0m[0m:[1;31m344[0m
+[0m--- (inlined by) [0;33muart_tx_char[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/vfs/vfs_uart.c[0m[0m:[1;31m189[0m
+[0m--- 0x42007fe8: [0;33muart_write[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/vfs/vfs_uart.c[0m[0m:[1;31m234[0m
+[0m--- 0x42006636: [0;33mconsole_write[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/vfs/vfs_console.c[0m[0m:[1;31m84[0m
+[0m--- 0x42006e4c: [0;33muart_ll_get_txfifo_len[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/hal/esp32c3/include/hal/uart_ll.h[0m[0m:[1;31m344[0m
+[0m--- (inlined by) [0;33muart_tx_char[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/vfs/vfs_uart.c[0m[0m:[1;31m189[0m
+[0m--- 0x42007fe8: [0;33muart_write[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/vfs/vfs_uart.c[0m[0m:[1;31m234[0m
+[0m--- 0x42006636: [0;33mconsole_write[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/vfs/vfs_console.c[0m[0m:[1;31m84[0m
+[0m--- 0x42006e4a: [0;33muart_ll_get_txfifo_len[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/hal/esp32c3/include/hal/uart_ll.h[0m[0m:[1;31m344[0m
+[0m--- (inlined by) [0;33muart_tx_char[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/vfs/vfs_uart.c[0m[0m:[1;31m189[0m
+[0m--- 0x42007fe8: [0;33muart_write[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/vfs/vfs_uart.c[0m[0m:[1;31m234[0m
+[0m--- 0x42006636: [0;33mconsole_write[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/vfs/vfs_console.c[0m[0m:[1;31m84[0m
+[0m--- 0x42006e54: [0;33muart_ll_get_txfifo_len[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/hal/esp32c3/include/hal/uart_ll.h[0m[0m:[1;31m344[0m
+[0m--- (inlined by) [0;33muart_tx_char[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/vfs/vfs_uart.c[0m[0m:[1;31m189[0m
+[0m--- 0x42007fe8: [0;33muart_write[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/vfs/vfs_uart.c[0m[0m:[1;31m234[0m
+[0m--- 0x42006636: [0;33mconsole_write[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/vfs/vfs_console.c[0m[0m:[1;31m84[0m
+[0m--- 0x42006e4a: [0;33muart_ll_get_txfifo_len[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/hal/esp32c3/include/hal/uart_ll.h[0m[0m:[1;31m344[0m
+[0m--- (inlined by) [0;33muart_tx_char[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/vfs/vfs_uart.c[0m[0m:[1;31m189[0m
+[0m--- 0x42007fe8: [0;33muart_write[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/vfs/vfs_uart.c[0m[0m:[1;31m234[0m
+[0m--- 0x42006636: [0;33mconsole_write[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/vfs/vfs_console.c[0m[0m:[1;31m84[0m
+[0m--- 0x42006a0a: [0;33musb_serial_jtag_tx_char[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/vfs/vfs_usb_serial_jtag.c[0m[0m:[1;31m111[0m
+[0m--- 0x42006ccc: [0;33musb_serial_jtag_write[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/vfs/vfs_usb_serial_jtag.c[0m[0m:[1;31m153[0m
+[0m--- 0x42006a04: [0;33musb_serial_jtag_tx_char[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/vfs/vfs_usb_serial_jtag.c[0m[0m:[1;31m111[0m
+[0m--- 0x42006e54: [0;33muart_ll_get_txfifo_len[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/hal/esp32c3/include/hal/uart_ll.h[0m[0m:[1;31m344[0m
+[0m--- (inlined by) [0;33muart_tx_char[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/vfs/vfs_uart.c[0m[0m:[1;31m189[0m
+[0m--- 0x42007fe8: [0;33muart_write[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/vfs/vfs_uart.c[0m[0m:[1;31m234[0m
+[0m--- 0x42006636: [0;33mconsole_write[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/vfs/vfs_console.c[0m[0m:[1;31m84[0m
+[0m--- 0x42006e4a: [0;33muart_ll_get_txfifo_len[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/hal/esp32c3/include/hal/uart_ll.h[0m[0m:[1;31m344[0m
+[0m--- (inlined by) [0;33muart_tx_char[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/vfs/vfs_uart.c[0m[0m:[1;31m189[0m
+[0m--- 0x42007fe8: [0;33muart_write[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/vfs/vfs_uart.c[0m[0m:[1;31m234[0m
+[0m--- 0x42006636: [0;33mconsole_write[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/vfs/vfs_console.c[0m[0m:[1;31m84[0m
+[0m--- 0x42006e5a: [0;33muart_tx_char[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/vfs/vfs_uart.c[0m[0m:[1;31m189[0m
+[0m--- 0x42007fe8: [0;33muart_write[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/vfs/vfs_uart.c[0m[0m:[1;31m234[0m
+[0m--- 0x42006636: [0;33mconsole_write[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/vfs/vfs_console.c[0m[0m:[1;31m84[0m
+[0m--- 0x42006e4a: [0;33muart_ll_get_txfifo_len[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/hal/esp32c3/include/hal/uart_ll.h[0m[0m:[1;31m344[0m
+[0m--- (inlined by) [0;33muart_tx_char[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/vfs/vfs_uart.c[0m[0m:[1;31m189[0m
+[0m--- 0x42007fe8: [0;33muart_write[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/vfs/vfs_uart.c[0m[0m:[1;31m234[0m
+[0m--- 0x42006636: [0;33mconsole_write[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/vfs/vfs_console.c[0m[0m:[1;31m84[0m
+[0m--- 0x4038add8: [0;33msystimer_hal_get_counter_value[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/hal/systimer_hal.c[0m[0m:[1;31m67[0m
+[0m--- 0x40381b34: [0;33mesp_timer_impl_get_time[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_timer/src/esp_timer_impl_systimer.c[0m[0m:[1;31m72[0m
+[0m--- 0x40384ce6: [0;33msystimer_ticks_to_us[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_hw_support/port/esp32c3/systimer.c[0m[0m:[1;31m16[0m
+[0m--- 0x42006a88: [0;33musb_serial_jtag_tx_char[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/vfs/vfs_usb_serial_jtag.c[0m[0m:[1;31m128[0m
+[0m--- 0x42006e48: [0;33muart_ll_get_txfifo_len[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/hal/esp32c3/include/hal/uart_ll.h[0m[0m:[1;31m344[0m
+[0m--- (inlined by) [0;33muart_tx_char[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/vfs/vfs_uart.c[0m[0m:[1;31m189[0m
+[0m--- 0x42007fe8: [0;33muart_write[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/vfs/vfs_uart.c[0m[0m:[1;31m234[0m
+[0m--- 0x42006636: [0;33mconsole_write[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/vfs/vfs_console.c[0m[0m:[1;31m84[0m
+[0m--- 0x42006e4a: [0;33muart_ll_get_txfifo_len[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/hal/esp32c3/include/hal/uart_ll.h[0m[0m:[1;31m344[0m
+[0m--- (inlined by) [0;33muart_tx_char[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/vfs/vfs_uart.c[0m[0m:[1;31m189[0m
+[0m--- 0x42007fe8: [0;33muart_write[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/vfs/vfs_uart.c[0m[0m:[1;31m234[0m
+[0m--- 0x42006636: [0;33mconsole_write[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/vfs/vfs_console.c[0m[0m:[1;31m84[0m
+[0m--- 0x42006e4a: [0;33muart_ll_get_txfifo_len[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/hal/esp32c3/include/hal/uart_ll.h[0m[0m:[1;31m344[0m
+[0m--- (inlined by) [0;33muart_tx_char[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/vfs/vfs_uart.c[0m[0m:[1;31m189[0m
+[0m--- 0x42007fe8: [0;33muart_write[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/vfs/vfs_uart.c[0m[0m:[1;31m234[0m
+[0m--- 0x42006636: [0;33mconsole_write[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/vfs/vfs_console.c[0m[0m:[1;31m84[0m
+[0m--- 0x42006e4a: [0;33muart_ll_get_txfifo_len[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/hal/esp32c3/include/hal/uart_ll.h[0m[0m:[1;31m344[0m
+[0m--- (inlined by) [0;33muart_tx_char[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/vfs/vfs_uart.c[0m[0m:[1;31m189[0m
+[0m--- 0x42007fe8: [0;33muart_write[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/vfs/vfs_uart.c[0m[0m:[1;31m234[0m
+[0m--- 0x42006636: [0;33mconsole_write[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/vfs/vfs_console.c[0m[0m:[1;31m84[0m
+[0m--- 0x42006e54: [0;33muart_ll_get_txfifo_len[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/hal/esp32c3/include/hal/uart_ll.h[0m[0m:[1;31m344[0m
+[0m--- (inlined by) [0;33muart_tx_char[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/vfs/vfs_uart.c[0m[0m:[1;31m189[0m
+[0m--- 0x42007fe8: [0;33muart_write[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/vfs/vfs_uart.c[0m[0m:[1;31m234[0m
+[0m--- 0x42006636: [0;33mconsole_write[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/vfs/vfs_console.c[0m[0m:[1;31m84[0m
+[0m--- 0x4202d68a: [0;33m_fflush_r[0m[0m at [0;32m??[0m[0m:[1;31m?[0m
+[0m--- 0x4202d688: [0;33m_fflush_r[0m[0m at [0;32m??[0m[0m:[1;31m?[0m
+[0m--- 0x42006e4a: [0;33muart_ll_get_txfifo_len[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/hal/esp32c3/include/hal/uart_ll.h[0m[0m:[1;31m344[0m
+[0m--- (inlined by) [0;33muart_tx_char[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/vfs/vfs_uart.c[0m[0m:[1;31m189[0m
+[0m--- 0x42007fe8: [0;33muart_write[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/vfs/vfs_uart.c[0m[0m:[1;31m234[0m
+[0m--- 0x42006636: [0;33mconsole_write[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/vfs/vfs_console.c[0m[0m:[1;31m84[0m
+[1;31m--- Error: ClearCommError failed (PermissionError(13, 'The device does not recognize the command.', None, 22))[0m
+[0;33m--- Waiting for the device to reconnect[0m[0;33m.[0m[0;33m.[0m[0;33m[0m
+[0m--- 0x42006e4c: [0;33muart_ll_get_txfifo_len[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/hal/esp32c3/include/hal/uart_ll.h[0m[0m:[1;31m344[0m
+[0m--- (inlined by) [0;33muart_tx_char[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/vfs/vfs_uart.c[0m[0m:[1;31m189[0m
+[0m--- 0x42007fe8: [0;33muart_write[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/vfs/vfs_uart.c[0m[0m:[1;31m234[0m
+[0m--- 0x42006636: [0;33mconsole_write[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/vfs/vfs_console.c[0m[0m:[1;31m84[0m
+[0m

@@ -1,0 +1,63 @@
+[0;32mI (102) esp_image: segment 1: paddr=0001d8a0 vaddr=3fc8ccESP-ROM:esp32c3-api1-20210207
+Build:Feb  7 2021
+rst:0x15 (USB_UART_CHIP_RESET),boot:0xf (SPI_FAST_FLASH_BOOT)
+Saved PC:0x40383aec
+SPIWP:0xee
+mode:DIO, clock div:1
+load:0x3fcd5820,len:0x170c
+load:0x403cc710,len:0x968
+load:0x403ce710,len:0x2fa8
+entry 0x403cc710
+[0;32mI (24) boot: ESP-IDF v5.1.6-dirty 2nd stage bootloader[0m
+[0;32mI (24) boot: compile time Oct 16 2025 01:02:32[0m
+[0;32mI (25) boot: chip revision: v0.4[0m
+[0;32mI (28) boot.esp32c3: SPI Speed      : 80MHz[0m
+[0;32mI (33) boot.esp32c3: SPI Mode       : DIO[0m
+[0;32mI (37) boot.esp32c3: SPI Flash Size : 2MB[0m
+[0;32mI (42) boot: Enabling RNG early entropy source...[0m
+[0;32mI (47) boot: Partition Table:[0m
+[0;32mI (51) boot: ## Label            Usage          Type ST Offset   Length[0m
+[0;32mI (58) boot:  0 nvs              WiFi data        01 02 00009000 00006000[0m
+[0;32mI (66) boot:  1 phy_init         RF data          01 01 0000f000 00001000[0m
+[0;32mI (73) boot:  2 factory          factory app      00 00 00010000 00100000[0m
+[0;32mI (81) boot: End of partition table[0m
+[0;32mI (85) esp_image: segment 0: paddr=00010020 vaddr=3c040020 size=0d878h ( 55416) map[0m
+[0;32mI (102) esp_image: segment 1: paddr=0001d8a0 vaddr=3fc8cc00 size=013e0h (  5088) load[0m
+[0;32mI (104) esp_image: segment 2: paddr=0001ec88 vaddr=40380000 size=01390h (  5008) load[0m
+[0;32mI (111) esp_image: segment 3: paddr=00020020 vaddr=42000020 size=3195ch (203100) map[0m
+[0;32mI (152) esp_image: segment 4: paddr=00051984 vaddr=40381390 size=0b6e4h ( 46820) load[0m
+[0;32mI (165) boot: Loaded app from partition at offset 0x10000[0m
+[0;32mI (165) boot: Disabling RNG early entropy source...[0m
+[0;32mI (176) cpu_start: Unicore app[0m
+[0;32mI (177) cpu_start: Pro cpu up.[0m
+[0;32mI (187) cpu_start: Pro cpu start user code[0m
+[0;32mI (187) cpu_start: cpu freq: 160000000 Hz[0m
+[0;32mI (187) cpu_start: Application information:[0m
+[0;32mI (190) cpu_start: Project name:     ESP_MultiFlasher[0m
+[0;32mI (195) cpu_start: App version:      1[0m
+[0;32mI (200) cpu_start: Compile time:     Oct 16 2025 00:52:28[0m
+[0;32mI (206) cpu_start: ELF file SHA256:  2f1daaad210d252a...[0m
+[0;32mI (212) cpu_start: ESP-IDF:          v5.1.6-dirty[0m
+[0;32mI (217) cpu_start: Min chip rev:     v0.3[0m
+[0;32mI (222) cpu_start: Max chip rev:     v1.99 [0m
+[0;32mI (227) cpu_start: Chip rev:         v0.4[0m
+[0;32mI (232) heap_init: Initializing. RAM available for dynamic allocation:[0m
+[0;32mI (239) heap_init: At 3FC8F2F0 len 00030D10 (195 KiB): DRAM[0m
+[0;32mI (245) heap_init: At 3FCC0000 len 0001C710 (113 KiB): DRAM/RETENTION[0m
+[0;32mI (252) heap_init: At 3FCDC710 len 00002950 (10 KiB): DRAM/RETENTION/STACK[0m
+[0;32mI (260) heap_init: At 50000010 len 00001FD8 (7 KiB): RTCRAM[0m
+[0;32mI (267) spi_flash: detected chip: generic[0m
+[0;32mI (271) spi_flash: flash io: dio[0m
+[0;33mW (274) spi_flash: Detected size(4096k) larger than the size in the binary image header(2048k). Using the size in the binary image header.[0m
+[0;32mI (288) sleep: Configure to isolate all GPIO pins in sleep state[0m
+[0;32mI (294) sleep: Enable automatic switching of GPIO sleep configuration[0m
+[0;32mI (302) app_start: Starting scheduler on CPU0[0m
+[0;32mI (307) main_task: Started on CPU0[0m
+[0;32mI (311) main_task: Calling app_main()[0m
+[0;32mI (1319) gpio: GPIO[4]| InputEn: 1| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (1320) gpio: GPIO[5]| InputEn: 1| OutputEn: 0| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (1327) gpio: GPIO[6]| InputEn: 1| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (1336) gpio: GPIO[7]| InputEn: 1| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (1356) SD_CARD: SD initialized OK![0m
+[0;33mW (1372) SD_METADATA: Firmware entry without fw_id, skipping[0m
+[0;32mI (1373) SD_CARD: Tải Metadata hoàn tất. Tổng cộng 3 firmware được tải.[0m

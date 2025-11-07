@@ -1,0 +1,12 @@
+ESP Insights Project commit: HEAD-HASH-NOTFOUND
+ESP RainMaker Project commit: HEAD-HASH-NOTFOUND
+CMake Error at C:/Espressif/frameworks/esp-idf-v5.1.6/tools/cmake/component.cmake:314 (message):
+  Include directory
+  'C:/Users/DELL/workspace/IDF/ESP_MUL/Muti/main/Adafruit_GFX' is not a
+  directory.
+Call Stack (most recent call first):
+  C:/Espressif/frameworks/esp-idf-v5.1.6/tools/cmake/component.cmake:482 (__component_add_include_dirs)
+  main/CMakeLists.txt:4 (idf_component_register)
+
+
+ninja: error: rebuilding 'build.ninja': subcommand failed

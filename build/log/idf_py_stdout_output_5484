@@ -1,0 +1,557 @@
+[0;32mI (105) esp_image: segment 1: paddr=000217d8 vaddr=3fc8e2ESP-ROM:esp32c3-api1-20210207
+Build:Feb  7 2021
+rst:0x15 (USB_UART_CHIP_RESET),boot:0xf (SPI_FAST_FLASH_BOOT)
+Saved PC:0x40383f90
+SPIWP:0xee
+mode:DIO, clock div:1
+load:0x3fcd5820,len:0x170c
+load:0x403cc710,len:0x968
+load:0x403ce710,len:0x2fa8
+entry 0x403cc710
+[0;32mI (24) boot: ESP-IDF v5.1.6-dirty 2nd stage bootloader[0m
+[0;32mI (24) boot: compile time Oct 16 2025 01:02:32[0m
+[0;32mI (25) boot: chip revision: v0.4[0m
+[0;32mI (28) boot.esp32c3: SPI Speed      : 80MHz[0m
+[0;32mI (33) boot.esp32c3: SPI Mode       : DIO[0m
+[0;32mI (37) boot.esp32c3: SPI Flash Size : 2MB[0m
+[0;32mI (42) boot: Enabling RNG early entropy source...[0m
+[0;32mI (47) boot: Partition Table:[0m
+[0;32mI (51) boot: ## Label            Usage          Type ST Offset   Length[0m
+[0;32mI (58) boot:  0 nvs              WiFi data        01 02 00009000 00006000[0m
+[0;32mI (66) boot:  1 phy_init         RF data          01 01 0000f000 00001000[0m
+[0;32mI (73) boot:  2 factory          factory app      00 00 00010000 00100000[0m
+[0;32mI (81) boot: End of partition table[0m
+[0;32mI (85) esp_image: segment 0: paddr=00010020 vaddr=3c040020 size=117b0h ( 71600) map[0m
+[0;32mI (105) esp_image: segment 1: paddr=000217d8 vaddr=3fc8e200 size=01420h (  5152) load[0m
+[0;32mI (106) esp_image: segment 2: paddr=00022c00 vaddr=40380000 size=0d418h ( 54296) load[0m
+[0;32mI (121) esp_image: segment 3: paddr=00030020 vaddr=42000020 size=3e054h (254036) map[0m
+[0;32mI (163) esp_image: segment 4: paddr=0006e07c vaddr=4038d418 size=00cd0h (  3280) load[0m
+[0;32mI (168) boot: Loaded app from partition at offset 0x10000[0m
+[0;32mI (168) boot: Disabling RNG early entropy source...[0m
+[0;32mI (183) cpu_start: Unicore app[0m
+[0;32mI (183) cpu_start: Pro cpu up.[0m
+[0;32mI (191) cpu_start: Pro cpu start user code[0m
+[0;32mI (192) cpu_start: cpu freq: 160000000 Hz[0m
+[0;32mI (192) cpu_start: Application information:[0m
+[0;32mI (195) cpu_start: Project name:     ESP_MultiFlasher[0m
+[0;32mI (200) cpu_start: App version:      1[0m
+[0;32mI (205) cpu_start: Compile time:     Oct 16 2025 00:52:28[0m
+[0;32mI (211) cpu_start: ELF file SHA256:  4628f76cce1559f4...[0m
+[0;32mI (217) cpu_start: ESP-IDF:          v5.1.6-dirty[0m
+[0;32mI (222) cpu_start: Min chip rev:     v0.3[0m
+[0;32mI (227) cpu_start: Max chip rev:     v1.99 [0m
+[0;32mI (232) cpu_start: Chip rev:         v0.4[0m
+[0;32mI (236) heap_init: Initializing. RAM available for dynamic allocation:[0m
+[0;32mI (244) heap_init: At 3FC90AB0 len 0002F550 (189 KiB): DRAM[0m
+[0;32mI (250) heap_init: At 3FCC0000 len 0001C710 (113 KiB): DRAM/RETENTION[0m
+[0;32mI (257) heap_init: At 3FCDC710 len 00002950 (10 KiB): DRAM/RETENTION/STACK[0m
+[0;32mI (265) heap_init: At 50000010 len 00001FD8 (7 KiB): RTCRAM[0m
+[0;32mI (272) spi_flash: detected chip: generic[0m
+[0;32mI (275) spi_flash: flash io: dio[0m
+[0;33mW (279) spi_flash: Detected size(4096k) larger than the size in the binary image header(2048k). Using the size in the binary image header.[0m
+[0;32mI (293) sleep: Configure to isolate all GPIO pins in sleep state[0m
+[0;32mI (299) sleep: Enable automatic switching of GPIO sleep configuration[0m
+[0;32mI (307) app_start: Starting scheduler on CPU0[0m
+[0;32mI (311) main_task: Started on CPU0[0m
+[0;32mI (315) main_task: Calling app_main()[0m
+[0;32mI (323) MAIN: --- BAT DAU KHOI DONG HE THONG ---[0m
+[0;32mI (841) gpio: GPIO[4]| InputEn: 1| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (842) gpio: GPIO[5]| InputEn: 1| OutputEn: 0| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (849) gpio: GPIO[6]| InputEn: 1| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (858) gpio: GPIO[7]| InputEn: 1| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (878) SD_CARD: SD initialized OK![0m
+[0;32mI (1437) SD_CARD: Tải Metadata hoàn tất. Tổng cộng 6 firmware được tải.[0m
+[0;31mE (1438) uart: uart_flush_input(1350): uart driver error[0m
+[0;32mI (1441) MAIN: Dang lay menu tu sd_card module...[0m
+[0;32mI (1446) gpio: GPIO[21]| InputEn: 1| OutputEn: 0| OpenDrain: 0| Pullup: 1| Pulldown: 0| Intr:0 [0m
+[0;32mI (1456) gpio: GPIO[20]| InputEn: 1| OutputEn: 0| OpenDrain: 0| Pullup: 1| Pulldown: 0| Intr:0 [0m
+[0;32mI (1465) gpio: GPIO[10]| InputEn: 1| OutputEn: 0| OpenDrain: 0| Pullup: 1| Pulldown: 0| Intr:0 [0m
+[0;32mI (1489) MAIN: Khoi dong hoan tat. Hien thi menu.[0m
+[0;32mI (7700) MAIN: Da chon: Index 5, FW ID: test_01[0m
+[0;32mI (7700) MAIN: Bat dau flash firmware: test_01[0m
+[0;32mI (7713) SD_CARD: SD initialized OK![0m
+[0;32mI (7727) gpio: GPIO[2]| InputEn: 0| OutputEn: 0| OpenDrain: 0| Pullup: 1| Pulldown: 0| Intr:0 [0m
+[0;32mI (7727) gpio: GPIO[3]| InputEn: 0| OutputEn: 0| OpenDrain: 0| Pullup: 1| Pulldown: 0| Intr:0 [0m
+[0;32mI (7735) FLASHER: UART connection initialized at baud rate 115200[0m
+[0;32mI (7741) MAIN: Flasher da san sang.[0m
+[0;32mI (7746) SD_METADATA: Firmware ID test_01 found: Path=/test_01/FW.bin, Version=v1.0[0m
+[0;32mI (7754) FLASHER: Reset sequence start...[0m
+[0;32mI (8229) FLASHER: Reset sequence done![0m
+[0;32mI (8707) FLASHER: Connected to target device.[0m
+[0;32mI (8711) FLASHER: Baudrate boosted to 460800[0m
+[0;32mI (8712) FLASHER: ==== Writing segment ====[0m
+[0;32mI (8712) FLASHER: File: /test_01/BOTL.bin | Offset: 0x00001000[0m
+[0;32mI (8739) FLASHER: Segment size: 24864 bytes[0m
+[0;32mI (9057) FLASHER: Progress: 16%[0m
+[0;32mI (9196) FLASHER: Progress: 32%[0m
+[0;32mI (9339) FLASHER: Progress: 49%[0m
+[0;32mI (9481) FLASHER: Progress: 65%[0m
+[0;32mI (9631) FLASHER: Progress: 82%[0m
+[0;32mI (9777) FLASHER: Progress: 98%[0m
+[0;32mI (9899) FLASHER: Progress: 100%[0m
+[0;32mI (9913) FLASHER: Segment written 24864 / 24864 bytes OK[0m
+[0;32mI (9952) FLASHER: MD5 verified OK for segment![0m
+[0;32mI (9953) FLASHER: Segment at 0x00001000 written successfully.[0m
+[0;32mI (9953) FLASHER: ==== Writing segment ====[0m
+[0;32mI (9958) FLASHER: File: /test_01/PART.bin | Offset: 0x00008000[0m
+[0;32mI (9986) FLASHER: Segment size: 3072 bytes[0m
+[0;32mI (10126) FLASHER: Progress: 100%[0m
+[0;32mI (10141) FLASHER: Segment written 3072 / 3072 bytes OK[0m
+[0;32mI (10150) FLASHER: MD5 verified OK for segment![0m
+[0;32mI (10150) FLASHER: Segment at 0x00008000 written successfully.[0m
+[0;32mI (10150) FLASHER: ==== Writing segment ====[0m
+[0;32mI (10155) FLASHER: File: /test_01/FW.bin | Offset: 0x00010000[0m
+[0;32mI (10183) FLASHER: Segment size: 124416 bytes[0m
+[0;32mI (11105) FLASHER: Progress: 3%[0m
+[0;32mI (11240) FLASHER: Progress: 6%[0m
+[0;32mI (11374) FLASHER: Progress: 9%[0m
+[0;32mI (11508) FLASHER: Progress: 13%[0m
+[0;32mI (11649) FLASHER: Progress: 16%[0m
+[0;32mI (11789) FLASHER: Progress: 19%[0m
+[0;32mI (11934) FLASHER: Progress: 23%[0m
+[0;32mI (12078) FLASHER: Progress: 26%[0m
+[0;32mI (12235) FLASHER: Progress: 29%[0m
+[0;32mI (12390) FLASHER: Progress: 32%[0m
+[0;32mI (12543) FLASHER: Progress: 36%[0m
+[0;32mI (12685) FLASHER: Progress: 39%[0m
+[0;32mI (12821) FLASHER: Progress: 42%[0m
+[0;32mI (12955) FLASHER: Progress: 46%[0m
+[0;32mI (13089) FLASHER: Progress: 49%[0m
+[0;32mI (13222) FLASHER: Progress: 52%[0m
+[0;32mI (13359) FLASHER: Progress: 55%[0m
+[0;32mI (13499) FLASHER: Progress: 59%[0m
+[0;32mI (13638) FLASHER: Progress: 62%[0m
+[0;32mI (13774) FLASHER: Progress: 65%[0m
+[0;32mI (13909) FLASHER: Progress: 69%[0m
+[0;32mI (14046) FLASHER: Progress: 72%[0m
+[0;32mI (14183) FLASHER: Progress: 75%[0m
+[0;32mI (14318) FLASHER: Progress: 79%[0m
+[0;32mI (14455) FLASHER: Progress: 82%[0m
+[0;32mI (14591) FLASHER: Progress: 85%[0m
+[0;32mI (14728) FLASHER: Progress: 88%[0m
+[0;32mI (14865) FLASHER: Progress: 92%[0m
+[0;32mI (15000) FLASHER: Progress: 95%[0m
+[0;32mI (15140) FLASHER: Progress: 98%[0m
+[0;32mI (15270) FLASHER: Progress: 100%[0m
+[0;32mI (15284) FLASHER: Segment written 124416 / 124416 bytes OK[0m
+[0;32mI (15463) FLASHER: MD5 verified OK for segment![0m
+[0;32mI (15463) FLASHER: Segment at 0x00010000 written successfully.[0m
+[0;32mI (15564) FLASHER: Resetting target to run app...[0m
+[0;32mI (15864) FLASHER: Target restarted in normal mode.[0m
+[0;32mI (15864) FLASHER: Full firmware update completed successfully![0m
+[0;32mI (15865) SD_CARD: SD Unmounted[0m
+[0;32mI (15869) MAIN: Flash hoan tat.[0m
+[0;32mI (17899) MAIN: Flash done. Starting UART1 monitor...[0m
+[0;32mI (18899) UART1: x�x�x�x��xxxx�x����x�[0m
+[0;32mI (18899) UART1: x�x�x��
+[0;32mI (18999) UART1: �x�x�x���x�x�x�x�x[0m
+[0;32mI (19190) UART1: [0m
+[0;32mI (20190) UART1: [0m
+[0;32mI (21190) UART1: [0m
+[0;32mI (22190) UART1: [0m
+[0;32mI (23190) UART1: [0m
+[0;32mI (24190) UART1: [0m
+[0;32mI (25190) UART1: [0m
+[0;32mI (26190) UART1: [0m
+[0;32mI (27190) UART1: [0m
+[0;32mI (28190) UART1: [0m
+[0;32mI (29190) UART1: [0m
+[0;32mI (30190) UART1: [0m
+[0;32mI (31190) UART1: [0m
+[0;32mI (32190) UART1: [0m
+[0;32mI (33190) UART1: [0m
+[0;32mI (34190) UART1: [0m
+[0;32mI (35190) UART1: [0m
+[0;32mI (36190) UART1: [0m
+[0;32mI (37190) UART1: [0m
+[0;32mI (38191) UART1: [0m
+[0;32mI (39191) UART1: [0m
+[0;32mI (40191) UART1: [0m
+[0;32mI (41191) UART1: [0m
+[0;32mI (42191) UART1: [0m
+[0;32mI (43191) UART1: [0m
+[0;32mI (44191) UART1: [0m
+[0;32mI (45191) UART1: [0m
+[0;32mI (46191) UART1: [0m
+[0;32mI (47191) UART1: [0m
+[0;32mI (48191) UART1: [0m
+[0;32mI (49191) UART1: [0m
+[0;32mI (50191) UART1: [0m
+[0;32mI (51191) UART1: [0m
+[0;32mI (52191) UART1: [0m
+[0;32mI (53191) UART1: [0m
+[0;32mI (54191) UART1: [0m
+[0;32mI (55191) UART1: [0m
+[0;32mI (56191) UART1: [0m
+[0;32mI (57191) UART1: [0m
+[0;32mI (58191) UART1: [0m
+[0;32mI (59191) UART1: [0m
+[0;32mI (60191) UART1: [0m
+[0;32mI (61191) UART1: [0m
+[0;32mI (62191) UART1: [0m
+[0;32mI (63191) UART1: [0m
+[0;32mI (64191) UART1: [0m
+[0;32mI (65191) UART1: [0m
+[0;32mI (66192) UART1: [0m
+[0;32mI (67192) UART1: [0m
+[0;32mI (68192) UART1: [0m
+[0;32mI (69192) UART1: [0m
+[0;32mI (70192) UART1: [0m
+[0;32mI (71192) UART1: [0m
+[0;32mI (72192) UART1: [0m
+[0;32mI (73192) UART1: [0m
+[0;32mI (74192) UART1: [0m
+[0;32mI (75192) UART1: [0m
+[0;32mI (76192) UART1: [0m
+[0;32mI (77192) UART1: [0m
+[0;32mI (78192) UART1: [0m
+[0;32mI (79192) UART1: [0m
+[0;32mI (80192) UART1: [0m
+[0;32mI (81192) UART1: [0m
+[0;32mI (82192) UART1: [0m
+[0;32mI (83192) UART1: [0m
+[0;32mI (84192) UART1: [0m
+[0;32mI (85192) UART1: [0m
+[0;32mI (86192) UART1: [0m
+[0;32mI (87192) UART1: [0m
+[0;32mI (88192) UART1: [0m
+[0;32mI (89192) UART1: [0m
+[0;32mI (90192) UART1: [0m
+[0;32mI (91192) UART1: [0m
+[0;32mI (92192) UART1: [0m
+[0;32mI (93192) UART1: [0m
+[0;32mI (94192) UART1: [0m
+[0;32mI (95193) UART1: [0m
+[0;32mI (96193) UART1: [0m
+[0;32mI (97193) UART1: [0m
+[0;32mI (98193) UART1: [0m
+[0;32mI (99193) UART1: [0m
+[0;32mI (100193) UART1: [0m
+[0;32mI (101193) UART1: [0m
+[0;32mI (102193) UART1: [0m
+[0;32mI (103193) UART1: [0m
+[0;32mI (104193) UART1: [0m
+[0;32mI (105193) UART1: [0m
+[0;32mI (106193) UART1: [0m
+[0;32mI (107193) UART1: [0m
+[0;32mI (108193) UART1: [0m
+[0;32mI (109193) UART1: [0m
+[0;32mI (110193) UART1: [0m
+[0;32mI (111193) UART1: [0m
+[0;32mI (112193) UART1: [0m
+[0;32mI (113193) UART1: [0m
+[0;32mI (114193) UART1: [0m
+[0;32mI (115193) UART1: [0m
+[0;32mI (116193) UART1: [0m
+[0;32mI (117193) UART1: [0m
+[0;32mI (118193) UART1: [0m
+[0;32mI (119193) UART1: [0m
+[0;32mI (120193) UART1: [0m
+[0;32mI (121193) UART1: [0m
+[0;32mI (122193) UART1: [0m
+[0;32mI (123194) UART1: [0m
+[0;32mI (124194) UART1: [0m
+[0;32mI (125194) UART1: [0m
+[0;32mI (126194) UART1: [0m
+[0;32mI (127194) UART1: [0m
+[0;32mI (128194) UART1: [0m
+[0;32mI (129194) UART1: [0m
+[0;32mI (130194) UART1: [0m
+[0;32mI (131194) UART1: [0m
+[0;32mI (132194) UART1: [0m
+[0;32mI (133194) UART1: [0m
+[0;32mI (134194) UART1: [0m
+[0;32mI (135194) UART1: [0m
+[0;32mI (136194) UART1: [0m
+[0;32mI (137194) UART1: [0m
+[0;32mI (138194) UART1: [0m
+[0;32mI (139194) UART1: [0m
+[0;32mI (140194) UART1: [0m
+[0;32mI (141194) UART1: [0m
+[0;32mI (142194) UART1: [0m
+[0;32mI (143194) UART1: [0m
+[0;32mI (144194) UART1: [0m
+[0;32mI (145194) UART1: [0m
+[0;32mI (146194) UART1: [0m
+[0;32mI (147194) UART1: [0m
+[0;32mI (148194) UART1: [0m
+[0;32mI (149194) UART1: [0m
+[0;32mI (150194) UART1: [0m
+[0;32mI (151195) UART1: [0m
+[0;32mI (152195) UART1: [0m
+[0;32mI (153195) UART1: [0m
+[0;32mI (154195) UART1: [0m
+[0;32mI (155195) UART1: [0m
+[0;32mI (156195) UART1: [0m
+[0;32mI (157195) UART1: [0m
+[0;32mI (158195) UART1: [0m
+[0;32mI (159195) UART1: [0m
+[0;32mI (160195) UART1: [0m
+[0;32mI (161195) UART1: [0m
+[0;32mI (162195) UART1: [0m
+[0;32mI (163195) UART1: [0m
+[0;32mI (164195) UART1: [0m
+[0;32mI (165195) UART1: [0m
+[0;32mI (166195) UART1: [0m
+[0;32mI (167195) UART1: [0m
+[0;32mI (168195) UART1: [0m
+[0;32mI (169195) UART1: [0m
+[0;32mI (170195) UART1: [0m
+[0;32mI (171195) UART1: [0m
+[0;32mI (172195) UART1: [0m
+[0;32mI (173195) UART1: [0m
+[0;32mI (174195) UART1: [0m
+[0;32mI (175195) UART1: [0m
+[0;32mI (176195) UART1: [0m
+[0;32mI (177195) UART1: [0m
+[0;32mI (178195) UART1: [0m
+[0;32mI (179196) UART1: [0m
+[0;32mI (180196) UART1: [0m
+[0;32mI (181196) UART1: [0m
+[0;32mI (182196) UART1: [0m
+[0;32mI (183196) UART1: [0m
+[0;32mI (184196) UART1: [0m
+[0;32mI (185196) UART1: [0m
+[0;32mI (186196) UART1: [0m
+[0;32mI (187196) UART1: [0m
+[0;32mI (188196) UART1: [0m
+[0;32mI (189196) UART1: [0m
+[0;32mI (190196) UART1: [0m
+[0;32mI (191196) UART1: [0m
+[0;32mI (192196) UART1: [0m
+[0;32mI (193196) UART1: [0m
+[0;32mI (194196) UART1: [0m
+[0;32mI (195196) UART1: [0m
+[0;32mI (196196) UART1: [0m
+[0;32mI (197196) UART1: [0m
+[0;32mI (198196) UART1: [0m
+[0;32mI (199196) UART1: [0m
+[0;32mI (200196) UART1: [0m
+[0;32mI (201196) UART1: [0m
+[0;32mI (202196) UART1: [0m
+[0;32mI (203196) UART1: [0m
+[0;32mI (204196) UART1: [0m
+[0;32mI (205196) UART1: [0m
+[0;32mI (206196) UART1: [0m
+[0;32mI (207197) UART1: [0m
+[0;32mI (208197) UART1: [0m
+[0;32mI (209197) UART1: [0m
+[0;32mI (210197) UART1: [0m
+[0;32mI (211197) UART1: [0m
+[0;32mI (212197) UART1: [0m
+[0;32mI (213197) UART1: [0m
+[0;32mI (214197) UART1: [0m
+[0;32mI (215197) UART1: [0m
+[0;32mI (216197) UART1: [0m
+[0;32mI (217197) UART1: [0m
+[0;32mI (218197) UART1: [0m
+[0;32mI (219197) UART1: [0m
+[0;32mI (220197) UART1: [0m
+[0;32mI (221197) UART1: [0m
+[0;32mI (222197) UART1: [0m
+[0;32mI (223197) UART1: [0m
+[0;32mI (224197) UART1: [0m
+[0;32mI (225197) UART1: [0m
+[0;32mI (226197) UART1: [0m
+[0;32mI (227197) UART1: [0m
+[0;32mI (228197) UART1: [0m
+[0;32mI (229197) UART1: [0m
+[0;32mI (230197) UART1: [0m
+[0;32mI (231197) UART1: [0m
+[0;32mI (232197) UART1: [0m
+[0;32mI (233197) UART1: [0m
+[0;32mI (234197) UART1: [0m
+[0;32mI (235198) UART1: [0m
+[0;32mI (236198) UART1: [0m
+[0;32mI (237198) UART1: [0m
+[0;32mI (238198) UART1: [0m
+[0;32mI (239198) UART1: [0m
+[0;32mI (240198) UART1: [0m
+[0;32mI (241198) UART1: [0m
+[0;32mI (242198) UART1: [0m
+[0;32mI (243198) UART1: [0m
+[0;32mI (244198) UART1: [0m
+[0;32mI (245198) UART1: [0m
+[0;32mI (246198) UART1: [0m
+[0;32mI (247198) UART1: [0m
+[0;32mI (248198) UART1: [0m
+[0;32mI (249198) UART1: [0m
+[0;32mI (250198) UART1: [0m
+[0;32mI (251198) UART1: [0m
+[0;32mI (252198) UART1: [0m
+[0;32mI (253198) UART1: [0m
+[0;32mI (254198) UART1: [0m
+[0;32mI (255198) UART1: [0m
+[0;32mI (256198) UART1: [0m
+[0;32mI (257198) UART1: [0m
+[0;32mI (258198) UART1: [0m
+[0;32mI (259198) UART1: [0m
+[0;32mI (260198) UART1: [0m
+[0;32mI (261198) UART1: [0m
+[0;32mI (262198) UART1: [0m
+[0;32mI (263199) UART1: [0m
+[0;32mI (264199) UART1: [0m
+[0;32mI (265199) UART1: [0m
+[0;32mI (266199) UART1: [0m
+[0;32mI (267199) UART1: [0m
+[0;32mI (268199) UART1: [0m
+[0;32mI (269199) UART1: [0m
+[0;32mI (270199) UART1: [0m
+[0;32mI (271199) UART1: [0m
+[0;32mI (272199) UART1: [0m
+[0;32mI (273199) UART1: [0m
+[0;32mI (274199) UART1: [0m
+[0;32mI (275199) UART1: [0m
+[0;32mI (276199) UART1: [0m
+[0;32mI (277199) UART1: [0m
+[0;32mI (278199) UART1: [0m
+[0;32mI (279199) UART1: [0m
+[0;32mI (280199) UART1: [0m
+[0;32mI (281199) UART1: [0m
+[0;32mI (282199) UART1: [0m
+[0;32mI (283199) UART1: [0m
+[0;32mI (284199) UART1: [0m
+[0;32mI (285199) UART1: [0m
+[0;32mI (286199) UART1: [0m
+[0;32mI (287199) UART1: [0m
+[0;32mI (288199) UART1: [0m
+[0;32mI (289199) UART1: [0m
+[0;32mI (290199) UART1: [0m
+[0;32mI (291200) UART1: [0m
+[0;32mI (292200) UART1: [0m
+[0;32mI (293200) UART1: [0m
+[0;32mI (294200) UART1: [0m
+[0;32mI (295200) UART1: [0m
+[0;32mI (296200) UART1: [0m
+[0;32mI (297200) UART1: [0m
+[0;32mI (298200) UART1: [0m
+[0;32mI (299200) UART1: [0m
+[0;32mI (300200) UART1: [0m
+[0;32mI (301200) UART1: [0m
+[0;32mI (302200) UART1: [0m
+[0;32mI (303200) UART1: [0m
+[0;32mI (304200) UART1: [0m
+[0;32mI (305200) UART1: [0m
+[0;32mI (306200) UART1: [0m
+[0;32mI (307200) UART1: [0m
+[0;32mI (308200) UART1: [0m
+[0;32mI (309200) UART1: [0m
+[0;32mI (310200) UART1: [0m
+[0;32mI (311200) UART1: [0m
+[0;32mI (312200) UART1: [0m
+[0;32mI (313200) UART1: [0m
+[0;32mI (314200) UART1: [0m
+[0;32mI (315200) UART1: [0m
+[0;32mI (316200) UART1: [0m
+[0;32mI (317200) UART1: [0m
+[0;32mI (318200) UART1: [0m
+[0;32mI (319201) UART1: [0m
+[0;32mI (320201) UART1: [0m
+[0;32mI (321201) UART1: [0m
+[0;32mI (322201) UART1: [0m
+[0;32mI (323201) UART1: [0m
+[0;32mI (324201) UART1: [0m
+[0;32mI (325201) UART1: [0m
+[0;32mI (326201) UART1: [0m
+[0;32mI (327201) UART1: [0m
+[0;32mI (328201) UART1: [0m
+[0;32mI (329201) UART1: [0m
+[0;32mI (330201) UART1: [0m
+[0;32mI (331201) UART1: [0m
+[0;32mI (332201) UART1: [0m
+[0;32mI (333201) UART1: [0m
+[0;32mI (334201) UART1: [0m
+[0;32mI (335201) UART1: [0m
+[0;32mI (336201) UART1: [0m
+[0;32mI (337201) UART1: [0m
+[0;32mI (338201) UART1: [0m
+[0;32mI (339201) UART1: [0m
+[0;32mI (340201) UART1: [0m
+[0;32mI (341201) UART1: [0m
+[0;32mI (342201) UART1: [0m
+[0;32mI (343201) UART1: [0m
+[0;32mI (344201) UART1: [0m
+[0;32mI (345201) UART1: [0m
+[0;32mI (346201) UART1: [0m
+[0;32mI (347202) UART1: [0m
+[0;32mI (348202) UART1: [0m
+[0;32mI (349202) UART1: [0m
+[0;32mI (350202) UART1: [0m
+[0;32mI (351202) UART1: [0m
+[0;32mI (352202) UART1: [0m
+[0;32mI (353202) UART1: [0m
+[0;32mI (354202) UART1: [0m
+[0;32mI (355202) UART1: [0m
+[0;32mI (356202) UART1: [0m
+[0;32mI (357202) UART1: [0m
+[0;32mI (358202) UART1: [0m
+[0;32mI (359202) UART1: [0m
+[0;32mI (360202) UART1: [0m
+[0;32mI (361202) UART1: [0m
+[0;32mI (362202) UART1: [0m
+[0;32mI (363202) UART1: [0m
+[0;32mI (364202) UART1: [0m
+[0;32mI (365202) UART1: [0m
+[0;32mI (366202) UART1: [0m
+[0;32mI (367202) UART1: [0m
+[0;32mI (368202) UART1: [0m
+[0;32mI (369202) UART1: [0m
+[0;32mI (370202) UART1: [0m
+[0;32mI (371202) UART1: [0m
+[0;32mI (372202) UART1: [0m
+[0;32mI (373202) UART1: [0m
+[0;32mI (374202) UART1: [0m
+[0;32mI (375203) UART1: [0m
+[0;32mI (376203) UART1: [0m
+[0;32mI (377203) UART1: [0m
+[0;32mI (378203) UART1: [0m
+[0;32mI (379203) UART1: [0m
+[0;32mI (380203) UART1: [0m
+[0;32mI (381203) UART1: [0m
+[0;32mI (382203) UART1: [0m
+[0;32mI (383203) UART1: [0m
+[0;32mI (384203) UART1: [0m
+[0;32mI (385203) UART1: [0m
+[0;32mI (386203) UART1: [0m
+[0;32mI (387203) UART1: [0m
+[0;32mI (388203) UART1: [0m
+[0;32mI (389203) UART1: [0m
+[0;32mI (390203) UART1: [0m
+[0;32mI (391203) UART1: [0m
+[0;32mI (392203) UART1: [0m
+[0;32mI (393203) UART1: [0m
+[0;32mI (394203) UART1: [0m
+[0;32mI (395203) UART1: [0m
+[0;32mI (396203) UART1: [0m
+[0;32mI (397203) UART1: [0m
+[0;32mI (398203) UART1: [0m
+[0;32mI (399203) UART1: [0m
+[0;32mI (400203) UART1: [0m
+[0;32mI (401203) UART1: [0m
+[0;32mI (402203) UART1: [0m
+[0;32mI (403204) UART1: [0m
+[0;32mI (404204) UART1: [0m
+[0;32mI (405204) UART1: [0m
+[0;32mI (406204) UART1: [0m
+[0;32mI (407204) UART1: [0m
+[0;32mI (408204) UART1: [0m
+[0;32mI (409204) UART1: [0m
+[0;32mI (410204) UART1: [0m
+[0;32mI (411204) UART1: [0m
+[0;32mI (412204) UART1: [0m
+[0;32mI (413204) UART1: [0m
+[0;32mI (414204) UART1: [0m
+[0;32mI (415204) UART1: [0m
+[0;32mI (416204) UART1: [0m
+[0;32mI (417204) UART1: [0m
+[0;32mI (418204) UART1: [0m
+[0;32mI (419204) UART1: [0m
+[0;32mI (420204) UART1: [0m
+[0;32mI (421204) UART1: [0m
+[0;32mI (422204) UART1: [0m
+[0;32mI (423204) UART1: [0m
+[0;32mI (424204) UART1: [0m
+[0;32mI (425204) UART1: [0m
+[0;32mI (426204) UART1: [0m
+[0;32mI (427204) UART1: [0m
+[0;32mI (428204) UART1: [0m

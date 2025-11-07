@@ -1,0 +1,162 @@
+[0;32mI (104746) MAIN: UART1 received 29 bytes: 00 80 78 78 78 ESP-ROM:esp32c3-api1-20210207
+Build:Feb  7 2021
+rst:0x15 (USB_UART_CHIP_RESET),boot:0xf (SPI_FAST_FLASH_BOOT)
+Saved PC:0x40383f90
+SPIWP:0xee
+mode:DIO, clock div:1
+load:0x3fcd5820,len:0x170c
+load:0x403cc710,len:0x968
+load:0x403ce710,len:0x2fa8
+entry 0x403cc710
+[0;32mI (24) boot: ESP-IDF v5.1.6-dirty 2nd stage bootloader[0m
+[0;32mI (24) boot: compile time Oct 16 2025 01:02:32[0m
+[0;32mI (25) boot: chip revision: v0.4[0m
+[0;32mI (28) boot.esp32c3: SPI Speed      : 80MHz[0m
+[0;32mI (33) boot.esp32c3: SPI Mode       : DIO[0m
+[0;32mI (37) boot.esp32c3: SPI Flash Size : 2MB[0m
+[0;32mI (42) boot: Enabling RNG early entropy source...[0m
+[0;32mI (47) boot: Partition Table:[0m
+[0;32mI (51) boot: ## Label            Usage          Type ST Offset   Length[0m
+[0;32mI (58) boot:  0 nvs              WiFi data        01 02 00009000 00006000[0m
+[0;32mI (66) boot:  1 phy_init         RF data          01 01 0000f000 00001000[0m
+[0;32mI (73) boot:  2 factory          factory app      00 00 00010000 00100000[0m
+[0;32mI (81) boot: End of partition table[0m
+[0;32mI (85) esp_image: segment 0: paddr=00010020 vaddr=3c040020 size=11770h ( 71536) map[0m
+[0;32mI (105) esp_image: segment 1: paddr=00021798 vaddr=3fc8e200 size=01420h (  5152) load[0m
+[0;32mI (106) esp_image: segment 2: paddr=00022bc0 vaddr=40380000 size=0d458h ( 54360) load[0m
+[0;32mI (121) esp_image: segment 3: paddr=00030020 vaddr=42000020 size=3e0d8h (254168) map[0m
+[0;32mI (163) esp_image: segment 4: paddr=0006e100 vaddr=4038d458 size=00c90h (  3216) load[0m
+[0;32mI (168) boot: Loaded app from partition at offset 0x10000[0m
+[0;32mI (168) boot: Disabling RNG early entropy source...[0m
+[0;32mI (183) cpu_start: Unicore app[0m
+[0;32mI (183) cpu_start: Pro cpu up.[0m
+[0;32mI (191) cpu_start: Pro cpu start user code[0m
+[0;32mI (192) cpu_start: cpu freq: 160000000 Hz[0m
+[0;32mI (192) cpu_start: Application information:[0m
+[0;32mI (195) cpu_start: Project name:     ESP_MultiFlasher[0m
+[0;32mI (200) cpu_start: App version:      1[0m
+[0;32mI (205) cpu_start: Compile time:     Oct 16 2025 00:52:28[0m
+[0;32mI (211) cpu_start: ELF file SHA256:  0cccad15df9988b0...[0m
+[0;32mI (217) cpu_start: ESP-IDF:          v5.1.6-dirty[0m
+[0;32mI (222) cpu_start: Min chip rev:     v0.3[0m
+[0;32mI (227) cpu_start: Max chip rev:     v1.99 [0m
+[0;32mI (232) cpu_start: Chip rev:         v0.4[0m
+[0;32mI (236) heap_init: Initializing. RAM available for dynamic allocation:[0m
+[0;32mI (244) heap_init: At 3FC90BB0 len 0002F450 (189 KiB): DRAM[0m
+[0;32mI (250) heap_init: At 3FCC0000 len 0001C710 (113 KiB): DRAM/RETENTION[0m
+[0;32mI (257) heap_init: At 3FCDC710 len 00002950 (10 KiB): DRAM/RETENTION/STACK[0m
+[0;32mI (265) heap_init: At 50000010 len 00001FD8 (7 KiB): RTCRAM[0m
+[0;32mI (272) spi_flash: detected chip: generic[0m
+[0;32mI (275) spi_flash: flash io: dio[0m
+[0;33mW (279) spi_flash: Detected size(4096k) larger than the size in the binary image header(2048k). Using the size in the binary image header.[0m
+[0;32mI (293) sleep: Configure to isolate all GPIO pins in sleep state[0m
+[0;32mI (299) sleep: Enable automatic switching of GPIO sleep configuration[0m
+[0;32mI (307) app_start: Starting scheduler on CPU0[0m
+[0;32mI (311) main_task: Started on CPU0[0m
+[0;32mI (315) main_task: Calling app_main()[0m
+[0;32mI (323) MAIN: --- BAT DAU KHOI DONG HE THONG ---[0m
+[0;32mI (841) gpio: GPIO[4]| InputEn: 1| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (842) gpio: GPIO[5]| InputEn: 1| OutputEn: 0| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (849) gpio: GPIO[6]| InputEn: 1| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (858) gpio: GPIO[7]| InputEn: 1| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (878) SD_CARD: SD initialized OK![0m
+[0;32mI (1437) SD_CARD: Tải Metadata hoàn tất. Tổng cộng 6 firmware được tải.[0m
+[0;31mE (1438) uart: uart_flush_input(1350): uart driver error[0m
+[0;32mI (1441) MAIN: Dang lay menu tu sd_card module...[0m
+[0;32mI (1447) gpio: GPIO[21]| InputEn: 1| OutputEn: 0| OpenDrain: 0| Pullup: 1| Pulldown: 0| Intr:0 [0m
+[0;32mI (1456) gpio: GPIO[20]| InputEn: 1| OutputEn: 0| OpenDrain: 0| Pullup: 1| Pulldown: 0| Intr:0 [0m
+[0;32mI (1465) gpio: GPIO[10]| InputEn: 1| OutputEn: 0| OpenDrain: 0| Pullup: 1| Pulldown: 0| Intr:0 [0m
+[0;32mI (1490) MAIN: Khoi dong hoan tat. Hien thi menu.[0m
+[0;31mE (1490) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (1500) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (1510) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (1520) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (1530) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (1540) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (1550) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (1560) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (1570) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (1580) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (1590) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (1600) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (1610) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (1620) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (1630) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (1640) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (1650) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (1660) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (1670) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (1680) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (1690) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (1700) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (1710) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (1720) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (1730) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (1740) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (1750) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (1760) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (1770) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (1780) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (1790) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (1800) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (1810) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (1820) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (1830) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (1840) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (1850) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (1860) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (1870) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (1880) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (1890) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (1900) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (1910) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (1920) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (1930) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (1940) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (1950) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (1960) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (1970) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (1980) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (1990) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2000) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2010) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2020) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2030) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2040) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2050) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2060) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2070) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2080) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2090) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2100) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2110) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2120) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2130) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2140) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2150) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2160) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2170) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2180) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2190) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2200) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2210) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2220) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2230) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2240) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2250) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2260) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2270) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2280) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2290) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2300) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2310) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2320) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2330) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2340) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2350) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2360) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2370) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2380) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2390) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2400) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2410) uart: uart_read_bytes(1289): uart driver error[0m

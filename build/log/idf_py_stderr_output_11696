@@ -1,0 +1,16 @@
+[0;33m--- Warning: GDB cannot open serial ports accessed as COMx[0m
+[0;33m--- Using \\.\COM5 instead...[0m
+[0;33m--- esp-idf-monitor 1.8.0 on \\.\COM5 115200[0m
+[0;33m--- Quit: Ctrl+] | Menu: Ctrl+T | Help: Ctrl+T followed by Ctrl+H[0m
+[0m--- 0x40383f90: [0;33mrv_utils_wait_for_intr[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/riscv/include/riscv/rv_utils.h[0m[0m:[1;31m33[0m
+[0m--- (inlined by) [0;33mesp_cpu_wait_for_intr[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_hw_support/cpu.c[0m[0m:[1;31m119[0m
+[0;33m--- Stack dump detected[0m
+[0m--- 0x40058eb6: [0;33mstrlen[0m[0m in [0;32mROM[0m
+[0m--- 0x42031412: [0;33m_svfprintf_r[0m[0m at [0;32m??[0m[0m:[1;31m?[0m
+[0m--- 0x40380001: [0;33m_vector_table[0m[0m at [0;32m??[0m[0m:[1;31m?[0m
+[0;33m--- Warning: Failed to run gdb_panic_server.py script: Command '['riscv32-esp-elf-gdb', '--batch', '-n', 'C:\\Users\\DELL\\workspace\\IDF\\ESP_MUL\\Muti\\build\\ESP_MultiFlasher.elf', '-ex', 'target remote | "C:\\Espressif\\python_env\\idf5.1_py3.11_env\\Scripts\\python.exe" -m esp_idf_panic_decoder --target esp32c3 "C:\\Users\\DELL\\AppData\\Local\\Temp\\tmphwnriwq1"', '-ex', 'bt']' returned non-zero exit status 1.
+--- Warning: b"error starting child process '| C:\\Espressif\\python_env\\idf5.1_py3.11_env\\Scripts\\python.exe -m esp_idf_panic_decoder --target esp32c3 C:\\Users\\DELL\\AppData\\Local\\Temp\\tmphwnriwq1': CreateProcess: No such file or directory\r\nNo stack.\r\n"
+
+[0m
+[0m--- 0x40048b82: [0;33msoftware_reset[0m[0m in [0;32mROM[0m
+[0m

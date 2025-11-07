@@ -1,0 +1,10 @@
+CMake Error at C:/Espressif/frameworks/esp-idf-v5.1.6/tools/cmake/build.cmake:266 (message):
+  Failed to resolve component 'Adafruit-GFX-Library'.
+Call Stack (most recent call first):
+  C:/Espressif/frameworks/esp-idf-v5.1.6/tools/cmake/build.cmake:302 (__build_resolve_and_add_req)
+  C:/Espressif/frameworks/esp-idf-v5.1.6/tools/cmake/build.cmake:603 (__build_expand_requirements)
+  C:/Espressif/frameworks/esp-idf-v5.1.6/tools/cmake/project.cmake:604 (idf_build_process)
+  CMakeLists.txt:11 (project)
+
+
+ninja: error: rebuilding 'build.ninja': subcommand failed

@@ -1,0 +1,1871 @@
+ESP-ROM:esp32c3-api1-20210207
+Build:Feb  7 2021
+rst:0x15 (USB_UART_CHIP_RESET),boot:0xf (SPI_FAST_FLASH_BOOT)
+Saved PC:0x40383f90
+SPIWP:0xee
+mode:DIO, clock div:1
+load:0x3fcd5820,len:0x170c
+load:0x403cc710,len:0x968
+load:0x403ce710,len:0x2fa8
+entry 0x403cc710
+[0;32mI (24) boot: ESP-IDF v5.1.6-dirty 2nd stage bootloader[0m
+[0;32mI (24) boot: compile time Oct 16 2025 01:02:32[0m
+[0;32mI (25) boot: chip revision: v0.4[0m
+[0;32mI (28) boot.esp32c3: SPI Speed      : 80MHz[0m
+[0;32mI (33) boot.esp32c3: SPI Mode       : DIO[0m
+[0;32mI (37) boot.esp32c3: SPI Flash Size : 2MB[0m
+[0;32mI (42) boot: Enabling RNG early entropy source...[0m
+[0;32mI (47) boot: Partition Table:[0m
+[0;32mI (51) boot: ## Label            Usage          Type ST Offset   Length[0m
+[0;32mI (58) boot:  0 nvs              WiFi data        01 02 00009000 00006000[0m
+[0;32mI (66) boot:  1 phy_init         RF data          01 01 0000f000 00001000[0m
+[0;32mI (73) boot:  2 factory          factory app      00 00 00010000 00100000[0m
+[0;32mI (81) boot: End of partition table[0m
+[0;32mI (85) esp_image: segment 0: paddr=00010020 vaddr=3c040020 size=11760h ( 71520) map[0m
+[0;32mI (105) esp_image: segment 1: paddr=00021788 vaddr=3fc8e200 size=01420h (  5152) load[0m
+[0;32mI (106) esp_image: segment 2: paddr=00022bb0 vaddr=40380000 size=0d468h ( 54376) load[0m
+[0;32mI (121) esp_image: segment 3: paddr=00030020 vaddr=42000020 size=3e034h (254004) map[0m
+[0;32mI (163) esp_image: segment 4: paddr=0006e05c vaddr=4038d468 size=00c80h (  3200) load[0m
+[0;32mI (168) boot: Loaded app from partition at offset 0x10000[0m
+[0;32mI (168) boot: Disabling RNG early entropy source...[0m
+[0;32mI (183) cpu_start: Unicore app[0m
+[0;32mI (183) cpu_start: Pro cpu up.[0m
+[0;32mI (192) cpu_start: Pro cpu start user code[0m
+[0;32mI (192) cpu_start: cpu freq: 160000000 Hz[0m
+[0;32mI (192) cpu_start: Application information:[0m
+[0;32mI (195) cpu_start: Project name:     ESP_MultiFlasher[0m
+[0;32mI (200) cpu_start: App version:      1[0m
+[0;32mI (205) cpu_start: Compile time:     Oct 16 2025 00:52:28[0m
+[0;32mI (211) cpu_start: ELF file SHA256:  03ab9c7b14197079...[0m
+[0;32mI (217) cpu_start: ESP-IDF:          v5.1.6-dirty[0m
+[0;32mI (222) cpu_start: Min chip rev:     v0.3[0m
+[0;32mI (227) cpu_start: Max chip rev:     v1.99 [0m
+[0;32mI (232) cpu_start: Chip rev:         v0.4[0m
+[0;32mI (237) heap_init: Initializing. RAM available for dynamic allocation:[0m
+[0;32mI (244) heap_init: At 3FC90B30 len 0002F4D0 (189 KiB): DRAM[0m
+[0;32mI (250) heap_init: At 3FCC0000 len 0001C710 (113 KiB): DRAM/RETENTION[0m
+[0;32mI (257) heap_init: At 3FCDC710 len 00002950 (10 KiB): DRAM/RETENTION/STACK[0m
+[0;32mI (265) heap_init: At 50000010 len 00001FD8 (7 KiB): RTCRAM[0m
+[0;32mI (272) spi_flash: detected chip: generic[0m
+[0;32mI (276) spi_flash: flash io: dio[0m
+[0;33mW (280) spi_flash: Detected size(4096k) larger than the size in the binary image header(2048k). Using the size in the binary image header.[0m
+[0;32mI (293) sleep: Configure to isolate all GPIO pins in sleep state[0m
+[0;32mI (299) sleep: Enable automatic switching of GPIO sleep configuration[0m
+[0;32mI (307) app_start: Starting scheduler on CPU0[0m
+[0;32mI (312) main_task: Started on CPU0[0m
+[0;32mI (316) main_task: Calling app_main()[0m
+[0;32mI (324) MAIN: --- BAT DAU KHOI DONG HE THONG ---[0m
+[0;32mI (842) gpio: GPIO[4]| InputEn: 1| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (843) gpio: GPIO[5]| InputEn: 1| OutputEn: 0| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (850) gpio: GPIO[6]| InputEn: 1| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (859) gpio: GPIO[7]| InputEn: 1| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (879) SD_CARD: SD initialized OK![0m
+[0;32mI (1438) SD_CARD: Tải Metadata hoàn tất. Tổng cộng 6 firmware được tải.[0m
+[0;32mI (1439) MAIN: Dang lay menu tu sd_card module...[0m
+[0;32mI (1441) gpio: GPIO[21]| InputEn: 1| OutputEn: 0| OpenDrain: 0| Pullup: 1| Pulldown: 0| Intr:0 [0m
+[0;32mI (1451) gpio: GPIO[20]| InputEn: 1| OutputEn: 0| OpenDrain: 0| Pullup: 1| Pulldown: 0| Intr:0 [0m
+[0;32mI (1460) gpio: GPIO[10]| InputEn: 1| OutputEn: 0| OpenDrain: 0| Pullup: 1| Pulldown: 0| Intr:0 [0m
+[0;32mI (1484) MAIN: Khoi dong hoan tat. Hien thi menu.[0m
+[0;32mI (4459) MAIN: Da chon: Index 1, FW ID: ttp_01[0m
+[0;32mI (4459) MAIN: Bat dau flash firmware: ttp_01[0m
+[0;32mI (4472) SD_CARD: SD initialized OK![0m
+[0;32mI (4486) gpio: GPIO[2]| InputEn: 0| OutputEn: 0| OpenDrain: 0| Pullup: 1| Pulldown: 0| Intr:0 [0m
+[0;32mI (4486) gpio: GPIO[3]| InputEn: 0| OutputEn: 0| OpenDrain: 0| Pullup: 1| Pulldown: 0| Intr:0 [0m
+[0;32mI (4494) FLASHER: UART connection initialized at baud rate 115200[0m
+[0;32mI (4500) MAIN: Flasher da san sang.[0m
+[0;32mI (4505) SD_METADATA: Firmware ID ttp_01 found: Path=/ttp_01/FW.bin, Version=1.0.11.2[0m
+[0;32mI (4513) FLASHER: Reset sequence start...[0m
+[0;32mI (4988) FLASHER: Reset sequence done![0m
+[0;32mI (5466) FLASHER: Connected to target device.[0m
+[0;32mI (5470) FLASHER: Baudrate boosted to 460800[0m
+[0;32mI (5471) FLASHER: ==== Writing segment ====[0m
+[0;32mI (5471) FLASHER: File: /ttp_01/BOTL.bin | Offset: 0x00001000[0m
+[0;32mI (5498) FLASHER: Segment size: 19152 bytes[0m
+[0;32mI (5823) FLASHER: Progress: 21%[0m
+[0;32mI (5959) FLASHER: Progress: 42%[0m
+[0;32mI (6094) FLASHER: Progress: 64%[0m
+[0;32mI (6229) FLASHER: Progress: 85%[0m
+[0;32mI (6360) FLASHER: Progress: 100%[0m
+[0;32mI (6374) FLASHER: Segment written 19152 / 19152 bytes OK[0m
+[0;32mI (6406) FLASHER: MD5 verified OK for segment![0m
+[0;32mI (6406) FLASHER: Segment at 0x00001000 written successfully.[0m
+[0;32mI (6406) FLASHER: ==== Writing segment ====[0m
+[0;32mI (6411) FLASHER: File: /ttp_01/PART.bin | Offset: 0x00008000[0m
+[0;32mI (6439) FLASHER: Segment size: 3072 bytes[0m
+[0;32mI (6590) FLASHER: Progress: 100%[0m
+[0;32mI (6605) FLASHER: Segment written 3072 / 3072 bytes OK[0m
+[0;32mI (6614) FLASHER: MD5 verified OK for segment![0m
+[0;32mI (6614) FLASHER: Segment at 0x00008000 written successfully.[0m
+[0;32mI (6614) FLASHER: ==== Writing segment ====[0m
+[0;32mI (6619) FLASHER: File: /ttp_01/FW.bin | Offset: 0x00010000[0m
+[0;32mI (6647) FLASHER: Segment size: 170512 bytes[0m
+[0;32mI (7788) FLASHER: Progress: 2%[0m
+[0;32mI (7923) FLASHER: Progress: 4%[0m
+[0;32mI (8056) FLASHER: Progress: 7%[0m
+[0;32mI (8190) FLASHER: Progress: 9%[0m
+[0;32mI (8324) FLASHER: Progress: 12%[0m
+[0;32mI (8458) FLASHER: Progress: 14%[0m
+[0;32mI (8591) FLASHER: Progress: 16%[0m
+[0;32mI (8725) FLASHER: Progress: 19%[0m
+[0;32mI (8859) FLASHER: Progress: 21%[0m
+[0;32mI (8993) FLASHER: Progress: 24%[0m
+[0;32mI (9128) FLASHER: Progress: 26%[0m
+[0;32mI (9264) FLASHER: Progress: 28%[0m
+[0;32mI (9400) FLASHER: Progress: 31%[0m
+[0;32mI (9536) FLASHER: Progress: 33%[0m
+[0;32mI (9671) FLASHER: Progress: 36%[0m
+[0;32mI (9807) FLASHER: Progress: 38%[0m
+[0;32mI (9942) FLASHER: Progress: 40%[0m
+[0;32mI (10077) FLASHER: Progress: 43%[0m
+[0;32mI (10212) FLASHER: Progress: 45%[0m
+[0;32mI (10346) FLASHER: Progress: 48%[0m
+[0;32mI (10481) FLASHER: Progress: 50%[0m
+[0;32mI (10617) FLASHER: Progress: 52%[0m
+[0;32mI (10751) FLASHER: Progress: 55%[0m
+[0;32mI (10886) FLASHER: Progress: 57%[0m
+[0;32mI (11022) FLASHER: Progress: 60%[0m
+[0;32mI (11158) FLASHER: Progress: 62%[0m
+[0;32mI (11294) FLASHER: Progress: 64%[0m
+[0;32mI (11430) FLASHER: Progress: 67%[0m
+[0;32mI (11567) FLASHER: Progress: 69%[0m
+[0;32mI (11702) FLASHER: Progress: 72%[0m
+[0;32mI (11839) FLASHER: Progress: 74%[0m
+[0;32mI (11975) FLASHER: Progress: 76%[0m
+[0;32mI (12110) FLASHER: Progress: 79%[0m
+[0;32mI (12246) FLASHER: Progress: 81%[0m
+[0;32mI (12382) FLASHER: Progress: 84%[0m
+[0;32mI (12518) FLASHER: Progress: 86%[0m
+[0;32mI (12653) FLASHER: Progress: 88%[0m
+[0;32mI (12788) FLASHER: Progress: 91%[0m
+[0;32mI (12924) FLASHER: Progress: 93%[0m
+[0;32mI (13058) FLASHER: Progress: 96%[0m
+[0;32mI (13193) FLASHER: Progress: 98%[0m
+[0;32mI (13323) FLASHER: Progress: 100%[0m
+[0;32mI (13338) FLASHER: Segment written 170512 / 170512 bytes OK[0m
+[0;32mI (13581) FLASHER: MD5 verified OK for segment![0m
+[0;32mI (13581) FLASHER: Segment at 0x00010000 written successfully.[0m
+[0;32mI (13682) FLASHER: Resetting target to run app...[0m
+[0;32mI (13982) FLASHER: Target restarted in normal mode.[0m
+[0;32mI (13982) FLASHER: Full firmware update completed successfully![0m
+[0;32mI (13983) SD_CARD: SD Unmounted[0m
+[0;32mI (13986) MAIN: Flash hoan tat.[0m
+[0;32mI (16257) MAIN: wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x00[0m
+[0;32mI (16375) MAIN: 05
+wrong chip id 0x0005
+ets Jul 29 2019 12:21:46
+
+rst:0x10 (RTCWDT_RTC_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+wrong chip id[0m
+[0;32mI (16642) MAIN:  0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chi[0m
+[0;32mI (16760) MAIN: p id 0x0005
+wrong chip id 0x0005
+ets Jul 29 2019 12:21:46
+
+rst:0x10 (RTCWDT_RTC_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+wron[0m
+[0;32mI (16982) MAIN: g chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+[0m
+[0;32mI (17106) MAIN: wrong chip id 0x0005
+wrong chip id 0x0005
+ets Jul 29 2019 12:21:46
+
+rst:0x10 (RTCWDT_RTC_RESET),boot:0x17 (SPI_FAST_FLASH_BO[0m
+[0;32mI (17367) MAIN: OT)
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id[0m
+[0;32mI (17491) MAIN:  0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+ets Jul 29 2019 12:21:46
+
+rst:0x10 (RTCWDT_RTC_RESET),boot:0x17 (SPI_FAST[0m
+[0;32mI (17752) MAIN: _FLASH_BOOT)
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wron[0m
+[0;32mI (17876) MAIN: g chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+ets Jul 29 2019 12:21:46
+
+rst:0x10 (RTCWDT_RTC_RESET),boot:0x17 [0m
+[0;32mI (18093) MAIN: (SPI_FAST_FLASH_BOOT)
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0[0m
+[0;32mI (18261) MAIN: 005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+ets Jul 29 2019 12:21:46
+
+rst:0x10 (RTCWDT_RTC_RESET),b[0m
+[0;32mI (18478) MAIN: oot:0x17 (SPI_FAST_FLASH_BOOT)
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong ch[0m
+[0;32mI (18646) MAIN: ip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+ets Jul 29 2019 12:21:46
+
+rst:0x10 (RTCWDT_RTC[0m
+[0;32mI (18819) MAIN: _RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005[0m
+[0;32mI (19031) MAIN: 
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+ets Jul 29 2019 12:21:46
+
+rst:0x10 (R[0m
+[0;32mI (19204) MAIN: TCWDT_RTC_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip i[0m
+[0;32mI (19416) MAIN: d 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+ets Jul 29 2019 12:21:46
+
+rs[0m
+[0;32mI (19589) MAIN: t:0x10 (RTCWDT_RTC_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wro[0m
+[0;32mI (19801) MAIN: ng chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+ets Jul 29 2019 12:21[0m
+[0;32mI (19929) MAIN: :46
+
+rst:0x10 (RTCWDT_RTC_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x[0m
+[0;32mI (20186) MAIN: 0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+ets Jul 29 2[0m
+[0;32mI (20314) MAIN: 019 12:21:46
+
+rst:0x10 (RTCWDT_RTC_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong c[0m
+[0;32mI (20571) MAIN: hip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+ets[0m
+[0;32mI (20655) MAIN:  Jul 29 2019 12:21:46
+
+rst:0x10 (RTCWDT_RTC_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+wrong chip id 0x0005
+wrong chip id 0x0005[0m
+[0;32mI (20922) MAIN: 
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x[0m
+[0;32mI (21040) MAIN: 0005
+ets Jul 29 2019 12:21:46
+
+rst:0x10 (RTCWDT_RTC_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+wrong chip id 0x0005
+wrong chip [0m
+[0;32mI (21307) MAIN: id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong c[0m
+[0;32mI (21425) MAIN: hip id 0x0005
+ets Jul 29 2019 12:21:46
+
+rst:0x10 (RTCWDT_RTC_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+wrong chip id 0x0005
+wr[0m
+[0;32mI (21647) MAIN: ong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005[0m
+[0;32mI (21765) MAIN: 
+wrong chip id 0x0005
+ets Jul 29 2019 12:21:46
+
+rst:0x10 (RTCWDT_RTC_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+wrong chip id 0[0m
+[0;32mI (22033) MAIN: x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip [0m
+[0;32mI (22151) MAIN: id 0x0005
+wrong chip id 0x0005
+ets Jul 29 2019 12:21:46
+
+rst:0x10 (RTCWDT_RTC_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+wrong [0m
+[0;32mI (22418) MAIN: chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wr[0m
+[0;32mI (22497) MAIN: ong chip id 0x0005
+wrong chip id 0x0005
+ets Jul 29 2019 12:21:46
+
+rst:0x10 (RTCWDT_RTC_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT[0m
+[0;32mI (22758) MAIN: )
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0[0m
+[0;32mI (22882) MAIN: x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+ets Jul 29 2019 12:21:46
+
+rst:0x10 (RTCWDT_RTC_RESET),boot:0x17 (SPI_FAST_F[0m
+[0;32mI (23143) MAIN: LASH_BOOT)
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong [0m
+[0;32mI (23267) MAIN: chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+ets Jul 29 2019 12:21:46
+
+rst:0x10 (RTCWDT_RTC_RESET),boot:0x17 (S[0m
+[0;32mI (23484) MAIN: PI_FAST_FLASH_BOOT)
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x000[0m
+[0;32mI (23652) MAIN: 5
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+ets Jul 29 2019 12:21:46
+
+rst:0x10 (RTCWDT_RTC_RESET),boo[0m
+[0;32mI (23869) MAIN: t:0x17 (SPI_FAST_FLASH_BOOT)
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip[0m
+[0;32mI (24037) MAIN:  id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+ets Jul 29 2019 12:21:46
+
+rst:0x10 (RTCWDT_RTC_R[0m
+[0;32mI (24254) MAIN: ESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+w[0m
+[0;32mI (24422) MAIN: rong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+ets Jul 29 2019 12:21:46
+
+rst:0x10 (RTC[0m
+[0;32mI (24595) MAIN: WDT_RTC_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id [0m
+[0;32mI (24807) MAIN: 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+ets Jul 29 2019 12:21:46
+
+rst:[0m
+[0;32mI (24979) MAIN: 0x10 (RTCWDT_RTC_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong[0m
+[0;32mI (25192) MAIN:  chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+ets Jul 29 2019 12:21:4[0m
+[0;32mI (25320) MAIN: 6
+
+rst:0x10 (RTCWDT_RTC_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x00[0m
+[0;32mI (25577) MAIN: 05
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+ets Jul 29 201[0m
+[0;32mI (25705) MAIN: 9 12:21:46
+
+rst:0x10 (RTCWDT_RTC_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chi[0m
+[0;32mI (25962) MAIN: p id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+ets J[0m
+[0;32mI (26045) MAIN: ul 29 2019 12:21:46
+
+rst:0x10 (RTCWDT_RTC_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+wrong chip id 0x0005
+wrong chip id 0x0005
+[0m
+[0;32mI (26312) MAIN: wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x00[0m
+[0;32mI (26430) MAIN: 05
+ets Jul 29 2019 12:21:46
+
+rst:0x10 (RTCWDT_RTC_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+wrong chip id 0x0005
+wrong chip id[0m
+[0;32mI (26697) MAIN:  0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chi[0m
+[0;32mI (26815) MAIN: p id 0x0005
+ets Jul 29 2019 12:21:46
+
+rst:0x10 (RTCWDT_RTC_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+wrong chip id 0x0005
+wron[0m
+[0;32mI (27038) MAIN: g chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+[0m
+[0;32mI (27155) MAIN: wrong chip id 0x0005
+ets Jul 29 2019 12:21:46
+
+rst:0x10 (RTCWDT_RTC_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+wrong chip id 0x0[0m
+[0;32mI (27422) MAIN: 005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id[0m
+[0;32mI (27540) MAIN:  0x0005
+wrong chip id 0x0005
+ets Jul 29 2019 12:21:46
+
+rst:0x10 (RTCWDT_RTC_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+wrong ch[0m
+[0;32mI (27807) MAIN: ip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wron[0m
+[0;32mI (27886) MAIN: g chip id 0x0005
+wrong chip id 0x0005
+ets Jul 29 2019 12:21:46
+
+rst:0x10 (RTCWDT_RTC_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)[0m
+[0;32mI (28148) MAIN: 
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0[0m
+[0;32mI (28271) MAIN: 005
+wrong chip id 0x0005
+wrong chip id 0x0005
+ets Jul 29 2019 12:21:46
+
+rst:0x10 (RTCWDT_RTC_RESET),boot:0x17 (SPI_FAST_FLA[0m
+[0;32mI (28533) MAIN: SH_BOOT)
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong ch[0m
+[0;32mI (28656) MAIN: ip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+ets Jul 29 2019 12:21:46
+
+rst:0x10 (RTCWDT_RTC_RESET),boot:0x17 (SPI[0m
+[0;32mI (28873) MAIN: _FAST_FLASH_BOOT)
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005[0m
+[0;32mI (29041) MAIN: 
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+ets Jul 29 2019 12:21:46
+
+rst:0x10 (RTCWDT_RTC_RESET),boot:[0m
+[0;32mI (29258) MAIN: 0x17 (SPI_FAST_FLASH_BOOT)
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip i[0m
+[0;32mI (29426) MAIN: d 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+ets Jul 29 2019 12:21:46
+
+rst:0x10 (RTCWDT_RTC_RES[0m
+[0;32mI (29643) MAIN: ET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wro[0m
+[0;32mI (29811) MAIN: ng chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+ets Jul 29 2019 12:21:46
+
+rst:0x10 (RTCWD[0m
+[0;32mI (29983) MAIN: T_RTC_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x[0m
+[0;32mI (30195) MAIN: 0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+ets Jul 29 2019 12:21:46
+
+rst:0x[0m
+[0;32mI (30368) MAIN: 10 (RTCWDT_RTC_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong c[0m
+[0;32mI (30580) MAIN: hip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+ets Jul 29 2019 12:21:46[0m
+[0;32mI (30708) MAIN: 
+
+rst:0x10 (RTCWDT_RTC_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005[0m
+[0;32mI (30965) MAIN: 
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+ets Jul 29 2019 [0m
+[0;32mI (31093) MAIN: 12:21:46
+
+rst:0x10 (RTCWDT_RTC_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip [0m
+[0;32mI (31350) MAIN: id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+ets Jul[0m
+[0;32mI (31478) MAIN:  29 2019 12:21:46
+
+rst:0x10 (RTCWDT_RTC_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+wrong chip id 0x0005
+wrong chip id 0x0005
+wr[0m
+[0;32mI (31700) MAIN: ong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005[0m
+[0;32mI (31818) MAIN: 
+ets Jul 29 2019 12:21:46
+
+rst:0x10 (RTCWDT_RTC_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+wrong chip id 0x0005
+wrong chip id 0[0m
+[0;32mI (32085) MAIN: x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip [0m
+[0;32mI (32203) MAIN: id 0x0005
+ets Jul 29 2019 12:21:46
+
+rst:0x10 (RTCWDT_RTC_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+wrong chip id 0x0005
+wrong [0m
+[0;32mI (32470) MAIN: chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wr[0m
+[0;32mI (32543) MAIN: ong chip id 0x0005
+ets Jul 29 2019 12:21:46
+
+rst:0x10 (RTCWDT_RTC_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+wrong chip id 0x000[0m
+[0;32mI (32811) MAIN: 5
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0[0m
+[0;32mI (32928) MAIN: x0005
+wrong chip id 0x0005
+ets Jul 29 2019 12:21:46
+
+rst:0x10 (RTCWDT_RTC_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+wrong chip[0m
+[0;32mI (33195) MAIN:  id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong [0m
+[0;32mI (33313) MAIN: chip id 0x0005
+wrong chip id 0x0005
+ets Jul 29 2019 12:21:46
+
+rst:0x10 (RTCWDT_RTC_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+w[0m
+[0;32mI (33535) MAIN: rong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x000[0m
+[0;32mI (33659) MAIN: 5
+wrong chip id 0x0005
+wrong chip id 0x0005
+ets Jul 29 2019 12:21:46
+
+rst:0x10 (RTCWDT_RTC_RESET),boot:0x17 (SPI_FAST_FLASH[0m
+[0;32mI (33920) MAIN: _BOOT)
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip[0m
+[0;32mI (34044) MAIN:  id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+ets Jul 29 2019 12:21:46
+
+rst:0x10 (RTCWDT_RTC_RESET),boot:0x17 (SPI_F[0m
+[0;32mI (34305) MAIN: AST_FLASH_BOOT)
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+w[0m
+[0;32mI (34429) MAIN: rong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+ets Jul 29 2019 12:21:46
+
+rst:0x10 (RTCWDT_RTC_RESET),boot:0x[0m
+[0;32mI (34646) MAIN: 17 (SPI_FAST_FLASH_BOOT)
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id [0m
+[0;32mI (34813) MAIN: 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+ets Jul 29 2019 12:21:46
+
+rst:0x10 (RTCWDT_RTC_RESET[0m
+[0;32mI (35031) MAIN: ),boot:0x17 (SPI_FAST_FLASH_BOOT)
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong[0m
+[0;32mI (35198) MAIN:  chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+ets Jul 29 2019 12:21:46
+
+rst:0x10 (RTCWDT_[0m
+[0;32mI (35371) MAIN: RTC_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x00[0m
+[0;32mI (35583) MAIN: 05
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+ets Jul 29 2019 12:21:46
+
+rst:0x10[0m
+[0;32mI (35756) MAIN:  (RTCWDT_RTC_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chi[0m
+[0;32mI (35968) MAIN: p id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+ets Jul 29 2019 12:21:46
+[0m
+[0;32mI (36096) MAIN: 
+rst:0x10 (RTCWDT_RTC_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+[0m
+[0;32mI (36353) MAIN: wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+ets Jul 29 2019 12[0m
+[0;32mI (36481) MAIN: :21:46
+
+rst:0x10 (RTCWDT_RTC_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id[0m
+[0;32mI (36738) MAIN:  0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+ets Jul 2[0m
+[0;32mI (36866) MAIN: 9 2019 12:21:46
+
+rst:0x10 (RTCWDT_RTC_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+wrong chip id 0x0005
+wrong chip id 0x0005
+wron[0m
+[0;32mI (37088) MAIN: g chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+[0m
+[0;32mI (37206) MAIN: ets Jul 29 2019 12:21:46
+
+rst:0x10 (RTCWDT_RTC_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+wrong chip id 0x0005
+wrong chip id 0x0[0m
+[0;32mI (37473) MAIN: 005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id[0m
+[0;32mI (37590) MAIN:  0x0005
+ets Jul 29 2019 12:21:46
+
+rst:0x10 (RTCWDT_RTC_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+wrong chip id 0x0005
+wrong ch[0m
+[0;32mI (37857) MAIN: ip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wron[0m
+[0;32mI (37930) MAIN: g chip id 0x0005
+ets Jul 29 2019 12:21:46
+
+rst:0x10 (RTCWDT_RTC_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+wrong chip id 0x0005[0m
+[0;32mI (38198) MAIN: 
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0[0m
+[0;32mI (38315) MAIN: 005
+wrong chip id 0x0005
+ets Jul 29 2019 12:21:46
+
+rst:0x10 (RTCWDT_RTC_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+wrong chip i[0m
+[0;32mI (38582) MAIN: d 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong ch[0m
+[0;32mI (38700) MAIN: ip id 0x0005
+wrong chip id 0x0005
+ets Jul 29 2019 12:21:46
+
+rst:0x10 (RTCWDT_RTC_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+wro[0m
+[0;32mI (38922) MAIN: ng chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005[0m
+[0;32mI (39045) MAIN: 
+wrong chip id 0x0005
+wrong chip id 0x0005
+ets Jul 29 2019 12:21:46
+
+rst:0x10 (RTCWDT_RTC_RESET),boot:0x17 (SPI_FAST_FLASH_B[0m
+[0;32mI (39307) MAIN: OOT)
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip i[0m
+[0;32mI (39430) MAIN: d 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+ets Jul 29 2019 12:21:46
+
+rst:0x10 (RTCWDT_RTC_RESET),boot:0x17 (SPI_FAS[0m
+[0;32mI (39691) MAIN: T_FLASH_BOOT)
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wro[0m
+[0;32mI (39814) MAIN: ng chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+ets Jul 29 2019 12:21:46
+
+rst:0x10 (RTCWDT_RTC_RESET),boot:0x17[0m
+[0;32mI (40031) MAIN:  (SPI_FAST_FLASH_BOOT)
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x[0m
+[0;32mI (40199) MAIN: 0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+ets Jul 29 2019 12:21:46
+
+rst:0x10 (RTCWDT_RTC_RESET),[0m
+[0;32mI (40416) MAIN: boot:0x17 (SPI_FAST_FLASH_BOOT)
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong c[0m
+[0;32mI (40583) MAIN: hip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+ets Jul 29 2019 12:21:46
+
+rst:0x10 (RTCWDT_RT[0m
+[0;32mI (40756) MAIN: C_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005[0m
+[0;32mI (40968) MAIN: 
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+ets Jul 29 2019 12:21:46
+
+rst:0x10 ([0m
+[0;32mI (41141) MAIN: RTCWDT_RTC_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip [0m
+[0;32mI (41353) MAIN: id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+ets Jul 29 2019 12:21:46
+
+r[0m
+[0;32mI (41525) MAIN: st:0x10 (RTCWDT_RTC_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wr[0m
+[0;32mI (41738) MAIN: ong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+ets Jul 29 2019 12:2[0m
+[0;32mI (41866) MAIN: 1:46
+
+rst:0x10 (RTCWDT_RTC_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0[0m
+[0;32mI (42122) MAIN: x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+ets Jul 29 [0m
+[0;32mI (42250) MAIN: 2019 12:21:46
+
+rst:0x10 (RTCWDT_RTC_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong [0m
+[0;32mI (42507) MAIN: chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+et[0m
+[0;32mI (42591) MAIN: s Jul 29 2019 12:21:46
+
+rst:0x10 (RTCWDT_RTC_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+wrong chip id 0x0005
+wrong chip id 0x000[0m
+[0;32mI (42858) MAIN: 5
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0[0m
+[0;32mI (42975) MAIN: x0005
+ets Jul 29 2019 12:21:46
+
+rst:0x10 (RTCWDT_RTC_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+wrong chip id 0x0005
+wrong chip[0m
+[0;32mI (43243) MAIN:  id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong [0m
+[0;32mI (43360) MAIN: chip id 0x0005
+ets Jul 29 2019 12:21:46
+
+rst:0x10 (RTCWDT_RTC_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+wrong chip id 0x0005
+w[0m
+[0;32mI (43583) MAIN: rong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x000[0m
+[0;32mI (43700) MAIN: 5
+wrong chip id 0x0005
+ets Jul 29 2019 12:21:46
+
+rst:0x10 (RTCWDT_RTC_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+wrong chip id [0m
+[0;32mI (43967) MAIN: 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip[0m
+[0;32mI (44085) MAIN:  id 0x0005
+wrong chip id 0x0005
+ets Jul 29 2019 12:21:46
+
+rst:0x10 (RTCWDT_RTC_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+wrong[0m
+[0;32mI (44352) MAIN:  chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+w[0m
+[0;32mI (44431) MAIN: rong chip id 0x0005
+wrong chip id 0x0005
+ets Jul 29 2019 12:21:46
+
+rst:0x10 (RTCWDT_RTC_RESET),boot:0x17 (SPI_FAST_FLASH_BOO[0m
+[0;32mI (44693) MAIN: T)
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id [0m
+[0;32mI (44816) MAIN: 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+ets Jul 29 2019 12:21:46
+
+rst:0x10 (RTCWDT_RTC_RESET),boot:0x17 (SPI_FAST_[0m
+[0;32mI (45077) MAIN: FLASH_BOOT)
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong[0m
+[0;32mI (45200) MAIN:  chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+ets Jul 29 2019 12:21:46
+
+rst:0x10 (RTCWDT_RTC_RESET),boot:0x17 ([0m
+[0;32mI (45418) MAIN: SPI_FAST_FLASH_BOOT)
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x00[0m
+[0;32mI (45585) MAIN: 05
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+ets Jul 29 2019 12:21:46
+
+rst:0x10 (RTCWDT_RTC_RESET),bo[0m
+[0;32mI (45802) MAIN: ot:0x17 (SPI_FAST_FLASH_BOOT)
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chi[0m
+[0;32mI (45969) MAIN: p id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+ets Jul 29 2019 12:21:46
+
+rst:0x10 (RTCWDT_RTC_[0m
+[0;32mI (46142) MAIN: RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+[0m
+[0;32mI (46354) MAIN: wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+ets Jul 29 2019 12:21:46
+
+rst:0x10 (RT[0m
+[0;32mI (46527) MAIN: CWDT_RTC_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id[0m
+[0;32mI (46738) MAIN:  0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+ets Jul 29 2019 12:21:46
+
+rst[0m
+[0;32mI (46911) MAIN: :0x10 (RTCWDT_RTC_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wron[0m
+[0;32mI (47123) MAIN: g chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+ets Jul 29 2019 12:21:[0m
+[0;32mI (47251) MAIN: 46
+
+rst:0x10 (RTCWDT_RTC_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0[0m
+[0;32mI (47507) MAIN: 005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+ets Jul 29 20[0m
+[0;32mI (47635) MAIN: 19 12:21:46
+
+rst:0x10 (RTCWDT_RTC_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong ch[0m
+[0;32mI (47892) MAIN: ip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+ets [0m
+[0;32mI (47976) MAIN: Jul 29 2019 12:21:46
+
+rst:0x10 (RTCWDT_RTC_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+wrong chip id 0x0005
+wrong chip id 0x0005[0m
+[0;32mI (48243) MAIN: 
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0[0m
+[0;32mI (48360) MAIN: 005
+ets Jul 29 2019 12:21:46
+
+rst:0x10 (RTCWDT_RTC_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+wrong chip id 0x0005
+wrong chip i[0m
+[0;32mI (48628) MAIN: d 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong ch[0m
+[0;32mI (48745) MAIN: ip id 0x0005
+ets Jul 29 2019 12:21:46
+
+rst:0x10 (RTCWDT_RTC_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+wrong chip id 0x0005
+wro[0m
+[0;32mI (48968) MAIN: ng chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005[0m
+[0;32mI (49086) MAIN: 
+wrong chip id 0x0005
+ets Jul 29 2019 12:21:46
+
+rst:0x10 (RTCWDT_RTC_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+wrong chip id 0x[0m
+[0;32mI (49353) MAIN: 0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip i[0m
+[0;32mI (49470) MAIN: d 0x0005
+wrong chip id 0x0005
+ets Jul 29 2019 12:21:46
+
+rst:0x10 (RTCWDT_RTC_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+wrong c[0m
+[0;32mI (49737) MAIN: hip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wro[0m
+[0;32mI (49816) MAIN: ng chip id 0x0005
+wrong chip id 0x0005
+ets Jul 29 2019 12:21:46
+
+rst:0x10 (RTCWDT_RTC_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)[0m
+[0;32mI (50078) MAIN: 
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x[0m
+[0;32mI (50201) MAIN: 0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+ets Jul 29 2019 12:21:46
+
+rst:0x10 (RTCWDT_RTC_RESET),boot:0x17 (SPI_FAST_FL[0m
+[0;32mI (50462) MAIN: ASH_BOOT)
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong c[0m
+[0;32mI (50586) MAIN: hip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+ets Jul 29 2019 12:21:46
+
+rst:0x10 (RTCWDT_RTC_RESET),boot:0x17 (SP[0m
+[0;32mI (50803) MAIN: I_FAST_FLASH_BOOT)
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005[0m
+[0;32mI (50970) MAIN: 
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+ets Jul 29 2019 12:21:46
+
+rst:0x10 (RTCWDT_RTC_RESET),boot[0m
+[0;32mI (51187) MAIN: :0x17 (SPI_FAST_FLASH_BOOT)
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip [0m
+[0;32mI (51355) MAIN: id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+ets Jul 29 2019 12:21:46
+
+rst:0x10 (RTCWDT_RTC_RE[0m
+[0;32mI (51572) MAIN: SET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wr[0m
+[0;32mI (51740) MAIN: ong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+ets Jul 29 2019 12:21:46
+
+rst:0x10 (RTCW[0m
+[0;32mI (51912) MAIN: DT_RTC_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0[0m
+[0;32mI (52124) MAIN: x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+ets Jul 29 2019 12:21:46
+
+rst:0[0m
+[0;32mI (52297) MAIN: x10 (RTCWDT_RTC_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong [0m
+[0;32mI (52509) MAIN: chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+ets Jul 29 2019 12:21:46[0m
+[0;32mI (52637) MAIN: 
+
+rst:0x10 (RTCWDT_RTC_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x000[0m
+[0;32mI (52894) MAIN: 5
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+ets Jul 29 2019[0m
+[0;32mI (53022) MAIN:  12:21:46
+
+rst:0x10 (RTCWDT_RTC_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip[0m
+[0;32mI (53278) MAIN:  id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+ets Ju[0m
+[0;32mI (53406) MAIN: l 29 2019 12:21:46
+
+rst:0x10 (RTCWDT_RTC_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+wrong chip id 0x0005
+wrong chip id 0x0005
+w[0m
+[0;32mI (53629) MAIN: rong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x000[0m
+[0;32mI (53746) MAIN: 5
+ets Jul 29 2019 12:21:46
+
+rst:0x10 (RTCWDT_RTC_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+wrong chip id 0x0005
+wrong chip id [0m
+[0;32mI (54013) MAIN: 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip[0m
+[0;32mI (54131) MAIN:  id 0x0005
+ets Jul 29 2019 12:21:46
+
+rst:0x10 (RTCWDT_RTC_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+wrong chip id 0x0005
+wrong[0m
+[0;32mI (54398) MAIN:  chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+w[0m
+[0;32mI (54471) MAIN: rong chip id 0x0005
+ets Jul 29 2019 12:21:46
+
+rst:0x10 (RTCWDT_RTC_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+wrong chip id 0x00[0m
+[0;32mI (54738) MAIN: 05
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id [0m
+[0;32mI (54855) MAIN: 0x0005
+wrong chip id 0x0005
+ets Jul 29 2019 12:21:46
+
+rst:0x10 (RTCWDT_RTC_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+wrong chi[0m
+[0;32mI (55122) MAIN: p id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong[0m
+[0;32mI (55201) MAIN:  chip id 0x0005
+wrong chip id 0x0005
+ets Jul 29 2019 12:21:46
+
+rst:0x10 (RTCWDT_RTC_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+[0m
+[0;32mI (55463) MAIN: wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x00[0m
+[0;32mI (55556) MAIN: Da chon: Index 2, FW ID: qr4_01[0m
+[0;32mI (55556) MAIN: Bat dau flash firmware: qr4_01[0m
+[0;32mI (55569) gpio: GPIO[7]| InputEn: 1| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (55580) SD_CARD: SD initialized OK![0m
+[0;32mI (55586) MAIN: 05
+wrong chip id 0x0005
+wrong chip id 0x0005
+ets Jul 29 2019 12:21:46
+
+rst:0x10 (RTCWDT_RTC_RESET),boot:0x17 (SPI_FAST_FLAS[0m
+[0;31mE (55595) uart: UART driver already installed[0m
+[0;31mE (55596) FLASHER: serial initialization failed.[0m
+[0;32mI (55599) MAIN: Flasher da san sang.[0m
+[0;32mI (55604) SD_METADATA: Firmware ID qr4_01 found: Path=/qr4_01/FW.bin, Version=v0.1.2[0m
+[0;32mI (55612) FLASHER: Reset sequence start...[0m
+[0;32mI (55847) MAIN: H_BOOT)
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chi[0m
+[0;32mI (55970) MAIN: p id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+ets Jul 29 2019 12:21:46
+
+rst:0x10 (RTCWDT_RTC_RESET),boot:0x17 (SPI_[0m
+[0;32mI (56087) FLASHER: Reset sequence done![0m
+[0;32mI (56187) MAIN: FAST_FLASH_BOOT)
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+[0m
+[0;31mE (56336) FLASHER: Failed to connect to target device.[0m
+[0;31mE (56336) MAIN: Flash that bai do loi flasher.[0m
+[0;32mI (56355) MAIN: wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+ets Jul 29 2019 12:21:46
+
+rst:0x10 (RTCWDT_RTC_RESET),boot:0[0m
+[0;32mI (56572) MAIN: x17 (SPI_FAST_FLASH_BOOT)
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id[0m
+[0;32mI (56739) MAIN:  0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+ets Jul 29 2019 12:21:46
+
+rst:0x10 (RTCWDT_RTC_RESE[0m
+[0;32mI (56957) MAIN: T),boot:0x17 (SPI_FAST_FLASH_BOOT)
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wron[0m
+[0;32mI (57124) MAIN: g chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+ets Jul 29 2019 12:21:46
+
+rst:0x10 (RTCWDT[0m
+[0;32mI (57297) MAIN: _RTC_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0[0m
+[0;32mI (57509) MAIN: 005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+ets Jul 29 2019 12:21:46
+
+rst:0x1[0m
+[0;32mI (57681) MAIN: 0 (RTCWDT_RTC_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong ch[0m
+[0;32mI (57893) MAIN: ip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+ets Jul 29 2019 12:21:46
+[0m
+[0;32mI (58021) MAIN: 
+rst:0x10 (RTCWDT_RTC_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005[0m
+[0;32mI (58278) MAIN: 
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+ets Jul 29 2019 1[0m
+[0;32mI (58406) MAIN: 2:21:46
+
+rst:0x10 (RTCWDT_RTC_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip i[0m
+[0;32mI (58663) MAIN: d 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+ets Jul [0m
+[0;32mI (58791) MAIN: 29 2019 12:21:46
+
+rst:0x10 (RTCWDT_RTC_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+wrong chip id 0x0005
+wrong chip id 0x0005
+wro[0m
+[0;32mI (59013) MAIN: ng chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005[0m
+[0;32mI (59131) MAIN: 
+ets Jul 29 2019 12:21:46
+
+rst:0x10 (RTCWDT_RTC_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+wrong chip id 0x0005
+wrong chip id 0x[0m
+[0;32mI (59398) MAIN: 0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip i[0m
+[0;32mI (59516) MAIN: d 0x0005
+ets Jul 29 2019 12:21:46
+
+rst:0x10 (RTCWDT_RTC_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+wrong chip id 0x0005
+wrong c[0m
+[0;32mI (59783) MAIN: hip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wro[0m
+[0;32mI (59856) MAIN: ng chip id 0x0005
+ets Jul 29 2019 12:21:46
+
+rst:0x10 (RTCWDT_RTC_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+wrong chip id 0x0005[0m
+[0;32mI (60123) MAIN: 
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x[0m
+[0;32mI (60241) MAIN: 0005
+wrong chip id 0x0005
+ets Jul 29 2019 12:21:46
+
+rst:0x10 (RTCWDT_RTC_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+wrong chip [0m
+[0;32mI (60508) MAIN: id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong chip id 0x0005
+wrong c[0m
+[0;32mI (60526) MAIN: Da chon: Index 2, FW ID: qr4_01[0m
+[0;32mI (60526) MAIN: Bat dau flash firmware: qr4_01[0m
+[0;32mI (60539) SD_CARD: SD initialized OK![0m
+[0;31mE (60552) uart: UART driver already installed[0m
+[0;31mE (60553) FLASHER: serial initialization failed.[0m
+[0;32mI (60553) MAIN: Flasher da san sang.[0m
+[0;32mI (60556) SD_METADATA: Firmware ID qr4_01 found: Path=/qr4_01/FW.bin, Version=v0.1.2[0m
+[0;32mI (60565) FLASHER: Reset sequence start...[0m
+[0;32mI (60588) MAIN: hip id 0x0005
+wrong chip id 0x0005
+ets Jul 29 2019 12:21:46
+
+rst:0x10 (RTCWDT_RTC_RESET),boot:0x7 (DOWNLOAD_BOOT(UART0/UART1[0m
+[0;32mI (60691) MAIN: /SDIO_REI_REO_V2))
+waiting for download
+[0m
+[0;32mI (61039) FLASHER: Reset sequence done![0m
+[0;31mE (61288) FLASHER: Failed to connect to target device.[0m
+[0;31mE (61288) MAIN: Flash that bai do loi flasher.[0m
+[0;32mI (896) gpio: GPIO[6]| InputEn: 1| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (904) gpio: GPIO[7]| InputEn: 1| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (1522) SD_CARD: SD initialized OK![0m
+[0;32mI (2082) SD_CARD: Tải Metadata hoàn tất. Tổng cộng 6 firmware được tải.[0m
+[0;32mI (2083) MAIN: Dang lay menu tu sd_card module...[0m
+[0;32mI (2086) gpio: GPIO[21]| InputEn: 1| OutputEn: 0| OpenDrain: 0| Pullup: 1| Pulldown: 0| Intr:0 [0m
+[0;32mI (2095) gpio: GPIO[20]| InputEn: 1| OutputEn: 0| OpenDrain: 0| Pullup: 1| Pulldown: 0| Intr:0 [0m
+[0;32mI (2104) gpio: GPIO[10]| InputEn: 1| OutputEn: 0| OpenDrain: 0| Pullup: 1| Pulldown: 0| Intr:0 [0m
+[0;32mI (2129) MAIN: Khoi dong hoan tat. Hien thi menu.[0m
+[0;32mI (10253) MAIN: Da chon: Index 2, FW ID: qr4_01[0m
+[0;32mI (10253) MAIN: Bat dau flash firmware: qr4_01[0m
+[0;32mI (10266) SD_CARD: SD initialized OK![0m
+[0;32mI (10280) gpio: GPIO[2]| InputEn: 0| OutputEn: 0| OpenDrain: 0| Pullup: 1| Pulldown: 0| Intr:0 [0m
+[0;32mI (10280) gpio: GPIO[3]| InputEn: 0| OutputEn: 0| OpenDrain: 0| Pullup: 1| Pulldown: 0| Intr:0 [0m
+[0;32mI (10288) FLASHER: UART connection initialized at baud rate 115200[0m
+[0;32mI (10295) MAIN: Flasher da san sang.[0m
+[0;32mI (10299) SD_METADATA: Firmware ID qr4_01 found: Path=/qr4_01/FW.bin, Version=v0.1.2[0m
+[0;32mI (10307) FLASHER: Reset sequence start...[0m
+[0;32mI (10782) FLASHER: Reset sequence done![0m
+[0;32mI (11260) FLASHER: Connected to target device.[0m
+[0;32mI (11264) FLASHER: Baudrate boosted to 460800[0m
+[0;32mI (11265) FLASHER: ==== Writing segment ====[0m
+[0;32mI (11265) FLASHER: File: /qr4_01/BOTL.bin | Offset: 0x00001000[0m
+[0;32mI (11292) FLASHER: Segment size: 17536 bytes[0m
+[0;32mI (11620) FLASHER: Progress: 23%[0m
+[0;32mI (11762) FLASHER: Progress: 46%[0m
+[0;32mI (11912) FLASHER: Progress: 70%[0m
+[0;32mI (12060) FLASHER: Progress: 93%[0m
+[0;32mI (12187) FLASHER: Progress: 100%[0m
+[0;32mI (12201) FLASHER: Segment written 17536 / 17536 bytes OK[0m
+DEBUG: Error: MD5 checksum does not match
+DEBUG: Expected:
+DEBUG: 70c9a76fcbc41d62b871521885c08342
+DEBUG: Actual:
+DEBUG: 03df9364adbf99d6ecf47ceac75862bf
+[0;31mE (12233) FLASHER: MD5 check failed for segment![0m
+[0;31mE (12238) MAIN: Flash that bai do loi flasher.[0m
+[0;32mI (19942) MAIN: Da chon: Index 5, FW ID: test_01[0m
+[0;32mI (19942) MAIN: Bat dau flash firmware: test_01[0m
+[0;32mI (19955) SD_CARD: SD initialized OK![0m
+[0;31mE (19969) uart: UART driver already installed[0m
+[0;31mE (19969) FLASHER: serial initialization failed.[0m
+[0;32mI (19969) MAIN: Flasher da san sang.[0m
+[0;32mI (19972) SD_METADATA: Firmware ID test_01 found: Path=/test_01/FW.bin, Version=v1.0[0m
+[0;32mI (19981) FLASHER: Reset sequence start...[0m
+[0;32mI (20455) FLASHER: Reset sequence done![0m
+[0;31mE (22495) FLASHER: Failed to connect to target device.[0m
+[0;31mE (22495) MAIN: Flash that bai do loi flasher.[0m
+[0;32mI (25882) MAIN: Da chon: Index 5, FW ID: test_01[0m
+[0;32mI (25882) MAIN: Bat dau flash firmware: test_01[0m
+[0;32mI (25895) SD_CARD: SD initialized OK![0m
+[0;31mE (25909) uart: UART driver already installed[0m
+[0;31mE (25909) FLASHER: serial initialization failed.[0m
+[0;32mI (25909) MAIN: Flasher da san sang.[0m
+[0;32mI (25912) SD_METADATA: Firmware ID test_01 found: Path=/test_01/FW.bin, Version=v1.0[0m
+[0;32mI (25921) FLASHER: Reset sequence start...[0m
+[0;32mI (26395) FLASHER: Reset sequence done![0m
+[0;31mE (28435) FLASHER: Failed to connect to target device.[0m
+[0;31mE (28435) MAIN: Flash that bai do loi flasher.[0m
+[0;32mI (892) gpio: GPIO[4]| InputEn: 1| OutputEn: 1| OpenDrain[0;32mI (1297) SD_CARD: SD initialized OK![0m
+[0;32mI (1856) SD_CARD: Tải Metadata hoàn tất. Tổng cộng 6 firmware được tải.[0m
+[0;32mI (1857) MAIN: Dang lay menu tu sd_card module...[0m
+[0;32mI (1860) gpio: GPIO[21]| InputEn: 1| OutputEn: 0| OpenDrain: 0| Pullup: 1| Pulldown: 0| Intr:0 [0m
+[0;32mI (1869) gpio: GPIO[20]| InputEn: 1| OutputEn: 0| OpenDrain: 0| Pullup: 1| Pulldown: 0| Intr:0 [0m
+[0;32mI (1878) gpio: GPIO[10]| InputEn: 1| OutputEn: 0| OpenDrain: 0| Pullup: 1| Pulldown: 0| Intr:0 [0m
+[0;32mI (1903) MAIN: Khoi dong hoan tat. Hien thi menu.[0m
+[0;32mI (9531) MAIN: Da chon: Index 5, FW ID: test_01[0m
+[0;32mI (9531) MAIN: Bat dau flash firmware: test_01[0m
+[0;32mI (9544) SD_CARD: SD initialized OK![0m
+[0;32mI (9558) gpio: GPIO[2]| InputEn: 0| OutputEn: 0| OpenDrain: 0| Pullup: 1| Pulldown: 0| Intr:0 [0m
+[0;32mI (9558) gpio: GPIO[3]| InputEn: 0| OutputEn: 0| OpenDrain: 0| Pullup: 1| Pulldown: 0| Intr:0 [0m
+[0;32mI (9566) FLASHER: UART connection initialized at baud rate 115200[0m
+[0;32mI (9572) MAIN: Flasher da san sang.[0m
+[0;32mI (9577) SD_METADATA: Firmware ID test_01 found: Path=/test_01/FW.bin, Version=v1.0[0m
+[0;32mI (9585) FLASHER: Reset sequence start...[0m
+[0;32mI (10060) FLASHER: Reset sequence done![0m
+[0;32mI (10737) FLASHER: Connected to target device.[0m
+[0;32mI (10741) FLASHER: Baudrate boosted to 460800[0m
+[0;32mI (10742) FLASHER: ==== Writing segment ====[0m
+[0;32mI (10742) FLASHER: File: /test_01/BOTL.bin | Offset: 0x00001000[0m
+[0;32mI (10769) FLASHER: Segment size: 24864 bytes[0m
+[0;32mI (11167) FLASHER: Progress: 16%[0m
+[0;32mI (11305) FLASHER: Progress: 32%[0m
+[0;32mI (11448) FLASHER: Progress: 49%[0m
+[0;32mI (11590) FLASHER: Progress: 65%[0m
+[0;32mI (11740) FLASHER: Progress: 82%[0m
+[0;32mI (11886) FLASHER: Progress: 98%[0m
+[0;32mI (12007) FLASHER: Progress: 100%[0m
+[0;32mI (12021) FLASHER: Segment written 24864 / 24864 bytes OK[0m
+[0;32mI (12061) FLASHER: MD5 verified OK for segment![0m
+[0;32mI (12061) FLASHER: Segment at 0x00001000 written successfully.[0m
+[0;32mI (12062) FLASHER: ==== Writing segment ====[0m
+[0;32mI (12066) FLASHER: File: /test_01/PART.bin | Offset: 0x00008000[0m
+[0;32mI (12094) FLASHER: Segment size: 3072 bytes[0m
+[0;32mI (12243) FLASHER: Progress: 100%[0m
+[0;32mI (12258) FLASHER: Segment written 3072 / 3072 bytes OK[0m
+[0;32mI (12266) FLASHER: MD5 verified OK for segment![0m
+[0;32mI (12267) FLASHER: Segment at 0x00008000 written successfully.[0m
+[0;32mI (12267) FLASHER: ==== Writing segment ====[0m
+[0;32mI (12272) FLASHER: File: /test_01/FW.bin | Offset: 0x00010000[0m
+[0;32mI (12300) FLASHER: Segment size: 124416 bytes[0m
+[0;32mI (13584) FLASHER: Progress: 3%[0m
+[0;32mI (13719) FLASHER: Progress: 6%[0m
+[0;32mI (13852) FLASHER: Progress: 9%[0m
+[0;32mI (13987) FLASHER: Progress: 13%[0m
+[0;32mI (14127) FLASHER: Progress: 16%[0m
+[0;32mI (14268) FLASHER: Progress: 19%[0m
+[0;32mI (14413) FLASHER: Progress: 23%[0m
+[0;32mI (14557) FLASHER: Progress: 26%[0m
+[0;32mI (14714) FLASHER: Progress: 29%[0m
+[0;32mI (14869) FLASHER: Progress: 32%[0m
+[0;32mI (15022) FLASHER: Progress: 36%[0m
+[0;32mI (15164) FLASHER: Progress: 39%[0m
+[0;32mI (15300) FLASHER: Progress: 42%[0m
+[0;32mI (15434) FLASHER: Progress: 46%[0m
+[0;32mI (15568) FLASHER: Progress: 49%[0m
+[0;32mI (15701) FLASHER: Progress: 52%[0m
+[0;32mI (15838) FLASHER: Progress: 55%[0m
+[0;32mI (15978) FLASHER: Progress: 59%[0m
+[0;32mI (16117) FLASHER: Progress: 62%[0m
+[0;32mI (16254) FLASHER: Progress: 65%[0m
+[0;32mI (16389) FLASHER: Progress: 69%[0m
+[0;32mI (16525) FLASHER: Progress: 72%[0m
+[0;32mI (16662) FLASHER: Progress: 75%[0m
+[0;32mI (16797) FLASHER: Progress: 79%[0m
+[0;32mI (16933) FLASHER: Progress: 82%[0m
+[0;32mI (17070) FLASHER: Progress: 85%[0m
+[0;32mI (17206) FLASHER: Progress: 88%[0m
+[0;32mI (17343) FLASHER: Progress: 92%[0m
+[0;32mI (17479) FLASHER: Progress: 95%[0m
+[0;32mI (17619) FLASHER: Progress: 98%[0m
+[0;32mI (17748) FLASHER: Progress: 100%[0m
+[0;32mI (17762) FLASHER: Segment written 124416 / 124416 bytes OK[0m
+[0;32mI (17941) FLASHER: MD5 verified OK for segment![0m
+[0;32mI (17941) FLASHER: Segment at 0x00010000 written successfully.[0m
+[0;32mI (18042) FLASHER: Resetting target to run app...[0m
+[0;32mI (18342) FLASHER: Target restarted in normal mode.[0m
+[0;32mI (18342) FLASHER: Full firmware update completed successfully![0m
+[0;32mI (18343) SD_CARD: SD Unmounted[0m
+[0;32mI (18346) MAIN: Flash hoan tat.[0m
+[0;32mI (20668) MAIN: Hello world!
+[0m
+[0;32mI (21668) MAIN: Hello world!
+[0m
+[0;32mI (22668) MAIN: Hello world!
+[0m
+[0;32mI (23668) MAIN: Hello world!
+[0m
+[0;32mI (24668) MAIN: Hello world!
+[0m
+[0;32mI (25668) MAIN: Hello world!
+[0m
+[0;32mI (26669) MAIN: Hello world!
+[0m
+[0;32mI (27669) MAIN: Hello world!
+[0m
+[0;32mI (28669) MAIN: Hello world!
+[0m
+[0;32mI (29669) MAIN: Hello world!
+[0m
+[0;32mI (30669) MAIN: Hello world!
+[0m
+[0;32mI (31669) MAIN: Hello world!
+[0m
+[0;32mI (32669) MAIN: Hello world!
+[0m
+[0;32mI (33669) MAIN: Hello world!
+[0m
+[0;32mI (34669) MAIN: Hello world!
+[0m
+[0;32mI (35669) MAIN: Hello world!
+[0m
+[0;32mI (36669) MAIN: Hello world!
+[0m
+[0;32mI (37669) MAIN: Hello world!
+[0m
+[0;32mI (38669) MAIN: Hello world!
+[0m
+[0;32mI (39669) MAIN: Hello world!
+[0m

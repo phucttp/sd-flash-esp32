@@ -1,0 +1,2044 @@
+[0;32mI (105) esp_image: segment 1: paddr=00021788 vaddr=3fc8e2ESP-ROM:esp32c3-api1-20210207
+Build:Feb  7 2021
+rst:0x15 (USB_UART_CHIP_RESET),boot:0xf (SPI_FAST_FLASH_BOOT)
+Saved PC:0x40383f90
+SPIWP:0xee
+mode:DIO, clock div:1
+load:0x3fcd5820,len:0x170c
+load:0x403cc710,len:0x968
+load:0x403ce710,len:0x2fa8
+entry 0x403cc710
+[0;32mI (24) boot: ESP-IDF v5.1.6-dirty 2nd stage bootloader[0m
+[0;32mI (24) boot: compile time Oct 16 2025 01:02:32[0m
+[0;32mI (25) boot: chip revision: v0.4[0m
+[0;32mI (28) boot.esp32c3: SPI Speed      : 80MHz[0m
+[0;32mI (33) boot.esp32c3: SPI Mode       : DIO[0m
+[0;32mI (37) boot.esp32c3: SPI Flash Size : 2MB[0m
+[0;32mI (42) boot: Enabling RNG early entropy source...[0m
+[0;32mI (47) boot: Partition Table:[0m
+[0;32mI (51) boot: ## Label            Usage          Type ST Offset   Length[0m
+[0;32mI (58) boot:  0 nvs              WiFi data        01 02 00009000 00006000[0m
+[0;32mI (66) boot:  1 phy_init         RF data          01 01 0000f000 00001000[0m
+[0;32mI (73) boot:  2 factory          factory app      00 00 00010000 00100000[0m
+[0;32mI (81) boot: End of partition table[0m
+[0;32mI (85) esp_image: segment 0: paddr=00010020 vaddr=3c040020 size=11760h ( 71520) map[0m
+[0;32mI (105) esp_image: segment 1: paddr=00021788 vaddr=3fc8e200 size=01420h (  5152) load[0m
+[0;32mI (106) esp_image: segment 2: paddr=00022bb0 vaddr=40380000 size=0d468h ( 54376) load[0m
+[0;32mI (121) esp_image: segment 3: paddr=00030020 vaddr=42000020 size=3dff8h (253944) map[0m
+[0;32mI (163) esp_image: segment 4: paddr=0006e020 vaddr=4038d468 size=00c80h (  3200) load[0m
+[0;32mI (168) boot: Loaded app from partition at offset 0x10000[0m
+[0;32mI (168) boot: Disabling RNG early entropy source...[0m
+[0;32mI (183) cpu_start: Unicore app[0m
+[0;32mI (183) cpu_start: Pro cpu up.[0m
+[0;32mI (192) cpu_start: Pro cpu start user code[0m
+[0;32mI (192) cpu_start: cpu freq: 160000000 Hz[0m
+[0;32mI (192) cpu_start: Application information:[0m
+[0;32mI (195) cpu_start: Project name:     ESP_MultiFlasher[0m
+[0;32mI (200) cpu_start: App version:      1[0m
+[0;32mI (205) cpu_start: Compile time:     Oct 16 2025 00:52:28[0m
+[0;32mI (211) cpu_start: ELF file SHA256:  d821dbca8300281c...[0m
+[0;32mI (217) cpu_start: ESP-IDF:          v5.1.6-dirty[0m
+[0;32mI (222) cpu_start: Min chip rev:     v0.3[0m
+[0;32mI (227) cpu_start: Max chip rev:     v1.99 [0m
+[0;32mI (232) cpu_start: Chip rev:         v0.4[0m
+[0;32mI (237) heap_init: Initializing. RAM available for dynamic allocation:[0m
+[0;32mI (244) heap_init: At 3FC90BB0 len 0002F450 (189 KiB): DRAM[0m
+[0;32mI (250) heap_init: At 3FCC0000 len 0001C710 (113 KiB): DRAM/RETENTION[0m
+[0;32mI (257) heap_init: At 3FCDC710 len 00002950 (10 KiB): DRAM/RETENTION/STACK[0m
+[0;32mI (265) heap_init: At 50000010 len 00001FD8 (7 KiB): RTCRAM[0m
+[0;32mI (272) spi_flash: detected chip: generic[0m
+[0;32mI (276) spi_flash: flash io: dio[0m
+[0;33mW (279) spi_flash: Detected size(4096k) larger than the size in the binary image header(2048k). Using the size in the binary image header.[0m
+[0;32mI (293) sleep: Configure to isolate all GPIO pins in sleep state[0m
+[0;32mI (299) sleep: Enable automatic switching of GPIO sleep configuration[0m
+[0;32mI (307) app_start: Starting scheduler on CPU0[0m
+[0;32mI (312) main_task: Started on CPU0[0m
+[0;32mI (316) main_task: Calling app_main()[0m
+[0;32mI (324) MAIN: --- BAT DAU KHOI DONG HE THONG ---[0m
+[0;32mI (842) gpio: GPIO[4]| InputEn: 1| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (843) gpio: GPIO[5]| InputEn: 1| OutputEn: 0| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (850) gpio: GPIO[6]| InputEn: 1| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (859) gpio: GPIO[7]| InputEn: 1| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (879) SD_CARD: SD initialized OK![0m
+[0;32mI (1438) SD_CARD: Tải Metadata hoàn tất. Tổng cộng 6 firmware được tải.[0m
+[0;31mE (1439) uart: uart_flush_input(1350): uart driver error[0m
+[0;32mI (1442) MAIN: Dang lay menu tu sd_card module...[0m
+[0;32mI (1448) gpio: GPIO[21]| InputEn: 1| OutputEn: 0| OpenDrain: 0| Pullup: 1| Pulldown: 0| Intr:0 [0m
+[0;32mI (1457) gpio: GPIO[20]| InputEn: 1| OutputEn: 0| OpenDrain: 0| Pullup: 1| Pulldown: 0| Intr:0 [0m
+[0;32mI (1466) gpio: GPIO[10]| InputEn: 1| OutputEn: 0| OpenDrain: 0| Pullup: 1| Pulldown: 0| Intr:0 [0m
+[0;32mI (1491) MAIN: Khoi dong hoan tat. Hien thi menu.[0m
+[0;31mE (1491) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (1501) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (1511) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (1521) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (1531) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (1541) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (1551) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (1561) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (1571) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (1581) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (1591) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (1601) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (1611) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (1621) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (1631) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (1641) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (1651) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (1661) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (1671) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (1681) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (1691) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (1701) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (1711) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (1721) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (1731) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (1741) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (1751) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (1761) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (1771) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (1781) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (1791) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (1801) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (1811) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (1821) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (1831) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (1841) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (1851) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (1861) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (1871) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (1881) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (1891) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (1901) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (1911) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (1921) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (1931) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (1941) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (1951) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (1961) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (1971) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (1981) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (1991) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2001) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2011) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2021) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2031) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2041) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2051) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2061) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2071) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2081) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2091) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2101) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2111) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2121) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2131) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2141) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2151) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2161) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2171) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2181) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2191) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2201) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2211) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2221) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2231) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2241) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2251) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2261) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2271) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2281) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2291) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2301) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2311) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2321) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2331) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2341) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2351) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2361) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2371) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2381) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2391) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2401) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2411) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2421) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2431) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2441) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2451) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2461) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2471) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2481) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2491) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2501) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2511) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2521) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2531) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2541) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2551) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2561) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2571) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2581) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2591) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2601) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2611) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2621) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2631) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2641) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2651) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2661) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2671) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2681) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2691) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2701) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2711) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2721) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2731) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2741) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2751) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2761) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2771) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2781) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2791) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2801) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2811) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2821) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2831) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2841) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2851) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2861) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2871) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2881) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2891) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2901) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2911) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2921) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2931) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2941) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2951) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2961) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2971) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2981) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (2991) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3001) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3011) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3021) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3031) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3041) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3051) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3061) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3071) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3081) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3091) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3101) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3111) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3121) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3131) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3141) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3151) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3161) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3171) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3181) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3191) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3201) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3211) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3221) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3231) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3241) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3251) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3261) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3271) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3281) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3291) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3301) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3311) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3321) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3331) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3341) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3351) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3361) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3371) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3381) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3391) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3401) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3411) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3421) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3431) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3441) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3451) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3461) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3471) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3481) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3491) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3501) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3511) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3521) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3531) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3541) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3551) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3561) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3571) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3581) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3591) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3601) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3611) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3621) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3631) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3641) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3651) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3661) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3671) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3681) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3691) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3701) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3711) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3721) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3731) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3741) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3751) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3761) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3771) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3781) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3791) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3801) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3811) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3821) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3831) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3841) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3851) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3861) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3871) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3881) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3891) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3901) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3911) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3921) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3931) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3941) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3951) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3961) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3971) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3981) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (3991) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4001) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4011) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4021) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4031) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4041) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4051) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4061) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4071) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4081) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4091) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4101) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4111) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4121) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4131) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4141) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4151) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4161) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4171) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4181) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4191) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4201) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4211) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4221) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4231) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4241) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4251) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4261) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4271) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4281) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4291) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4301) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4311) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4321) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4331) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4341) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4351) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4361) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4371) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4381) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4391) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4401) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4411) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4421) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4431) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4441) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4465) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4475) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4485) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4495) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4505) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4515) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4525) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4535) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4545) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4555) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4565) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4575) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4585) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4595) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4605) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4615) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4625) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4635) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4645) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4655) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4665) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4675) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4685) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4695) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4705) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4715) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4725) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4735) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4759) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4769) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4779) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4789) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4799) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4809) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4819) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4829) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4839) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4849) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4859) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4869) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4879) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4889) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4899) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4909) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4919) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4929) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4939) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4949) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4959) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4983) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (4993) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5003) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5013) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5023) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5033) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5043) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5053) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5063) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5073) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5083) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5093) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5103) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5113) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5123) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5133) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5143) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5153) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5163) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5173) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5183) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5193) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5203) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5227) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5237) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5247) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5257) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5267) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5277) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5287) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5297) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5307) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5317) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5327) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5337) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5347) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5357) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5367) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5377) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5387) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5397) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5407) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5417) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5427) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5437) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5447) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5457) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5467) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5477) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5487) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5497) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5507) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5517) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5527) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5537) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5547) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5557) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5567) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5577) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5587) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5597) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5607) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5617) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5627) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5637) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5647) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5657) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5667) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5677) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5687) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5697) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5707) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5717) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5727) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5737) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5747) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5757) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5767) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5777) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5787) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5797) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5807) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5817) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5827) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5837) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5847) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5857) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5867) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5877) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5887) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5897) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5907) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5917) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5927) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5937) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5947) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5957) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5967) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5977) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5987) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (5997) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6007) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6017) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6027) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6037) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6047) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6057) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6067) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6077) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6087) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6097) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6107) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6117) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6127) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6137) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6147) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6157) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6167) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6177) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6187) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6197) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6207) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6217) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6227) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6237) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6247) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6257) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6267) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6277) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6287) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6297) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6307) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6317) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6327) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6337) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6347) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6357) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6367) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6377) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6387) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6397) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6407) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6417) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6427) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6437) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6447) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6457) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6467) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6477) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6487) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6497) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6507) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6517) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6527) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6537) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6547) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6557) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6567) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6577) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6587) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6597) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6607) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6617) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6627) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6637) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6647) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6657) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6667) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6677) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6687) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6697) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6707) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6717) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6727) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6737) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6747) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6757) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6767) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6777) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6787) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6797) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6807) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6817) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6827) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6837) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6847) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6857) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6867) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6877) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6887) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6897) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6907) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6917) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6927) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6937) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6947) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6957) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6967) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6977) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6987) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (6997) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7007) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7017) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7027) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7037) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7047) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7057) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7067) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7077) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7087) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7097) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7107) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7117) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7127) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7137) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7147) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7157) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7167) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7177) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7187) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7197) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7207) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7217) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7227) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7237) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7247) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7257) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7281) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7291) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7301) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7311) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7321) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7331) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7341) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7351) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7361) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7371) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7381) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7391) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7401) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7411) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7421) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7431) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7441) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7451) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7461) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7471) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7481) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7491) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7501) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7511) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7521) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7531) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7541) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7551) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7561) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7571) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7581) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7591) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7601) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7611) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7621) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7631) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7641) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7651) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7661) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7671) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7681) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7691) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7701) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7711) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7721) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7731) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7741) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7751) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7761) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7771) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7781) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7791) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7801) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7811) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7821) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7831) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7841) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7851) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7861) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7871) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7881) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7891) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7901) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7911) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7921) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7931) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7941) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7951) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7961) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7971) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7981) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (7991) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (8001) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (8011) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (8021) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (8031) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (8041) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (8051) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (8061) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (8071) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (8081) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (8091) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (8101) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (8111) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (8121) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (8131) uart: uart_read_bytes(1289): uart driver error[0m
+[0;31mE (8141) uart: uart_read_bytes(1289): uart driver error[0m
+[0;32mI (8151) MAIN: Da chon: Index 5, FW ID: test_01[0m
+[0;32mI (8151) MAIN: Bat dau flash firmware: test_01[0m
+[0;32mI (8164) SD_CARD: SD initialized OK![0m
+[0;32mI (8178) gpio: GPIO[2]| InputEn: 0| OutputEn: 0| OpenDrain: 0| Pullup: 1| Pulldown: 0| Intr:0 [0m
+[0;32mI (8178) gpio: GPIO[3]| InputEn: 0| OutputEn: 0| OpenDrain: 0| Pullup: 1| Pulldown: 0| Intr:0 [0m
+[0;32mI (8186) FLASHER: UART connection initialized at baud rate 115200[0m
+[0;32mI (8192) MAIN: Flasher da san sang.[0m
+[0;32mI (8197) SD_METADATA: Firmware ID test_01 found: Path=/test_01/FW.bin, Version=v1.0[0m
+[0;32mI (8205) FLASHER: Reset sequence start...[0m
+[0;32mI (8680) FLASHER: Reset sequence done![0m
+[0;32mI (9353) FLASHER: Connected to target device.[0m
+[0;32mI (9357) FLASHER: Baudrate boosted to 460800[0m
+[0;32mI (9358) FLASHER: ==== Writing segment ====[0m
+[0;32mI (9358) FLASHER: File: /test_01/BOTL.bin | Offset: 0x00001000[0m
+[0;32mI (9385) FLASHER: Segment size: 24864 bytes[0m
+[0;32mI (9705) FLASHER: Progress: 16%[0m
+[0;32mI (9844) FLASHER: Progress: 32%[0m
+[0;32mI (9987) FLASHER: Progress: 49%[0m
+[0;32mI (10129) FLASHER: Progress: 65%[0m
+[0;32mI (10279) FLASHER: Progress: 82%[0m
+[0;32mI (10425) FLASHER: Progress: 98%[0m
+[0;32mI (10546) FLASHER: Progress: 100%[0m
+[0;32mI (10561) FLASHER: Segment written 24864 / 24864 bytes OK[0m
+[0;32mI (10600) FLASHER: MD5 verified OK for segment![0m
+[0;32mI (10600) FLASHER: Segment at 0x00001000 written successfully.[0m
+[0;32mI (10601) FLASHER: ==== Writing segment ====[0m
+[0;32mI (10606) FLASHER: File: /test_01/PART.bin | Offset: 0x00008000[0m
+[0;32mI (10634) FLASHER: Segment size: 3072 bytes[0m
+[0;32mI (10776) FLASHER: Progress: 100%[0m
+[0;32mI (10790) FLASHER: Segment written 3072 / 3072 bytes OK[0m
+[0;32mI (10799) FLASHER: MD5 verified OK for segment![0m
+[0;32mI (10799) FLASHER: Segment at 0x00008000 written successfully.[0m
+[0;32mI (10800) FLASHER: ==== Writing segment ====[0m
+[0;32mI (10805) FLASHER: File: /test_01/FW.bin | Offset: 0x00010000[0m
+[0;32mI (10832) FLASHER: Segment size: 124416 bytes[0m
+[0;32mI (11746) FLASHER: Progress: 3%[0m
+[0;32mI (11881) FLASHER: Progress: 6%[0m
+[0;32mI (12015) FLASHER: Progress: 9%[0m
+[0;32mI (12149) FLASHER: Progress: 13%[0m
+[0;32mI (12289) FLASHER: Progress: 16%[0m
+[0;32mI (12430) FLASHER: Progress: 19%[0m
+[0;32mI (12575) FLASHER: Progress: 23%[0m
+[0;32mI (12719) FLASHER: Progress: 26%[0m
+[0;32mI (12875) FLASHER: Progress: 29%[0m
+[0;32mI (13030) FLASHER: Progress: 32%[0m
+[0;32mI (13183) FLASHER: Progress: 36%[0m
+[0;32mI (13325) FLASHER: Progress: 39%[0m
+[0;32mI (13461) FLASHER: Progress: 42%[0m
+[0;32mI (13594) FLASHER: Progress: 46%[0m
+[0;32mI (13728) FLASHER: Progress: 49%[0m
+[0;32mI (13862) FLASHER: Progress: 52%[0m
+[0;32mI (13998) FLASHER: Progress: 55%[0m
+[0;32mI (14138) FLASHER: Progress: 59%[0m
+[0;32mI (14277) FLASHER: Progress: 62%[0m
+[0;32mI (14413) FLASHER: Progress: 65%[0m
+[0;32mI (14548) FLASHER: Progress: 69%[0m
+[0;32mI (14684) FLASHER: Progress: 72%[0m
+[0;32mI (14821) FLASHER: Progress: 75%[0m
+[0;32mI (14956) FLASHER: Progress: 79%[0m
+[0;32mI (15093) FLASHER: Progress: 82%[0m
+[0;32mI (15229) FLASHER: Progress: 85%[0m
+[0;32mI (15365) FLASHER: Progress: 88%[0m
+[0;32mI (15502) FLASHER: Progress: 92%[0m
+[0;32mI (15638) FLASHER: Progress: 95%[0m
+[0;32mI (15777) FLASHER: Progress: 98%[0m
+[0;32mI (15907) FLASHER: Progress: 100%[0m
+[0;32mI (15921) FLASHER: Segment written 124416 / 124416 bytes OK[0m
+[0;32mI (16100) FLASHER: MD5 verified OK for segment![0m
+[0;32mI (16100) FLASHER: Segment at 0x00010000 written successfully.[0m
+[0;32mI (16201) FLASHER: Resetting target to run app...[0m
+[0;32mI (16501) FLASHER: Target restarted in normal mode.[0m
+[0;32mI (16501) FLASHER: Full firmware update completed successfully![0m
+[0;32mI (16502) SD_CARD: SD Unmounted[0m
+[0;32mI (16505) MAIN: Flash hoan tat.[0m
+[0;32mI (18536) MAIN: UART1 received: x�x�x�x��xxxx�x����x�[0m
+[0;32mI (18556) MAIN: UART1 received: x�x�x��
+[0;32mI (18737) MAIN: UART1 received: [0m
+[0;32mI (19737) MAIN: UART1 received: [0m
+[0;32mI (20737) MAIN: UART1 received: [0m
+[0;32mI (21737) MAIN: UART1 received: [0m
+[0;32mI (22737) MAIN: UART1 received: [0m
+[0;32mI (23737) MAIN: UART1 received: [0m
+[0;32mI (24737) MAIN: UART1 received: [0m
+[0;32mI (25737) MAIN: UART1 received: [0m
+[0;32mI (26737) MAIN: UART1 received: [0m
+[0;32mI (27737) MAIN: UART1 received: [0m
+[0;32mI (28737) MAIN: UART1 received: [0m
+[0;32mI (29737) MAIN: UART1 received: [0m
+[0;32mI (30737) MAIN: UART1 received: [0m
+[0;32mI (31737) MAIN: UART1 received: [0m
+[0;32mI (32737) MAIN: UART1 received: [0m
+[0;32mI (33737) MAIN: UART1 received: [0m
+[0;32mI (34737) MAIN: UART1 received: [0m
+[0;32mI (35737) MAIN: UART1 received: [0m
+[0;32mI (36738) MAIN: UART1 received: [0m
+[0;32mI (37738) MAIN: UART1 received: [0m
+[0;32mI (38738) MAIN: UART1 received: [0m
+[0;32mI (39738) MAIN: UART1 received: [0m
+[0;32mI (40738) MAIN: UART1 received: [0m
+[0;32mI (41738) MAIN: UART1 received: [0m
+[0;32mI (42738) MAIN: UART1 received: [0m
+[0;32mI (43738) MAIN: UART1 received: [0m
+[0;32mI (44738) MAIN: UART1 received: [0m
+[0;32mI (45738) MAIN: UART1 received: [0m
+[0;32mI (46738) MAIN: UART1 received: [0m
+[0;32mI (47738) MAIN: UART1 received: [0m
+[0;32mI (48738) MAIN: UART1 received: [0m
+[0;32mI (49738) MAIN: UART1 received: [0m
+[0;32mI (50738) MAIN: UART1 received: [0m
+[0;32mI (51738) MAIN: UART1 received: [0m
+[0;32mI (52738) MAIN: UART1 received: [0m
+[0;32mI (53738) MAIN: UART1 received: [0m
+[0;32mI (54738) MAIN: UART1 received: [0m
+[0;32mI (55738) MAIN: UART1 received: [0m
+[0;32mI (56738) MAIN: UART1 received: [0m
+[0;32mI (57738) MAIN: UART1 received: [0m
+[0;32mI (58738) MAIN: UART1 received: [0m
+[0;32mI (59738) MAIN: UART1 received: [0m
+[0;32mI (60738) MAIN: UART1 received: [0m
+[0;32mI (61738) MAIN: UART1 received: [0m
+[0;32mI (62738) MAIN: UART1 received: [0m
+[0;32mI (63738) MAIN: UART1 received: [0m
+[0;32mI (64739) MAIN: UART1 received: [0m
+[0;32mI (65739) MAIN: UART1 received: [0m
+[0;32mI (66739) MAIN: UART1 received: [0m
+[0;32mI (67739) MAIN: UART1 received: [0m
+[0;32mI (68739) MAIN: UART1 received: [0m
+[0;32mI (69739) MAIN: UART1 received: [0m
+[0;32mI (70739) MAIN: UART1 received: [0m
+[0;32mI (71739) MAIN: UART1 received: [0m
+[0;32mI (72739) MAIN: UART1 received: [0m
+[0;32mI (73739) MAIN: UART1 received: [0m
+[0;32mI (74739) MAIN: UART1 received: [0m
+[0;32mI (75739) MAIN: UART1 received: [0m
+[0;32mI (76739) MAIN: UART1 received: [0m
+[0;32mI (77739) MAIN: UART1 received: [0m
+[0;32mI (78739) MAIN: UART1 received: [0m
+[0;32mI (79739) MAIN: UART1 received: [0m
+[0;32mI (80739) MAIN: UART1 received: [0m
+[0;32mI (81739) MAIN: UART1 received: [0m
+[0;32mI (82739) MAIN: UART1 received: [0m
+[0;32mI (83739) MAIN: UART1 received: [0m
+[0;32mI (84739) MAIN: UART1 received: [0m
+[0;32mI (85739) MAIN: UART1 received: [0m
+[0;32mI (86739) MAIN: UART1 received: [0m
+[0;32mI (87739) MAIN: UART1 received: [0m
+[0;32mI (88739) MAIN: UART1 received: [0m
+[0;32mI (89739) MAIN: UART1 received: [0m
+[0;32mI (90739) MAIN: UART1 received: [0m
+[0;32mI (91739) MAIN: UART1 received: [0m
+[0;32mI (92740) MAIN: UART1 received: [0m
+[0;32mI (93740) MAIN: UART1 received: [0m
+[0;32mI (94740) MAIN: UART1 received: [0m
+[0;32mI (95740) MAIN: UART1 received: [0m
+[0;32mI (96740) MAIN: UART1 received: [0m
+[0;32mI (97740) MAIN: UART1 received: [0m
+[0;32mI (98740) MAIN: UART1 received: [0m
+[0;32mI (99740) MAIN: UART1 received: [0m
+[0;32mI (100740) MAIN: UART1 received: [0m
+[0;32mI (101740) MAIN: UART1 received: [0m
+[0;32mI (102740) MAIN: UART1 received: [0m
+[0;32mI (103740) MAIN: UART1 received: [0m
+[0;32mI (104740) MAIN: UART1 received: [0m
+[0;32mI (105740) MAIN: UART1 received: [0m
+[0;32mI (106740) MAIN: UART1 received: [0m
+[0;32mI (107740) MAIN: UART1 received: [0m
+[0;32mI (108740) MAIN: UART1 received: [0m
+[0;32mI (109740) MAIN: UART1 received: [0m
+[0;32mI (110740) MAIN: UART1 received: [0m
+[0;32mI (111740) MAIN: UART1 received: [0m
+[0;32mI (112740) MAIN: UART1 received: [0m
+[0;32mI (113740) MAIN: UART1 received: [0m
+[0;32mI (114740) MAIN: UART1 received: [0m
+[0;32mI (115740) MAIN: UART1 received: [0m
+[0;32mI (116740) MAIN: UART1 received: [0m
+[0;32mI (117740) MAIN: UART1 received: [0m
+[0;32mI (118740) MAIN: UART1 received: [0m
+[0;32mI (119740) MAIN: UART1 received: [0m
+[0;32mI (120741) MAIN: UART1 received: [0m
+[0;32mI (121741) MAIN: UART1 received: [0m
+[0;32mI (122741) MAIN: UART1 received: [0m
+[0;32mI (123741) MAIN: UART1 received: [0m
+[0;32mI (124741) MAIN: UART1 received: [0m
+[0;32mI (125741) MAIN: UART1 received: [0m
+[0;32mI (126741) MAIN: UART1 received: [0m
+[0;32mI (127741) MAIN: UART1 received: [0m
+[0;32mI (128741) MAIN: UART1 received: [0m
+[0;32mI (129741) MAIN: UART1 received: [0m
+[0;32mI (130741) MAIN: UART1 received: [0m
+[0;32mI (131741) MAIN: UART1 received: [0m
+[0;32mI (132741) MAIN: UART1 received: [0m
+[0;32mI (133741) MAIN: UART1 received: [0m
+[0;32mI (134741) MAIN: UART1 received: [0m
+[0;32mI (135741) MAIN: UART1 received: [0m
+[0;32mI (136741) MAIN: UART1 received: [0m
+[0;32mI (137741) MAIN: UART1 received: [0m
+[0;32mI (138741) MAIN: UART1 received: [0m
+[0;32mI (139741) MAIN: UART1 received: [0m
+[0;32mI (140741) MAIN: UART1 received: [0m
+[0;32mI (141741) MAIN: UART1 received: [0m
+[0;32mI (142741) MAIN: UART1 received: [0m
+[0;32mI (143741) MAIN: UART1 received: [0m
+[0;32mI (144741) MAIN: UART1 received: [0m
+[0;32mI (145741) MAIN: UART1 received: [0m
+[0;32mI (146741) MAIN: UART1 received: [0m
+[0;32mI (147741) MAIN: UART1 received: [0m
+[0;32mI (148742) MAIN: UART1 received: [0m
+[0;32mI (149742) MAIN: UART1 received: [0m
+[0;32mI (150742) MAIN: UART1 received: [0m
+[0;32mI (151742) MAIN: UART1 received: [0m
+[0;32mI (152742) MAIN: UART1 received: [0m
+[0;32mI (153742) MAIN: UART1 received: [0m
+[0;32mI (154742) MAIN: UART1 received: [0m
+[0;32mI (155742) MAIN: UART1 received: [0m
+[0;32mI (156742) MAIN: UART1 received: [0m
+[0;32mI (157742) MAIN: UART1 received: [0m
+[0;32mI (158742) MAIN: UART1 received: [0m
+[0;32mI (159742) MAIN: UART1 received: [0m
+[0;32mI (160742) MAIN: UART1 received: [0m
+[0;32mI (161742) MAIN: UART1 received: [0m
+[0;32mI (162742) MAIN: UART1 received: [0m
+[0;32mI (163742) MAIN: UART1 received: [0m
+[0;32mI (164742) MAIN: UART1 received: [0m
+[0;32mI (165742) MAIN: UART1 received: [0m
+[0;32mI (166742) MAIN: UART1 received: [0m
+[0;32mI (167742) MAIN: UART1 received: [0m
+[0;32mI (168742) MAIN: UART1 received: [0m
+[0;32mI (169742) MAIN: UART1 received: [0m
+[0;32mI (170742) MAIN: UART1 received: [0m
+[0;32mI (171742) MAIN: UART1 received: [0m
+[0;32mI (172742) MAIN: UART1 received: [0m
+[0;32mI (173742) MAIN: UART1 received: [0m
+[0;32mI (174742) MAIN: UART1 received: [0m
+[0;32mI (175742) MAIN: UART1 received: [0m
+[0;32mI (176742) MAIN: UART1 received: [0m
+[0;32mI (177743) MAIN: UART1 received: [0m
+[0;32mI (178743) MAIN: UART1 received: [0m
+[0;32mI (179743) MAIN: UART1 received: [0m
+[0;32mI (180743) MAIN: UART1 received: [0m
+[0;32mI (181743) MAIN: UART1 received: [0m
+[0;32mI (182743) MAIN: UART1 received: [0m
+[0;32mI (183743) MAIN: UART1 received: [0m
+[0;32mI (184743) MAIN: UART1 received: [0m
+[0;32mI (185743) MAIN: UART1 received: [0m
+[0;32mI (186743) MAIN: UART1 received: [0m
+[0;32mI (187743) MAIN: UART1 received: [0m
+[0;32mI (188743) MAIN: UART1 received: [0m
+[0;32mI (189743) MAIN: UART1 received: [0m
+[0;32mI (190743) MAIN: UART1 received: [0m
+[0;32mI (191743) MAIN: UART1 received: [0m
+[0;32mI (192743) MAIN: UART1 received: [0m
+[0;32mI (193743) MAIN: UART1 received: [0m
+[0;32mI (194743) MAIN: UART1 received: [0m
+[0;32mI (195743) MAIN: UART1 received: [0m
+[0;32mI (196743) MAIN: UART1 received: [0m
+[0;32mI (197743) MAIN: UART1 received: [0m
+[0;32mI (198743) MAIN: UART1 received: [0m
+[0;32mI (199743) MAIN: UART1 received: [0m
+[0;32mI (200743) MAIN: UART1 received: [0m
+[0;32mI (201743) MAIN: UART1 received: [0m
+[0;32mI (202743) MAIN: UART1 received: [0m
+[0;32mI (203743) MAIN: UART1 received: [0m
+[0;32mI (204743) MAIN: UART1 received: [0m
+[0;32mI (205744) MAIN: UART1 received: [0m
+[0;32mI (206744) MAIN: UART1 received: [0m
+[0;32mI (207744) MAIN: UART1 received: [0m
+[0;32mI (208744) MAIN: UART1 received: [0m
+[0;32mI (209744) MAIN: UART1 received: [0m
+[0;32mI (210744) MAIN: UART1 received: [0m
+[0;32mI (211744) MAIN: UART1 received: [0m
+[0;32mI (212744) MAIN: UART1 received: [0m
+[0;32mI (213744) MAIN: UART1 received: [0m
+[0;32mI (214744) MAIN: UART1 received: [0m
+[0;32mI (215744) MAIN: UART1 received: [0m
+[0;32mI (216744) MAIN: UART1 received: [0m
+[0;32mI (217744) MAIN: UART1 received: [0m
+[0;32mI (218744) MAIN: UART1 received: [0m
+[0;32mI (219744) MAIN: UART1 received: [0m
+[0;32mI (220744) MAIN: UART1 received: [0m
+[0;32mI (221744) MAIN: UART1 received: [0m
+[0;32mI (222744) MAIN: UART1 received: [0m
+[0;32mI (223744) MAIN: UART1 received: [0m
+[0;32mI (224744) MAIN: UART1 received: [0m
+[0;32mI (225744) MAIN: UART1 received: [0m
+[0;32mI (226744) MAIN: UART1 received: [0m
+[0;32mI (227744) MAIN: UART1 received: [0m
+[0;32mI (228744) MAIN: UART1 received: [0m
+[0;32mI (229744) MAIN: UART1 received: [0m
+[0;32mI (230744) MAIN: UART1 received: [0m
+[0;32mI (231744) MAIN: UART1 received: [0m
+[0;32mI (232744) MAIN: UART1 received: [0m
+[0;32mI (233745) MAIN: UART1 received: [0m
+[0;32mI (234745) MAIN: UART1 received: [0m
+[0;32mI (235745) MAIN: UART1 received: [0m
+[0;32mI (236745) MAIN: UART1 received: [0m
+[0;32mI (237745) MAIN: UART1 received: [0m
+[0;32mI (238745) MAIN: UART1 received: [0m
+[0;32mI (239745) MAIN: UART1 received: [0m
+[0;32mI (240745) MAIN: UART1 received: [0m
+[0;32mI (241745) MAIN: UART1 received: [0m
+[0;32mI (242745) MAIN: UART1 received: [0m
+[0;32mI (243745) MAIN: UART1 received: [0m
+[0;32mI (244745) MAIN: UART1 received: [0m
+[0;32mI (245745) MAIN: UART1 received: [0m
+[0;32mI (246745) MAIN: UART1 received: [0m
+[0;32mI (247745) MAIN: UART1 received: [0m
+[0;32mI (248745) MAIN: UART1 received: [0m
+[0;32mI (249745) MAIN: UART1 received: [0m
+[0;32mI (250745) MAIN: UART1 received: [0m
+[0;32mI (251745) MAIN: UART1 received: [0m
+[0;32mI (252745) MAIN: UART1 received: [0m
+[0;32mI (253745) MAIN: UART1 received: [0m
+[0;32mI (254745) MAIN: UART1 received: [0m
+[0;32mI (255745) MAIN: UART1 received: [0m
+[0;32mI (256745) MAIN: UART1 received: [0m
+[0;32mI (257745) MAIN: UART1 received: [0m
+[0;32mI (258745) MAIN: UART1 received: [0m
+[0;32mI (259745) MAIN: UART1 received: [0m
+[0;32mI (260745) MAIN: UART1 received: [0m
+[0;32mI (261746) MAIN: UART1 received: [0m
+[0;32mI (262746) MAIN: UART1 received: [0m
+[0;32mI (263746) MAIN: UART1 received: [0m
+[0;32mI (264746) MAIN: UART1 received: [0m
+[0;32mI (265746) MAIN: UART1 received: [0m
+[0;32mI (266746) MAIN: UART1 received: [0m
+[0;32mI (267746) MAIN: UART1 received: [0m
+[0;32mI (268746) MAIN: UART1 received: [0m
+[0;32mI (269746) MAIN: UART1 received: [0m
+[0;32mI (270746) MAIN: UART1 received: [0m
+[0;32mI (271746) MAIN: UART1 received: [0m
+[0;32mI (272746) MAIN: UART1 received: [0m
+[0;32mI (273746) MAIN: UART1 received: [0m
+[0;32mI (274746) MAIN: UART1 received: [0m
+[0;32mI (275746) MAIN: UART1 received: [0m
+[0;32mI (276746) MAIN: UART1 received: [0m
+[0;32mI (277746) MAIN: UART1 received: [0m
+[0;32mI (278746) MAIN: UART1 received: [0m
+[0;32mI (279746) MAIN: UART1 received: [0m
+[0;32mI (280746) MAIN: UART1 received: [0m
+[0;32mI (281746) MAIN: UART1 received: [0m
+[0;32mI (282746) MAIN: UART1 received: [0m
+[0;32mI (283746) MAIN: UART1 received: [0m
+[0;32mI (284746) MAIN: UART1 received: [0m
+[0;32mI (285746) MAIN: UART1 received: [0m
+[0;32mI (286746) MAIN: UART1 received: [0m
+[0;32mI (287746) MAIN: UART1 received: [0m
+[0;32mI (288746) MAIN: UART1 received: [0m
+[0;32mI (289747) MAIN: UART1 received: [0m
+[0;32mI (290747) MAIN: UART1 received: [0m
+[0;32mI (291747) MAIN: UART1 received: [0m
+[0;32mI (292747) MAIN: UART1 received: [0m
+[0;32mI (293747) MAIN: UART1 received: [0m
+[0;32mI (294747) MAIN: UART1 received: [0m
+[0;32mI (295747) MAIN: UART1 received: [0m
+[0;32mI (296747) MAIN: UART1 received: [0m
+[0;32mI (297747) MAIN: UART1 received: [0m
+[0;32mI (298747) MAIN: UART1 received: [0m
+[0;32mI (299747) MAIN: UART1 received: [0m
+[0;32mI (300747) MAIN: UART1 received: [0m
+[0;32mI (301747) MAIN: UART1 received: [0m
+[0;32mI (302747) MAIN: UART1 received: [0m
+[0;32mI (303747) MAIN: UART1 received: [0m
+[0;32mI (304747) MAIN: UART1 received: [0m
+[0;32mI (305747) MAIN: UART1 received: [0m
+[0;32mI (306747) MAIN: UART1 received: [0m
+[0;32mI (307747) MAIN: UART1 received: [0m
+[0;32mI (308747) MAIN: UART1 received: [0m
+[0;32mI (309747) MAIN: UART1 received: [0m
+[0;32mI (310747) MAIN: UART1 received: [0m
+[0;32mI (311747) MAIN: UART1 received: [0m
+[0;32mI (312747) MAIN: UART1 received: [0m
+[0;32mI (313747) MAIN: UART1 received: [0m
+[0;32mI (314747) MAIN: UART1 received: [0m
+[0;32mI (315747) MAIN: UART1 received: [0m
+[0;32mI (316747) MAIN: UART1 received: [0m
+[0;32mI (317748) MAIN: UART1 received: [0m
+[0;32mI (318748) MAIN: UART1 received: [0m
+[0;32mI (319748) MAIN: UART1 received: [0m
+[0;32mI (320748) MAIN: UART1 received: [0m
+[0;32mI (321748) MAIN: UART1 received: [0m
+[0;32mI (322748) MAIN: UART1 received: [0m
+[0;32mI (323748) MAIN: UART1 received: [0m
+[0;32mI (324748) MAIN: UART1 received: [0m
+[0;32mI (325748) MAIN: UART1 received: [0m
+[0;32mI (326748) MAIN: UART1 received: [0m
+[0;32mI (327748) MAIN: UART1 received: [0m
+[0;32mI (328748) MAIN: UART1 received: [0m
+[0;32mI (329748) MAIN: UART1 received: [0m
+[0;32mI (330748) MAIN: UART1 received: [0m
+[0;32mI (331748) MAIN: UART1 received: [0m
+[0;32mI (332748) MAIN: UART1 received: [0m
+[0;32mI (333748) MAIN: UART1 received: [0m
+[0;32mI (334748) MAIN: UART1 received: [0m
+[0;32mI (335748) MAIN: UART1 received: [0m
+[0;32mI (336748) MAIN: UART1 received: [0m
+[0;32mI (337748) MAIN: UART1 received: [0m
+[0;32mI (338748) MAIN: UART1 received: [0m
+[0;32mI (339748) MAIN: UART1 received: [0m
+[0;32mI (340748) MAIN: UART1 received: [0m
+[0;32mI (341748) MAIN: UART1 received: [0m
+[0;32mI (342748) MAIN: UART1 received: [0m
+[0;32mI (343748) MAIN: UART1 received: [0m
+[0;32mI (344748) MAIN: UART1 received: [0m
+[0;32mI (345749) MAIN: UART1 received: [0m
+[0;32mI (346749) MAIN: UART1 received: [0m
+[0;32mI (347749) MAIN: UART1 received: [0m
+[0;32mI (348749) MAIN: UART1 received: [0m
+[0;32mI (349749) MAIN: UART1 received: [0m
+[0;32mI (350749) MAIN: UART1 received: [0m
+[0;32mI (351749) MAIN: UART1 received: [0m
+[0;32mI (352749) MAIN: UART1 received: [0m
+[0;32mI (353749) MAIN: UART1 received: [0m
+[0;32mI (354749) MAIN: UART1 received: [0m
+[0;32mI (355749) MAIN: UART1 received: [0m
+[0;32mI (356749) MAIN: UART1 received: [0m
+[0;32mI (357749) MAIN: UART1 received: [0m
+[0;32mI (358749) MAIN: UART1 received: [0m
+[0;32mI (359749) MAIN: UART1 received: [0m
+[0;32mI (360749) MAIN: UART1 received: [0m
+[0;32mI (361749) MAIN: UART1 received: [0m
+[0;32mI (362749) MAIN: UART1 received: [0m
+[0;32mI (363749) MAIN: UART1 received: [0m
+[0;32mI (364749) MAIN: UART1 received: [0m
+[0;32mI (365749) MAIN: UART1 received: [0m
+[0;32mI (366749) MAIN: UART1 received: [0m
+[0;32mI (367749) MAIN: UART1 received: [0m
+[0;32mI (368749) MAIN: UART1 received: [0m
+[0;32mI (369749) MAIN: UART1 received: [0m
+[0;32mI (370749) MAIN: UART1 received: [0m
+[0;32mI (371749) MAIN: UART1 received: [0m
+[0;32mI (372749) MAIN: UART1 received: [0m
+[0;32mI (373749) MAIN: UART1 received: [0m
+[0;32mI (374750) MAIN: UART1 received: [0m
+[0;32mI (375750) MAIN: UART1 received: [0m
+[0;32mI (376750) MAIN: UART1 received: [0m
+[0;32mI (377750) MAIN: UART1 received: [0m
+[0;32mI (378750) MAIN: UART1 received: [0m
+[0;32mI (379750) MAIN: UART1 received: [0m
+[0;32mI (380750) MAIN: UART1 received: [0m
+[0;32mI (381750) MAIN: UART1 received: [0m
+[0;32mI (382750) MAIN: UART1 received: [0m
+[0;32mI (383750) MAIN: UART1 received: [0m
+[0;32mI (384750) MAIN: UART1 received: [0m
+[0;32mI (385750) MAIN: UART1 received: [0m
+[0;32mI (386750) MAIN: UART1 received: [0m
+[0;32mI (387750) MAIN: UART1 received: [0m
+[0;32mI (388750) MAIN: UART1 received: [0m
+[0;32mI (389750) MAIN: UART1 received: [0m
+[0;32mI (390750) MAIN: UART1 received: [0m
+[0;32mI (391750) MAIN: UART1 received: [0m
+[0;32mI (392750) MAIN: UART1 received: [0m
+[0;32mI (393750) MAIN: UART1 received: [0m
+[0;32mI (394750) MAIN: UART1 received: [0m
+[0;32mI (395750) MAIN: UART1 received: [0m
+[0;32mI (396750) MAIN: UART1 received: [0m
+[0;32mI (397750) MAIN: UART1 received: [0m
+[0;32mI (398750) MAIN: UART1 received: [0m
+[0;32mI (399750) MAIN: UART1 received: [0m
+[0;32mI (400750) MAIN: UART1 received: [0m
+[0;32mI (401750) MAIN: UART1 received: [0m
+[0;32mI (402751) MAIN: UART1 received: [0m
+[0;32mI (403751) MAIN: UART1 received: [0m
+[0;32mI (404751) MAIN: UART1 received: [0m
+[0;32mI (405751) MAIN: UART1 received: [0m
+[0;32mI (406751) MAIN: UART1 received: [0m
+[0;32mI (407751) MAIN: UART1 received: [0m
+[0;32mI (408751) MAIN: UART1 received: [0m
+[0;32mI (409751) MAIN: UART1 received: [0m
+[0;32mI (410751) MAIN: UART1 received: [0m
+[0;32mI (411751) MAIN: UART1 received: [0m
+[0;32mI (412751) MAIN: UART1 received: [0m
+[0;32mI (413751) MAIN: UART1 received: [0m
+[0;32mI (414751) MAIN: UART1 received: [0m
+[0;32mI (415751) MAIN: UART1 received: [0m
+[0;32mI (416751) MAIN: UART1 received: [0m
+[0;32mI (417751) MAIN: UART1 received: [0m
+[0;32mI (418751) MAIN: UART1 received: [0m
+[0;32mI (419751) MAIN: UART1 received: [0m
+[0;32mI (420751) MAIN: UART1 received: [0m
+[0;32mI (421751) MAIN: UART1 received: [0m
+[0;32mI (422751) MAIN: UART1 received: [0m
+[0;32mI (423751) MAIN: UART1 received: [0m
+[0;32mI (424751) MAIN: UART1 received: [0m
+[0;32mI (425751) MAIN: UART1 received: [0m
+[0;32mI (426751) MAIN: UART1 received: [0m
+[0;32mI (427751) MAIN: UART1 received: [0m
+[0;32mI (428751) MAIN: UART1 received: [0m
+[0;32mI (429751) MAIN: UART1 received: [0m
+[0;32mI (430752) MAIN: UART1 received: [0m
+[0;32mI (431752) MAIN: UART1 received: [0m
+[0;32mI (432752) MAIN: UART1 received: [0m
+[0;32mI (433752) MAIN: UART1 received: [0m
+[0;32mI (434752) MAIN: UART1 received: [0m
+[0;32mI (435752) MAIN: UART1 received: [0m
+[0;32mI (436752) MAIN: UART1 received: [0m
+[0;32mI (437752) MAIN: UART1 received: [0m
+[0;32mI (438752) MAIN: UART1 received: [0m
+[0;32mI (439752) MAIN: UART1 received: [0m
+[0;32mI (440752) MAIN: UART1 received: [0m
+[0;32mI (441752) MAIN: UART1 received: [0m
+[0;32mI (442752) MAIN: UART1 received: [0m
+[0;32mI (443752) MAIN: UART1 received: [0m
+[0;32mI (444752) MAIN: UART1 received: [0m
+[0;32mI (445752) MAIN: UART1 received: [0m
+[0;32mI (446752) MAIN: UART1 received: [0m
+[0;32mI (447752) MAIN: UART1 received: [0m
+[0;32mI (448752) MAIN: UART1 received: [0m
+[0;32mI (449752) MAIN: UART1 received: [0m
+[0;32mI (450752) MAIN: UART1 received: [0m
+[0;32mI (451752) MAIN: UART1 received: [0m
+[0;32mI (452752) MAIN: UART1 received: [0m
+[0;32mI (453752) MAIN: UART1 received: [0m
+[0;32mI (454752) MAIN: UART1 received: [0m
+[0;32mI (455752) MAIN: UART1 received: [0m
+[0;32mI (456752) MAIN: UART1 received: [0m
+[0;32mI (457752) MAIN: UART1 received: [0m
+[0;32mI (458753) MAIN: UART1 received: [0m
+[0;32mI (459753) MAIN: UART1 received: [0m
+[0;32mI (460753) MAIN: UART1 received: [0m
+[0;32mI (461753) MAIN: UART1 received: [0m
+[0;32mI (462753) MAIN: UART1 received: [0m
+[0;32mI (463753) MAIN: UART1 received: [0m
+[0;32mI (464753) MAIN: UART1 received: [0m
+[0;32mI (465753) MAIN: UART1 received: [0m
+[0;32mI (466753) MAIN: UART1 received: [0m
+[0;32mI (467753) MAIN: UART1 received: [0m
+[0;32mI (468753) MAIN: UART1 received: [0m
+[0;32mI (469753) MAIN: UART1 received: [0m
+[0;32mI (470753) MAIN: UART1 received: [0m
+[0;32mI (471753) MAIN: UART1 received: [0m
+[0;32mI (472753) MAIN: UART1 received: [0m
+[0;32mI (473753) MAIN: UART1 received: [0m
+[0;32mI (474753) MAIN: UART1 received: [0m
+[0;32mI (475753) MAIN: UART1 received: [0m
+[0;32mI (476753) MAIN: UART1 received: [0m
+[0;32mI (477753) MAIN: UART1 received: [0m
+[0;32mI (478753) MAIN: UART1 received: [0m
+[0;32mI (479753) MAIN: UART1 received: [0m
+[0;32mI (480753) MAIN: UART1 received: [0m
+[0;32mI (481753) MAIN: UART1 received: [0m
+[0;32mI (482753) MAIN: UART1 received: [0m
+[0;32mI (483753) MAIN: UART1 received: [0m
+[0;32mI (484753) MAIN: UART1 received: [0m
+[0;32mI (485753) MAIN: UART1 received: [0m
+[0;32mI (486754) MAIN: UART1 received: [0m
+[0;32mI (487754) MAIN: UART1 received: [0m
+[0;32mI (488754) MAIN: UART1 received: [0m
+[0;32mI (489754) MAIN: UART1 received: [0m
+[0;32mI (490754) MAIN: UART1 received: [0m
+[0;32mI (491754) MAIN: UART1 received: [0m
+[0;32mI (492754) MAIN: UART1 received: [0m
+[0;32mI (493754) MAIN: UART1 received: [0m
+[0;32mI (494754) MAIN: UART1 received: [0m
+[0;32mI (495754) MAIN: UART1 received: [0m
+[0;32mI (496754) MAIN: UART1 received: [0m
+[0;32mI (497754) MAIN: UART1 received: [0m
+[0;32mI (498754) MAIN: UART1 received: [0m
+[0;32mI (499754) MAIN: UART1 received: [0m
+[0;32mI (500754) MAIN: UART1 received: [0m
+[0;32mI (501754) MAIN: UART1 received: [0m
+[0;32mI (502754) MAIN: UART1 received: [0m
+[0;32mI (503754) MAIN: UART1 received: [0m
+[0;32mI (504754) MAIN: UART1 received: [0m
+[0;32mI (505754) MAIN: UART1 received: [0m
+[0;32mI (506754) MAIN: UART1 received: [0m
+[0;32mI (507754) MAIN: UART1 received: [0m
+[0;32mI (508754) MAIN: UART1 received: [0m
+[0;32mI (509754) MAIN: UART1 received: [0m
+[0;32mI (510754) MAIN: UART1 received: [0m
+[0;32mI (511754) MAIN: UART1 received: [0m
+[0;32mI (512754) MAIN: UART1 received: [0m
+[0;32mI (513754) MAIN: UART1 received: [0m
+[0;32mI (514755) MAIN: UART1 received: [0m
+[0;32mI (515755) MAIN: UART1 received: [0m
+[0;32mI (516755) MAIN: UART1 received: [0m
+[0;32mI (517755) MAIN: UART1 received: [0m
+[0;32mI (518755) MAIN: UART1 received: [0m
+[0;32mI (519755) MAIN: UART1 received: [0m
+[0;32mI (520755) MAIN: UART1 received: [0m
+[0;32mI (521755) MAIN: UART1 received: [0m
+[0;32mI (522755) MAIN: UART1 received: [0m
+[0;32mI (523755) MAIN: UART1 received: [0m
+[0;32mI (524755) MAIN: UART1 received: [0m
+[0;32mI (525755) MAIN: UART1 received: [0m
+[0;32mI (526755) MAIN: UART1 received: [0m
+[0;32mI (527755) MAIN: UART1 received: [0m
+[0;32mI (528755) MAIN: UART1 received: [0m
+[0;32mI (529755) MAIN: UART1 received: [0m
+[0;32mI (530755) MAIN: UART1 received: [0m
+[0;32mI (531755) MAIN: UART1 received: [0m
+[0;32mI (532755) MAIN: UART1 received: [0m
+[0;32mI (533755) MAIN: UART1 received: [0m
+[0;32mI (534755) MAIN: UART1 received: [0m
+[0;32mI (535755) MAIN: UART1 received: [0m
+[0;32mI (536755) MAIN: UART1 received: [0m
+[0;32mI (537755) MAIN: UART1 received: [0m
+[0;32mI (538755) MAIN: UART1 received: [0m
+[0;32mI (539755) MAIN: UART1 received: [0m
+[0;32mI (540755) MAIN: UART1 received: [0m
+[0;32mI (541755) MAIN: UART1 received: [0m
+[0;32mI (542756) MAIN: UART1 received: [0m
+[0;32mI (543756) MAIN: UART1 received: [0m
+[0;32mI (544756) MAIN: UART1 received: [0m
+[0;32mI (545756) MAIN: UART1 received: [0m
+[0;32mI (546756) MAIN: UART1 received: [0m
+[0;32mI (547756) MAIN: UART1 received: [0m
+[0;32mI (548756) MAIN: UART1 received: [0m
+[0;32mI (549756) MAIN: UART1 received: [0m
+[0;32mI (550756) MAIN: UART1 received: [0m
+[0;32mI (551756) MAIN: UART1 received: [0m
+[0;32mI (552756) MAIN: UART1 received: [0m
+[0;32mI (553756) MAIN: UART1 received: [0m
+[0;32mI (554756) MAIN: UART1 received: [0m
+[0;32mI (555756) MAIN: UART1 received: [0m
+[0;32mI (556756) MAIN: UART1 received: [0m
+[0;32mI (557756) MAIN: UART1 received: [0m
+[0;32mI (558756) MAIN: UART1 received: [0m
+[0;32mI (559756) MAIN: UART1 received: [0m
+[0;32mI (560756) MAIN: UART1 received: [0m
+[0;32mI (561756) MAIN: UART1 received: [0m
+[0;32mI (562756) MAIN: UART1 received: [0m
+[0;32mI (563756) MAIN: UART1 received: [0m
+[0;32mI (564756) MAIN: UART1 received: [0m
+[0;32mI (565756) MAIN: UART1 received: [0m
+[0;32mI (566756) MAIN: UART1 received: [0m
+[0;32mI (567756) MAIN: UART1 received: [0m
+[0;32mI (568756) MAIN: UART1 received: [0m
+[0;32mI (569756) MAIN: UART1 received: [0m
+[0;32mI (570757) MAIN: UART1 received: [0m
+[0;32mI (571757) MAIN: UART1 received: [0m
+[0;32mI (572757) MAIN: UART1 received: [0m
+[0;32mI (573757) MAIN: UART1 received: [0m
+[0;32mI (574757) MAIN: UART1 received: [0m
+[0;32mI (575757) MAIN: UART1 received: [0m
+[0;32mI (576757) MAIN: UART1 received: [0m
+[0;32mI (577757) MAIN: UART1 received: [0m
+[0;32mI (578757) MAIN: UART1 received: [0m
+[0;32mI (579757) MAIN: UART1 received: [0m
+[0;32mI (580757) MAIN: UART1 received: [0m
+[0;32mI (581757) MAIN: UART1 received: [0m
+[0;32mI (582757) MAIN: UART1 received: [0m
+[0;32mI (583757) MAIN: UART1 received: [0m
+[0;32mI (584757) MAIN: UART1 received: [0m
+[0;32mI (585757) MAIN: UART1 received: [0m
+[0;32mI (586757) MAIN: UART1 received: [0m
+[0;32mI (587757) MAIN: UART1 received: [0m
+[0;32mI (588757) MAIN: UART1 received: [0m
+[0;32mI (589757) MAIN: UART1 received: [0m
+[0;32mI (590757) MAIN: UART1 received: [0m
+[0;32mI (591757) MAIN: UART1 received: [0m
+[0;32mI (592757) MAIN: UART1 received: [0m
+[0;32mI (593757) MAIN: UART1 received: [0m
+[0;32mI (594757) MAIN: UART1 received: [0m
+[0;32mI (595757) MAIN: UART1 received: [0m
+[0;32mI (596757) MAIN: UART1 received: [0m
+[0;32mI (597757) MAIN: UART1 received: [0m
+[0;32mI (598757) MAIN: UART1 received: [0m
+[0;32mI (599758) MAIN: UART1 received: [0m
+[0;32mI (600758) MAIN: UART1 received: [0m
+[0;32mI (601758) MAIN: UART1 received: [0m
+[0;32mI (602758) MAIN: UART1 received: [0m
+[0;32mI (603758) MAIN: UART1 received: [0m
+[0;32mI (604758) MAIN: UART1 received: [0m
+[0;32mI (605758) MAIN: UART1 received: [0m
+[0;32mI (606758) MAIN: UART1 received: [0m
+[0;32mI (607758) MAIN: UART1 received: [0m
+[0;32mI (608758) MAIN: UART1 received: [0m
+[0;32mI (609758) MAIN: UART1 received: [0m
+[0;32mI (610758) MAIN: UART1 received: [0m
+[0;32mI (611758) MAIN: UART1 received: [0m
+[0;32mI (612758) MAIN: UART1 received: [0m
+[0;32mI (613758) MAIN: UART1 received: [0m
+[0;32mI (614758) MAIN: UART1 received: [0m
+[0;32mI (615758) MAIN: UART1 received: [0m
+[0;32mI (616758) MAIN: UART1 received: [0m
+[0;32mI (617758) MAIN: UART1 received: [0m
+[0;32mI (618758) MAIN: UART1 received: [0m
+[0;32mI (619758) MAIN: UART1 received: [0m
+[0;32mI (620758) MAIN: UART1 received: [0m
+[0;32mI (621758) MAIN: UART1 received: [0m
+[0;32mI (622758) MAIN: UART1 received: [0m
+[0;32mI (623758) MAIN: UART1 received: [0m
+[0;32mI (624758) MAIN: UART1 received: [0m
+[0;32mI (625758) MAIN: UART1 received: [0m
+[0;32mI (626758) MAIN: UART1 received: [0m
+[0;32mI (627759) MAIN: UART1 received: [0m
+[0;32mI (628759) MAIN: UART1 received: [0m
+[0;32mI (629759) MAIN: UART1 received: [0m
+[0;32mI (630759) MAIN: UART1 received: [0m
+[0;32mI (631759) MAIN: UART1 received: [0m
+[0;32mI (632759) MAIN: UART1 received: [0m
+[0;32mI (633759) MAIN: UART1 received: [0m
+[0;32mI (634759) MAIN: UART1 received: [0m
+[0;32mI (635759) MAIN: UART1 received: [0m
+[0;32mI (636759) MAIN: UART1 received: [0m
+[0;32mI (637759) MAIN: UART1 received: [0m
+[0;32mI (638759) MAIN: UART1 received: [0m
+[0;32mI (639759) MAIN: UART1 received: [0m
+[0;32mI (640759) MAIN: UART1 received: [0m
+[0;32mI (641759) MAIN: UART1 received: [0m
+[0;32mI (642759) MAIN: UART1 received: [0m
+[0;32mI (643759) MAIN: UART1 received: [0m
+[0;32mI (644759) MAIN: UART1 received: [0m
+[0;32mI (645759) MAIN: UART1 received: [0m
+[0;32mI (646759) MAIN: UART1 received: [0m
+[0;32mI (647759) MAIN: UART1 received: [0m
+[0;32mI (648759) MAIN: UART1 received: [0m
+[0;32mI (649759) MAIN: UART1 received: [0m
+[0;32mI (650759) MAIN: UART1 received: [0m
+[0;32mI (651759) MAIN: UART1 received: [0m
+[0;32mI (652759) MAIN: UART1 received: [0m
+[0;32mI (653759) MAIN: UART1 received: [0m
+[0;32mI (654759) MAIN: UART1 received: [0m
+[0;32mI (655760) MAIN: UART1 received: [0m
+[0;32mI (656760) MAIN: UART1 received: [0m
+[0;32mI (657760) MAIN: UART1 received: [0m
+[0;32mI (658760) MAIN: UART1 received: [0m
+[0;32mI (659760) MAIN: UART1 received: [0m
+[0;32mI (660760) MAIN: UART1 received: [0m
+[0;32mI (661760) MAIN: UART1 received: [0m
+[0;32mI (662760) MAIN: UART1 received: [0m
+[0;32mI (663760) MAIN: UART1 received: [0m
+[0;32mI (664760) MAIN: UART1 received: [0m
+[0;32mI (665760) MAIN: UART1 received: [0m
+[0;32mI (666760) MAIN: UART1 received: [0m
+[0;32mI (667760) MAIN: UART1 received: [0m
+[0;32mI (668760) MAIN: UART1 received: [0m
+[0;32mI (669760) MAIN: UART1 received: [0m
+[0;32mI (670760) MAIN: UART1 received: [0m
+[0;32mI (671760) MAIN: UART1 received: [0m
+[0;32mI (672760) MAIN: UART1 received: [0m
+[0;32mI (673760) MAIN: UART1 received: [0m
+[0;32mI (674760) MAIN: UART1 received: [0m
+[0;32mI (675760) MAIN: UART1 received: [0m
+[0;32mI (676760) MAIN: UART1 received: [0m
+[0;32mI (677760) MAIN: UART1 received: [0m
+[0;32mI (678760) MAIN: UART1 received: [0m
+[0;32mI (679760) MAIN: UART1 received: [0m
+[0;32mI (680760) MAIN: UART1 received: [0m
+[0;32mI (681760) MAIN: UART1 received: [0m
+[0;32mI (682760) MAIN: UART1 received: [0m
+[0;32mI (683761) MAIN: UART1 received: [0m
+[0;32mI (684761) MAIN: UART1 received: [0m
+[0;32mI (685761) MAIN: UART1 received: [0m
+[0;32mI (686761) MAIN: UART1 received: [0m
+[0;32mI (687761) MAIN: UART1 received: [0m
+[0;32mI (688761) MAIN: UART1 received: [0m
+[0;32mI (689761) MAIN: UART1 received: [0m
+[0;32mI (690761) MAIN: UART1 received: [0m
+[0;32mI (691761) MAIN: UART1 received: [0m
+[0;32mI (692761) MAIN: UART1 received: [0m
+[0;32mI (693761) MAIN: UART1 received: [0m
+[0;32mI (694761) MAIN: UART1 received: [0m
+[0;32mI (695761) MAIN: UART1 received: [0m
+[0;32mI (696761) MAIN: UART1 received: [0m
+[0;32mI (697761) MAIN: UART1 received: [0m
+[0;32mI (698761) MAIN: UART1 received: [0m
+[0;32mI (699761) MAIN: UART1 received: [0m
+[0;32mI (700761) MAIN: UART1 received: [0m
+[0;32mI (701761) MAIN: UART1 received: [0m
+[0;32mI (702761) MAIN: UART1 received: [0m
+[0;32mI (703761) MAIN: UART1 received: [0m
+[0;32mI (704761) MAIN: UART1 received: [0m
+[0;32mI (705761) MAIN: UART1 received: [0m
+[0;32mI (706761) MAIN: UART1 received: [0m
+[0;32mI (707761) MAIN: UART1 received: [0m
+[0;32mI (708761) MAIN: UART1 received: [0m
+[0;32mI (709761) MAIN: UART1 received: [0m
+[0;32mI (710761) MAIN: UART1 received: [0m
+[0;32mI (711762) MAIN: UART1 received: [0m
+[0;32mI (712762) MAIN: UART1 received: [0m
+[0;32mI (713762) MAIN: UART1 received: [0m
+[0;32mI (714762) MAIN: UART1 received: [0m
+[0;32mI (715762) MAIN: UART1 received: [0m
+[0;32mI (716762) MAIN: UART1 received: [0m
+[0;32mI (717762) MAIN: UART1 received: [0m
+[0;32mI (718762) MAIN: UART1 received: [0m
+[0;32mI (719762) MAIN: UART1 received: [0m
+[0;32mI (720762) MAIN: UART1 received: [0m
+[0;32mI (721762) MAIN: UART1 received: [0m
+[0;32mI (722762) MAIN: UART1 received: [0m
+[0;32mI (723762) MAIN: UART1 received: [0m
+[0;32mI (724762) MAIN: UART1 received: [0m
+[0;32mI (725762) MAIN: UART1 received: [0m
+[0;32mI (726762) MAIN: UART1 received: [0m
+[0;32mI (727762) MAIN: UART1 received: [0m
+[0;32mI (728762) MAIN: UART1 received: [0m
+[0;32mI (729762) MAIN: UART1 received: [0m
+[0;32mI (730762) MAIN: UART1 received: [0m
+[0;32mI (731762) MAIN: UART1 received: [0m
+[0;32mI (732762) MAIN: UART1 received: [0m
+[0;32mI (733762) MAIN: UART1 received: [0m
+[0;32mI (734762) MAIN: UART1 received: [0m
+[0;32mI (735762) MAIN: UART1 received: [0m
+[0;32mI (736762) MAIN: UART1 received: [0m
+[0;32mI (737762) MAIN: UART1 received: [0m
+[0;32mI (738762) MAIN: UART1 received: [0m
+[0;32mI (739763) MAIN: UART1 received: [0m
+[0;32mI (740763) MAIN: UART1 received: [0m
+[0;32mI (741763) MAIN: UART1 received: [0m
+[0;32mI (742763) MAIN: UART1 received: [0m
+[0;32mI (743763) MAIN: UART1 received: [0m
+[0;32mI (744763) MAIN: UART1 received: [0m
+[0;32mI (745763) MAIN: UART1 received: [0m
+[0;32mI (746763) MAIN: UART1 received: [0m
+[0;32mI (747763) MAIN: UART1 received: [0m
+[0;32mI (748763) MAIN: UART1 received: [0m
+[0;32mI (749763) MAIN: UART1 received: [0m
+[0;32mI (750763) MAIN: UART1 received: [0m
+[0;32mI (751763) MAIN: UART1 received: [0m
+[0;32mI (752763) MAIN: UART1 received: [0m
+[0;32mI (753763) MAIN: UART1 received: [0m
+[0;32mI (754763) MAIN: UART1 received: [0m
+[0;32mI (755763) MAIN: UART1 received: [0m
+[0;32mI (756763) MAIN: UART1 received: [0m
+[0;32mI (757763) MAIN: UART1 received: [0m
+[0;32mI (758763) MAIN: UART1 received: [0m
+[0;32mI (759763) MAIN: UART1 received: [0m
+[0;32mI (760763) MAIN: UART1 received: [0m
+[0;32mI (761763) MAIN: UART1 received: [0m
+[0;32mI (762763) MAIN: UART1 received: [0m
+[0;32mI (763763) MAIN: UART1 received: [0m
+[0;32mI (764763) MAIN: UART1 received: [0m
+[0;32mI (765763) MAIN: UART1 received: [0m
+[0;32mI (766763) MAIN: UART1 received: [0m
+[0;32mI (767764) MAIN: UART1 received: [0m
+[0;32mI (768764) MAIN: UART1 received: [0m
+[0;32mI (769764) MAIN: UART1 received: [0m
+[0;32mI (770764) MAIN: UART1 received: [0m
+[0;32mI (771764) MAIN: UART1 received: [0m
+[0;32mI (772764) MAIN: UART1 received: [0m
+[0;32mI (773764) MAIN: UART1 received: [0m
+[0;32mI (774764) MAIN: UART1 received: [0m
+[0;32mI (775764) MAIN: UART1 received: [0m
+[0;32mI (776764) MAIN: UART1 received: [0m
+[0;32mI (777764) MAIN: UART1 received: [0m
+[0;32mI (778764) MAIN: UART1 received: [0m
+[0;32mI (779764) MAIN: UART1 received: [0m
+[0;32mI (780764) MAIN: UART1 received: [0m
+[0;32mI (781764) MAIN: UART1 received: [0m
+[0;32mI (782764) MAIN: UART1 received: [0m
+[0;32mI (783764) MAIN: UART1 received: [0m
+[0;32mI (784764) MAIN: UART1 received: [0m
+[0;32mI (785764) MAIN: UART1 received: [0m
+[0;32mI (786764) MAIN: UART1 received: [0m
+[0;32mI (787764) MAIN: UART1 received: [0m
+[0;32mI (788764) MAIN: UART1 received: [0m
+[0;32mI (789764) MAIN: UART1 received: [0m
+[0;32mI (790764) MAIN: UART1 received: [0m
+[0;32mI (791764) MAIN: UART1 received: [0m
+[0;32mI (792764) MAIN: UART1 received: [0m
+[0;32mI (793764) MAIN: UART1 received: [0m
+[0;32mI (794764) MAIN: UART1 received: [0m
+[0;32mI (795765) MAIN: UART1 received: [0m
+[0;32mI (796765) MAIN: UART1 received: [0m
+[0;32mI (797765) MAIN: UART1 received: [0m
+[0;32mI (798765) MAIN: UART1 received: [0m
+[0;32mI (799765) MAIN: UART1 received: [0m
+[0;32mI (800765) MAIN: UART1 received: [0m
+[0;32mI (801765) MAIN: UART1 received: [0m
+[0;32mI (802765) MAIN: UART1 received: [0m
+[0;32mI (803765) MAIN: UART1 received: [0m
+[0;32mI (804765) MAIN: UART1 received: [0m
+[0;32mI (805765) MAIN: UART1 received: [0m
+[0;32mI (806765) MAIN: UART1 received: [0m
+[0;32mI (807765) MAIN: UART1 received: [0m
+[0;32mI (808765) MAIN: UART1 received: [0m
+[0;32mI (809765) MAIN: UART1 received: [0m
+[0;32mI (810765) MAIN: UART1 received: [0m
+[0;32mI (811765) MAIN: UART1 received: [0m
+[0;32mI (812765) MAIN: UART1 received: [0m
+[0;32mI (813765) MAIN: UART1 received: [0m
+[0;32mI (814765) MAIN: UART1 received: [0m
+[0;32mI (815765) MAIN: UART1 received: [0m
+[0;32mI (816765) MAIN: UART1 received: [0m
+[0;32mI (817765) MAIN: UART1 received: [0m
+[0;32mI (818765) MAIN: UART1 received: [0m
+[0;32mI (819765) MAIN: UART1 received: [0m
+[0;32mI (820765) MAIN: UART1 received: [0m
+[0;32mI (821765) MAIN: UART1 received: [0m
+[0;32mI (822765) MAIN: UART1 received: [0m
+[0;32mI (823765) MAIN: UART1 received: [0m
+[0;32mI (824766) MAIN: UART1 received: [0m
+[0;32mI (825766) MAIN: UART1 received: [0m
+[0;32mI (826766) MAIN: UART1 received: [0m
+[0;32mI (827766) MAIN: UART1 received: [0m
+[0;32mI (828766) MAIN: UART1 received: [0m
+[0;32mI (829766) MAIN: UART1 received: [0m
+[0;32mI (830766) MAIN: UART1 received: [0m
+[0;32mI (831766) MAIN: UART1 received: [0m
+[0;32mI (832766) MAIN: UART1 received: [0m
+[0;32mI (833766) MAIN: UART1 received: [0m
+[0;32mI (834766) MAIN: UART1 received: [0m
+[0;32mI (835766) MAIN: UART1 received: [0m
+[0;32mI (836766) MAIN: UART1 received: [0m
+[0;32mI (837766) MAIN: UART1 received: [0m
+[0;32mI (838766) MAIN: UART1 received: [0m
+[0;32mI (839766) MAIN: UART1 received: [0m
+[0;32mI (840766) MAIN: UART1 received: [0m
+[0;32mI (841766) MAIN: UART1 received: [0m
+[0;32mI (842766) MAIN: UART1 received: [0m
+[0;32mI (843766) MAIN: UART1 received: [0m
+[0;32mI (844766) MAIN: UART1 received: [0m
+[0;32mI (845766) MAIN: UART1 received: [0m
+[0;32mI (846766) MAIN: UART1 received: [0m
+[0;32mI (847766) MAIN: UART1 received: [0m
+[0;32mI (848766) MAIN: UART1 received: [0m
+[0;32mI (849766) MAIN: UART1 received: [0m
+[0;32mI (850766) MAIN: UART1 received: [0m
+[0;32mI (851766) MAIN: UART1 received: [0m
+[0;32mI (852767) MAIN: UART1 received: [0m
+[0;32mI (853767) MAIN: UART1 received: [0m
+[0;32mI (854767) MAIN: UART1 received: [0m
+[0;32mI (855767) MAIN: UART1 received: [0m
+[0;32mI (856767) MAIN: UART1 received: [0m
+[0;32mI (857767) MAIN: UART1 received: [0m
+[0;32mI (858767) MAIN: UART1 received: [0m
+[0;32mI (859767) MAIN: UART1 received: [0m
+[0;32mI (860767) MAIN: UART1 received: [0m
+[0;32mI (861767) MAIN: UART1 received: [0m
+[0;32mI (862767) MAIN: UART1 received: [0m
+[0;32mI (863767) MAIN: UART1 received: [0m
+[0;32mI (864767) MAIN: UART1 received: [0m
+[0;32mI (865767) MAIN: UART1 received: [0m
+[0;32mI (866767) MAIN: UART1 received: [0m
+[0;32mI (867767) MAIN: UART1 received: [0m
+[0;32mI (868767) MAIN: UART1 received: [0m
+[0;32mI (869767) MAIN: UART1 received: [0m
+[0;32mI (870767) MAIN: UART1 received: [0m
+[0;32mI (871767) MAIN: UART1 received: [0m
+[0;32mI (872767) MAIN: UART1 received: [0m
+[0;32mI (873767) MAIN: UART1 received: [0m
+[0;32mI (874767) MAIN: UART1 received: [0m
+[0;32mI (875767) MAIN: UART1 received: [0m
+[0;32mI (876767) MAIN: UART1 received: [0m
+[0;32mI (877767) MAIN: UART1 received: [0m
+[0;32mI (878767) MAIN: UART1 received: [0m
+[0;32mI (879767) MAIN: UART1 received: [0m
+[0;32mI (880768) MAIN: UART1 received: [0m
+[0;32mI (881768) MAIN: UART1 received: [0m
+[0;32mI (882768) MAIN: UART1 received: [0m
+[0;32mI (883768) MAIN: UART1 received: [0m
+[0;32mI (884768) MAIN: UART1 received: [0m
+[0;32mI (885768) MAIN: UART1 received: [0m
+[0;32mI (886768) MAIN: UART1 received: [0m
+[0;32mI (887768) MAIN: UART1 received: [0m
+[0;32mI (888768) MAIN: UART1 received: [0m
+[0;32mI (889768) MAIN: UART1 received: [0m
+[0;32mI (890768) MAIN: UART1 received: [0m
+[0;32mI (891768) MAIN: UART1 received: [0m
+[0;32mI (892768) MAIN: UART1 received: [0m
+[0;32mI (893768) MAIN: UART1 received: [0m
+[0;32mI (894768) MAIN: UART1 received: [0m
+[0;32mI (895768) MAIN: UART1 received: [0m
+[0;32mI (896768) MAIN: UART1 received: [0m
+[0;32mI (897768) MAIN: UART1 received: [0m
+[0;32mI (898768) MAIN: UART1 received: [0m
+[0;32mI (899768) MAIN: UART1 received: [0m
+[0;32mI (900768) MAIN: UART1 received: [0m
+[0;32mI (901768) MAIN: UART1 received: [0m
+[0;32mI (902768) MAIN: UART1 received: [0m
+[0;32mI (903768) MAIN: UART1 received: [0m
+[0;32mI (904768) MAIN: UART1 received: [0m
+[0;32mI (905768) MAIN: UART1 received: [0m
+[0;32mI (906768) MAIN: UART1 received: [0m
+[0;32mI (907768) MAIN: UART1 received: [0m
+[0;32mI (908769) MAIN: UART1 received: [0m
+[0;32mI (909769) MAIN: UART1 received: [0m
+[0;32mI (910769) MAIN: UART1 received: [0m
+[0;32mI (911769) MAIN: UART1 received: [0m
+[0;32mI (912769) MAIN: UART1 received: [0m
+[0;32mI (913769) MAIN: UART1 received: [0m
+[0;32mI (914769) MAIN: UART1 received: [0m
+[0;32mI (915769) MAIN: UART1 received: [0m
+[0;32mI (916769) MAIN: UART1 received: [0m
+[0;32mI (917769) MAIN: UART1 received: [0m
+[0;32mI (918769) MAIN: UART1 received: [0m
+[0;32mI (919769) MAIN: UART1 received: [0m
+[0;32mI (920769) MAIN: UART1 received: [0m
+[0;32mI (921769) MAIN: UART1 received: [0m
+[0;32mI (922769) MAIN: UART1 received: [0m
+[0;32mI (923769) MAIN: UART1 received: [0m
+[0;32mI (924769) MAIN: UART1 received: [0m
+[0;32mI (925769) MAIN: UART1 received: [0m
+[0;32mI (926769) MAIN: UART1 received: [0m
+[0;32mI (927769) MAIN: UART1 received: [0m
+[0;32mI (928769) MAIN: UART1 received: [0m
+[0;32mI (929769) MAIN: UART1 received: [0m
+[0;32mI (930769) MAIN: UART1 received: [0m
+[0;32mI (931769) MAIN: UART1 received: [0m
+[0;32mI (932769) MAIN: UART1 received: [0m
+[0;32mI (933769) MAIN: UART1 received: [0m
+[0;32mI (934769) MAIN: UART1 received: [0m
+[0;32mI (935769) MAIN: UART1 received: [0m
+[0;32mI (936770) MAIN: UART1 received: [0m
+[0;32mI (937770) MAIN: UART1 received: [0m
+[0;32mI (938770) MAIN: UART1 received: [0m
+[0;32mI (939770) MAIN: UART1 received: [0m
+[0;32mI (940770) MAIN: UART1 received: [0m
+[0;32mI (941770) MAIN: UART1 received: [0m
+[0;32mI (942770) MAIN: UART1 received: [0m
+[0;32mI (943770) MAIN: UART1 received: [0m
+[0;32mI (944770) MAIN: UART1 received: [0m
+[0;32mI (945770) MAIN: UART1 received: [0m
+[0;32mI (946770) MAIN: UART1 received: [0m
+[0;32mI (947770) MAIN: UART1 received: [0m
+[0;32mI (948770) MAIN: UART1 received: [0m
+[0;32mI (949770) MAIN: UART1 received: [0m
+[0;32mI (950770) MAIN: UART1 received: [0m
+[0;32mI (951770) MAIN: UART1 received: [0m
+[0;32mI (952770) MAIN: UART1 received: [0m
+[0;32mI (953770) MAIN: UART1 received: [0m
+[0;32mI (954770) MAIN: UART1 received: [0m
+[0;32mI (955770) MAIN: UART1 received: [0m
+[0;32mI (956770) MAIN: UART1 received: [0m
+[0;32mI (957770) MAIN: UART1 received: [0m
+[0;32mI (958770) MAIN: UART1 received: [0m
+[0;32mI (959770) MAIN: UART1 received: [0m
+[0;32mI (960770) MAIN: UART1 received: [0m
+[0;32mI (961770) MAIN: UART1 received: [0m
+[0;32mI (962770) MAIN: UART1 received: [0m
+[0;32mI (963770) MAIN: UART1 received: [0m
+[0;32mI (964771) MAIN: UART1 received: [0m
+[0;32mI (965771) MAIN: UART1 received: [0m
+[0;32mI (966771) MAIN: UART1 received: [0m
+[0;32mI (967771) MAIN: UART1 received: [0m
+[0;32mI (968771) MAIN: UART1 received: [0m
+[0;32mI (969771) MAIN: UART1 received: [0m
+[0;32mI (970771) MAIN: UART1 received: [0m
+[0;32mI (971771) MAIN: UART1 received: [0m
+[0;32mI (972771) MAIN: UART1 received: [0m
+[0;32mI (973771) MAIN: UART1 received: [0m
+[0;32mI (974771) MAIN: UART1 received: [0m
+[0;32mI (975771) MAIN: UART1 received: [0m
+[0;32mI (976771) MAIN: UART1 received: [0m
+[0;32mI (977771) MAIN: UART1 received: [0m
+[0;32mI (978771) MAIN: UART1 received: [0m
+[0;32mI (979771) MAIN: UART1 received: [0m
+[0;32mI (980771) MAIN: UART1 received: [0m
+[0;32mI (981771) MAIN: UART1 received: [0m
+[0;32mI (982771) MAIN: UART1 received: [0m
+[0;32mI (983771) MAIN: UART1 received: [0m
+[0;32mI (984771) MAIN: UART1 received: [0m
+[0;32mI (985771) MAIN: UART1 received: [0m
+[0;32mI (986771) MAIN: UART1 received: [0m
+[0;32mI (987771) MAIN: UART1 received: [0m
+[0;32mI (988771) MAIN: UART1 received: [0m
+[0;32mI (989771) MAIN: UART1 received: [0m
+[0;32mI (990771) MAIN: UART1 received: [0m
+[0;32mI (991771) MAIN: UART1 received: [0m
+[0;32mI (992772) MAIN: UART1 received: [0m
+[0;32mI (993772) MAIN: UART1 received: [0m
+[0;32mI (994772) MAIN: UART1 received: [0m
+[0;32mI (995772) MAIN: UART1 received: [0m
+[0;32mI (996772) MAIN: UART1 received: [0m
+[0;32mI (997772) MAIN: UART1 received: [0m
+[0;32mI (998772) MAIN: UART1 received: [0m
+[0;32mI (999772) MAIN: UART1 received: [0m
+[0;32mI (1000772) MAIN: UART1 received: [0m
+[0;32mI (1001772) MAIN: UART1 received: [0m
+[0;32mI (1002772) MAIN: UART1 received: [0m
+[0;32mI (1003772) MAIN: UART1 received: [0m
+[0;32mI (1004772) MAIN: UART1 received: [0m
+[0;32mI (1005772) MAIN: UART1 received: [0m
+[0;32mI (1006772) MAIN: UART1 received: [0m
+[0;32mI (1007772) MAIN: UART1 received: [0m
+[0;32mI (1008772) MAIN: UART1 received: [0m
+[0;32mI (1009772) MAIN: UART1 received: [0m
+[0;32mI (1010772) MAIN: UART1 received: [0m
+[0;32mI (1011772) MAIN: UART1 received: [0m
+[0;32mI (1012772) MAIN: UART1 received: [0m
+[0;32mI (1013772) MAIN: UART1 received: [0m
+[0;32mI (1014772) MAIN: UART1 received: [0m
+[0;32mI (1015772) MAIN: UART1 received: [0m
+[0;32mI (1016772) MAIN: UART1 received: [0m
+[0;32mI (1017772) MAIN: UART1 received: [0m
+[0;32mI (1018772) MAIN: UART1 received: [0m
+[0;32mI (1019772) MAIN: UART1 received: [0m
+[0;32mI (1020773) MAIN: UART1 received: [0m
+[0;32mI (1021773) MAIN: UART1 received: [0m
+[0;32mI (1022773) MAIN: UART1 received: [0m
+[0;32mI (1023773) MAIN: UART1 received: [0m
+[0;32mI (1024773) MAIN: UART1 received: [0m
+[0;32mI (1025773) MAIN: UART1 received: [0m
+[0;32mI (1026773) MAIN: UART1 received: [0m
+[0;32mI (1027773) MAIN: UART1 received: [0m
+[0;32mI (1028773) MAIN: UART1 received: [0m
+[0;32mI (1029773) MAIN: UART1 received: [0m
+[0;32mI (1030773) MAIN: UART1 received: [0m
+[0;32mI (1031773) MAIN: UART1 received: [0m
+[0;32mI (1032773) MAIN: UART1 received: [0m
+[0;32mI (1033773) MAIN: UART1 received: [0m
+[0;32mI (1034773) MAIN: UART1 received: [0m
+[0;32mI (1035773) MAIN: UART1 received: [0m
+[0;32mI (1036773) MAIN: UART1 received: [0m
+[0;32mI (1037773) MAIN: UART1 received: [0m
+[0;32mI (1038773) MAIN: UART1 received: [0m
+[0;32mI (1039773) MAIN: UART1 received: [0m
+[0;32mI (1040773) MAIN: UART1 received: [0m
+[0;32mI (1041773) MAIN: UART1 received: [0m
+[0;32mI (1042773) MAIN: UART1 received: [0m
+[0;32mI (1043773) MAIN: UART1 received: [0m
+[0;32mI (1044773) MAIN: UART1 received: [0m
+[0;32mI (1045773) MAIN: UART1 received: [0m
+[0;32mI (1046773) MAIN: UART1 received: [0m
+[0;32mI (1047773) MAIN: UART1 received: [0m
+[0;32mI (1048773) MAIN: UART1 received: [0m
+[0;32mI (1049774) MAIN: UART1 received: [0m
+[0;32mI (1050774) MAIN: UART1 received: [0m
+[0;32mI (1051774) MAIN: UART1 received: [0m
+[0;32mI (1052774) MAIN: UART1 received: [0m
+[0;32mI (1053774) MAIN: UART1 received: [0m
+[0;32mI (1054774) MAIN: UART1 received: [0m
+[0;32mI (1055774) MAIN: UART1 received: [0m
+[0;32mI (1056774) MAIN: UART1 received: [0m
+[0;32mI (1057774) MAIN: UART1 received: [0m
+[0;32mI (1058774) MAIN: UART1 received: [0m
+[0;32mI (1059774) MAIN: UART1 received: [0m
+[0;32mI (1060774) MAIN: UART1 received: [0m
+[0;32mI (1061774) MAIN: UART1 received: [0m
+[0;32mI (1062774) MAIN: UART1 received: [0m
+[0;32mI (1063774) MAIN: UART1 received: [0m
+[0;32mI (1064774) MAIN: UART1 received: [0m
+[0;32mI (1065774) MAIN: UART1 received: [0m
+[0;32mI (1066774) MAIN: UART1 received: [0m
+[0;32mI (1067774) MAIN: UART1 received: [0m
+[0;32mI (1068774) MAIN: UART1 received: [0m
+[0;32mI (1069774) MAIN: UART1 received: [0m
+[0;32mI (1070774) MAIN: UART1 received: [0m
+[0;32mI (1071774) MAIN: UART1 received: [0m
+[0;32mI (1072774) MAIN: UART1 received: [0m
+[0;32mI (1073774) MAIN: UART1 received: [0m
+[0;32mI (1074774) MAIN: UART1 received: [0m
+[0;32mI (1075774) MAIN: UART1 received: [0m
+[0;32mI (1076774) MAIN: UART1 received: [0m
+[0;32mI (1077775) MAIN: UART1 received: [0m
+[0;32mI (1078775) MAIN: UART1 received: [0m
+[0;32mI (1079775) MAIN: UART1 received: [0m
+[0;32mI (1080775) MAIN: UART1 received: [0m
+[0;32mI (1081775) MAIN: UART1 received: [0m
+[0;32mI (1082775) MAIN: UART1 received: [0m
+[0;32mI (1083775) MAIN: UART1 received: [0m
+[0;32mI (1084775) MAIN: UART1 received: [0m
+[0;32mI (1085775) MAIN: UART1 received: [0m
+[0;32mI (1086775) MAIN: UART1 received: [0m
+[0;32mI (1087775) MAIN: UART1 received: [0m
+[0;32mI (1088775) MAIN: UART1 received: [0m
+[0;32mI (1089775) MAIN: UART1 received: [0m
+[0;32mI (1090775) MAIN: UART1 received: [0m
+[0;32mI (1091775) MAIN: UART1 received: [0m
+[0;32mI (1092775) MAIN: UART1 received: [0m
+[0;32mI (1093775) MAIN: UART1 received: [0m
+[0;32mI (1094775) MAIN: UART1 received: [0m
+[0;32mI (1095775) MAIN: UART1 received: [0m
+[0;32mI (1096775) MAIN: UART1 received: [0m
+[0;32mI (1097775) MAIN: UART1 received: [0m
+[0;32mI (1098775) MAIN: UART1 received: [0m
+[0;32mI (1099775) MAIN: UART1 received: [0m
+[0;32mI (1100775) MAIN: UART1 received: [0m
+[0;32mI (1101775) MAIN: UART1 received: [0m
+[0;32mI (1102775) MAIN: UART1 received: [0m
+[0;32mI (1103775) MAIN: UART1 received: [0m
+[0;32mI (1104775) MAIN: UART1 received: [0m
+[0;32mI (1105776) MAIN: UART1 received: [0m
+[0;32mI (1106776) MAIN: UART1 received: [0m
+[0;32mI (1107776) MAIN: UART1 received: [0m
+[0;32mI (1108776) MAIN: UART1 received: [0m
+[0;32mI (1109776) MAIN: UART1 received: [0m
+[0;32mI (1110776) MAIN: UART1 received: [0m
+[0;32mI (1111776) MAIN: UART1 received: [0m
+[0;32mI (1112776) MAIN: UART1 received: [0m
+[0;32mI (1113776) MAIN: UART1 received: [0m
+[0;32mI (1114776) MAIN: UART1 received: [0m
+[0;32mI (1115776) MAIN: UART1 received: [0m
+[0;32mI (1116776) MAIN: UART1 received: [0m
+[0;32mI (1117776) MAIN: UART1 received: [0m
+[0;32mI (1118776) MAIN: UART1 received: [0m
+[0;32mI (1119776) MAIN: UART1 received: [0m
+[0;32mI (1120776) MAIN: UART1 received: [0m
+[0;32mI (1121776) MAIN: UART1 received: [0m
+[0;32mI (1122776) MAIN: UART1 received: [0m
+[0;32mI (1123776) MAIN: UART1 received: [0m
+[0;32mI (1124776) MAIN: UART1 received: [0m
+[0;32mI (1125776) MAIN: UART1 received: [0m
+[0;32mI (1126776) MAIN: UART1 received: [0m
+[0;32mI (1127776) MAIN: UART1 received: [0m
+[0;32mI (1128776) MAIN: UART1 received: [0m
+[0;32mI (1129776) MAIN: UART1 received: [0m
+[0;32mI (1130776) MAIN: UART1 received: [0m
+[0;32mI (1131776) MAIN: UART1 received: [0m
+[0;32mI (1132776) MAIN: UART1 received: [0m
+[0;32mI (1133777) MAIN: UART1 received: [0m
+[0;32mI (1134777) MAIN: UART1 received: [0m
+[0;32mI (1135777) MAIN: UART1 received: [0m
+[0;32mI (1136777) MAIN: UART1 received: [0m
+[0;32mI (1137777) MAIN: UART1 received: [0m
+[0;32mI (1138777) MAIN: UART1 received: [0m
+[0;32mI (1139777) MAIN: UART1 received: [0m
+[0;32mI (1140777) MAIN: UART1 received: [0m
+[0;32mI (1141777) MAIN: UART1 received: [0m
+[0;32mI (1142777) MAIN: UART1 received: [0m
+[0;32mI (1143777) MAIN: UART1 received: [0m
+[0;32mI (1144777) MAIN: UART1 received: [0m
+[0;32mI (1145777) MAIN: UART1 received: [0m
+[0;32mI (1146777) MAIN: UART1 received: [0m
+[0;32mI (1147777) MAIN: UART1 received: [0m
+[0;32mI (1148777) MAIN: UART1 received: [0m
+[0;32mI (1149777) MAIN: UART1 received: [0m
+[0;32mI (1150777) MAIN: UART1 received: [0m
+[0;32mI (1151777) MAIN: UART1 received: [0m
+[0;32mI (1152777) MAIN: UART1 received: [0m
+[0;32mI (1153777) MAIN: UART1 received: [0m
+[0;32mI (1154777) MAIN: UART1 received: [0m
+[0;32mI (1155777) MAIN: UART1 received: [0m
+[0;32mI (1156777) MAIN: UART1 received: [0m
+[0;32mI (1157777) MAIN: UART1 received: [0m
+[0;32mI (1158777) MAIN: UART1 received: [0m
+[0;32mI (1159777) MAIN: UART1 received: [0m
+[0;32mI (1160777) MAIN: UART1 received: [0m
+[0;32mI (1161778) MAIN: UART1 received: [0m
+[0;32mI (1162778) MAIN: UART1 received: [0m
+[0;32mI (1163778) MAIN: UART1 received: [0m
+[0;32mI (1164778) MAIN: UART1 received: [0m
+[0;32mI (1165778) MAIN: UART1 received: [0m
+[0;32mI (1166778) MAIN: UART1 received: [0m
+[0;32mI (1167778) MAIN: UART1 received: [0m
+[0;32mI (1168778) MAIN: UART1 received: [0m
+[0;32mI (1169778) MAIN: UART1 received: [0m
+[0;32mI (1170778) MAIN: UART1 received: [0m
+[0;32mI (1171778) MAIN: UART1 received: [0m
+[0;32mI (1172778) MAIN: UART1 received: [0m
+[0;32mI (1173778) MAIN: UART1 received: [0m
+[0;32mI (1174778) MAIN: UART1 received: [0m
+[0;32mI (1175778) MAIN: UART1 received: [0m
+[0;32mI (1176778) MAIN: UART1 received: [0m
+[0;32mI (1177778) MAIN: UART1 received: [0m
+[0;32mI (1178778) MAIN: UART1 received: [0m
+[0;32mI (1179778) MAIN: UART1 received: [0m
+[0;32mI (1180778) MAIN: UART1 received: [0m
+[0;32mI (1181778) MAIN: UART1 received: [0m
+[0;32mI (1182778) MAIN: UART1 received: [0m
+[0;32mI (1183778) MAIN: UART1 received: [0m
+[0;32mI (1184778) MAIN: UART1 received: [0m
+[0;32mI (1185778) MAIN: UART1 received: [0m
+[0;32mI (1186778) MAIN: UART1 received: [0m
+[0;32mI (1187778) MAIN: UART1 received: [0m
+[0;32mI (1188778) MAIN: UART1 received: [0m
+[0;32mI (1189779) MAIN: UART1 received: [0m
+[0;32mI (1190779) MAIN: UART1 received: [0m
+[0;32mI (1191779) MAIN: UART1 received: [0m
+[0;32mI (1192779) MAIN: UART1 received: [0m
+[0;32mI (1193779) MAIN: UART1 received: [0m
+[0;32mI (1194779) MAIN: UART1 received: [0m
+[0;32mI (1195779) MAIN: UART1 received: [0m
+[0;32mI (1196779) MAIN: UART1 received: [0m
+[0;32mI (1197779) MAIN: UART1 received: [0m
+[0;32mI (1198779) MAIN: UART1 received: [0m
+[0;32mI (1199779) MAIN: UART1 received: [0m
+[0;32mI (1200779) MAIN: UART1 received: [0m
+[0;32mI (1201779) MAIN: UART1 received: [0m
+[0;32mI (1202779) MAIN: UART1 received: [0m
+[0;32mI (1203779) MAIN: UART1 received: [0m
+[0;32mI (1204779) MAIN: UART1 received: [0m
+[0;32mI (1205779) MAIN: UART1 received: [0m
+[0;32mI (1206779) MAIN: UART1 received: [0m
+[0;32mI (1207779) MAIN: UART1 received: [0m
+[0;32mI (1208779) MAIN: UART1 received: [0m
+[0;32mI (1209779) MAIN: UART1 received: [0m
+[0;32mI (1210779) MAIN: UART1 received: [0m
+[0;32mI (1211779) MAIN: UART1 received: [0m
+[0;32mI (1212779) MAIN: UART1 received: [0m
+[0;32mI (1213779) MAIN: UART1 received: [0m
+[0;32mI (1214779) MAIN: UART1 received: [0m
+[0;32mI (1215779) MAIN: UART1 received: [0m
+[0;32mI (1216779) MAIN: UART1 received: [0m
+[0;32mI (1217780) MAIN: UART1 received: [0m
+[0;32mI (1218780) MAIN: UART1 received: [0m
+[0;32mI (1219780) MAIN: UART1 received: [0m
+[0;32mI (1220780) MAIN: UART1 received: [0m
+[0;32mI (1221780) MAIN: UART1 received: [0m
+[0;32mI (1222780) MAIN: UART1 received: [0m
+[0;32mI (1223780) MAIN: UART1 received: [0m
+[0;32mI (1224780) MAIN: UART1 received: [0m
+[0;32mI (1225780) MAIN: UART1 received: [0m
+[0;32mI (1226780) MAIN: UART1 received: [0m
+[0;32mI (1227780) MAIN: UART1 received: [0m
+[0;32mI (1228780) MAIN: UART1 received: [0m
+[0;32mI (1229780) MAIN: UART1 received: [0m
+[0;32mI (1230780) MAIN: UART1 received: [0m
+[0;32mI (1231780) MAIN: UART1 received: [0m
+[0;32mI (1232780) MAIN: UART1 received: [0m
+[0;32mI (1233780) MAIN: UART1 received: [0m
+[0;32mI (1234780) MAIN: UART1 received: [0m
+[0;32mI (1235780) MAIN: UART1 received: [0m
+[0;32mI (1236780) MAIN: UART1 received: [0m
+[0;32mI (1237780) MAIN: UART1 received: [0m
+[0;32mI (1238780) MAIN: UART1 received: [0m
+[0;32mI (1239780) MAIN: UART1 received: [0m
+[0;32mI (1240780) MAIN: UART1 received: [0m
+[0;32mI (1241780) MAIN: UART1 received: [0m
+[0;32mI (1242780) MAIN: UART1 received: [0m
+[0;32mI (1243780) MAIN: UART1 received: [0m
+[0;32mI (1244780) MAIN: UART1 received: [0m
+[0;32mI (1245781) MAIN: UART1 received: [0m
+[0;32mI (1246781) MAIN: UART1 received: [0m
+[0;32mI (1247781) MAIN: UART1 received: [0m
+[0;32mI (1248781) MAIN: UART1 received: [0m
+[0;32mI (1249781) MAIN: UART1 received: [0m
+[0;32mI (1250781) MAIN: UART1 received: [0m
+[0;32mI (1251781) MAIN: UART1 received: [0m
+[0;32mI (1252781) MAIN: UART1 received: [0m
+[0;32mI (1253781) MAIN: UART1 received: [0m
+[0;32mI (1254781) MAIN: UART1 received: [0m
+[0;32mI (1255781) MAIN: UART1 received: [0m
+[0;32mI (1256781) MAIN: UART1 received: [0m
+[0;32mI (1257781) MAIN: UART1 received: [0m

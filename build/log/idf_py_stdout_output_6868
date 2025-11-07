@@ -1,0 +1,407 @@
+[0;32mI (103) esp_image: segment 1: paddr=0001efb0 vaddr=3fc8dcESP-ROM:esp32c3-api1-20210207
+Build:Feb  7 2021
+rst:0x15 (USB_UART_CHIP_RESET),boot:0xf (SPI_FAST_FLASH_BOOT)
+Saved PC:0x40383aec
+SPIWP:0xee
+mode:DIO, clock div:1
+load:0x3fcd5820,len:0x170c
+load:0x403cc710,len:0x968
+load:0x403ce710,len:0x2fa8
+entry 0x403cc710
+[0;32mI (24) boot: ESP-IDF v5.1.6-dirty 2nd stage bootloader[0m
+[0;32mI (24) boot: compile time Oct 16 2025 01:02:32[0m
+[0;32mI (25) boot: chip revision: v0.4[0m
+[0;32mI (28) boot.esp32c3: SPI Speed      : 80MHz[0m
+[0;32mI (33) boot.esp32c3: SPI Mode       : DIO[0m
+[0;32mI (37) boot.esp32c3: SPI Flash Size : 2MB[0m
+[0;32mI (42) boot: Enabling RNG early entropy source...[0m
+[0;32mI (47) boot: Partition Table:[0m
+[0;32mI (51) boot: ## Label            Usage          Type ST Offset   Length[0m
+[0;32mI (58) boot:  0 nvs              WiFi data        01 02 00009000 00006000[0m
+[0;32mI (66) boot:  1 phy_init         RF data          01 01 0000f000 00001000[0m
+[0;32mI (73) boot:  2 factory          factory app      00 00 00010000 00100000[0m
+[0;32mI (81) boot: End of partition table[0m
+[0;32mI (85) esp_image: segment 0: paddr=00010020 vaddr=3c040020 size=0ef88h ( 61320) map[0m
+[0;32mI (103) esp_image: segment 1: paddr=0001efb0 vaddr=3fc8dc00 size=01068h (  4200) load[0m
+[0;32mI (105) esp_image: segment 2: paddr=00020020 vaddr=42000020 size=358fch (219388) map[0m
+[0;32mI (146) esp_image: segment 3: paddr=00055924 vaddr=3fc8ec68 size=00390h (   912) load[0m
+[0;32mI (146) esp_image: segment 4: paddr=00055cbc vaddr=40380000 size=0da08h ( 55816) load[0m
+[0;32mI (166) boot: Loaded app from partition at offset 0x10000[0m
+[0;32mI (167) boot: Disabling RNG early entropy source...[0m
+[0;32mI (178) cpu_start: Unicore app[0m
+[0;32mI (178) cpu_start: Pro cpu up.[0m
+[0;32mI (188) cpu_start: Pro cpu start user code[0m
+[0;32mI (188) cpu_start: cpu freq: 160000000 Hz[0m
+[0;32mI (188) cpu_start: Application information:[0m
+[0;32mI (191) cpu_start: Project name:     ESP_MultiFlasher[0m
+[0;32mI (197) cpu_start: App version:      1[0m
+[0;32mI (201) cpu_start: Compile time:     Oct 16 2025 00:52:28[0m
+[0;32mI (207) cpu_start: ELF file SHA256:  5ff0e50cd46189b1...[0m
+[0;32mI (213) cpu_start: ESP-IDF:          v5.1.6-dirty[0m
+[0;32mI (219) cpu_start: Min chip rev:     v0.3[0m
+[0;32mI (224) cpu_start: Max chip rev:     v1.99 [0m
+[0;32mI (228) cpu_start: Chip rev:         v0.4[0m
+[0;32mI (233) heap_init: Initializing. RAM available for dynamic allocation:[0m
+[0;32mI (240) heap_init: At 3FC90410 len 0002FBF0 (190 KiB): DRAM[0m
+[0;32mI (247) heap_init: At 3FCC0000 len 0001C710 (113 KiB): DRAM/RETENTION[0m
+[0;32mI (254) heap_init: At 3FCDC710 len 00002950 (10 KiB): DRAM/RETENTION/STACK[0m
+[0;32mI (261) heap_init: At 50000010 len 00001FD8 (7 KiB): RTCRAM[0m
+[0;32mI (268) spi_flash: detected chip: generic[0m
+[0;32mI (272) spi_flash: flash io: dio[0m
+[0;33mW (276) spi_flash: Detected size(4096k) larger than the size in the binary image header(2048k). Using the size in the binary image header.[0m
+[0;32mI (290) sleep: Configure to isolate all GPIO pins in sleep state[0m
+[0;32mI (296) sleep: Enable automatic switching of GPIO sleep configuration[0m
+[0;32mI (303) app_start: Starting scheduler on CPU0[0m
+[0;32mI (308) main_task: Started on CPU0[0m
+[0;32mI (312) main_task: Calling app_main()[0m
+[0;32mI (1320) gpio: GPIO[4]| InputEn: 1| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (1320) gpio: GPIO[5]| InputEn: 1| OutputEn: 0| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (1328) gpio: GPIO[6]| InputEn: 1| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (1337) gpio: GPIO[7]| InputEn: 1| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (1357) SD_CARD: SD initialized OK![0m
+[0;33mW (1373) SD_METADATA: Firmware entry without fw_id, skipping[0m
+[0;32mI (1374) SD_CARD: Tải Metadata hoàn tất. Tổng cộng 3 firmware được tải.[0m
+[0;32mI (1377) SD_METADATA: Firmware ID esp32_cam_v1 found: Path=/HELLO.bin, Version=1.0.2[0m
+[0;32mI (1386) gpio: GPIO[2]| InputEn: 0| OutputEn: 0| OpenDrain: 0| Pullup: 1| Pulldown: 0| Intr:0 [0m
+[0;32mI (1395) gpio: GPIO[3]| InputEn: 0| OutputEn: 0| OpenDrain: 0| Pullup: 1| Pulldown: 0| Intr:0 [0m
+[0;32mI (1404) FLASHER: UART connection initialized at baud rate 115200[0m
+[0;32mI (1411) SD_METADATA: Firmware ID esp32_cam_v1 found: Path=/HELLO.bin, Version=1.0.2[0m
+[0;32mI (1429) FLASHER: Firmware file opened: /HELLO.bin, size: 170512 bytes[0m
+[0;32mI (3712) FLASHER: Connected to target device.[0m
+[0;32mI (3712) FLASHER: Bắt đầu nạp 170512 bytes vào 0x10000...[0m
+[0;32mI (5500) FLASHER: Progress: 2%[0m
+[0;32mI (5909) FLASHER: Progress: 4%[0m
+[0;32mI (6317) FLASHER: Progress: 7%[0m
+[0;32mI (6725) FLASHER: Progress: 9%[0m
+[0;32mI (7133) FLASHER: Progress: 12%[0m
+[0;32mI (7541) FLASHER: Progress: 14%[0m
+[0;32mI (7949) FLASHER: Progress: 16%[0m
+[0;32mI (8357) FLASHER: Progress: 19%[0m
+[0;32mI (8765) FLASHER: Progress: 21%[0m
+[0;32mI (9175) FLASHER: Progress: 24%[0m
+[0;32mI (9585) FLASHER: Progress: 26%[0m
+[0;32mI (9997) FLASHER: Progress: 28%[0m
+[0;32mI (10410) FLASHER: Progress: 31%[0m
+[0;32mI (10822) FLASHER: Progress: 33%[0m
+[0;32mI (11234) FLASHER: Progress: 36%[0m
+[0;32mI (11645) FLASHER: Progress: 38%[0m
+[0;32mI (12056) FLASHER: Progress: 40%[0m
+[0;32mI (12466) FLASHER: Progress: 43%[0m
+[0;32mI (12876) FLASHER: Progress: 45%[0m
+[0;32mI (13286) FLASHER: Progress: 48%[0m
+[0;32mI (13697) FLASHER: Progress: 50%[0m
+[0;32mI (14108) FLASHER: Progress: 52%[0m
+[0;32mI (14518) FLASHER: Progress: 55%[0m
+[0;32mI (14928) FLASHER: Progress: 57%[0m
+[0;32mI (15341) FLASHER: Progress: 60%[0m
+[0;32mI (15754) FLASHER: Progress: 62%[0m
+[0;32mI (16165) FLASHER: Progress: 64%[0m
+[0;32mI (16577) FLASHER: Progress: 67%[0m
+[0;32mI (16991) FLASHER: Progress: 69%[0m
+[0;32mI (17403) FLASHER: Progress: 72%[0m
+[0;32mI (17816) FLASHER: Progress: 74%[0m
+[0;32mI (18230) FLASHER: Progress: 76%[0m
+[0;32mI (18641) FLASHER: Progress: 79%[0m
+[0;32mI (19053) FLASHER: Progress: 81%[0m
+[0;32mI (19467) FLASHER: Progress: 84%[0m
+[0;32mI (19879) FLASHER: Progress: 86%[0m
+[0;32mI (20290) FLASHER: Progress: 88%[0m
+[0;32mI (20701) FLASHER: Progress: 91%[0m
+[0;32mI (21113) FLASHER: Progress: 93%[0m
+[0;32mI (21522) FLASHER: Progress: 96%[0m
+[0;32mI (21933) FLASHER: Progress: 98%[0m
+[0;32mI (22338) FLASHER: Progress: 100%[0m
+[0;32mI (22338) FLASHER: Written 170512 / 170512 bytes, finalizing...[0m
+[0;32mI (22339) FLASHER: Flash finish OK[0m
+[0;32mI (22342) FLASHER: Resetting target...[0m
+
+assert failed: tlsf_free tlsf.c:1120 (!block_is_free(block) && "block already marked as free")
+Core  0 register dump:
+MEPC    : 0x40380734  RA      : 0x40385cc6  SP      : 0x3fc93090  GP      : 0x3fc8e400  
+TP      : 0x3fc85038  T0      : 0x37363534  T1      : 0x7271706f  T2      : 0x33323130  
+S0/FP   : 0x00000069  S1      : 0x00000001  A0      : 0x3fc930cc  A1      : 0x3fc8e5a9  
+A2      : 0x00000001  A3      : 0x00000029  A4      : 0x00000001  A5      : 0x3fc90000  
+A6      : 0x7a797877  A7      : 0x76757473  S2      : 0x00000009  S3      : 0x3fc931fe  
+S4      : 0x3fc8e5a8  S5      : 0x3fc9d95c  S6      : 0x00000000  S7      : 0x00000000  
+S8      : 0x00000000  S9      : 0x00000000  S10     : 0x00000000  S11     : 0x00000000  
+T3      : 0x6e6d6c6b  T4      : 0x6a696867  T5      : 0x66656463  T6      : 0x62613938  
+MSTATUS : 0x00001881  MTVEC   : 0x40380001  MCAUSE  : 0x00000007  MTVAL   : 0x00000000  
+MHARTID : 0x00000000  
+
+Stack memory:
+3fc93090: 0x3fc90360 0x00000000 0x3c041a28 0x4038c462 0x3fc8e980 0x3c041a28 0x3fc8e964 0x3c041397
+3fc930b0: 0x3fc8e990 0x3fc930c4 0x3fc8e994 0x3c041890 0x3fc8e5a8 0x30323131 0x3fc91000 0x65737361
+3fc930d0: 0x66207472 0x656c6961 0x74203a64 0x5f66736c 0x65657266 0x736c7420 0x3a632e66 0x30323131
+3fc930f0: 0x62212820 0x6b636f6c 0x5f73695f 0x65657266 0x6f6c6228 0x20296b63 0x22202626 0x636f6c62
+3fc93110: 0x6c61206b 0x64616572 0x616d2079 0x64656b72 0x20736120 0x65657266 0x3f002922 0x40385d58
+3fc93130: 0x40383a5a 0x40388582 0x3fc931b0 0x3fc8e400 0x3fc85038 0x4005890e 0x20000000 0x852247cc
+3fc93150: 0x00000064 0x00000000 0x00000001 0x00000001 0x0000567a 0x00000004 0x00000001 0x600c0000
+3fc93170: 0x60023000 0x0000000a 0x00029a10 0x00029a10 0x00000000 0x3fc9d95c 0x00000000 0x00000000
+3fc93190: 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x0000024d 0x00000000 0x00029a10
+3fc931b0: 0x3fc9d954 0x3fc90424 0x3fc9d95c 0x4038b1a4 0x00029a10 0x3fc9d95c 0x00000000 0x00029a10
+3fc931d0: 0x00029a10 0x3fc9d95c 0x3fc90410 0x4038add4 0x00001000 0x00000000 0x3c046000 0x40380d06
+3fc931f0: 0x00029000 0x3fc9d95c 0x3c046000 0x4038c488 0x3c046198 0x00000134 0x00000001 0x4200b23a
+3fc93210: 0x00000000 0x00000000 0x00000000 0x000007d0 0x0000000a 0x3c04672c 0x00000000 0x00000000
+3fc93230: 0x00000000 0x00000000 0x00000000 0x3fc93244 0x00000009 0x33505345 0x41432d32 0x4038004d
+3fc93250: 0x3c045ebc 0x3fc9325c 0x00000005 0x2e302e31 0x00000032 0x00000000 0x00000000 0x3fc93274
+3fc93270: 0x0000000a 0x4c45482f 0x622e4f4c 0x00006e69 0x3c046198 0x3fc9c0a4 0x00000010 0x0000001e
+3fc93290: 0x00000000 0x0001c200 0x00000001 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000
+3fc932b0: 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x3c043000 0x420080b8
+3fc932d0: 0x00000000 0x00000000 0x3c043000 0x420080de 0x3c0432a8 0x00000134 0xfe7fffff 0x42034cbc
+3fc932f0: 0x00000000 0x00001388 0x00000001 0x00000000 0x00000000 0x00000000 0x00000000 0x403883d2
+3fc93310: 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000
+3fc93330: 0x00000000 0xa5a5a5a5 0xa5a5a5a5 0xa5a5a5a5 0xa5a5a5a5 0x00000154 0x3fc93130 0x0000567a
+3fc93350: 0x3fc8f1a8 0x3fc8f1a8 0x3fc93348 0x3fc8f1a0 0x00000018 0x3fc9bd3c 0x3fc9bd3c 0x3fc93348
+3fc93370: 0x00000000 0x00000001 0x3fc92344 0x6e69616d 0x3e9bb500 0xafab847a 0x00ab88d1 0x00000000
+3fc93390: 0x3fc93340 0x00000001 0x00000000 0x00000000 0x00000000 0x00000000 0x3fc90af4 0x3fc90b5c
+3fc933b0: 0x3fc90bc4 0x00000000 0x00000000 0x00000001 0x00000000 0x00000000 0x00000000 0x42025104
+3fc933d0: 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000
+3fc933f0: 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000
+3fc93410: 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000
+3fc93430: 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000
+3fc93450: 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000
+3fc93470: 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000
+
+
+
+ELF file SHA256: 5ff0e50cd46189b1
+
+Rebooting...
+ESP-ROM:esp32c3-api1-20210207
+Build:Feb  7 2021
+rst:0x3 (RTC_SW_SYS_RST),boot:0xf (SPI_FAST_FLASH_BOOT)
+Saved PC:0x40048b82
+SPIWP:0xee
+mode:DIO, clock div:1
+load:0x3fcd5820,len:0x170c
+load:0x403cc710,len:0x968
+load:0x403ce710,len:0x2fa8
+entry 0x403cc710
+[0;32mI (24) boot: ESP-IDF v5.1.6-dirty 2nd stage bootloader[0m
+[0;32mI (24) boot: compile time Oct 16 2025 01:02:32[0m
+[0;32mI (24) boot: chip revision: v0.4[0m
+[0;32mI (27) boot.esp32c3: SPI Speed      : 80MHz[0m
+[0;32mI (32) boot.esp32c3: SPI Mode       : DIO[0m
+[0;32mI (37) boot.esp32c3: SPI Flash Size : 2MB[0m
+[0;32mI (42) boot: Enabling RNG early entropy source...[0m
+[0;32mI (47) boot: Partition Table:[0m
+[0;32mI (51) boot: ## Label            Usage          Type ST Offset   Length[0m
+[0;32mI (58) boot:  0 nvs              WiFi data        01 02 00009000 00006000[0m
+[0;32mI (65) boot:  1 phy_init         RF data          01 01 0000f000 00001000[0m
+[0;32mI (73) boot:  2 factory          factory app      00 00 00010000 00100000[0m
+[0;32mI (80) boot: End of partition table[0m
+[0;32mI (84) esp_image: segment 0: paddr=00010020 vaddr=3c040020 size=0ef88h ( 61320) map[0m
+[0;32mI (103) esp_image: segment 1: paddr=0001efb0 vaddr=3fc8dc00 size=01068h (  4200) load[0m
+[0;32mI (104) esp_image: segment 2: paddr=00020020 vaddr=42000020 size=358fch (219388) map[0m
+[0;32mI (145) esp_image: segment 3: paddr=00055924 vaddr=3fc8ec68 size=00390h (   912) load[0m
+[0;32mI (146) esp_image: segment 4: paddr=00055cbc vaddr=40380000 size=0da08h ( 55816) load[0m
+[0;32mI (166) boot: Loaded app from partition at offset 0x10000[0m
+[0;32mI (166) boot: Disabling RNG early entropy source...[0m
+[0;32mI (177) cpu_start: Unicore app[0m
+[0;32mI (178) cpu_start: Pro cpu up.[0m
+[0;32mI (188) cpu_start: Pro cpu start user code[0m
+[0;32mI (188) cpu_start: cpu freq: 160000000 Hz[0m
+[0;32mI (188) cpu_start: Application information:[0m
+[0;32mI (191) cpu_start: Project name:     ESP_MultiFlasher[0m
+[0;32mI (196) cpu_start: App version:      1[0m
+[0;32mI (201) cpu_start: Compile time:     Oct 16 2025 00:52:28[0m
+[0;32mI (207) cpu_start: ELF file SHA256:  5ff0e50cd46189b1...[0m
+[0;32mI (213) cpu_start: ESP-IDF:          v5.1.6-dirty[0m
+[0;32mI (218) cpu_start: Min chip rev:     v0.3[0m
+[0;32mI (223) cpu_start: Max chip rev:     v1.99 [0m
+[0;32mI (228) cpu_start: Chip rev:         v0.4[0m
+[0;32mI (233) heap_init: Initializing. RAM available for dynamic allocation:[0m
+[0;32mI (240) heap_init: At 3FC90410 len 0002FBF0 (190 KiB): DRAM[0m
+[0;32mI (246) heap_init: At 3FCC0000 len 0001C710 (113 KiB): DRAM/RETENTION[0m
+[0;32mI (253) heap_init: At 3FCDC710 len 00002950 (10 KiB): DRAM/RETENTION/STACK[0m
+[0;32mI (261) heap_init: At 50000010 len 00001FD8 (7 KiB): RTCRAM[0m
+[0;32mI (268) spi_flash: detected chip: generic[0m
+[0;32mI (272) spi_flash: flash io: dio[0m
+[0;33mW (276) spi_flash: Detected size(4096k) larger than the size in the binary image header(2048k). Using the size in the binary image header.[0m
+[0;32mI (289) sleep: Configure to isolate all GPIO pins in sleep state[0m
+[0;32mI (295) sleep: Enable automatic switching of GPIO sleep configuration[0m
+[0;32mI (303) app_start: Starting scheduler on CPU0[0m
+[0;32mI (308) main_task: Started on CPU0[0m
+[0;32mI (312) main_task: Calling app_main()[0m
+[0;32mI (1320) gpio: GPIO[4]| InputEn: 1| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (1320) gpio: GPIO[5]| InputEn: 1| OutputEn: 0| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (1328) gpio: GPIO[6]| InputEn: 1| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (1337) gpio: GPIO[7]| InputEn: 1| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (1357) SD_CARD: SD initialized OK![0m
+[0;33mW (1373) SD_METADATA: Firmware entry without fw_id, skipping[0m
+[0;32mI (1374) SD_CARD: Tải Metadata hoàn tất. Tổng cộng 3 firmware được tải.[0m
+[0;32mI (1377) SD_METADATA: Firmware ID esp32_cam_v1 found: Path=/HELLO.bin, Version=1.0.2[0m
+[0;32mI (1386) gpio: GPIO[2]| InputEn: 0| OutputEn: 0| OpenDrain: 0| Pullup: 1| Pulldown: 0| Intr:0 [0m
+[0;32mI (1395) gpio: GPIO[3]| InputEn: 0| OutputEn: 0| OpenDrain: 0| Pullup: 1| Pulldown: 0| Intr:0 [0m
+[0;32mI (1404) FLASHER: UART connection initialized at baud rate 115200[0m
+[0;32mI (1411) SD_METADATA: Firmware ID esp32_cam_v1 found: Path=/HELLO.bin, Version=1.0.2[0m
+[0;32mI (1429) FLASHER: Firmware file opened: /HELLO.bin, size: 170512 bytes[0m
+[0;32mI (3712) FLASHER: Connected to target device.[0m
+[0;32mI (3713) FLASHER: Bắt đầu nạp 170512 bytes vào 0x10000...[0m
+[0;32mI (5457) FLASHER: Progress: 2%[0m
+[0;32mI (5866) FLASHER: Progress: 4%[0m
+[0;32mI (6273) FLASHER: Progress: 7%[0m
+[0;32mI (6681) FLASHER: Progress: 9%[0m
+[0;32mI (7089) FLASHER: Progress: 12%[0m
+[0;32mI (7498) FLASHER: Progress: 14%[0m
+[0;32mI (7905) FLASHER: Progress: 16%[0m
+[0;32mI (8313) FLASHER: Progress: 19%[0m
+[0;32mI (8721) FLASHER: Progress: 21%[0m
+[0;32mI (9131) FLASHER: Progress: 24%[0m
+[0;32mI (9541) FLASHER: Progress: 26%[0m
+[0;32mI (9953) FLASHER: Progress: 28%[0m
+[0;32mI (10367) FLASHER: Progress: 31%[0m
+[0;32mI (10778) FLASHER: Progress: 33%[0m
+[0;32mI (11190) FLASHER: Progress: 36%[0m
+[0;32mI (11601) FLASHER: Progress: 38%[0m
+[0;32mI (12012) FLASHER: Progress: 40%[0m
+[0;32mI (12422) FLASHER: Progress: 43%[0m
+[0;32mI (12833) FLASHER: Progress: 45%[0m
+[0;32mI (13242) FLASHER: Progress: 48%[0m
+[0;32mI (13653) FLASHER: Progress: 50%[0m
+[0;32mI (14065) FLASHER: Progress: 52%[0m
+[0;32mI (14474) FLASHER: Progress: 55%[0m
+[0;32mI (14885) FLASHER: Progress: 57%[0m
+[0;32mI (15297) FLASHER: Progress: 60%[0m
+[0;32mI (15710) FLASHER: Progress: 62%[0m
+[0;32mI (16122) FLASHER: Progress: 64%[0m
+[0;32mI (16534) FLASHER: Progress: 67%[0m
+[0;32mI (16948) FLASHER: Progress: 69%[0m
+[0;32mI (17359) FLASHER: Progress: 72%[0m
+[0;32mI (17773) FLASHER: Progress: 74%[0m
+[0;32mI (18187) FLASHER: Progress: 76%[0m
+[0;32mI (18598) FLASHER: Progress: 79%[0m
+[0;32mI (19010) FLASHER: Progress: 81%[0m
+[0;32mI (19423) FLASHER: Progress: 84%[0m
+[0;32mI (19836) FLASHER: Progress: 86%[0m
+[0;32mI (20247) FLASHER: Progress: 88%[0m
+[0;32mI (20658) FLASHER: Progress: 91%[0m
+[0;32mI (21070) FLASHER: Progress: 93%[0m
+[0;32mI (21479) FLASHER: Progress: 96%[0m
+[0;32mI (21890) FLASHER: Progress: 98%[0m
+[0;32mI (22295) FLASHER: Progress: 100%[0m
+[0;32mI (22295) FLASHER: Written 170512 / 170512 bytes, finalizing...[0m
+[0;32mI (22295) FLASHER: Flash finish OK[0m
+[0;32mI (22299) FLASHER: Resetting target...[0m
+
+assert failed: tlsf_free tlsf.c:1120 (!block_is_free(block) && "block already marked as free")
+Core  0 register dump:
+MEPC    : 0x40380734  RA      : 0x40385cc6  SP      : 0x3fc93090  GP      : 0x3fc8e400  
+TP      : 0x3fc85038  T0      : 0x37363534  T1      : 0x7271706f  T2      : 0x33323130  
+S0/FP   : 0x00000069  S1      : 0x00000001  A0      : 0x3fc930cc  A1      : 0x3fc8e5a9  
+A2      : 0x00000001  A3      : 0x00000029  A4      : 0x00000001  A5      : 0x3fc90000  
+A6      : 0x7a797877  A7      : 0x76757473  S2      : 0x00000009  S3      : 0x3fc931fe  
+S4      : 0x3fc8e5a8  S5      : 0x3fc9d95c  S6      : 0x00000000  S7      : 0x00000000  
+S8      : 0x00000000  S9      : 0x00000000  S10     : 0x00000000  S11     : 0x00000000  
+T3      : 0x6e6d6c6b  T4      : 0x6a696867  T5      : 0x66656463  T6      : 0x62613938  
+MSTATUS : 0x00001881  MTVEC   : 0x40380001  MCAUSE  : 0x00000007  MTVAL   : 0x00000000  
+MHARTID : 0x00000000  
+
+Stack memory:
+3fc93090: 0x00000001 0x00000000 0x3c041a28 0x4038c462 0x3fc8e980 0x3c041a28 0x3fc8e964 0x3c041397
+3fc930b0: 0x3fc8e990 0x3fc930c4 0x3fc8e994 0x3c041890 0x3fc8e5a8 0x30323131 0x3fc91000 0x65737361
+3fc930d0: 0x66207472 0x656c6961 0x74203a64 0x5f66736c 0x65657266 0x736c7420 0x3a632e66 0x30323131
+3fc930f0: 0x62212820 0x6b636f6c 0x5f73695f 0x65657266 0x6f6c6228 0x20296b63 0x22202626 0x636f6c62
+3fc93110: 0x6c61206b 0x64616572 0x616d2079 0x64656b72 0x20736120 0x65657266 0x3f002922 0x40385d58
+3fc93130: 0x40383a5a 0x40388582 0x3fc931b0 0x3fc8e400 0x3fc85038 0x4005890e 0x20000000 0x852247cc
+3fc93150: 0x00000064 0x00000000 0x00000001 0x00000001 0x0000564f 0x00000004 0x00000001 0x600c0000
+3fc93170: 0x60023000 0x0000000a 0x00029a10 0x00029a10 0x00000000 0x3fc9d95c 0x00000000 0x00000000
+3fc93190: 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x0000024d 0x00000000 0x00029a10
+3fc931b0: 0x3fc9d954 0x3fc90424 0x3fc9d95c 0x4038b1a4 0x00029a10 0x3fc9d95c 0x00000000 0x00029a10
+3fc931d0: 0x00029a10 0x3fc9d95c 0x3fc90410 0x4038add4 0x00001000 0x00000000 0x3c046000 0x40380d06
+3fc931f0: 0x00029000 0x3fc9d95c 0x3c046000 0x4038c488 0x3c046198 0x00000134 0x00000001 0x4200b23a
+3fc93210: 0x00000000 0x00000000 0x00000000 0x000007d0 0x0000000a 0x3c04672c 0x00000000 0x00000000
+3fc93230: 0x00000000 0x00000000 0x00000000 0x3fc93244 0x00000009 0x33505345 0x41432d32 0x4038004d
+3fc93250: 0x3c045ebc 0x3fc9325c 0x00000005 0x2e302e31 0x00000032 0x00000000 0x00000000 0x3fc93274
+3fc93270: 0x0000000a 0x4c45482f 0x622e4f4c 0x00006e69 0x3c046198 0x3fc9c0a4 0x00000010 0x0000001e
+3fc93290: 0x00327600 0x0001c200 0x00000001 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000
+3fc932b0: 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x3c043000 0x420080b8
+3fc932d0: 0x00000000 0x00000000 0x3c043000 0x420080de 0x3c0432a8 0x00000134 0xfe7fffff 0x42034cbc
+3fc932f0: 0x00000000 0x00001388 0x00000001 0x00000000 0x00000000 0x00000000 0x00000000 0x403883d2
+3fc93310: 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000
+3fc93330: 0x00000000 0xa5a5a5a5 0xa5a5a5a5 0xa5a5a5a5 0xa5a5a5a5 0x00000154 0x3fc93130 0x0000564f
+3fc93350: 0x3fc8f1a8 0x3fc8f1a8 0x3fc93348 0x3fc8f1a0 0x00000018 0x3fc9bd3c 0x3fc9bd3c 0x3fc93348
+3fc93370: 0x00000000 0x00000001 0x3fc92344 0x6e69616d 0x3e9bb500 0xafab847a 0x00ab88d1 0x00000000
+3fc93390: 0x3fc93340 0x00000001 0x00000000 0x00000000 0x00000000 0x00000000 0x3fc90af4 0x3fc90b5c
+3fc933b0: 0x3fc90bc4 0x00000000 0x00000000 0x00000001 0x00000000 0x00000000 0x00000000 0x42025104
+3fc933d0: 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000
+3fc933f0: 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000
+3fc93410: 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000
+3fc93430: 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000
+3fc93450: 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000
+3fc93470: 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000
+
+
+
+ELF file SHA256: 5ff0e50cd46189b1
+
+Rebooting...
+ESP-ROM:esp32c3-api1-20210207
+Build:Feb  7 2021
+rst:0x3 (RTC_SW_SYS_RST),boot:0xf (SPI_FAST_FLASH_BOOT)
+Saved PC:0x40048b82
+SPIWP:0xee
+mode:DIO, clock div:1
+load:0x3fcd5820,len:0x170c
+load:0x403cc710,len:0x968
+load:0x403ce710,len:0x2fa8
+entry 0x403cc710
+[0;32mI (24) boot: ESP-IDF v5.1.6-dirty 2nd stage bootloader[0m
+[0;32mI (24) boot: compile time Oct 16 2025 01:02:32[0m
+[0;32mI (24) boot: chip revision: v0.4[0m
+[0;32mI (27) boot.esp32c3: SPI Speed      : 80MHz[0m
+[0;32mI (32) boot.esp32c3: SPI Mode       : DIO[0m
+[0;32mI (37) boot.esp32c3: SPI Flash Size : 2MB[0m
+[0;32mI (42) boot: Enabling RNG early entropy source...[0m
+[0;32mI (47) boot: Partition Table:[0m
+[0;32mI (51) boot: ## Label            Usage          Type ST Offset   Length[0m
+[0;32mI (58) boot:  0 nvs              WiFi data        01 02 00009000 00006000[0m
+[0;32mI (65) boot:  1 phy_init         RF data          01 01 0000f000 00001000[0m
+[0;32mI (73) boot:  2 factory          factory app      00 00 00010000 00100000[0m
+[0;32mI (80) boot: End of partition table[0m
+[0;32mI (84) esp_image: segment 0: paddr=00010020 vaddr=3c040020 size=0ef88h ( 61320) map[0m
+[0;32mI (103) esp_image: segment 1: paddr=0001efb0 vaddr=3fc8dc00 size=01068h (  4200) load[0m
+[0;32mI (104) esp_image: segment 2: paddr=00020020 vaddr=42000020 size=358fch (219388) map[0m
+[0;32mI (145) esp_image: segment 3: paddr=00055924 vaddr=3fc8ec68 size=00390h (   912) load[0m
+[0;32mI (146) esp_image: segment 4: paddr=00055cbc vaddr=40380000 size=0da08h ( 55816) load[0m
+[0;32mI (166) boot: Loaded app from partition at offset 0x10000[0m
+[0;32mI (166) boot: Disabling RNG early entropy source...[0m
+[0;32mI (177) cpu_start: Unicore app[0m
+[0;32mI (178) cpu_start: Pro cpu up.[0m
+[0;32mI (188) cpu_start: Pro cpu start user code[0m
+[0;32mI (188) cpu_start: cpu freq: 160000000 Hz[0m
+[0;32mI (188) cpu_start: Application information:[0m
+[0;32mI (191) cpu_start: Project name:     ESP_MultiFlasher[0m
+[0;32mI (196) cpu_start: App version:      1[0m
+[0;32mI (201) cpu_start: Compile time:     Oct 16 2025 00:52:28[0m
+[0;32mI (207) cpu_start: ELF file SHA256:  5ff0e50cd46189b1...[0m
+[0;32mI (213) cpu_start: ESP-IDF:          v5.1.6-dirty[0m
+[0;32mI (218) cpu_start: Min chip rev:     v0.3[0m
+[0;32mI (223) cpu_start: Max chip rev:     v1.99 [0m
+[0;32mI (228) cpu_start: Chip rev:         v0.4[0m
+[0;32mI (233) heap_init: Initializing. RAM available for dynamic allocation:[0m
+[0;32mI (240) heap_init: At 3FC90410 len 0002FBF0 (190 KiB): DRAM[0m
+[0;32mI (246) heap_init: At 3FCC0000 len 0001C710 (113 KiB): DRAM/RETENTION[0m
+[0;32mI (253) heap_init: At 3FCDC710 len 00002950 (10 KiB): DRAM/RETENTION/STACK[0m
+[0;32mI (261) heap_init: At 50000010 len 00001FD8 (7 KiB): RTCRAM[0m
+[0;32mI (268) spi_flash: detected chip: generic[0m
+[0;32mI (272) spi_flash: flash io: dio[0m
+[0;33mW (276) spi_flash: Detected size(4096k) larger than the size in the binary image header(2048k). Using the size in the binary image header.[0m
+[0;32mI (289) sleep: Configure to isolate all GPIO pins in sleep state[0m
+[0;32mI (295) sleep: Enable automatic switching of GPIO sleep configuration[0m
+[0;32mI (303) app_start: Starting scheduler on CPU0[0m
+[0;32mI (308) main_task: Started on CPU0[0m
+[0;32mI (312) main_task: Calling app_main()[0m
+[0;32mI (1320) gpio: GPIO[4]| InputEn: 1| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (1320) gpio: GPIO[5]| InputEn: 1| OutputEn: 0| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (1328) gpio: GPIO[6]| InputEn: 1| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (1337) gpio: GPIO[7]| InputEn: 1| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (1357) SD_CARD: SD initialized OK![0m
+[0;33mW (1373) SD_METADATA: Firmware entry without fw_id, skipping[0m
+[0;32mI (1374) SD_CARD: Tải Metadata hoàn tất. Tổng cộng 3 firmware được tải.[0m
+[0;32mI (1377) SD_METADATA: Firmware ID esp32_cam_v1 found: Path=/HELLO.bin, Version=1.0.2[0m
+[0;32mI (1386) gpio: GPIO[2]| InputEn: 0| OutputEn: 0| OpenDrain: 0| Pullup: 1| Pulldown: 0| Intr:0 [0m
+[0;32mI (1395) gpio: GPIO[3]| InputEn: 0| OutputEn: 0| OpenDrain: 0| Pullup: 1| Pulldown: 0| Intr:0 [0m
+[0;32mI (1404) FLASHER: UART connection initialized at baud rate 115200[0m
+[0;32mI (1411) SD_METADATA: Firmware ID esp32_cam_v1 found: Path=/HELLO.bin, Version=1.0.2[0m
+[0;32mI (1429) FLASHER: Firmware file opened: /HELLO.bin, size: 170512 bytes[0m

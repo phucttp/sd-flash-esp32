@@ -1,0 +1,686 @@
+[0;33m--- Warning: GDB cannot open serial ports accessed as COMx[0m
+[0;33m--- Using \\.\COM8 instead...[0m
+[0;33m--- esp-idf-monitor 1.8.0 on \\.\COM8 115200[0m
+[0;33m--- Quit: Ctrl+] | Menu: Ctrl+T | Help: Ctrl+T followed by Ctrl+H[0m
+[0m--- 0x40383aec: [0;33mrv_utils_wait_for_intr[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/riscv/include/riscv/rv_utils.h[0m[0m:[1;31m33[0m
+[0m--- (inlined by) [0;33mesp_cpu_wait_for_intr[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_hw_support/cpu.c[0m[0m:[1;31m119[0m
+[0;33m--- Stack dump detected[0m
+[0m--- 0x40380734: [0;33mpanic_abort[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_system/panic.c[0m[0m:[1;31m466[0m
+[0m--- 0x40385cc6: [0;33m__ubsan_include[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_system/ubsan.c[0m[0m:[1;31m313[0m
+[0m--- 0x4005890e: [0;33mmemset[0m[0m in [0;32mROM[0m
+[0m--- 0x40380001: [0;33m_vector_table[0m[0m at [0;32m??[0m[0m:[1;31m?[0m
+[0;33m--- Warning: Failed to run gdb_panic_server.py script: Command '['riscv32-esp-elf-gdb', '--batch', '-n', 'C:\\Users\\DELL\\workspace\\IDF\\ESP_MUL\\Muti\\build\\ESP_MultiFlasher.elf', '-ex', 'target remote | "C:\\Espressif\\python_env\\idf5.1_py3.11_env\\Scripts\\python.exe" -m esp_idf_panic_decoder --target esp32c3 "C:\\Users\\DELL\\AppData\\Local\\Temp\\tmptdvfho9a"', '-ex', 'bt']' returned non-zero exit status 1.
+--- Warning: b"error starting child process '| C:\\Espressif\\python_env\\idf5.1_py3.11_env\\Scripts\\python.exe -m esp_idf_panic_decoder --target esp32c3 C:\\Users\\DELL\\AppData\\Local\\Temp\\tmptdvfho9a': CreateProcess: No such file or directory\r\nNo stack.\r\n"
+
+[0m
+[0m--- 0x40048b82: [0;33msoftware_reset[0m[0m in [0;32mROM[0m
+[0;33m--- Stack dump detected[0m
+[0m--- 0x40380734: [0;33mpanic_abort[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_system/panic.c[0m[0m:[1;31m466[0m
+[0m--- 0x40385cc6: [0;33m__ubsan_include[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_system/ubsan.c[0m[0m:[1;31m313[0m
+[0m--- 0x4005890e: [0;33mmemset[0m[0m in [0;32mROM[0m
+[0m--- 0x40380001: [0;33m_vector_table[0m[0m at [0;32m??[0m[0m:[1;31m?[0m
+[0;33m--- Warning: Failed to run gdb_panic_server.py script: Command '['riscv32-esp-elf-gdb', '--batch', '-n', 'C:\\Users\\DELL\\workspace\\IDF\\ESP_MUL\\Muti\\build\\ESP_MultiFlasher.elf', '-ex', 'target remote | "C:\\Espressif\\python_env\\idf5.1_py3.11_env\\Scripts\\python.exe" -m esp_idf_panic_decoder --target esp32c3 "C:\\Users\\DELL\\AppData\\Local\\Temp\\tmpzavo8n2o"', '-ex', 'bt']' returned non-zero exit status 1.
+--- Warning: b"error starting child process '| C:\\Espressif\\python_env\\idf5.1_py3.11_env\\Scripts\\python.exe -m esp_idf_panic_decoder --target esp32c3 C:\\Users\\DELL\\AppData\\Local\\Temp\\tmpzavo8n2o': CreateProcess: No such file or directory\r\nNo stack.\r\n"
+
+[0m
+[0m--- 0x40048b82: [0;33msoftware_reset[0m[0m in [0;32mROM[0m
+[0;33m--- Stack dump detected[0m
+[0m--- 0x40380734: [0;33mpanic_abort[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_system/panic.c[0m[0m:[1;31m466[0m
+[0m--- 0x40385cc6: [0;33m__ubsan_include[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_system/ubsan.c[0m[0m:[1;31m313[0m
+[0m--- 0x4005890e: [0;33mmemset[0m[0m in [0;32mROM[0m
+[0m--- 0x40380001: [0;33m_vector_table[0m[0m at [0;32m??[0m[0m:[1;31m?[0m
+[0;33m--- Warning: Failed to run gdb_panic_server.py script: Command '['riscv32-esp-elf-gdb', '--batch', '-n', 'C:\\Users\\DELL\\workspace\\IDF\\ESP_MUL\\Muti\\build\\ESP_MultiFlasher.elf', '-ex', 'target remote | "C:\\Espressif\\python_env\\idf5.1_py3.11_env\\Scripts\\python.exe" -m esp_idf_panic_decoder --target esp32c3 "C:\\Users\\DELL\\AppData\\Local\\Temp\\tmpp_hiqqpr"', '-ex', 'bt']' returned non-zero exit status 1.
+--- Warning: b"error starting child process '| C:\\Espressif\\python_env\\idf5.1_py3.11_env\\Scripts\\python.exe -m esp_idf_panic_decoder --target esp32c3 C:\\Users\\DELL\\AppData\\Local\\Temp\\tmpp_hiqqpr': CreateProcess: No such file or directory\r\nNo stack.\r\n"
+
+[0m
+[0m--- 0x40048b82: [0;33msoftware_reset[0m[0m in [0;32mROM[0m
+[0;33m--- Stack dump detected[0m
+[0m--- 0x40380734: [0;33mpanic_abort[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_system/panic.c[0m[0m:[1;31m466[0m
+[0m--- 0x40385cc6: [0;33m__ubsan_include[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_system/ubsan.c[0m[0m:[1;31m313[0m
+[0m--- 0x4005890e: [0;33mmemset[0m[0m in [0;32mROM[0m
+[0m--- 0x40380001: [0;33m_vector_table[0m[0m at [0;32m??[0m[0m:[1;31m?[0m
+[0;33m--- Warning: Failed to run gdb_panic_server.py script: Command '['riscv32-esp-elf-gdb', '--batch', '-n', 'C:\\Users\\DELL\\workspace\\IDF\\ESP_MUL\\Muti\\build\\ESP_MultiFlasher.elf', '-ex', 'target remote | "C:\\Espressif\\python_env\\idf5.1_py3.11_env\\Scripts\\python.exe" -m esp_idf_panic_decoder --target esp32c3 "C:\\Users\\DELL\\AppData\\Local\\Temp\\tmposu3pqkr"', '-ex', 'bt']' returned non-zero exit status 1.
+--- Warning: b"error starting child process '| C:\\Espressif\\python_env\\idf5.1_py3.11_env\\Scripts\\python.exe -m esp_idf_panic_decoder --target esp32c3 C:\\Users\\DELL\\AppData\\Local\\Temp\\tmposu3pqkr': CreateProcess: No such file or directory\r\nNo stack.\r\n"
+
+[0m
+[0m--- 0x40048b82: [0;33msoftware_reset[0m[0m in [0;32mROM[0m
+[0;33m--- Stack dump detected[0m
+[0m--- 0x40380734: [0;33mpanic_abort[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_system/panic.c[0m[0m:[1;31m466[0m
+[0m--- 0x40385cc6: [0;33m__ubsan_include[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_system/ubsan.c[0m[0m:[1;31m313[0m
+[0m--- 0x4005890e: [0;33mmemset[0m[0m in [0;32mROM[0m
+[0m--- 0x40380001: [0;33m_vector_table[0m[0m at [0;32m??[0m[0m:[1;31m?[0m
+[0;33m--- Warning: Failed to run gdb_panic_server.py script: Command '['riscv32-esp-elf-gdb', '--batch', '-n', 'C:\\Users\\DELL\\workspace\\IDF\\ESP_MUL\\Muti\\build\\ESP_MultiFlasher.elf', '-ex', 'target remote | "C:\\Espressif\\python_env\\idf5.1_py3.11_env\\Scripts\\python.exe" -m esp_idf_panic_decoder --target esp32c3 "C:\\Users\\DELL\\AppData\\Local\\Temp\\tmpe86l363f"', '-ex', 'bt']' returned non-zero exit status 1.
+--- Warning: b"error starting child process '| C:\\Espressif\\python_env\\idf5.1_py3.11_env\\Scripts\\python.exe -m esp_idf_panic_decoder --target esp32c3 C:\\Users\\DELL\\AppData\\Local\\Temp\\tmpe86l363f': CreateProcess: No such file or directory\r\nNo stack.\r\n"
+
+[0m
+[0m--- 0x40048b82: [0;33msoftware_reset[0m[0m in [0;32mROM[0m
+[0;33m--- Stack dump detected[0m
+[0m--- 0x40380734: [0;33mpanic_abort[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_system/panic.c[0m[0m:[1;31m466[0m
+[0m--- 0x40385cc6: [0;33m__ubsan_include[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_system/ubsan.c[0m[0m:[1;31m313[0m
+[0m--- 0x4005890e: [0;33mmemset[0m[0m in [0;32mROM[0m
+[0m--- 0x40380001: [0;33m_vector_table[0m[0m at [0;32m??[0m[0m:[1;31m?[0m
+[0;33m--- Warning: Failed to run gdb_panic_server.py script: Command '['riscv32-esp-elf-gdb', '--batch', '-n', 'C:\\Users\\DELL\\workspace\\IDF\\ESP_MUL\\Muti\\build\\ESP_MultiFlasher.elf', '-ex', 'target remote | "C:\\Espressif\\python_env\\idf5.1_py3.11_env\\Scripts\\python.exe" -m esp_idf_panic_decoder --target esp32c3 "C:\\Users\\DELL\\AppData\\Local\\Temp\\tmp2su8ydx_"', '-ex', 'bt']' returned non-zero exit status 1.
+--- Warning: b"error starting child process '| C:\\Espressif\\python_env\\idf5.1_py3.11_env\\Scripts\\python.exe -m esp_idf_panic_decoder --target esp32c3 C:\\Users\\DELL\\AppData\\Local\\Temp\\tmp2su8ydx_': CreateProcess: No such file or directory\r\nNo stack.\r\n"
+
+[0m
+[0m--- 0x40048b82: [0;33msoftware_reset[0m[0m in [0;32mROM[0m
+[0;33m--- Stack dump detected[0m
+[0m--- 0x40380734: [0;33mpanic_abort[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_system/panic.c[0m[0m:[1;31m466[0m
+[0m--- 0x40385cc6: [0;33m__ubsan_include[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_system/ubsan.c[0m[0m:[1;31m313[0m
+[0m--- 0x4005890e: [0;33mmemset[0m[0m in [0;32mROM[0m
+[0m--- 0x40380001: [0;33m_vector_table[0m[0m at [0;32m??[0m[0m:[1;31m?[0m
+[0;33m--- Warning: Failed to run gdb_panic_server.py script: Command '['riscv32-esp-elf-gdb', '--batch', '-n', 'C:\\Users\\DELL\\workspace\\IDF\\ESP_MUL\\Muti\\build\\ESP_MultiFlasher.elf', '-ex', 'target remote | "C:\\Espressif\\python_env\\idf5.1_py3.11_env\\Scripts\\python.exe" -m esp_idf_panic_decoder --target esp32c3 "C:\\Users\\DELL\\AppData\\Local\\Temp\\tmpvow6ee6_"', '-ex', 'bt']' returned non-zero exit status 1.
+--- Warning: b"error starting child process '| C:\\Espressif\\python_env\\idf5.1_py3.11_env\\Scripts\\python.exe -m esp_idf_panic_decoder --target esp32c3 C:\\Users\\DELL\\AppData\\Local\\Temp\\tmpvow6ee6_': CreateProcess: No such file or directory\r\nNo stack.\r\n"
+
+[0m
+[0m--- 0x40048b82: [0;33msoftware_reset[0m[0m in [0;32mROM[0m
+[0;33m--- Stack dump detected[0m
+[0m--- 0x40380734: [0;33mpanic_abort[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_system/panic.c[0m[0m:[1;31m466[0m
+[0m--- 0x40385cc6: [0;33m__ubsan_include[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_system/ubsan.c[0m[0m:[1;31m313[0m
+[0m--- 0x4005890e: [0;33mmemset[0m[0m in [0;32mROM[0m
+[0m--- 0x40380001: [0;33m_vector_table[0m[0m at [0;32m??[0m[0m:[1;31m?[0m
+[0;33m--- Warning: Failed to run gdb_panic_server.py script: Command '['riscv32-esp-elf-gdb', '--batch', '-n', 'C:\\Users\\DELL\\workspace\\IDF\\ESP_MUL\\Muti\\build\\ESP_MultiFlasher.elf', '-ex', 'target remote | "C:\\Espressif\\python_env\\idf5.1_py3.11_env\\Scripts\\python.exe" -m esp_idf_panic_decoder --target esp32c3 "C:\\Users\\DELL\\AppData\\Local\\Temp\\tmpmn2tngbd"', '-ex', 'bt']' returned non-zero exit status 1.
+--- Warning: b"error starting child process '| C:\\Espressif\\python_env\\idf5.1_py3.11_env\\Scripts\\python.exe -m esp_idf_panic_decoder --target esp32c3 C:\\Users\\DELL\\AppData\\Local\\Temp\\tmpmn2tngbd': CreateProcess: No such file or directory\r\nNo stack.\r\n"
+
+[0m
+[0m--- 0x40048b82: [0;33msoftware_reset[0m[0m in [0;32mROM[0m
+[0;33m--- Stack dump detected[0m
+[0m--- 0x40380734: [0;33mpanic_abort[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_system/panic.c[0m[0m:[1;31m466[0m
+[0m--- 0x40385cc6: [0;33m__ubsan_include[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_system/ubsan.c[0m[0m:[1;31m313[0m
+[0m--- 0x4005890e: [0;33mmemset[0m[0m in [0;32mROM[0m
+[0m--- 0x40380001: [0;33m_vector_table[0m[0m at [0;32m??[0m[0m:[1;31m?[0m
+[0;33m--- Warning: Failed to run gdb_panic_server.py script: Command '['riscv32-esp-elf-gdb', '--batch', '-n', 'C:\\Users\\DELL\\workspace\\IDF\\ESP_MUL\\Muti\\build\\ESP_MultiFlasher.elf', '-ex', 'target remote | "C:\\Espressif\\python_env\\idf5.1_py3.11_env\\Scripts\\python.exe" -m esp_idf_panic_decoder --target esp32c3 "C:\\Users\\DELL\\AppData\\Local\\Temp\\tmpalxmqbgu"', '-ex', 'bt']' returned non-zero exit status 1.
+--- Warning: b"error starting child process '| C:\\Espressif\\python_env\\idf5.1_py3.11_env\\Scripts\\python.exe -m esp_idf_panic_decoder --target esp32c3 C:\\Users\\DELL\\AppData\\Local\\Temp\\tmpalxmqbgu': CreateProcess: No such file or directory\r\nNo stack.\r\n"
+
+[0m
+[0m--- 0x40048b82: [0;33msoftware_reset[0m[0m in [0;32mROM[0m
+[0;33m--- Stack dump detected[0m
+[0m--- 0x40380734: [0;33mpanic_abort[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_system/panic.c[0m[0m:[1;31m466[0m
+[0m--- 0x40385cc6: [0;33m__ubsan_include[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_system/ubsan.c[0m[0m:[1;31m313[0m
+[0m--- 0x4005890e: [0;33mmemset[0m[0m in [0;32mROM[0m
+[0m--- 0x40380001: [0;33m_vector_table[0m[0m at [0;32m??[0m[0m:[1;31m?[0m
+[0;33m--- Warning: Failed to run gdb_panic_server.py script: Command '['riscv32-esp-elf-gdb', '--batch', '-n', 'C:\\Users\\DELL\\workspace\\IDF\\ESP_MUL\\Muti\\build\\ESP_MultiFlasher.elf', '-ex', 'target remote | "C:\\Espressif\\python_env\\idf5.1_py3.11_env\\Scripts\\python.exe" -m esp_idf_panic_decoder --target esp32c3 "C:\\Users\\DELL\\AppData\\Local\\Temp\\tmpc3j66ft_"', '-ex', 'bt']' returned non-zero exit status 1.
+--- Warning: b"error starting child process '| C:\\Espressif\\python_env\\idf5.1_py3.11_env\\Scripts\\python.exe -m esp_idf_panic_decoder --target esp32c3 C:\\Users\\DELL\\AppData\\Local\\Temp\\tmpc3j66ft_': CreateProcess: No such file or directory\r\nNo stack.\r\n"
+
+[0m
+[0m--- 0x40048b82: [0;33msoftware_reset[0m[0m in [0;32mROM[0m
+[0;33m--- Stack dump detected[0m
+[0m--- 0x40380734: [0;33mpanic_abort[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_system/panic.c[0m[0m:[1;31m466[0m
+[0m--- 0x40385cc6: [0;33m__ubsan_include[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_system/ubsan.c[0m[0m:[1;31m313[0m
+[0m--- 0x4005890e: [0;33mmemset[0m[0m in [0;32mROM[0m
+[0m--- 0x40380001: [0;33m_vector_table[0m[0m at [0;32m??[0m[0m:[1;31m?[0m
+[0;33m--- Warning: Failed to run gdb_panic_server.py script: Command '['riscv32-esp-elf-gdb', '--batch', '-n', 'C:\\Users\\DELL\\workspace\\IDF\\ESP_MUL\\Muti\\build\\ESP_MultiFlasher.elf', '-ex', 'target remote | "C:\\Espressif\\python_env\\idf5.1_py3.11_env\\Scripts\\python.exe" -m esp_idf_panic_decoder --target esp32c3 "C:\\Users\\DELL\\AppData\\Local\\Temp\\tmpfyfowtiw"', '-ex', 'bt']' returned non-zero exit status 1.
+--- Warning: b"error starting child process '| C:\\Espressif\\python_env\\idf5.1_py3.11_env\\Scripts\\python.exe -m esp_idf_panic_decoder --target esp32c3 C:\\Users\\DELL\\AppData\\Local\\Temp\\tmpfyfowtiw': CreateProcess: No such file or directory\r\nNo stack.\r\n"
+
+[0m
+[0m--- 0x40048b82: [0;33msoftware_reset[0m[0m in [0;32mROM[0m
+[0;33m--- Stack dump detected[0m
+[0m--- 0x40380734: [0;33mpanic_abort[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_system/panic.c[0m[0m:[1;31m466[0m
+[0m--- 0x40385cc6: [0;33m__ubsan_include[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_system/ubsan.c[0m[0m:[1;31m313[0m
+[0m--- 0x4005890e: [0;33mmemset[0m[0m in [0;32mROM[0m
+[0m--- 0x40380001: [0;33m_vector_table[0m[0m at [0;32m??[0m[0m:[1;31m?[0m
+[0;33m--- Warning: Failed to run gdb_panic_server.py script: Command '['riscv32-esp-elf-gdb', '--batch', '-n', 'C:\\Users\\DELL\\workspace\\IDF\\ESP_MUL\\Muti\\build\\ESP_MultiFlasher.elf', '-ex', 'target remote | "C:\\Espressif\\python_env\\idf5.1_py3.11_env\\Scripts\\python.exe" -m esp_idf_panic_decoder --target esp32c3 "C:\\Users\\DELL\\AppData\\Local\\Temp\\tmp5e8ul59h"', '-ex', 'bt']' returned non-zero exit status 1.
+--- Warning: b"error starting child process '| C:\\Espressif\\python_env\\idf5.1_py3.11_env\\Scripts\\python.exe -m esp_idf_panic_decoder --target esp32c3 C:\\Users\\DELL\\AppData\\Local\\Temp\\tmp5e8ul59h': CreateProcess: No such file or directory\r\nNo stack.\r\n"
+
+[0m
+[0m--- 0x40048b82: [0;33msoftware_reset[0m[0m in [0;32mROM[0m
+[0;33m--- Stack dump detected[0m
+[0m--- 0x40380734: [0;33mpanic_abort[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_system/panic.c[0m[0m:[1;31m466[0m
+[0m--- 0x40385cc6: [0;33m__ubsan_include[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_system/ubsan.c[0m[0m:[1;31m313[0m
+[0m--- 0x4005890e: [0;33mmemset[0m[0m in [0;32mROM[0m
+[0m--- 0x40380001: [0;33m_vector_table[0m[0m at [0;32m??[0m[0m:[1;31m?[0m
+[0;33m--- Warning: Failed to run gdb_panic_server.py script: Command '['riscv32-esp-elf-gdb', '--batch', '-n', 'C:\\Users\\DELL\\workspace\\IDF\\ESP_MUL\\Muti\\build\\ESP_MultiFlasher.elf', '-ex', 'target remote | "C:\\Espressif\\python_env\\idf5.1_py3.11_env\\Scripts\\python.exe" -m esp_idf_panic_decoder --target esp32c3 "C:\\Users\\DELL\\AppData\\Local\\Temp\\tmp6afh7_vz"', '-ex', 'bt']' returned non-zero exit status 1.
+--- Warning: b"error starting child process '| C:\\Espressif\\python_env\\idf5.1_py3.11_env\\Scripts\\python.exe -m esp_idf_panic_decoder --target esp32c3 C:\\Users\\DELL\\AppData\\Local\\Temp\\tmp6afh7_vz': CreateProcess: No such file or directory\r\nNo stack.\r\n"
+
+[0m
+[0m--- 0x40048b82: [0;33msoftware_reset[0m[0m in [0;32mROM[0m
+[0;33m--- Stack dump detected[0m
+[0m--- 0x40380734: [0;33mpanic_abort[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_system/panic.c[0m[0m:[1;31m466[0m
+[0m--- 0x40385cc6: [0;33m__ubsan_include[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_system/ubsan.c[0m[0m:[1;31m313[0m
+[0m--- 0x4005890e: [0;33mmemset[0m[0m in [0;32mROM[0m
+[0m--- 0x40380001: [0;33m_vector_table[0m[0m at [0;32m??[0m[0m:[1;31m?[0m
+[0;33m--- Warning: Failed to run gdb_panic_server.py script: Command '['riscv32-esp-elf-gdb', '--batch', '-n', 'C:\\Users\\DELL\\workspace\\IDF\\ESP_MUL\\Muti\\build\\ESP_MultiFlasher.elf', '-ex', 'target remote | "C:\\Espressif\\python_env\\idf5.1_py3.11_env\\Scripts\\python.exe" -m esp_idf_panic_decoder --target esp32c3 "C:\\Users\\DELL\\AppData\\Local\\Temp\\tmpgch7di7o"', '-ex', 'bt']' returned non-zero exit status 1.
+--- Warning: b"error starting child process '| C:\\Espressif\\python_env\\idf5.1_py3.11_env\\Scripts\\python.exe -m esp_idf_panic_decoder --target esp32c3 C:\\Users\\DELL\\AppData\\Local\\Temp\\tmpgch7di7o': CreateProcess: No such file or directory\r\nNo stack.\r\n"
+
+[0m
+[0m--- 0x40048b82: [0;33msoftware_reset[0m[0m in [0;32mROM[0m
+[0;33m--- Stack dump detected[0m
+[0m--- 0x40380734: [0;33mpanic_abort[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_system/panic.c[0m[0m:[1;31m466[0m
+[0m--- 0x40385cc6: [0;33m__ubsan_include[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_system/ubsan.c[0m[0m:[1;31m313[0m
+[0m--- 0x4005890e: [0;33mmemset[0m[0m in [0;32mROM[0m
+[0m--- 0x40380001: [0;33m_vector_table[0m[0m at [0;32m??[0m[0m:[1;31m?[0m
+[0;33m--- Warning: Failed to run gdb_panic_server.py script: Command '['riscv32-esp-elf-gdb', '--batch', '-n', 'C:\\Users\\DELL\\workspace\\IDF\\ESP_MUL\\Muti\\build\\ESP_MultiFlasher.elf', '-ex', 'target remote | "C:\\Espressif\\python_env\\idf5.1_py3.11_env\\Scripts\\python.exe" -m esp_idf_panic_decoder --target esp32c3 "C:\\Users\\DELL\\AppData\\Local\\Temp\\tmpfthls01i"', '-ex', 'bt']' returned non-zero exit status 1.
+--- Warning: b"error starting child process '| C:\\Espressif\\python_env\\idf5.1_py3.11_env\\Scripts\\python.exe -m esp_idf_panic_decoder --target esp32c3 C:\\Users\\DELL\\AppData\\Local\\Temp\\tmpfthls01i': CreateProcess: No such file or directory\r\nNo stack.\r\n"
+
+[0m
+[0m--- 0x40048b82: [0;33msoftware_reset[0m[0m in [0;32mROM[0m
+[0;33m--- Stack dump detected[0m
+[0m--- 0x40380734: [0;33mpanic_abort[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_system/panic.c[0m[0m:[1;31m466[0m
+[0m--- 0x40385cc6: [0;33m__ubsan_include[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_system/ubsan.c[0m[0m:[1;31m313[0m
+[0m--- 0x4005890e: [0;33mmemset[0m[0m in [0;32mROM[0m
+[0m--- 0x40380001: [0;33m_vector_table[0m[0m at [0;32m??[0m[0m:[1;31m?[0m
+[0;33m--- Warning: Failed to run gdb_panic_server.py script: Command '['riscv32-esp-elf-gdb', '--batch', '-n', 'C:\\Users\\DELL\\workspace\\IDF\\ESP_MUL\\Muti\\build\\ESP_MultiFlasher.elf', '-ex', 'target remote | "C:\\Espressif\\python_env\\idf5.1_py3.11_env\\Scripts\\python.exe" -m esp_idf_panic_decoder --target esp32c3 "C:\\Users\\DELL\\AppData\\Local\\Temp\\tmpx86mk9u2"', '-ex', 'bt']' returned non-zero exit status 1.
+--- Warning: b"error starting child process '| C:\\Espressif\\python_env\\idf5.1_py3.11_env\\Scripts\\python.exe -m esp_idf_panic_decoder --target esp32c3 C:\\Users\\DELL\\AppData\\Local\\Temp\\tmpx86mk9u2': CreateProcess: No such file or directory\r\nNo stack.\r\n"
+
+[0m
+[0m--- 0x40048b82: [0;33msoftware_reset[0m[0m in [0;32mROM[0m
+[0;33m--- Stack dump detected[0m
+[0m--- 0x40380734: [0;33mpanic_abort[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_system/panic.c[0m[0m:[1;31m466[0m
+[0m--- 0x40385cc6: [0;33m__ubsan_include[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_system/ubsan.c[0m[0m:[1;31m313[0m
+[0m--- 0x4005890e: [0;33mmemset[0m[0m in [0;32mROM[0m
+[0m--- 0x40380001: [0;33m_vector_table[0m[0m at [0;32m??[0m[0m:[1;31m?[0m
+[0;33m--- Warning: Failed to run gdb_panic_server.py script: Command '['riscv32-esp-elf-gdb', '--batch', '-n', 'C:\\Users\\DELL\\workspace\\IDF\\ESP_MUL\\Muti\\build\\ESP_MultiFlasher.elf', '-ex', 'target remote | "C:\\Espressif\\python_env\\idf5.1_py3.11_env\\Scripts\\python.exe" -m esp_idf_panic_decoder --target esp32c3 "C:\\Users\\DELL\\AppData\\Local\\Temp\\tmpbgy_5q7y"', '-ex', 'bt']' returned non-zero exit status 1.
+--- Warning: b"error starting child process '| C:\\Espressif\\python_env\\idf5.1_py3.11_env\\Scripts\\python.exe -m esp_idf_panic_decoder --target esp32c3 C:\\Users\\DELL\\AppData\\Local\\Temp\\tmpbgy_5q7y': CreateProcess: No such file or directory\r\nNo stack.\r\n"
+
+[0m
+[0m--- 0x40048b82: [0;33msoftware_reset[0m[0m in [0;32mROM[0m
+[0;33m--- Stack dump detected[0m
+[0m--- 0x40380734: [0;33mpanic_abort[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_system/panic.c[0m[0m:[1;31m466[0m
+[0m--- 0x40385cc6: [0;33m__ubsan_include[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_system/ubsan.c[0m[0m:[1;31m313[0m
+[0m--- 0x4005890e: [0;33mmemset[0m[0m in [0;32mROM[0m
+[0m--- 0x40380001: [0;33m_vector_table[0m[0m at [0;32m??[0m[0m:[1;31m?[0m
+[0;33m--- Warning: Failed to run gdb_panic_server.py script: Command '['riscv32-esp-elf-gdb', '--batch', '-n', 'C:\\Users\\DELL\\workspace\\IDF\\ESP_MUL\\Muti\\build\\ESP_MultiFlasher.elf', '-ex', 'target remote | "C:\\Espressif\\python_env\\idf5.1_py3.11_env\\Scripts\\python.exe" -m esp_idf_panic_decoder --target esp32c3 "C:\\Users\\DELL\\AppData\\Local\\Temp\\tmp6y3yzl6n"', '-ex', 'bt']' returned non-zero exit status 1.
+--- Warning: b"error starting child process '| C:\\Espressif\\python_env\\idf5.1_py3.11_env\\Scripts\\python.exe -m esp_idf_panic_decoder --target esp32c3 C:\\Users\\DELL\\AppData\\Local\\Temp\\tmp6y3yzl6n': CreateProcess: No such file or directory\r\nNo stack.\r\n"
+
+[0m
+[0m--- 0x40048b82: [0;33msoftware_reset[0m[0m in [0;32mROM[0m
+[0;33m--- Stack dump detected[0m
+[0m--- 0x40380734: [0;33mpanic_abort[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_system/panic.c[0m[0m:[1;31m466[0m
+[0m--- 0x40385cc6: [0;33m__ubsan_include[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_system/ubsan.c[0m[0m:[1;31m313[0m
+[0m--- 0x4005890e: [0;33mmemset[0m[0m in [0;32mROM[0m
+[0m--- 0x40380001: [0;33m_vector_table[0m[0m at [0;32m??[0m[0m:[1;31m?[0m
+[0;33m--- Warning: Failed to run gdb_panic_server.py script: Command '['riscv32-esp-elf-gdb', '--batch', '-n', 'C:\\Users\\DELL\\workspace\\IDF\\ESP_MUL\\Muti\\build\\ESP_MultiFlasher.elf', '-ex', 'target remote | "C:\\Espressif\\python_env\\idf5.1_py3.11_env\\Scripts\\python.exe" -m esp_idf_panic_decoder --target esp32c3 "C:\\Users\\DELL\\AppData\\Local\\Temp\\tmpikdi6qj1"', '-ex', 'bt']' returned non-zero exit status 1.
+--- Warning: b"error starting child process '| C:\\Espressif\\python_env\\idf5.1_py3.11_env\\Scripts\\python.exe -m esp_idf_panic_decoder --target esp32c3 C:\\Users\\DELL\\AppData\\Local\\Temp\\tmpikdi6qj1': CreateProcess: No such file or directory\r\nNo stack.\r\n"
+
+[0m
+[0m--- 0x40048b82: [0;33msoftware_reset[0m[0m in [0;32mROM[0m
+[0;33m--- Stack dump detected[0m
+[0m--- 0x40380734: [0;33mpanic_abort[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_system/panic.c[0m[0m:[1;31m466[0m
+[0m--- 0x40385cc6: [0;33m__ubsan_include[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_system/ubsan.c[0m[0m:[1;31m313[0m
+[0m--- 0x4005890e: [0;33mmemset[0m[0m in [0;32mROM[0m
+[0m--- 0x40380001: [0;33m_vector_table[0m[0m at [0;32m??[0m[0m:[1;31m?[0m
+[0;33m--- Warning: Failed to run gdb_panic_server.py script: Command '['riscv32-esp-elf-gdb', '--batch', '-n', 'C:\\Users\\DELL\\workspace\\IDF\\ESP_MUL\\Muti\\build\\ESP_MultiFlasher.elf', '-ex', 'target remote | "C:\\Espressif\\python_env\\idf5.1_py3.11_env\\Scripts\\python.exe" -m esp_idf_panic_decoder --target esp32c3 "C:\\Users\\DELL\\AppData\\Local\\Temp\\tmpdgs66sb4"', '-ex', 'bt']' returned non-zero exit status 1.
+--- Warning: b"error starting child process '| C:\\Espressif\\python_env\\idf5.1_py3.11_env\\Scripts\\python.exe -m esp_idf_panic_decoder --target esp32c3 C:\\Users\\DELL\\AppData\\Local\\Temp\\tmpdgs66sb4': CreateProcess: No such file or directory\r\nNo stack.\r\n"
+
+[0m
+[0m--- 0x40048b82: [0;33msoftware_reset[0m[0m in [0;32mROM[0m
+[0;33m--- Stack dump detected[0m
+[0m--- 0x40380734: [0;33mpanic_abort[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_system/panic.c[0m[0m:[1;31m466[0m
+[0m--- 0x40385cc6: [0;33m__ubsan_include[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_system/ubsan.c[0m[0m:[1;31m313[0m
+[0m--- 0x4005890e: [0;33mmemset[0m[0m in [0;32mROM[0m
+[0m--- 0x40380001: [0;33m_vector_table[0m[0m at [0;32m??[0m[0m:[1;31m?[0m
+[0;33m--- Warning: Failed to run gdb_panic_server.py script: Command '['riscv32-esp-elf-gdb', '--batch', '-n', 'C:\\Users\\DELL\\workspace\\IDF\\ESP_MUL\\Muti\\build\\ESP_MultiFlasher.elf', '-ex', 'target remote | "C:\\Espressif\\python_env\\idf5.1_py3.11_env\\Scripts\\python.exe" -m esp_idf_panic_decoder --target esp32c3 "C:\\Users\\DELL\\AppData\\Local\\Temp\\tmpzvv8kix7"', '-ex', 'bt']' returned non-zero exit status 1.
+--- Warning: b"error starting child process '| C:\\Espressif\\python_env\\idf5.1_py3.11_env\\Scripts\\python.exe -m esp_idf_panic_decoder --target esp32c3 C:\\Users\\DELL\\AppData\\Local\\Temp\\tmpzvv8kix7': CreateProcess: No such file or directory\r\nNo stack.\r\n"
+
+[0m
+[0m--- 0x40048b82: [0;33msoftware_reset[0m[0m in [0;32mROM[0m
+[0;33m--- Stack dump detected[0m
+[0m--- 0x40380734: [0;33mpanic_abort[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_system/panic.c[0m[0m:[1;31m466[0m
+[0m--- 0x40385cc6: [0;33m__ubsan_include[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_system/ubsan.c[0m[0m:[1;31m313[0m
+[0m--- 0x4005890e: [0;33mmemset[0m[0m in [0;32mROM[0m
+[0m--- 0x40380001: [0;33m_vector_table[0m[0m at [0;32m??[0m[0m:[1;31m?[0m
+[0;33m--- Warning: Failed to run gdb_panic_server.py script: Command '['riscv32-esp-elf-gdb', '--batch', '-n', 'C:\\Users\\DELL\\workspace\\IDF\\ESP_MUL\\Muti\\build\\ESP_MultiFlasher.elf', '-ex', 'target remote | "C:\\Espressif\\python_env\\idf5.1_py3.11_env\\Scripts\\python.exe" -m esp_idf_panic_decoder --target esp32c3 "C:\\Users\\DELL\\AppData\\Local\\Temp\\tmpua52196k"', '-ex', 'bt']' returned non-zero exit status 1.
+--- Warning: b"error starting child process '| C:\\Espressif\\python_env\\idf5.1_py3.11_env\\Scripts\\python.exe -m esp_idf_panic_decoder --target esp32c3 C:\\Users\\DELL\\AppData\\Local\\Temp\\tmpua52196k': CreateProcess: No such file or directory\r\nNo stack.\r\n"
+
+[0m
+[0m--- 0x40048b82: [0;33msoftware_reset[0m[0m in [0;32mROM[0m
+[0;33m--- Stack dump detected[0m
+[0m--- 0x40380734: [0;33mpanic_abort[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_system/panic.c[0m[0m:[1;31m466[0m
+[0m--- 0x40385cc6: [0;33m__ubsan_include[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_system/ubsan.c[0m[0m:[1;31m313[0m
+[0m--- 0x4005890e: [0;33mmemset[0m[0m in [0;32mROM[0m
+[0m--- 0x40380001: [0;33m_vector_table[0m[0m at [0;32m??[0m[0m:[1;31m?[0m
+[0;33m--- Warning: Failed to run gdb_panic_server.py script: Command '['riscv32-esp-elf-gdb', '--batch', '-n', 'C:\\Users\\DELL\\workspace\\IDF\\ESP_MUL\\Muti\\build\\ESP_MultiFlasher.elf', '-ex', 'target remote | "C:\\Espressif\\python_env\\idf5.1_py3.11_env\\Scripts\\python.exe" -m esp_idf_panic_decoder --target esp32c3 "C:\\Users\\DELL\\AppData\\Local\\Temp\\tmp8fxiakzg"', '-ex', 'bt']' returned non-zero exit status 1.
+--- Warning: b"error starting child process '| C:\\Espressif\\python_env\\idf5.1_py3.11_env\\Scripts\\python.exe -m esp_idf_panic_decoder --target esp32c3 C:\\Users\\DELL\\AppData\\Local\\Temp\\tmp8fxiakzg': CreateProcess: No such file or directory\r\nNo stack.\r\n"
+
+[0m
+[0m--- 0x40048b82: [0;33msoftware_reset[0m[0m in [0;32mROM[0m
+[0;33m--- Stack dump detected[0m
+[0m--- 0x40380734: [0;33mpanic_abort[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_system/panic.c[0m[0m:[1;31m466[0m
+[0m--- 0x40385cc6: [0;33m__ubsan_include[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_system/ubsan.c[0m[0m:[1;31m313[0m
+[0m--- 0x4005890e: [0;33mmemset[0m[0m in [0;32mROM[0m
+[0m--- 0x40380001: [0;33m_vector_table[0m[0m at [0;32m??[0m[0m:[1;31m?[0m
+[0;33m--- Warning: Failed to run gdb_panic_server.py script: Command '['riscv32-esp-elf-gdb', '--batch', '-n', 'C:\\Users\\DELL\\workspace\\IDF\\ESP_MUL\\Muti\\build\\ESP_MultiFlasher.elf', '-ex', 'target remote | "C:\\Espressif\\python_env\\idf5.1_py3.11_env\\Scripts\\python.exe" -m esp_idf_panic_decoder --target esp32c3 "C:\\Users\\DELL\\AppData\\Local\\Temp\\tmpggmpke5b"', '-ex', 'bt']' returned non-zero exit status 1.
+--- Warning: b"error starting child process '| C:\\Espressif\\python_env\\idf5.1_py3.11_env\\Scripts\\python.exe -m esp_idf_panic_decoder --target esp32c3 C:\\Users\\DELL\\AppData\\Local\\Temp\\tmpggmpke5b': CreateProcess: No such file or directory\r\nNo stack.\r\n"
+
+[0m
+[0m--- 0x40048b82: [0;33msoftware_reset[0m[0m in [0;32mROM[0m
+[0;33m--- Stack dump detected[0m
+[0m--- 0x40380734: [0;33mpanic_abort[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_system/panic.c[0m[0m:[1;31m466[0m
+[0m--- 0x40385cc6: [0;33m__ubsan_include[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_system/ubsan.c[0m[0m:[1;31m313[0m
+[0m--- 0x4005890e: [0;33mmemset[0m[0m in [0;32mROM[0m
+[0m--- 0x40380001: [0;33m_vector_table[0m[0m at [0;32m??[0m[0m:[1;31m?[0m
+[0;33m--- Warning: Failed to run gdb_panic_server.py script: Command '['riscv32-esp-elf-gdb', '--batch', '-n', 'C:\\Users\\DELL\\workspace\\IDF\\ESP_MUL\\Muti\\build\\ESP_MultiFlasher.elf', '-ex', 'target remote | "C:\\Espressif\\python_env\\idf5.1_py3.11_env\\Scripts\\python.exe" -m esp_idf_panic_decoder --target esp32c3 "C:\\Users\\DELL\\AppData\\Local\\Temp\\tmpbwfz8_ew"', '-ex', 'bt']' returned non-zero exit status 1.
+--- Warning: b"error starting child process '| C:\\Espressif\\python_env\\idf5.1_py3.11_env\\Scripts\\python.exe -m esp_idf_panic_decoder --target esp32c3 C:\\Users\\DELL\\AppData\\Local\\Temp\\tmpbwfz8_ew': CreateProcess: No such file or directory\r\nNo stack.\r\n"
+
+[0m
+[0m--- 0x40048b82: [0;33msoftware_reset[0m[0m in [0;32mROM[0m
+[0;33m--- Stack dump detected[0m
+[0m--- 0x40380734: [0;33mpanic_abort[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_system/panic.c[0m[0m:[1;31m466[0m
+[0m--- 0x40385cc6: [0;33m__ubsan_include[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_system/ubsan.c[0m[0m:[1;31m313[0m
+[0m--- 0x4005890e: [0;33mmemset[0m[0m in [0;32mROM[0m
+[0m--- 0x40380001: [0;33m_vector_table[0m[0m at [0;32m??[0m[0m:[1;31m?[0m
+[0;33m--- Warning: Failed to run gdb_panic_server.py script: Command '['riscv32-esp-elf-gdb', '--batch', '-n', 'C:\\Users\\DELL\\workspace\\IDF\\ESP_MUL\\Muti\\build\\ESP_MultiFlasher.elf', '-ex', 'target remote | "C:\\Espressif\\python_env\\idf5.1_py3.11_env\\Scripts\\python.exe" -m esp_idf_panic_decoder --target esp32c3 "C:\\Users\\DELL\\AppData\\Local\\Temp\\tmp8s8_iyej"', '-ex', 'bt']' returned non-zero exit status 1.
+--- Warning: b"error starting child process '| C:\\Espressif\\python_env\\idf5.1_py3.11_env\\Scripts\\python.exe -m esp_idf_panic_decoder --target esp32c3 C:\\Users\\DELL\\AppData\\Local\\Temp\\tmp8s8_iyej': CreateProcess: No such file or directory\r\nNo stack.\r\n"
+
+[0m
+[0m--- 0x40048b82: [0;33msoftware_reset[0m[0m in [0;32mROM[0m
+[0;33m--- Stack dump detected[0m
+[0m--- 0x40380734: [0;33mpanic_abort[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_system/panic.c[0m[0m:[1;31m466[0m
+[0m--- 0x40385cc6: [0;33m__ubsan_include[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_system/ubsan.c[0m[0m:[1;31m313[0m
+[0m--- 0x4005890e: [0;33mmemset[0m[0m in [0;32mROM[0m
+[0m--- 0x40380001: [0;33m_vector_table[0m[0m at [0;32m??[0m[0m:[1;31m?[0m
+[0;33m--- Warning: Failed to run gdb_panic_server.py script: Command '['riscv32-esp-elf-gdb', '--batch', '-n', 'C:\\Users\\DELL\\workspace\\IDF\\ESP_MUL\\Muti\\build\\ESP_MultiFlasher.elf', '-ex', 'target remote | "C:\\Espressif\\python_env\\idf5.1_py3.11_env\\Scripts\\python.exe" -m esp_idf_panic_decoder --target esp32c3 "C:\\Users\\DELL\\AppData\\Local\\Temp\\tmpyid6cdcl"', '-ex', 'bt']' returned non-zero exit status 1.
+--- Warning: b"error starting child process '| C:\\Espressif\\python_env\\idf5.1_py3.11_env\\Scripts\\python.exe -m esp_idf_panic_decoder --target esp32c3 C:\\Users\\DELL\\AppData\\Local\\Temp\\tmpyid6cdcl': CreateProcess: No such file or directory\r\nNo stack.\r\n"
+
+[0m
+[0m--- 0x40048b82: [0;33msoftware_reset[0m[0m in [0;32mROM[0m
+[0;33m--- Stack dump detected[0m
+[0m--- 0x40380734: [0;33mpanic_abort[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_system/panic.c[0m[0m:[1;31m466[0m
+[0m--- 0x40385cc6: [0;33m__ubsan_include[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_system/ubsan.c[0m[0m:[1;31m313[0m
+[0m--- 0x4005890e: [0;33mmemset[0m[0m in [0;32mROM[0m
+[0m--- 0x40380001: [0;33m_vector_table[0m[0m at [0;32m??[0m[0m:[1;31m?[0m
+[0;33m--- Warning: Failed to run gdb_panic_server.py script: Command '['riscv32-esp-elf-gdb', '--batch', '-n', 'C:\\Users\\DELL\\workspace\\IDF\\ESP_MUL\\Muti\\build\\ESP_MultiFlasher.elf', '-ex', 'target remote | "C:\\Espressif\\python_env\\idf5.1_py3.11_env\\Scripts\\python.exe" -m esp_idf_panic_decoder --target esp32c3 "C:\\Users\\DELL\\AppData\\Local\\Temp\\tmppdv3fq00"', '-ex', 'bt']' returned non-zero exit status 1.
+--- Warning: b"error starting child process '| C:\\Espressif\\python_env\\idf5.1_py3.11_env\\Scripts\\python.exe -m esp_idf_panic_decoder --target esp32c3 C:\\Users\\DELL\\AppData\\Local\\Temp\\tmppdv3fq00': CreateProcess: No such file or directory\r\nNo stack.\r\n"
+
+[0m
+[0m--- 0x40048b82: [0;33msoftware_reset[0m[0m in [0;32mROM[0m
+[0;33m--- Stack dump detected[0m
+[0m--- 0x40380734: [0;33mpanic_abort[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_system/panic.c[0m[0m:[1;31m466[0m
+[0m--- 0x40385cc6: [0;33m__ubsan_include[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_system/ubsan.c[0m[0m:[1;31m313[0m
+[0m--- 0x4005890e: [0;33mmemset[0m[0m in [0;32mROM[0m
+[0m--- 0x40380001: [0;33m_vector_table[0m[0m at [0;32m??[0m[0m:[1;31m?[0m
+[1;31m--- Error: ClearCommError failed (PermissionError(13, 'The device does not recognize the command.', None, 22))[0m
+[0;33m--- Waiting for the device to reconnect[0m[0;33m--- Warning: Failed to run gdb_panic_server.py script: Command '['riscv32-esp-elf-gdb', '--batch', '-n', 'C:\\Users\\DELL\\workspace\\IDF\\ESP_MUL\\Muti\\build\\ESP_MultiFlasher.elf', '-ex', 'target remote | "C:\\Espressif\\python_env\\idf5.1_py3.11_env\\Scripts\\python.exe" -m esp_idf_panic_decoder --target esp32c3 "C:\\Users\\DELL\\AppData\\Local\\Temp\\tmpwc0yigup"', '-ex', 'bt']' returned non-zero exit status 1.
+--- Warning: b"error starting child process '| C:\\Espressif\\python_env\\idf5.1_py3.11_env\\Scripts\\python.exe -m esp_idf_panic_decoder --target esp32c3 C:\\Users\\DELL\\AppData\\Local\\Temp\\tmpwc0yigup': CreateProcess: No such file or directory\r\nNo stack.\r\n"
+
+[0m
+[0;33m.[0m[0;33m.[0m[0m--- 0x40048b82: [0;33msoftware_reset[0m[0m in [0;32mROM[0m
+[0;33m--- Stack dump detected[0m
+[0m--- 0x40380734: [0;33mpanic_abort[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_system/panic.c[0m[0m:[1;31m466[0m
+[0m--- 0x40385cc6: [0;33m__ubsan_include[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_system/ubsan.c[0m[0m:[1;31m313[0m
+[0m--- 0x4005890e: [0;33mmemset[0m[0m in [0;32mROM[0m
+[0m--- 0x40380001: [0;33m_vector_table[0m[0m at [0;32m??[0m[0m:[1;31m?[0m
+[0;33m.[0m[0;33m.[0m[0;33m.[0m[0;33m--- Warning: Failed to run gdb_panic_server.py script: Command '['riscv32-esp-elf-gdb', '--batch', '-n', 'C:\\Users\\DELL\\workspace\\IDF\\ESP_MUL\\Muti\\build\\ESP_MultiFlasher.elf', '-ex', 'target remote | "C:\\Espressif\\python_env\\idf5.1_py3.11_env\\Scripts\\python.exe" -m esp_idf_panic_decoder --target esp32c3 "C:\\Users\\DELL\\AppData\\Local\\Temp\\tmpvbjw_peg"', '-ex', 'bt']' returned non-zero exit status 1.
+--- Warning: b"error starting child process '| C:\\Espressif\\python_env\\idf5.1_py3.11_env\\Scripts\\python.exe -m esp_idf_panic_decoder --target esp32c3 C:\\Users\\DELL\\AppData\\Local\\Temp\\tmpvbjw_peg': CreateProcess: No such file or directory\r\nNo stack.\r\n"
+
+[0m
+[0m--- 0x40048b82: [0;33msoftware_reset[0m[0m in [0;32mROM[0m
+[0;33m--- Stack dump detected[0m
+[0m--- 0x40380734: [0;33mpanic_abort[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_system/panic.c[0m[0m:[1;31m466[0m
+[0m--- 0x40385cc6: [0;33m__ubsan_include[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_system/ubsan.c[0m[0m:[1;31m313[0m
+[0m--- 0x4005890e: [0;33mmemset[0m[0m in [0;32mROM[0m
+[0;33m.[0m[0m--- 0x40380001: [0;33m_vector_table[0m[0m at [0;32m??[0m[0m:[1;31m?[0m
+[0;33m.[0m[0;33m.[0m[0;33m.[0m[0;33m.[0m[0;33m.[0m[0;33m.[0m[0;33m.[0m[0;33m--- Warning: Failed to run gdb_panic_server.py script: Command '['riscv32-esp-elf-gdb', '--batch', '-n', 'C:\\Users\\DELL\\workspace\\IDF\\ESP_MUL\\Muti\\build\\ESP_MultiFlasher.elf', '-ex', 'target remote | "C:\\Espressif\\python_env\\idf5.1_py3.11_env\\Scripts\\python.exe" -m esp_idf_panic_decoder --target esp32c3 "C:\\Users\\DELL\\AppData\\Local\\Temp\\tmpduh7fc0c"', '-ex', 'bt']' returned non-zero exit status 1.
+--- Warning: b"error starting child process '| C:\\Espressif\\python_env\\idf5.1_py3.11_env\\Scripts\\python.exe -m esp_idf_panic_decoder --target esp32c3 C:\\Users\\DELL\\AppData\\Local\\Temp\\tmpduh7fc0c': CreateProcess: No such file or directory\r\nNo stack.\r\n"
+
+[0m
+[0m--- 0x40048b82: [0;33msoftware_reset[0m[0m in [0;32mROM[0m
+[0;33m.[0m[0;33m--- Stack dump detected[0m
+[0m--- 0x40380734: [0;33mpanic_abort[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_system/panic.c[0m[0m:[1;31m466[0m
+[0m--- 0x40385cc6: [0;33m__ubsan_include[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_system/ubsan.c[0m[0m:[1;31m313[0m
+[0m--- 0x4005890e: [0;33mmemset[0m[0m in [0;32mROM[0m
+[0m--- 0x40380001: [0;33m_vector_table[0m[0m at [0;32m??[0m[0m:[1;31m?[0m
+[0;33m.[0m[0;33m.[0m[0;33m--- Warning: Failed to run gdb_panic_server.py script: Command '['riscv32-esp-elf-gdb', '--batch', '-n', 'C:\\Users\\DELL\\workspace\\IDF\\ESP_MUL\\Muti\\build\\ESP_MultiFlasher.elf', '-ex', 'target remote | "C:\\Espressif\\python_env\\idf5.1_py3.11_env\\Scripts\\python.exe" -m esp_idf_panic_decoder --target esp32c3 "C:\\Users\\DELL\\AppData\\Local\\Temp\\tmp6cc3j21d"', '-ex', 'bt']' returned non-zero exit status 1.
+--- Warning: b"error starting child process '| C:\\Espressif\\python_env\\idf5.1_py3.11_env\\Scripts\\python.exe -m esp_idf_panic_decoder --target esp32c3 C:\\Users\\DELL\\AppData\\Local\\Temp\\tmp6cc3j21d': CreateProcess: No such file or directory\r\nNo stack.\r\n"
+
+[0m
+[0;33m.[0m[0;33m.[0m[0;33m.[0m[0;33m.[0m[0;33m.[0m[0;33m.[0m[0;33m.[0m[0;33m.[0m[0;33m.[0m[0;33m.[0m[0;33m.[0m[0;33m.[0m[0;33m.[0m[0;33m.[0m[0m--- 0x40048b82: [0;33msoftware_reset[0m[0m in [0;32mROM[0m
+[0;33m.[0m[0;33m--- Stack dump detected[0m
+[0m--- 0x40380734: [0;33mpanic_abort[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_system/panic.c[0m[0m:[1;31m466[0m
+[0m--- 0x40385cc6: [0;33m__ubsan_include[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_system/ubsan.c[0m[0m:[1;31m313[0m
+[0m--- 0x4005890e: [0;33mmemset[0m[0m in [0;32mROM[0m
+[0;33m--- To exit from IDF monitor please use "Ctrl+]". Alternatively, you can use Ctrl+T Ctrl+X to exit.[0m
+[0m--- 0x40048b82: [0;33msoftware_reset[0m[0m in [0;32mROM[0m
+[0;33m--- To exit from IDF monitor please use "Ctrl+]". Alternatively, you can use Ctrl+T Ctrl+X to exit.[0m
+[0m--- 0x40380734: [0;33mpanic_abort[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_system/panic.c[0m[0m:[1;31m466[0m
+[0m--- 0x40385cc6: [0;33m__ubsan_include[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_system/ubsan.c[0m[0m:[1;31m313[0m
+[0m--- 0x4005890e: [0;33mmemset[0m[0m in [0;32mROM[0m
+[0m--- 0x40380001: [0;33m_vector_table[0m[0m at [0;32m??[0m[0m:[1;31m?[0m
+[0;33m.[0m[0;33m--- To exit from IDF monitor please use "Ctrl+]". Alternatively, you can use Ctrl+T Ctrl+X to exit.[0m
+[0;33m--- To exit from IDF monitor please use "Ctrl+]". Alternatively, you can use Ctrl+T Ctrl+X to exit.[0m
+[0m--- 0x40048b82: [0;33msoftware_reset[0m[0m in [0;32mROM[0m
+[0;33m.[0m[0;33m.[0m[0;33m--- To exit from IDF monitor please use "Ctrl+]". Alternatively, you can use Ctrl+T Ctrl+X to exit.[0m
+[0;33m--- Stack dump detected[0m
+[0m--- 0x40380734: [0;33mpanic_abort[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_system/panic.c[0m[0m:[1;31m466[0m
+[0m--- 0x40385cc6: [0;33m__ubsan_include[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_system/ubsan.c[0m[0m:[1;31m313[0m
+[0m--- 0x4005890e: [0;33mmemset[0m[0m in [0;32mROM[0m
+[0m--- 0x40380001: [0;33m_vector_table[0m[0m at [0;32m??[0m[0m:[1;31m?[0m
+[0;33m.[0m[0;33m.[0m[0;33m.[0m[0;33m--- Warning: Failed to run gdb_panic_server.py script: Command '['riscv32-esp-elf-gdb', '--batch', '-n', 'C:\\Users\\DELL\\workspace\\IDF\\ESP_MUL\\Muti\\build\\ESP_MultiFlasher.elf', '-ex', 'target remote | "C:\\Espressif\\python_env\\idf5.1_py3.11_env\\Scripts\\python.exe" -m esp_idf_panic_decoder --target esp32c3 "C:\\Users\\DELL\\AppData\\Local\\Temp\\tmp4o773v8b"', '-ex', 'bt']' returned non-zero exit status 1.
+--- Warning: b"error starting child process '| C:\\Espressif\\python_env\\idf5.1_py3.11_env\\Scripts\\python.exe -m esp_idf_panic_decoder --target esp32c3 C:\\Users\\DELL\\AppData\\Local\\Temp\\tmp4o773v8b': CreateProcess: No such file or directory\r\nNo stack.\r\n"
+
+[0m
+[0m--- 0x40048b82: [0;33msoftware_reset[0m[0m in [0;32mROM[0m
+[0;33m--- Stack dump detected[0m
+[0m--- 0x40380734: [0;33mpanic_abort[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_system/panic.c[0m[0m:[1;31m466[0m
+[0m--- 0x40385cc6: [0;33m__ubsan_include[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_system/ubsan.c[0m[0m:[1;31m313[0m
+[0m--- 0x4005890e: [0;33mmemset[0m[0m in [0;32mROM[0m
+[0m--- 0x40380001: [0;33m_vector_table[0m[0m at [0;32m??[0m[0m:[1;31m?[0m
+[0;33m.[0m[0;33m.[0m[0;33m--- Warning: Failed to run gdb_panic_server.py script: Command '['riscv32-esp-elf-gdb', '--batch', '-n', 'C:\\Users\\DELL\\workspace\\IDF\\ESP_MUL\\Muti\\build\\ESP_MultiFlasher.elf', '-ex', 'target remote | "C:\\Espressif\\python_env\\idf5.1_py3.11_env\\Scripts\\python.exe" -m esp_idf_panic_decoder --target esp32c3 "C:\\Users\\DELL\\AppData\\Local\\Temp\\tmp_rrh9d28"', '-ex', 'bt']' returned non-zero exit status 1.
+--- Warning: b"error starting child process '| C:\\Espressif\\python_env\\idf5.1_py3.11_env\\Scripts\\python.exe -m esp_idf_panic_decoder --target esp32c3 C:\\Users\\DELL\\AppData\\Local\\Temp\\tmp_rrh9d28': CreateProcess: No such file or directory\r\nNo stack.\r\n"
+
+[0m
+[0m--- 0x40048b82: [0;33msoftware_reset[0m[0m in [0;32mROM[0m
+[0;33m.[0m[0;33m--- Stack dump detected[0m
+[0m--- 0x40380734: [0;33mpanic_abort[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_system/panic.c[0m[0m:[1;31m466[0m
+[0m--- 0x40385cc6: [0;33m__ubsan_include[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_system/ubsan.c[0m[0m:[1;31m313[0m
+[0m--- 0x4005890e: [0;33mmemset[0m[0m in [0;32mROM[0m
+[0m--- 0x40380001: [0;33m_vector_table[0m[0m at [0;32m??[0m[0m:[1;31m?[0m
+[0;33m.[0m[0;33m.[0m[0;33m--- Warning: Failed to run gdb_panic_server.py script: Command '['riscv32-esp-elf-gdb', '--batch', '-n', 'C:\\Users\\DELL\\workspace\\IDF\\ESP_MUL\\Muti\\build\\ESP_MultiFlasher.elf', '-ex', 'target remote | "C:\\Espressif\\python_env\\idf5.1_py3.11_env\\Scripts\\python.exe" -m esp_idf_panic_decoder --target esp32c3 "C:\\Users\\DELL\\AppData\\Local\\Temp\\tmp54a9e9yn"', '-ex', 'bt']' returned non-zero exit status 1.
+--- Warning: b"error starting child process '| C:\\Espressif\\python_env\\idf5.1_py3.11_env\\Scripts\\python.exe -m esp_idf_panic_decoder --target esp32c3 C:\\Users\\DELL\\AppData\\Local\\Temp\\tmp54a9e9yn': CreateProcess: No such file or directory\r\nNo stack.\r\n"
+
+[0m
+[0m--- 0x40048b82: [0;33msoftware_reset[0m[0m in [0;32mROM[0m
+[0;33m.[0m[0;33m--- Stack dump detected[0m
+[0m--- 0x40380734: [0;33mpanic_abort[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_system/panic.c[0m[0m:[1;31m466[0m
+[0m--- 0x40385cc6: [0;33m__ubsan_include[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_system/ubsan.c[0m[0m:[1;31m313[0m
+[0m--- 0x4005890e: [0;33mmemset[0m[0m in [0;32mROM[0m
+[0m--- 0x40380001: [0;33m_vector_table[0m[0m at [0;32m??[0m[0m:[1;31m?[0m
+[0;33m.[0m[0;33m.[0m[0;33m.[0m[0;33m--- Warning: Failed to run gdb_panic_server.py script: Command '['riscv32-esp-elf-gdb', '--batch', '-n', 'C:\\Users\\DELL\\workspace\\IDF\\ESP_MUL\\Muti\\build\\ESP_MultiFlasher.elf', '-ex', 'target remote | "C:\\Espressif\\python_env\\idf5.1_py3.11_env\\Scripts\\python.exe" -m esp_idf_panic_decoder --target esp32c3 "C:\\Users\\DELL\\AppData\\Local\\Temp\\tmplo2kfj5p"', '-ex', 'bt']' returned non-zero exit status 1.
+--- Warning: b"error starting child process '| C:\\Espressif\\python_env\\idf5.1_py3.11_env\\Scripts\\python.exe -m esp_idf_panic_decoder --target esp32c3 C:\\Users\\DELL\\AppData\\Local\\Temp\\tmplo2kfj5p': CreateProcess: No such file or directory\r\nNo stack.\r\n"
+
+[0m
+[0m--- 0x40048b82: [0;33msoftware_reset[0m[0m in [0;32mROM[0m
+[0;33m--- Stack dump detected[0m
+[0m--- 0x40380734: [0;33mpanic_abort[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_system/panic.c[0m[0m:[1;31m466[0m
+[0m--- 0x40385cc6: [0;33m__ubsan_include[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_system/ubsan.c[0m[0m:[1;31m313[0m
+[0m--- 0x4005890e: [0;33mmemset[0m[0m in [0;32mROM[0m
+[0;33m.[0m[0m--- 0x40380001: [0;33m_vector_table[0m[0m at [0;32m??[0m[0m:[1;31m?[0m
+[0;33m.[0m[0;33m.[0m[0;33m.[0m[1;31m--- esp_idf_monitor (1.8.0) - ESP-IDF Monitor tool
+--- based on miniterm from pySerial
+---
+--- Ctrl+]   Exit program
+--- Ctrl+T   Menu escape key, followed by:
+--- Menu keys:
+---    Ctrl+T         Send the menu character itself to remote
+---    Ctrl+]         Send the exit character itself to remote
+---    Ctrl+R         Reset target board via RTS line
+---    Ctrl+F         Build & flash project
+---    Ctrl+A (or A)  Build & flash app only
+---    Ctrl+Y         Toggle output display
+---    Ctrl+L         Toggle saving output into file
+---    Ctrl+I (or I)  Toggle printing timestamps
+---    Ctrl+P         Reset target into bootloader via the DTR/RTS lines
+---    Ctrl+X (or X)  Exit program[0m
+[0;33m.[0m[0;33m.[0m[0;33m.[0m[0;33m.[0m[0;33m.[0m[0;33m.[0m[0;33m.[0m[0;33m.[0m[0;33m--- To exit from IDF monitor please use "Ctrl+]". Alternatively, you can use Ctrl+T Ctrl+X to exit.[0m
+[0m--- 0x40048b82: [0;33msoftware_reset[0m[0m in [0;32mROM[0m
+[0;33m--- Stack dump detected[0m
+[0m--- 0x40380734: [0;33mpanic_abort[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_system/panic.c[0m[0m:[1;31m466[0m
+[0m--- 0x40385cc6: [0;33m__ubsan_include[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_system/ubsan.c[0m[0m:[1;31m313[0m
+[0m--- 0x4005890e: [0;33mmemset[0m[0m in [0;32mROM[0m
+[0m--- 0x40380001: [0;33m_vector_table[0m[0m at [0;32m??[0m[0m:[1;31m?[0m
+[0;33m.[0m[0;33m.[0m[0;33m--- Warning: Failed to run gdb_panic_server.py script: Command '['riscv32-esp-elf-gdb', '--batch', '-n', 'C:\\Users\\DELL\\workspace\\IDF\\ESP_MUL\\Muti\\build\\ESP_MultiFlasher.elf', '-ex', 'target remote | "C:\\Espressif\\python_env\\idf5.1_py3.11_env\\Scripts\\python.exe" -m esp_idf_panic_decoder --target esp32c3 "C:\\Users\\DELL\\AppData\\Local\\Temp\\tmp9ep7k2uz"', '-ex', 'bt']' returned non-zero exit status 1.
+--- Warning: b"error starting child process '| C:\\Espressif\\python_env\\idf5.1_py3.11_env\\Scripts\\python.exe -m esp_idf_panic_decoder --target esp32c3 C:\\Users\\DELL\\AppData\\Local\\Temp\\tmp9ep7k2uz': CreateProcess: No such file or directory\r\nNo stack.\r\n"
+
+[0m
+[0m--- 0x40048b82: [0;33msoftware_reset[0m[0m in [0;32mROM[0m
+[0;33m--- Stack dump detected[0m
+[0m--- 0x40380734: [0;33mpanic_abort[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_system/panic.c[0m[0m:[1;31m466[0m
+[0m--- 0x40385cc6: [0;33m__ubsan_include[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_system/ubsan.c[0m[0m:[1;31m313[0m
+[0m--- 0x4005890e: [0;33mmemset[0m[0m in [0;32mROM[0m
+[0;33m.[0m[0m--- 0x40380001: [0;33m_vector_table[0m[0m at [0;32m??[0m[0m:[1;31m?[0m
+[0;33m.[0m[0;33m.[0m[0;33m--- Warning: Failed to run gdb_panic_server.py script: Command '['riscv32-esp-elf-gdb', '--batch', '-n', 'C:\\Users\\DELL\\workspace\\IDF\\ESP_MUL\\Muti\\build\\ESP_MultiFlasher.elf', '-ex', 'target remote | "C:\\Espressif\\python_env\\idf5.1_py3.11_env\\Scripts\\python.exe" -m esp_idf_panic_decoder --target esp32c3 "C:\\Users\\DELL\\AppData\\Local\\Temp\\tmpl8vmdllz"', '-ex', 'bt']' returned non-zero exit status 1.
+--- Warning: b"error starting child process '| C:\\Espressif\\python_env\\idf5.1_py3.11_env\\Scripts\\python.exe -m esp_idf_panic_decoder --target esp32c3 C:\\Users\\DELL\\AppData\\Local\\Temp\\tmpl8vmdllz': CreateProcess: No such file or directory\r\nNo stack.\r\n"
+
+[0m
+[0m--- 0x40048b82: [0;33msoftware_reset[0m[0m in [0;32mROM[0m
+[0;33m--- Stack dump detected[0m
+[0m--- 0x40380734: [0;33mpanic_abort[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_system/panic.c[0m[0m:[1;31m466[0m
+[0m--- 0x40385cc6: [0;33m__ubsan_include[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_system/ubsan.c[0m[0m:[1;31m313[0m
+[0m--- 0x4005890e: [0;33mmemset[0m[0m in [0;32mROM[0m
+[0m--- 0x40380001: [0;33m_vector_table[0m[0m at [0;32m??[0m[0m:[1;31m?[0m
+[0;33m.[0m[0;33m.[0m[0;33m.[0m[0;33m--- Warning: Failed to run gdb_panic_server.py script: Command '['riscv32-esp-elf-gdb', '--batch', '-n', 'C:\\Users\\DELL\\workspace\\IDF\\ESP_MUL\\Muti\\build\\ESP_MultiFlasher.elf', '-ex', 'target remote | "C:\\Espressif\\python_env\\idf5.1_py3.11_env\\Scripts\\python.exe" -m esp_idf_panic_decoder --target esp32c3 "C:\\Users\\DELL\\AppData\\Local\\Temp\\tmp014ztyeq"', '-ex', 'bt']' returned non-zero exit status 1.
+--- Warning: b"error starting child process '| C:\\Espressif\\python_env\\idf5.1_py3.11_env\\Scripts\\python.exe -m esp_idf_panic_decoder --target esp32c3 C:\\Users\\DELL\\AppData\\Local\\Temp\\tmp014ztyeq': CreateProcess: No such file or directory\r\nNo stack.\r\n"
+
+[0m
+[0m--- 0x40048b82: [0;33msoftware_reset[0m[0m in [0;32mROM[0m
+[0;33m--- Stack dump detected[0m
+[0m--- 0x40380734: [0;33mpanic_abort[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_system/panic.c[0m[0m:[1;31m466[0m
+[0m--- 0x40385cc6: [0;33m__ubsan_include[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_system/ubsan.c[0m[0m:[1;31m313[0m
+[0m--- 0x4005890e: [0;33mmemset[0m[0m in [0;32mROM[0m
+[0m--- 0x40380001: [0;33m_vector_table[0m[0m at [0;32m??[0m[0m:[1;31m?[0m
+[0;33m.[0m[0;33m.[0m[0;33m.[0m[0;33m--- Warning: Failed to run gdb_panic_server.py script: Command '['riscv32-esp-elf-gdb', '--batch', '-n', 'C:\\Users\\DELL\\workspace\\IDF\\ESP_MUL\\Muti\\build\\ESP_MultiFlasher.elf', '-ex', 'target remote | "C:\\Espressif\\python_env\\idf5.1_py3.11_env\\Scripts\\python.exe" -m esp_idf_panic_decoder --target esp32c3 "C:\\Users\\DELL\\AppData\\Local\\Temp\\tmpazjso9vn"', '-ex', 'bt']' returned non-zero exit status 1.
+--- Warning: b"error starting child process '| C:\\Espressif\\python_env\\idf5.1_py3.11_env\\Scripts\\python.exe -m esp_idf_panic_decoder --target esp32c3 C:\\Users\\DELL\\AppData\\Local\\Temp\\tmpazjso9vn': CreateProcess: No such file or directory\r\nNo stack.\r\n"
+
+[0m
+[0m--- 0x40048b82: [0;33msoftware_reset[0m[0m in [0;32mROM[0m
+[0;33m--- Stack dump detected[0m
+[0m--- 0x40380734: [0;33mpanic_abort[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_system/panic.c[0m[0m:[1;31m466[0m
+[0m--- 0x40385cc6: [0;33m__ubsan_include[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_system/ubsan.c[0m[0m:[1;31m313[0m
+[0m--- 0x4005890e: [0;33mmemset[0m[0m in [0;32mROM[0m
+[0m--- 0x40380001: [0;33m_vector_table[0m[0m at [0;32m??[0m[0m:[1;31m?[0m
+[0;33m.[0m[0;33m.[0m[0;33m.[0m[0;33m--- Warning: Failed to run gdb_panic_server.py script: Command '['riscv32-esp-elf-gdb', '--batch', '-n', 'C:\\Users\\DELL\\workspace\\IDF\\ESP_MUL\\Muti\\build\\ESP_MultiFlasher.elf', '-ex', 'target remote | "C:\\Espressif\\python_env\\idf5.1_py3.11_env\\Scripts\\python.exe" -m esp_idf_panic_decoder --target esp32c3 "C:\\Users\\DELL\\AppData\\Local\\Temp\\tmpuclpt1jp"', '-ex', 'bt']' returned non-zero exit status 1.
+--- Warning: b"error starting child process '| C:\\Espressif\\python_env\\idf5.1_py3.11_env\\Scripts\\python.exe -m esp_idf_panic_decoder --target esp32c3 C:\\Users\\DELL\\AppData\\Local\\Temp\\tmpuclpt1jp': CreateProcess: No such file or directory\r\nNo stack.\r\n"
+
+[0m
+[0m--- 0x40048b82: [0;33msoftware_reset[0m[0m in [0;32mROM[0m
+[0;33m--- Stack dump detected[0m
+[0m--- 0x40380734: [0;33mpanic_abort[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_system/panic.c[0m[0m:[1;31m466[0m
+[0m--- 0x40385cc6: [0;33m__ubsan_include[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_system/ubsan.c[0m[0m:[1;31m313[0m
+[0m--- 0x4005890e: [0;33mmemset[0m[0m in [0;32mROM[0m
+[0m--- 0x40380001: [0;33m_vector_table[0m[0m at [0;32m??[0m[0m:[1;31m?[0m
+[0;33m.[0m[0;33m.[0m[0;33m.[0m[0;33m.[0m[0;33m.[0m[0;33m.[0m[0;33m.[0m[0;33m--- Warning: Failed to run gdb_panic_server.py script: Command '['riscv32-esp-elf-gdb', '--batch', '-n', 'C:\\Users\\DELL\\workspace\\IDF\\ESP_MUL\\Muti\\build\\ESP_MultiFlasher.elf', '-ex', 'target remote | "C:\\Espressif\\python_env\\idf5.1_py3.11_env\\Scripts\\python.exe" -m esp_idf_panic_decoder --target esp32c3 "C:\\Users\\DELL\\AppData\\Local\\Temp\\tmp8el82jcp"', '-ex', 'bt']' returned non-zero exit status 1.
+--- Warning: b"error starting child process '| C:\\Espressif\\python_env\\idf5.1_py3.11_env\\Scripts\\python.exe -m esp_idf_panic_decoder --target esp32c3 C:\\Users\\DELL\\AppData\\Local\\Temp\\tmp8el82jcp': CreateProcess: No such file or directory\r\nNo stack.\r\n"
+
+[0m
+[0m--- 0x40048b82: [0;33msoftware_reset[0m[0m in [0;32mROM[0m
+[0;33m.[0m[0;33m--- Stack dump detected[0m
+[0m--- 0x40380734: [0;33mpanic_abort[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_system/panic.c[0m[0m:[1;31m466[0m
+[0m--- 0x40385cc6: [0;33m__ubsan_include[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_system/ubsan.c[0m[0m:[1;31m313[0m
+[0m--- 0x4005890e: [0;33mmemset[0m[0m in [0;32mROM[0m
+[0m--- 0x40380001: [0;33m_vector_table[0m[0m at [0;32m??[0m[0m:[1;31m?[0m
+[0;33m.[0m[0;33m.[0m[0;33m--- Warning: Failed to run gdb_panic_server.py script: Command '['riscv32-esp-elf-gdb', '--batch', '-n', 'C:\\Users\\DELL\\workspace\\IDF\\ESP_MUL\\Muti\\build\\ESP_MultiFlasher.elf', '-ex', 'target remote | "C:\\Espressif\\python_env\\idf5.1_py3.11_env\\Scripts\\python.exe" -m esp_idf_panic_decoder --target esp32c3 "C:\\Users\\DELL\\AppData\\Local\\Temp\\tmp2lhm0j9b"', '-ex', 'bt']' returned non-zero exit status 1.
+--- Warning: b"error starting child process '| C:\\Espressif\\python_env\\idf5.1_py3.11_env\\Scripts\\python.exe -m esp_idf_panic_decoder --target esp32c3 C:\\Users\\DELL\\AppData\\Local\\Temp\\tmp2lhm0j9b': CreateProcess: No such file or directory\r\nNo stack.\r\n"
+
+[0m
+[0m--- 0x40048b82: [0;33msoftware_reset[0m[0m in [0;32mROM[0m
+[0;33m--- Stack dump detected[0m
+[0m--- 0x40380734: [0;33mpanic_abort[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_system/panic.c[0m[0m:[1;31m466[0m
+[0m--- 0x40385cc6: [0;33m__ubsan_include[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_system/ubsan.c[0m[0m:[1;31m313[0m
+[0m--- 0x4005890e: [0;33mmemset[0m[0m in [0;32mROM[0m
+[0;33m.[0m[0m--- 0x40380001: [0;33m_vector_table[0m[0m at [0;32m??[0m[0m:[1;31m?[0m
+[0;33m.[0m[0;33m.[0m[0;33m--- Warning: Failed to run gdb_panic_server.py script: Command '['riscv32-esp-elf-gdb', '--batch', '-n', 'C:\\Users\\DELL\\workspace\\IDF\\ESP_MUL\\Muti\\build\\ESP_MultiFlasher.elf', '-ex', 'target remote | "C:\\Espressif\\python_env\\idf5.1_py3.11_env\\Scripts\\python.exe" -m esp_idf_panic_decoder --target esp32c3 "C:\\Users\\DELL\\AppData\\Local\\Temp\\tmpzinhkemw"', '-ex', 'bt']' returned non-zero exit status 1.
+--- Warning: b"error starting child process '| C:\\Espressif\\python_env\\idf5.1_py3.11_env\\Scripts\\python.exe -m esp_idf_panic_decoder --target esp32c3 C:\\Users\\DELL\\AppData\\Local\\Temp\\tmpzinhkemw': CreateProcess: No such file or directory\r\nNo stack.\r\n"
+
+[0m
+[0m--- 0x40048b82: [0;33msoftware_reset[0m[0m in [0;32mROM[0m
+[0;33m--- Stack dump detected[0m
+[0m--- 0x40380734: [0;33mpanic_abort[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_system/panic.c[0m[0m:[1;31m466[0m
+[0m--- 0x40385cc6: [0;33m__ubsan_include[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_system/ubsan.c[0m[0m:[1;31m313[0m
+[0m--- 0x4005890e: [0;33mmemset[0m[0m in [0;32mROM[0m
+[0;33m.[0m[0m--- 0x40380001: [0;33m_vector_table[0m[0m at [0;32m??[0m[0m:[1;31m?[0m
+[0;33m.[0m[0;33m--- Warning: Failed to run gdb_panic_server.py script: Command '['riscv32-esp-elf-gdb', '--batch', '-n', 'C:\\Users\\DELL\\workspace\\IDF\\ESP_MUL\\Muti\\build\\ESP_MultiFlasher.elf', '-ex', 'target remote | "C:\\Espressif\\python_env\\idf5.1_py3.11_env\\Scripts\\python.exe" -m esp_idf_panic_decoder --target esp32c3 "C:\\Users\\DELL\\AppData\\Local\\Temp\\tmp9opw1of9"', '-ex', 'bt']' returned non-zero exit status 1.
+--- Warning: b"error starting child process '| C:\\Espressif\\python_env\\idf5.1_py3.11_env\\Scripts\\python.exe -m esp_idf_panic_decoder --target esp32c3 C:\\Users\\DELL\\AppData\\Local\\Temp\\tmp9opw1of9': CreateProcess: No such file or directory\r\nNo stack.\r\n"
+
+[0m
+[0m--- 0x40048b82: [0;33msoftware_reset[0m[0m in [0;32mROM[0m
+[0;33m.[0m[0;33m--- Stack dump detected[0m
+[0m--- 0x40380734: [0;33mpanic_abort[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_system/panic.c[0m[0m:[1;31m466[0m
+[0m--- 0x40385cc6: [0;33m__ubsan_include[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_system/ubsan.c[0m[0m:[1;31m313[0m
+[0m--- 0x4005890e: [0;33mmemset[0m[0m in [0;32mROM[0m
+[0m--- 0x40380001: [0;33m_vector_table[0m[0m at [0;32m??[0m[0m:[1;31m?[0m
+[0;33m.[0m[0;33m--- Warning: Failed to run gdb_panic_server.py script: Command '['riscv32-esp-elf-gdb', '--batch', '-n', 'C:\\Users\\DELL\\workspace\\IDF\\ESP_MUL\\Muti\\build\\ESP_MultiFlasher.elf', '-ex', 'target remote | "C:\\Espressif\\python_env\\idf5.1_py3.11_env\\Scripts\\python.exe" -m esp_idf_panic_decoder --target esp32c3 "C:\\Users\\DELL\\AppData\\Local\\Temp\\tmpopf7t6nq"', '-ex', 'bt']' returned non-zero exit status 1.
+--- Warning: b"error starting child process '| C:\\Espressif\\python_env\\idf5.1_py3.11_env\\Scripts\\python.exe -m esp_idf_panic_decoder --target esp32c3 C:\\Users\\DELL\\AppData\\Local\\Temp\\tmpopf7t6nq': CreateProcess: No such file or directory\r\nNo stack.\r\n"
+
+[0m
+[0m--- 0x40048b82: [0;33msoftware_reset[0m[0m in [0;32mROM[0m
+[0;33m.[0m[0;33m--- Stack dump detected[0m
+[0m--- 0x40380734: [0;33mpanic_abort[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_system/panic.c[0m[0m:[1;31m466[0m
+[0m--- 0x40385cc6: [0;33m__ubsan_include[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_system/ubsan.c[0m[0m:[1;31m313[0m
+[0m--- 0x4005890e: [0;33mmemset[0m[0m in [0;32mROM[0m
+[0m--- 0x40380001: [0;33m_vector_table[0m[0m at [0;32m??[0m[0m:[1;31m?[0m
+[0;33m.[0m[0;33m--- Warning: Failed to run gdb_panic_server.py script: Command '['riscv32-esp-elf-gdb', '--batch', '-n', 'C:\\Users\\DELL\\workspace\\IDF\\ESP_MUL\\Muti\\build\\ESP_MultiFlasher.elf', '-ex', 'target remote | "C:\\Espressif\\python_env\\idf5.1_py3.11_env\\Scripts\\python.exe" -m esp_idf_panic_decoder --target esp32c3 "C:\\Users\\DELL\\AppData\\Local\\Temp\\tmpznojdp2q"', '-ex', 'bt']' returned non-zero exit status 1.
+--- Warning: b"error starting child process '| C:\\Espressif\\python_env\\idf5.1_py3.11_env\\Scripts\\python.exe -m esp_idf_panic_decoder --target esp32c3 C:\\Users\\DELL\\AppData\\Local\\Temp\\tmpznojdp2q': CreateProcess: No such file or directory\r\nNo stack.\r\n"
+
+[0m
+[0m--- 0x40048b82: [0;33msoftware_reset[0m[0m in [0;32mROM[0m
+[0;33m.[0m[0;33m--- Stack dump detected[0m
+[0m--- 0x40380734: [0;33mpanic_abort[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_system/panic.c[0m[0m:[1;31m466[0m
+[0m--- 0x40385cc6: [0;33m__ubsan_include[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_system/ubsan.c[0m[0m:[1;31m313[0m
+[0m--- 0x4005890e: [0;33mmemset[0m[0m in [0;32mROM[0m
+[0m--- 0x40380001: [0;33m_vector_table[0m[0m at [0;32m??[0m[0m:[1;31m?[0m
+[0;33m.[0m[0;33m--- Warning: Failed to run gdb_panic_server.py script: Command '['riscv32-esp-elf-gdb', '--batch', '-n', 'C:\\Users\\DELL\\workspace\\IDF\\ESP_MUL\\Muti\\build\\ESP_MultiFlasher.elf', '-ex', 'target remote | "C:\\Espressif\\python_env\\idf5.1_py3.11_env\\Scripts\\python.exe" -m esp_idf_panic_decoder --target esp32c3 "C:\\Users\\DELL\\AppData\\Local\\Temp\\tmp0mvbmv14"', '-ex', 'bt']' returned non-zero exit status 1.
+--- Warning: b"error starting child process '| C:\\Espressif\\python_env\\idf5.1_py3.11_env\\Scripts\\python.exe -m esp_idf_panic_decoder --target esp32c3 C:\\Users\\DELL\\AppData\\Local\\Temp\\tmp0mvbmv14': CreateProcess: No such file or directory\r\nNo stack.\r\n"
+
+[0m
+[0;33m.[0m[0m--- 0x40048b82: [0;33msoftware_reset[0m[0m in [0;32mROM[0m
+[0;33m--- Stack dump detected[0m
+[0m--- 0x40380734: [0;33mpanic_abort[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_system/panic.c[0m[0m:[1;31m466[0m
+[0m--- 0x40385cc6: [0;33m__ubsan_include[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_system/ubsan.c[0m[0m:[1;31m313[0m
+[0m--- 0x4005890e: [0;33mmemset[0m[0m in [0;32mROM[0m
+[0m--- 0x40380001: [0;33m_vector_table[0m[0m at [0;32m??[0m[0m:[1;31m?[0m
+[0;33m.[0m[0;33m.[0m[0;33m--- Warning: Failed to run gdb_panic_server.py script: Command '['riscv32-esp-elf-gdb', '--batch', '-n', 'C:\\Users\\DELL\\workspace\\IDF\\ESP_MUL\\Muti\\build\\ESP_MultiFlasher.elf', '-ex', 'target remote | "C:\\Espressif\\python_env\\idf5.1_py3.11_env\\Scripts\\python.exe" -m esp_idf_panic_decoder --target esp32c3 "C:\\Users\\DELL\\AppData\\Local\\Temp\\tmpkrco7j52"', '-ex', 'bt']' returned non-zero exit status 1.
+--- Warning: b"error starting child process '| C:\\Espressif\\python_env\\idf5.1_py3.11_env\\Scripts\\python.exe -m esp_idf_panic_decoder --target esp32c3 C:\\Users\\DELL\\AppData\\Local\\Temp\\tmpkrco7j52': CreateProcess: No such file or directory\r\nNo stack.\r\n"
+
+[0m
+[0m--- 0x40048b82: [0;33msoftware_reset[0m[0m in [0;32mROM[0m
+[0;33m--- Stack dump detected[0m
+[0m--- 0x40380734: [0;33mpanic_abort[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_system/panic.c[0m[0m:[1;31m466[0m
+[0m--- 0x40385cc6: [0;33m__ubsan_include[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_system/ubsan.c[0m[0m:[1;31m313[0m
+[0m--- 0x4005890e: [0;33mmemset[0m[0m in [0;32mROM[0m
+[0m--- 0x40380001: [0;33m_vector_table[0m[0m at [0;32m??[0m[0m:[1;31m?[0m
+[0;33m.[0m[0;33m.[0m[0;33m--- Warning: Failed to run gdb_panic_server.py script: Command '['riscv32-esp-elf-gdb', '--batch', '-n', 'C:\\Users\\DELL\\workspace\\IDF\\ESP_MUL\\Muti\\build\\ESP_MultiFlasher.elf', '-ex', 'target remote | "C:\\Espressif\\python_env\\idf5.1_py3.11_env\\Scripts\\python.exe" -m esp_idf_panic_decoder --target esp32c3 "C:\\Users\\DELL\\AppData\\Local\\Temp\\tmpwb_z2fol"', '-ex', 'bt']' returned non-zero exit status 1.
+--- Warning: b"error starting child process '| C:\\Espressif\\python_env\\idf5.1_py3.11_env\\Scripts\\python.exe -m esp_idf_panic_decoder --target esp32c3 C:\\Users\\DELL\\AppData\\Local\\Temp\\tmpwb_z2fol': CreateProcess: No such file or directory\r\nNo stack.\r\n"
+
+[0m
+[0m--- 0x40048b82: [0;33msoftware_reset[0m[0m in [0;32mROM[0m
+[0;33m--- Stack dump detected[0m
+[0m--- 0x40380734: [0;33mpanic_abort[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_system/panic.c[0m[0m:[1;31m466[0m
+[0m--- 0x40385cc6: [0;33m__ubsan_include[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_system/ubsan.c[0m[0m:[1;31m313[0m
+[0m--- 0x4005890e: [0;33mmemset[0m[0m in [0;32mROM[0m
+[0m--- 0x40380001: [0;33m_vector_table[0m[0m at [0;32m??[0m[0m:[1;31m?[0m
+[0;33m.[0m[0;33m.[0m[0;33m--- Warning: Failed to run gdb_panic_server.py script: Command '['riscv32-esp-elf-gdb', '--batch', '-n', 'C:\\Users\\DELL\\workspace\\IDF\\ESP_MUL\\Muti\\build\\ESP_MultiFlasher.elf', '-ex', 'target remote | "C:\\Espressif\\python_env\\idf5.1_py3.11_env\\Scripts\\python.exe" -m esp_idf_panic_decoder --target esp32c3 "C:\\Users\\DELL\\AppData\\Local\\Temp\\tmpyefvwh6k"', '-ex', 'bt']' returned non-zero exit status 1.
+--- Warning: b"error starting child process '| C:\\Espressif\\python_env\\idf5.1_py3.11_env\\Scripts\\python.exe -m esp_idf_panic_decoder --target esp32c3 C:\\Users\\DELL\\AppData\\Local\\Temp\\tmpyefvwh6k': CreateProcess: No such file or directory\r\nNo stack.\r\n"
+
+[0m
+[0m--- 0x40048b82: [0;33msoftware_reset[0m[0m in [0;32mROM[0m
+[0;33m--- Stack dump detected[0m
+[0;33m.[0m[0m--- 0x40380734: [0;33mpanic_abort[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_system/panic.c[0m[0m:[1;31m466[0m
+[0m--- 0x40385cc6: [0;33m__ubsan_include[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_system/ubsan.c[0m[0m:[1;31m313[0m
+[0m--- 0x4005890e: [0;33mmemset[0m[0m in [0;32mROM[0m
+[0m--- 0x40380001: [0;33m_vector_table[0m[0m at [0;32m??[0m[0m:[1;31m?[0m
+[0;33m.[0m[0;33m--- Warning: Failed to run gdb_panic_server.py script: Command '['riscv32-esp-elf-gdb', '--batch', '-n', 'C:\\Users\\DELL\\workspace\\IDF\\ESP_MUL\\Muti\\build\\ESP_MultiFlasher.elf', '-ex', 'target remote | "C:\\Espressif\\python_env\\idf5.1_py3.11_env\\Scripts\\python.exe" -m esp_idf_panic_decoder --target esp32c3 "C:\\Users\\DELL\\AppData\\Local\\Temp\\tmpp7yi4wjg"', '-ex', 'bt']' returned non-zero exit status 1.
+--- Warning: b"error starting child process '| C:\\Espressif\\python_env\\idf5.1_py3.11_env\\Scripts\\python.exe -m esp_idf_panic_decoder --target esp32c3 C:\\Users\\DELL\\AppData\\Local\\Temp\\tmpp7yi4wjg': CreateProcess: No such file or directory\r\nNo stack.\r\n"
+
+[0m
+[0m--- 0x40048b82: [0;33msoftware_reset[0m[0m in [0;32mROM[0m
+[0;33m.[0m[0;33m--- Stack dump detected[0m
+[0m--- 0x40380734: [0;33mpanic_abort[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_system/panic.c[0m[0m:[1;31m466[0m
+[0m--- 0x40385cc6: [0;33m__ubsan_include[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_system/ubsan.c[0m[0m:[1;31m313[0m
+[0m--- 0x4005890e: [0;33mmemset[0m[0m in [0;32mROM[0m
+[0m--- 0x40380001: [0;33m_vector_table[0m[0m at [0;32m??[0m[0m:[1;31m?[0m
+[0;33m.[0m[0;33m--- Warning: Failed to run gdb_panic_server.py script: Command '['riscv32-esp-elf-gdb', '--batch', '-n', 'C:\\Users\\DELL\\workspace\\IDF\\ESP_MUL\\Muti\\build\\ESP_MultiFlasher.elf', '-ex', 'target remote | "C:\\Espressif\\python_env\\idf5.1_py3.11_env\\Scripts\\python.exe" -m esp_idf_panic_decoder --target esp32c3 "C:\\Users\\DELL\\AppData\\Local\\Temp\\tmp7g19w_qh"', '-ex', 'bt']' returned non-zero exit status 1.
+--- Warning: b"error starting child process '| C:\\Espressif\\python_env\\idf5.1_py3.11_env\\Scripts\\python.exe -m esp_idf_panic_decoder --target esp32c3 C:\\Users\\DELL\\AppData\\Local\\Temp\\tmp7g19w_qh': CreateProcess: No such file or directory\r\nNo stack.\r\n"
+
+[0m
+[0m--- 0x40048b82: [0;33msoftware_reset[0m[0m in [0;32mROM[0m
+[0;33m.[0m[0;33m--- Stack dump detected[0m
+[0m--- 0x40380734: [0;33mpanic_abort[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_system/panic.c[0m[0m:[1;31m466[0m
+[0m--- 0x40385cc6: [0;33m__ubsan_include[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_system/ubsan.c[0m[0m:[1;31m313[0m
+[0m--- 0x4005890e: [0;33mmemset[0m[0m in [0;32mROM[0m
+[0m--- 0x40380001: [0;33m_vector_table[0m[0m at [0;32m??[0m[0m:[1;31m?[0m
+[0;33m.[0m[0;33m--- Warning: Failed to run gdb_panic_server.py script: Command '['riscv32-esp-elf-gdb', '--batch', '-n', 'C:\\Users\\DELL\\workspace\\IDF\\ESP_MUL\\Muti\\build\\ESP_MultiFlasher.elf', '-ex', 'target remote | "C:\\Espressif\\python_env\\idf5.1_py3.11_env\\Scripts\\python.exe" -m esp_idf_panic_decoder --target esp32c3 "C:\\Users\\DELL\\AppData\\Local\\Temp\\tmpuizk3uqg"', '-ex', 'bt']' returned non-zero exit status 1.
+--- Warning: b"error starting child process '| C:\\Espressif\\python_env\\idf5.1_py3.11_env\\Scripts\\python.exe -m esp_idf_panic_decoder --target esp32c3 C:\\Users\\DELL\\AppData\\Local\\Temp\\tmpuizk3uqg': CreateProcess: No such file or directory\r\nNo stack.\r\n"
+
+[0m
+[0;33m.[0m[0m--- 0x40048b82: [0;33msoftware_reset[0m[0m in [0;32mROM[0m
+[0;33m--- Stack dump detected[0m
+[0m--- 0x40380734: [0;33mpanic_abort[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_system/panic.c[0m[0m:[1;31m466[0m
+[0m--- 0x40385cc6: [0;33m__ubsan_include[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_system/ubsan.c[0m[0m:[1;31m313[0m
+[0m--- 0x4005890e: [0;33mmemset[0m[0m in [0;32mROM[0m
+[0m--- 0x40380001: [0;33m_vector_table[0m[0m at [0;32m??[0m[0m:[1;31m?[0m
+[0;33m.[0m[0;33m.[0m[0;33m--- Warning: Failed to run gdb_panic_server.py script: Command '['riscv32-esp-elf-gdb', '--batch', '-n', 'C:\\Users\\DELL\\workspace\\IDF\\ESP_MUL\\Muti\\build\\ESP_MultiFlasher.elf', '-ex', 'target remote | "C:\\Espressif\\python_env\\idf5.1_py3.11_env\\Scripts\\python.exe" -m esp_idf_panic_decoder --target esp32c3 "C:\\Users\\DELL\\AppData\\Local\\Temp\\tmp0j8tv83u"', '-ex', 'bt']' returned non-zero exit status 1.
+--- Warning: b"error starting child process '| C:\\Espressif\\python_env\\idf5.1_py3.11_env\\Scripts\\python.exe -m esp_idf_panic_decoder --target esp32c3 C:\\Users\\DELL\\AppData\\Local\\Temp\\tmp0j8tv83u': CreateProcess: No such file or directory\r\nNo stack.\r\n"
+
+[0m
+[0m--- 0x40048b82: [0;33msoftware_reset[0m[0m in [0;32mROM[0m
+[0;33m--- Stack dump detected[0m
+[0m--- 0x40380734: [0;33mpanic_abort[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_system/panic.c[0m[0m:[1;31m466[0m
+[0m--- 0x40385cc6: [0;33m__ubsan_include[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_system/ubsan.c[0m[0m:[1;31m313[0m
+[0m--- 0x4005890e: [0;33mmemset[0m[0m in [0;32mROM[0m
+[0m--- 0x40380001: [0;33m_vector_table[0m[0m at [0;32m??[0m[0m:[1;31m?[0m
+[0;33m.[0m[0;33m.[0m[0;33m--- Warning: Failed to run gdb_panic_server.py script: Command '['riscv32-esp-elf-gdb', '--batch', '-n', 'C:\\Users\\DELL\\workspace\\IDF\\ESP_MUL\\Muti\\build\\ESP_MultiFlasher.elf', '-ex', 'target remote | "C:\\Espressif\\python_env\\idf5.1_py3.11_env\\Scripts\\python.exe" -m esp_idf_panic_decoder --target esp32c3 "C:\\Users\\DELL\\AppData\\Local\\Temp\\tmpv452depl"', '-ex', 'bt']' returned non-zero exit status 1.
+--- Warning: b"error starting child process '| C:\\Espressif\\python_env\\idf5.1_py3.11_env\\Scripts\\python.exe -m esp_idf_panic_decoder --target esp32c3 C:\\Users\\DELL\\AppData\\Local\\Temp\\tmpv452depl': CreateProcess: No such file or directory\r\nNo stack.\r\n"
+
+[0m
+[0m--- 0x40048b82: [0;33msoftware_reset[0m[0m in [0;32mROM[0m
+[0;33m--- Stack dump detected[0m
+[0m--- 0x40380734: [0;33mpanic_abort[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_system/panic.c[0m[0m:[1;31m466[0m
+[0m--- 0x40385cc6: [0;33m__ubsan_include[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_system/ubsan.c[0m[0m:[1;31m313[0m
+[0m--- 0x4005890e: [0;33mmemset[0m[0m in [0;32mROM[0m
+[0m--- 0x40380001: [0;33m_vector_table[0m[0m at [0;32m??[0m[0m:[1;31m?[0m
+[0;33m.[0m[0;33m.[0m[0;33m--- Warning: Failed to run gdb_panic_server.py script: Command '['riscv32-esp-elf-gdb', '--batch', '-n', 'C:\\Users\\DELL\\workspace\\IDF\\ESP_MUL\\Muti\\build\\ESP_MultiFlasher.elf', '-ex', 'target remote | "C:\\Espressif\\python_env\\idf5.1_py3.11_env\\Scripts\\python.exe" -m esp_idf_panic_decoder --target esp32c3 "C:\\Users\\DELL\\AppData\\Local\\Temp\\tmpw6e2h0l3"', '-ex', 'bt']' returned non-zero exit status 1.
+--- Warning: b"error starting child process '| C:\\Espressif\\python_env\\idf5.1_py3.11_env\\Scripts\\python.exe -m esp_idf_panic_decoder --target esp32c3 C:\\Users\\DELL\\AppData\\Local\\Temp\\tmpw6e2h0l3': CreateProcess: No such file or directory\r\nNo stack.\r\n"
+
+[0m
+[0m--- 0x40048b82: [0;33msoftware_reset[0m[0m in [0;32mROM[0m
+[0;33m.[0m[0;33m--- Stack dump detected[0m
+[0m--- 0x40380734: [0;33mpanic_abort[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_system/panic.c[0m[0m:[1;31m466[0m
+[0m--- 0x40385cc6: [0;33m__ubsan_include[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_system/ubsan.c[0m[0m:[1;31m313[0m
+[0m--- 0x4005890e: [0;33mmemset[0m[0m in [0;32mROM[0m
+[0m--- 0x40380001: [0;33m_vector_table[0m[0m at [0;32m??[0m[0m:[1;31m?[0m
+[0;33m.[0m[0;33m--- Warning: Failed to run gdb_panic_server.py script: Command '['riscv32-esp-elf-gdb', '--batch', '-n', 'C:\\Users\\DELL\\workspace\\IDF\\ESP_MUL\\Muti\\build\\ESP_MultiFlasher.elf', '-ex', 'target remote | "C:\\Espressif\\python_env\\idf5.1_py3.11_env\\Scripts\\python.exe" -m esp_idf_panic_decoder --target esp32c3 "C:\\Users\\DELL\\AppData\\Local\\Temp\\tmpwlg3bubq"', '-ex', 'bt']' returned non-zero exit status 1.
+--- Warning: b"error starting child process '| C:\\Espressif\\python_env\\idf5.1_py3.11_env\\Scripts\\python.exe -m esp_idf_panic_decoder --target esp32c3 C:\\Users\\DELL\\AppData\\Local\\Temp\\tmpwlg3bubq': CreateProcess: No such file or directory\r\nNo stack.\r\n"
+
+[0m
+[0;33m.[0m[0m--- 0x40048b82: [0;33msoftware_reset[0m[0m in [0;32mROM[0m
+[0;33m--- Stack dump detected[0m
+[0m--- 0x40380734: [0;33mpanic_abort[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_system/panic.c[0m[0m:[1;31m466[0m
+[0m--- 0x40385cc6: [0;33m__ubsan_include[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_system/ubsan.c[0m[0m:[1;31m313[0m
+[0m--- 0x4005890e: [0;33mmemset[0m[0m in [0;32mROM[0m
+[0m--- 0x40380001: [0;33m_vector_table[0m[0m at [0;32m??[0m[0m:[1;31m?[0m
+[0;33m.[0m[0;33m.[0m[0;33m--- Warning: Failed to run gdb_panic_server.py script: Command '['riscv32-esp-elf-gdb', '--batch', '-n', 'C:\\Users\\DELL\\workspace\\IDF\\ESP_MUL\\Muti\\build\\ESP_MultiFlasher.elf', '-ex', 'target remote | "C:\\Espressif\\python_env\\idf5.1_py3.11_env\\Scripts\\python.exe" -m esp_idf_panic_decoder --target esp32c3 "C:\\Users\\DELL\\AppData\\Local\\Temp\\tmp3amnq7kq"', '-ex', 'bt']' returned non-zero exit status 1.
+--- Warning: b"error starting child process '| C:\\Espressif\\python_env\\idf5.1_py3.11_env\\Scripts\\python.exe -m esp_idf_panic_decoder --target esp32c3 C:\\Users\\DELL\\AppData\\Local\\Temp\\tmp3amnq7kq': CreateProcess: No such file or directory\r\nNo stack.\r\n"
+
+[0m
+[0m--- 0x40048b82: [0;33msoftware_reset[0m[0m in [0;32mROM[0m
+[0;33m.[0m[0;33m--- Stack dump detected[0m
+[0m--- 0x40380734: [0;33mpanic_abort[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_system/panic.c[0m[0m:[1;31m466[0m
+[0m--- 0x40385cc6: [0;33m__ubsan_include[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_system/ubsan.c[0m[0m:[1;31m313[0m
+[0m--- 0x4005890e: [0;33mmemset[0m[0m in [0;32mROM[0m
+[0m--- 0x40380001: [0;33m_vector_table[0m[0m at [0;32m??[0m[0m:[1;31m?[0m
+[0;33m.[0m[0;33m--- Warning: Failed to run gdb_panic_server.py script: Command '['riscv32-esp-elf-gdb', '--batch', '-n', 'C:\\Users\\DELL\\workspace\\IDF\\ESP_MUL\\Muti\\build\\ESP_MultiFlasher.elf', '-ex', 'target remote | "C:\\Espressif\\python_env\\idf5.1_py3.11_env\\Scripts\\python.exe" -m esp_idf_panic_decoder --target esp32c3 "C:\\Users\\DELL\\AppData\\Local\\Temp\\tmpmzd8mxr6"', '-ex', 'bt']' returned non-zero exit status 1.
+--- Warning: b"error starting child process '| C:\\Espressif\\python_env\\idf5.1_py3.11_env\\Scripts\\python.exe -m esp_idf_panic_decoder --target esp32c3 C:\\Users\\DELL\\AppData\\Local\\Temp\\tmpmzd8mxr6': CreateProcess: No such file or directory\r\nNo stack.\r\n"
+
+[0m
+[0;33m.[0m[0m--- 0x40048b82: [0;33msoftware_reset[0m[0m in [0;32mROM[0m
+[0;33m--- Stack dump detected[0m
+[0m--- 0x40380734: [0;33mpanic_abort[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_system/panic.c[0m[0m:[1;31m466[0m
+[0m--- 0x40385cc6: [0;33m__ubsan_include[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_system/ubsan.c[0m[0m:[1;31m313[0m
+[0m--- 0x4005890e: [0;33mmemset[0m[0m in [0;32mROM[0m
+[0m--- 0x40380001: [0;33m_vector_table[0m[0m at [0;32m??[0m[0m:[1;31m?[0m
+[0;33m.[0m[0;33m--- Warning: Failed to run gdb_panic_server.py script: Command '['riscv32-esp-elf-gdb', '--batch', '-n', 'C:\\Users\\DELL\\workspace\\IDF\\ESP_MUL\\Muti\\build\\ESP_MultiFlasher.elf', '-ex', 'target remote | "C:\\Espressif\\python_env\\idf5.1_py3.11_env\\Scripts\\python.exe" -m esp_idf_panic_decoder --target esp32c3 "C:\\Users\\DELL\\AppData\\Local\\Temp\\tmp1ijp3cbw"', '-ex', 'bt']' returned non-zero exit status 1.
+--- Warning: b"error starting child process '| C:\\Espressif\\python_env\\idf5.1_py3.11_env\\Scripts\\python.exe -m esp_idf_panic_decoder --target esp32c3 C:\\Users\\DELL\\AppData\\Local\\Temp\\tmp1ijp3cbw': CreateProcess: No such file or directory\r\nNo stack.\r\n"
+
+[0m
+[0;33m.[0m[0m--- 0x40048b82: [0;33msoftware_reset[0m[0m in [0;32mROM[0m
+[0;33m--- Stack dump detected[0m
+[0m--- 0x40380734: [0;33mpanic_abort[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_system/panic.c[0m[0m:[1;31m466[0m
+[0m--- 0x40385cc6: [0;33m__ubsan_include[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_system/ubsan.c[0m[0m:[1;31m313[0m
+[0m--- 0x4005890e: [0;33mmemset[0m[0m in [0;32mROM[0m
+[0m--- 0x40380001: [0;33m_vector_table[0m[0m at [0;32m??[0m[0m:[1;31m?[0m
+[0;33m.[0m[0;33m.[0m[0;33m--- Warning: Failed to run gdb_panic_server.py script: Command '['riscv32-esp-elf-gdb', '--batch', '-n', 'C:\\Users\\DELL\\workspace\\IDF\\ESP_MUL\\Muti\\build\\ESP_MultiFlasher.elf', '-ex', 'target remote | "C:\\Espressif\\python_env\\idf5.1_py3.11_env\\Scripts\\python.exe" -m esp_idf_panic_decoder --target esp32c3 "C:\\Users\\DELL\\AppData\\Local\\Temp\\tmpp6i0mqhu"', '-ex', 'bt']' returned non-zero exit status 1.
+--- Warning: b"error starting child process '| C:\\Espressif\\python_env\\idf5.1_py3.11_env\\Scripts\\python.exe -m esp_idf_panic_decoder --target esp32c3 C:\\Users\\DELL\\AppData\\Local\\Temp\\tmpp6i0mqhu': CreateProcess: No such file or directory\r\nNo stack.\r\n"
+
+[0m
+[0m--- 0x40048b82: [0;33msoftware_reset[0m[0m in [0;32mROM[0m
+[0;33m--- Stack dump detected[0m
+[0m--- 0x40380734: [0;33mpanic_abort[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_system/panic.c[0m[0m:[1;31m466[0m
+[0m--- 0x40385cc6: [0;33m__ubsan_include[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_system/ubsan.c[0m[0m:[1;31m313[0m
+[0m--- 0x4005890e: [0;33mmemset[0m[0m in [0;32mROM[0m
+[0m--- 0x40380001: [0;33m_vector_table[0m[0m at [0;32m??[0m[0m:[1;31m?[0m
+[0;33m.[0m[0;33m.[0m[0;33m--- Warning: Failed to run gdb_panic_server.py script: Command '['riscv32-esp-elf-gdb', '--batch', '-n', 'C:\\Users\\DELL\\workspace\\IDF\\ESP_MUL\\Muti\\build\\ESP_MultiFlasher.elf', '-ex', 'target remote | "C:\\Espressif\\python_env\\idf5.1_py3.11_env\\Scripts\\python.exe" -m esp_idf_panic_decoder --target esp32c3 "C:\\Users\\DELL\\AppData\\Local\\Temp\\tmp5vf4zaiu"', '-ex', 'bt']' returned non-zero exit status 1.
+--- Warning: b"error starting child process '| C:\\Espressif\\python_env\\idf5.1_py3.11_env\\Scripts\\python.exe -m esp_idf_panic_decoder --target esp32c3 C:\\Users\\DELL\\AppData\\Local\\Temp\\tmp5vf4zaiu': CreateProcess: No such file or directory\r\nNo stack.\r\n"
+
+[0m
+[0m--- 0x40048b82: [0;33msoftware_reset[0m[0m in [0;32mROM[0m
+[0;33m.[0m[0;33m[0m
+[0m
+Traceback (most recent call last):
+  File "C:\Espressif\frameworks\esp-idf-v5.1.6\tools/idf_monitor.py", line 11, in <module>
+    sys.exit(subprocess.run([sys.executable, '-m', 'esp_idf_monitor'] + sys.argv[1:]).returncode)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "subprocess.py", line 550, in run
+  File "subprocess.py", line 1199, in communicate
+  File "subprocess.py", line 1262, in wait
+  File "subprocess.py", line 1543, in _wait
+KeyboardInterrupt

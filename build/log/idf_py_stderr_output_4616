@@ -1,0 +1,14 @@
+CMake Error at C:/Espressif/frameworks/esp-idf-v5.1.6/tools/cmake/build.cmake:548 (message):
+  WARNING: Component "espressif/pn532" not found
+
+  WARNING: Component "espressif/pn532" not found
+
+  ERROR: Because project depends on espressif/pn532 (1.0.3) which doesn't
+  match any versions, version solving failed.
+
+Call Stack (most recent call first):
+  C:/Espressif/frameworks/esp-idf-v5.1.6/tools/cmake/project.cmake:604 (idf_build_process)
+  CMakeLists.txt:11 (project)
+
+
+ninja: error: rebuilding 'build.ninja': subcommand failed
