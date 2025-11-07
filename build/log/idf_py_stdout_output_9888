@@ -1,53 +1,89 @@
-[1/5] C:\Windows\system32\cmd.exe /C "cd /D C:\Users\DELL\workspace\IDF\ESP_MUL\Muti\build\esp-idf\esptool_py && C:\Espressif\python_env\idf5.1_py3.11_env\Scripts\python.exe C:/Espressif/frameworks/esp-idf-v5.1.6/components/partition_table/check_sizes.py --offset 0x8000 partition --type app C:/Users/DELL/workspace/IDF/ESP_MUL/Muti/build/partition_table/partition-table.bin C:/Users/DELL/workspace/IDF/ESP_MUL/Muti/build/ESP_MultiFlasher.bin"
-ESP_MultiFlasher.bin binary size 0x53690 bytes. Smallest app partition is 0x100000 bytes. 0xac970 bytes (67%) free.
-[2/5] Performing build step for 'bootloader'
-[1/1] C:\Windows\system32\cmd.exe /C "cd /D C:\Users\DELL\workspace\IDF\ESP_MUL\Muti\build\bootloader\esp-idf\esptool_py && C:\Espressif\python_env\idf5.1_py3.11_env\Scripts\python.exe C:/Espressif/frameworks/esp-idf-v5.1.6/components/partition_table/check_sizes.py --offset 0x8000 bootloader 0x0 C:/Users/DELL/workspace/IDF/ESP_MUL/Muti/build/bootloader/bootloader.bin"
-Bootloader binary size 0x5070 bytes. 0x2f90 bytes (37%) free.
-[3/5] No install step for 'bootloader'
-[4/5] Completed 'bootloader'
-[4/5] C:\Windows\system32\cmd.exe /C "cd /D C:\Espressif\frameworks\esp-idf-v5.1.6\components\esptool_py && C:\Espressif\tools\cmake\3.30.2\bin\cmake.exe -D IDF_PATH=C:/Espressif/frameworks/esp-idf-v5.1.6 -D SERIAL_TOOL=C:/Espressif/python_env/idf5.1_py3.11_env/Scripts/python.exe;;C:/Espressif/frameworks/esp-idf-v5.1.6/components/esptool_py/esptool/esptool.py;--chip;esp32c3 -D SERIAL_TOOL_ARGS=--before=default_reset;--after=hard_reset;write_flash;@flash_args -D WORKING_DIRECTORY=C:/Users/DELL/workspace/IDF/ESP_MUL/Muti/build -P C:/Espressif/frameworks/esp-idf-v5.1.6/components/esptool_py/run_serial_tool.cmake"
-esptool.py --chip esp32c3 -p COM10 -b 460800 --before=default_reset --after=hard_reset write_flash --flash_mode dio --flash_freq 80m --flash_size 2MB 0x0 bootloader/bootloader.bin 0x10000 ESP_MultiFlasher.bin 0x8000 partition_table/partition-table.bin
-esptool.py v4.10.0
-Serial port COM10
-Connecting....
-Chip is ESP32-C3 (QFN32) (revision v0.4)
-Features: WiFi, BLE, Embedded Flash 4MB (XMC)
-Crystal is 40MHz
-USB mode: USB-Serial/JTAG
-MAC: d8:3b:da:34:d7:2c
-Uploading stub...
-Running stub...
-Stub running...
-Changing baud rate to 460800
-Changed.
-Configuring flash size...
-Flash will be erased from 0x00000000 to 0x00005fff...
-Flash will be erased from 0x00010000 to 0x00063fff...
-Flash will be erased from 0x00008000 to 0x00008fff...
-SHA digest in image updated
-Compressed 20592 bytes to 12641...
-Writing at 0x00000000... (100 %)
-Wrote 20592 bytes (12641 compressed) at 0x00000000 in 0.3 seconds (effective 491.6 kbit/s)...
-Hash of data verified.
-Compressed 341648 bytes to 181250...
-Writing at 0x00010000... (8 %)
-Writing at 0x0001b41f... (16 %)
-Writing at 0x0002395e... (25 %)
-Writing at 0x0002aac5... (33 %)
-Writing at 0x000324f3... (41 %)
-Writing at 0x00038cdc... (50 %)
-Writing at 0x00040bf9... (58 %)
-Writing at 0x00047031... (66 %)
-Writing at 0x0004e0bf... (75 %)
-Writing at 0x000552d9... (83 %)
-Writing at 0x0005ba2b... (91 %)
-Writing at 0x00062e3e... (100 %)
-Wrote 341648 bytes (181250 compressed) at 0x00010000 in 2.6 seconds (effective 1058.4 kbit/s)...
-Hash of data verified.
-Compressed 3072 bytes to 103...
-Writing at 0x00008000... (100 %)
-Wrote 3072 bytes (103 compressed) at 0x00008000 in 0.0 seconds (effective 839.0 kbit/s)...
-Hash of data verified.
-
-Leaving...
-Hard resetting via RTS pin...
+[0;32mI (105) esp_image: segment 1: paddr=000219f8 vaddr=3fc8e2ESP-ROM:esp32c3-api1-20210207
+Build:Feb  7 2021
+rst:0x15 (USB_UART_CHIP_RESET),boot:0xd (SPI_FAST_FLASH_BOOT)
+Saved PC:0x40383f90
+SPIWP:0xee
+mode:DIO, clock div:1
+load:0x3fcd5820,len:0x170c
+load:0x403cc710,len:0x968
+load:0x403ce710,len:0x2fa8
+entry 0x403cc710
+[0;32mI (24) boot: ESP-IDF v5.1.6-dirty 2nd stage bootloader[0m
+[0;32mI (24) boot: compile time Oct 16 2025 01:02:32[0m
+[0;32mI (25) boot: chip revision: v0.4[0m
+[0;32mI (28) boot.esp32c3: SPI Speed      : 80MHz[0m
+[0;32mI (33) boot.esp32c3: SPI Mode       : DIO[0m
+[0;32mI (37) boot.esp32c3: SPI Flash Size : 2MB[0m
+[0;32mI (42) boot: Enabling RNG early entropy source...[0m
+[0;32mI (47) boot: Partition Table:[0m
+[0;32mI (51) boot: ## Label            Usage          Type ST Offset   Length[0m
+[0;32mI (58) boot:  0 nvs              WiFi data        01 02 00009000 00006000[0m
+[0;32mI (66) boot:  1 phy_init         RF data          01 01 0000f000 00001000[0m
+[0;32mI (73) boot:  2 factory          factory app      00 00 00010000 00100000[0m
+[0;32mI (81) boot: End of partition table[0m
+[0;32mI (85) esp_image: segment 0: paddr=00010020 vaddr=3c040020 size=119d0h ( 72144) map[0m
+[0;32mI (105) esp_image: segment 1: paddr=000219f8 vaddr=3fc8e200 size=01420h (  5152) load[0m
+[0;32mI (106) esp_image: segment 2: paddr=00022e20 vaddr=40380000 size=0d1f8h ( 53752) load[0m
+[0;32mI (121) esp_image: segment 3: paddr=00030020 vaddr=42000020 size=3e270h (254576) map[0m
+[0;32mI (163) esp_image: segment 4: paddr=0006e298 vaddr=4038d1f8 size=00ef0h (  3824) load[0m
+[0;32mI (168) boot: Loaded app from partition at offset 0x10000[0m
+[0;32mI (168) boot: Disabling RNG early entropy source...[0m
+[0;32mI (183) cpu_start: Unicore app[0m
+[0;32mI (183) cpu_start: Pro cpu up.[0m
+[0;32mI (192) cpu_start: Pro cpu start user code[0m
+[0;32mI (192) cpu_start: cpu freq: 160000000 Hz[0m
+[0;32mI (192) cpu_start: Application information:[0m
+[0;32mI (195) cpu_start: Project name:     ESP_MultiFlasher[0m
+[0;32mI (200) cpu_start: App version:      a61a2d0-dirty[0m
+[0;32mI (206) cpu_start: Compile time:     Nov  7 2025 16:30:22[0m
+[0;32mI (212) cpu_start: ELF file SHA256:  f1cff75b7c09500b...[0m
+[0;32mI (218) cpu_start: ESP-IDF:          v5.1.6-dirty[0m
+[0;32mI (223) cpu_start: Min chip rev:     v0.3[0m
+[0;32mI (228) cpu_start: Max chip rev:     v1.99 [0m
+[0;32mI (233) cpu_start: Chip rev:         v0.4[0m
+[0;32mI (238) heap_init: Initializing. RAM available for dynamic allocation:[0m
+[0;32mI (245) heap_init: At 3FC90AB0 len 0002F550 (189 KiB): DRAM[0m
+[0;32mI (251) heap_init: At 3FCC0000 len 0001C710 (113 KiB): DRAM/RETENTION[0m
+[0;32mI (258) heap_init: At 3FCDC710 len 00002950 (10 KiB): DRAM/RETENTION/STACK[0m
+[0;32mI (266) heap_init: At 50000010 len 00001FD8 (7 KiB): RTCRAM[0m
+[0;32mI (273) spi_flash: detected chip: generic[0m
+[0;32mI (277) spi_flash: flash io: dio[0m
+[0;33mW (281) spi_flash: Detected size(4096k) larger than the size in the binary image header(2048k). Using the size in the binary image header.[0m
+[0;32mI (294) sleep: Configure to isolate all GPIO pins in sleep state[0m
+[0;32mI (301) sleep: Enable automatic switching of GPIO sleep configuration[0m
+[0;32mI (308) app_start: Starting scheduler on CPU0[0m
+[0;32mI (313) main_task: Started on CPU0[0m
+[0;32mI (317) main_task: Calling app_main()[0m
+[0;32mI (327) MAIN: --- BAT DAU KHOI DONG HE THONG ---[0m
+[0;32mI (844) gpio: GPIO[4]| InputEn: 1| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (845) gpio: GPIO[5]| InputEn: 1| OutputEn: 0| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (852) gpio: GPIO[6]| InputEn: 1| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (861) gpio: GPIO[7]| InputEn: 1| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (878) SD_CARD: SD initialized OK![0m
+[0;32mI (1415) SD_CARD: Tải Metadata hoàn tất. Tổng cộng 4 firmware được tải.[0m
+[0;32mI (1416) MAIN: Dang lay menu tu sd_card module...[0m
+[0;32mI (1419) gpio: GPIO[21]| InputEn: 1| OutputEn: 0| OpenDrain: 0| Pullup: 1| Pulldown: 0| Intr:0 [0m
+[0;32mI (1428) gpio: GPIO[20]| InputEn: 1| OutputEn: 0| OpenDrain: 0| Pullup: 1| Pulldown: 0| Intr:0 [0m
+[0;32mI (1437) gpio: GPIO[10]| InputEn: 1| OutputEn: 0| OpenDrain: 0| Pullup: 1| Pulldown: 0| Intr:0 [0m
+[0;32mI (1461) MAIN: Khoi dong hoan tat. Hien thi menu.[0m
+[0;32mI (4685) MAIN: Da chon: Index 4, FW ID: NULL[0m
+[0;32mI (4685) MAIN: Xoa du lieu flash tren chip Target.[0m
+[0;32mI (4698) FLASHER: Initializing UART connection for flasher...[0m
+[0;32mI (4699) gpio: GPIO[2]| InputEn: 0| OutputEn: 0| OpenDrain: 0| Pullup: 1| Pulldown: 0| Intr:0 [0m
+[0;32mI (4703) gpio: GPIO[3]| InputEn: 0| OutputEn: 0| OpenDrain: 0| Pullup: 1| Pulldown: 0| Intr:0 [0m
+[0;32mI (4712) FLASHER: UART connection initialized at baud rate 115200[0m
+[0;32mI (4719) FLASHER: --- START CHIP ERASE ---[0m
+[0;32mI (4724) FLASHER: Reset sequence start...[0m
+[0;32mI (5198) FLASHER: Reset sequence done![0m
+[0;31mE (7238) FLASHER: Failed to connect to target for erase.[0m
+[0;31mE (7251) MAIN: Xoa chip that bai do loi flasher.[0m
+[0;32mI (72350) MAIN: Da chon: Index 4, FW ID: NULL[0m
+[0;32mI (72350) MAIN: Xoa du lieu flash tren chip Target.[0m
+[0;32mI (72363) FLASHER: Initializing UART connection for flasher...[0m
+[0;31mE (72364) uart: UART driver already installed[0m
+[0;31mE (72364) FLASHER: serial initialization failed.[0m
+[0;32mI (72369) FLASHER: --- START CHIP ERASE ---[0m
+[0;32mI (72374) FLASHER: Reset sequence start...[0m
+[0;32mI (72849) FLASHER: Reset sequence done![0m
+[0;31mE (74889) FLASHER: Failed to connect to target for erase.[0m
+[0;31mE (74902) MAIN: Xoa chip that bai do loi flasher.[0m

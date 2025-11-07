@@ -223,9 +223,11 @@ esp_err_t flasher_chip_erase() {
     
     if (esp_loader_connect(&connect_config) != ESP_LOADER_SUCCESS) {
         ESP_LOGE(TAG, "Failed to connect to target for erase.");
+        oled_show_message("Erasing Chip", "failed to connect.");
         return ESP_FAIL;
     }
     ESP_LOGI(TAG, "Connected. Erasing chip (please wait)...");
+    oled_show_message("Erasing Chip", "connected.");
 
     // 2. Gọi lệnh xóa toàn bộ (Hàm này sẽ BLOCK cho đến khi xóa xong)
     esp_loader_error_t err = esp_loader_flash_erase();
