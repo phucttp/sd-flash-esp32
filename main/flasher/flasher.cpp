@@ -12,6 +12,7 @@
 #include "Arduino.h"
 #include "flasher.h"
 #include "../oled/menu.h"    // Thêm để dùng hàm oled_show_message
+#include "esp_system.h"
 
 // TAG dùng để lọc log cho module này
 static const char *TAG = "FLASHER";
@@ -35,17 +36,7 @@ const loader_esp32_config_t config = {
 static esp_err_t reset_sequence(const loader_esp32_config_t *config);
 
 esp_err_t flasher_init() {
-//     // Cấu hình các chân GPIO và cổng UART mà HOST sẽ dùng
-//    const loader_esp32_config_t config = {
-//       .baud_rate = 115200,             // Tốc độ baud giao tiếp
-//       .uart_port = UART_NUM_1,         // Dùng UART1 của con HOST
-//       .uart_rx_pin = GPIO_NUM_1,      // Chân RX của HOST (nối với TX của Target)
-//       .uart_tx_pin = GPIO_NUM_0,      // Chân TX của HOST (nối với RX của Target)
-//       .reset_trigger_pin = GPIO_NUM_2,// Chân HOST điều khiển chân EN/RESET của Target
-//       .gpio0_trigger_pin = GPIO_NUM_3, // Chân HOST điều khiển chân BOOT/GPIO0 của Target
-//    };
-
-    // Đăng ký cấu hình phần cứng này với "driver port" của thư viện
+   ESP_LOGI(TAG, "Initializing UART connection for flasher...");
    if (loader_port_esp32_init(&config) != ESP_LOADER_SUCCESS) {
       ESP_LOGE(TAG, "serial initialization failed.");
       return ESP_FAIL;
@@ -158,14 +149,8 @@ esp_err_t flasher_begin_session(const std::string& fw_id)
     }
     ESP_LOGI(TAG, "Connected to target device.");
     
-    // esp_loader_error_t err_erase = esp_loader_flash_erase();
-    // if (err_erase != ESP_LOADER_SUCCESS) {
-    //     ESP_LOGE(TAG, "Flash erase failed. err=%d", err_erase);
-    //     return ESP_FAIL;
-    // }
-
     // --- BƯỚC 3: BOOST BAUDRATE ---
-    uint32_t new_baud = 460800;
+    uint32_t new_baud = 921600;
     esp_loader_error_t err_baud = esp_loader_change_transmission_rate(new_baud);
     if (err_baud == ESP_LOADER_SUCCESS) {
         uart_set_baudrate(UART_NUM_1, new_baud);
@@ -189,16 +174,12 @@ esp_err_t flasher_begin_session(const std::string& fw_id)
     // --- BƯỚC 5: RESET TARGET ---
     esp_loader_reset_target();
     ESP_LOGI(TAG, "Resetting target to run app...");
-    gpio_set_level(GPIO_NUM_3, 1);
-    vTaskDelay(pdMS_TO_TICKS(50));
-    gpio_set_level(GPIO_NUM_2, 0);
-    vTaskDelay(pdMS_TO_TICKS(50));
-    gpio_set_level(GPIO_NUM_2, 1);
     vTaskDelay(pdMS_TO_TICKS(200));
 
     ESP_LOGI(TAG, "Target restarted in normal mode.");
     ESP_LOGI(TAG, "Full firmware update completed successfully!");
     sd_unmount(); // Giải phóng thẻ SD sau khi nạp xong
+
     return ESP_OK;
 }
 
@@ -231,4 +212,48 @@ static esp_err_t reset_sequence(const loader_esp32_config_t *config)
 
     ESP_LOGI(TAG, "Reset sequence done!");
     return ESP_OK;
+}
+
+esp_err_t flasher_chip_erase() {
+    ESP_LOGI(TAG, "--- START CHIP ERASE ---");
+
+    // 1. Handshake với Target
+    esp_loader_connect_args_t connect_config = ESP_LOADER_CONNECT_DEFAULT();
+    reset_sequence(&config); // Gọi lại sequence reset để vào bootloader
+    
+    if (esp_loader_connect(&connect_config) != ESP_LOADER_SUCCESS) {
+        ESP_LOGE(TAG, "Failed to connect to target for erase.");
+        return ESP_FAIL;
+    }
+    ESP_LOGI(TAG, "Connected. Erasing chip (please wait)...");
+
+    // 2. Gọi lệnh xóa toàn bộ (Hàm này sẽ BLOCK cho đến khi xóa xong)
+    esp_loader_error_t err = esp_loader_flash_erase();
+    if (err != ESP_LOADER_SUCCESS) {
+        ESP_LOGE(TAG, "Chip erase failed with error: %d", err);
+        return ESP_FAIL;
+    }
+
+    ESP_LOGI(TAG, "Chip erase completed successfully!");
+    
+    // 3. Reset target lại cho chắc
+    esp_loader_reset_target();
+    
+    return ESP_OK;
+}
+
+/**
+ * @brief Hiển thị thông báo và khởi động lại ESP32 Host.
+ */
+void host_system_restart() {
+    ESP_LOGI(TAG, "Dang khoi dong lai he thong...");
+    
+    // Hiệu ứng dấu chấm động: Restarting. -> Restarting.. -> Restarting...
+    for (int i = 1; i <= 3; i++) {
+        std::string dots(i, '.'); // Tạo chuỗi chứa i dấu chấm
+        oled_show_message("Restarting", dots.c_str());
+        vTaskDelay(pdMS_TO_TICKS(500)); 
+    }
+    
+    esp_restart();
 }

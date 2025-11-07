@@ -1,0 +1,156 @@
+[0/1] Re-running CMake...
+-- ccache will be used for faster recompilation
+-- Building ESP-IDF components for target esp32c3
+NOTICE: Skipping optional dependency: espressif/esp-sr
+NOTICE: Skipping optional dependency: espressif/usb_host_cdc_acm
+NOTICE: Skipping optional dependency: espressif/usb_host_ch34x_vcp
+NOTICE: Skipping optional dependency: espressif/usb_host_cp210x_vcp
+NOTICE: Skipping optional dependency: espressif/esp_hosted
+NOTICE: Skipping optional dependency: espressif/esp_wifi_remote
+NOTICE: Skipping optional dependency: espressif/lan867x
+NOTICE: 
+Following dependencies have new versions available:
+Dependency "espressif/esp_modem": "1.4.1" -> "1.4.2"
+Dependency "espressif/esp_rainmaker": "1.7.5" -> "1.7.6"
+Dependency "espressif/esp_schedule": "1.3.1" -> "1.3.2"
+Dependency "espressif/esp_secure_cert_mgr": "2.7.0" -> "2.7.1"
+Dependency "espressif/mdns": "1.8.2" -> "1.9.0"
+Dependency "joltwallet/littlefs": "1.20.1" -> "1.20.2"
+Consider running "idf.py update-dependencies" to update your lock file.
+NOTICE: Processing 28 dependencies:
+NOTICE: [1/28] bblanchon/ArduinoJson (7.4.2)
+NOTICE: [2/28] chmorgan/esp-libhelix-mp3 (1.0.3)
+NOTICE: [3/28] espressif/arduino-esp32 (3.0.7)
+NOTICE: [4/28] espressif/cbor (0.6.1~3)
+NOTICE: [5/28] espressif/esp-dsp (1.7.0)
+NOTICE: [6/28] espressif/esp-modbus (1.0.18)
+NOTICE: [7/28] espressif/esp-serial-flasher (1.10.0)
+NOTICE: [8/28] espressif/esp-zboss-lib (1.6.4)
+NOTICE: [9/28] espressif/esp-zigbee-lib (1.6.7)
+NOTICE: [10/28] espressif/esp_daylight (1.0.1)
+NOTICE: [11/28] espressif/esp_diag_data_store (1.1.0)
+NOTICE: [12/28] espressif/esp_diagnostics (1.3.0)
+NOTICE: [13/28] espressif/esp_insights (1.3.1)
+NOTICE: [14/28] espressif/esp_modem (1.4.1)
+NOTICE: [15/28] espressif/esp_rainmaker (1.7.5)
+NOTICE: [16/28] espressif/esp_rcp_update (1.5.1)
+NOTICE: [17/28] espressif/esp_schedule (1.3.1)
+NOTICE: [18/28] espressif/esp_secure_cert_mgr (2.7.0)
+NOTICE: [19/28] espressif/jsmn (1.1.0)
+NOTICE: [20/28] espressif/json_generator (1.1.2)
+NOTICE: [21/28] espressif/json_parser (1.0.3)
+NOTICE: [22/28] espressif/libsodium (1.0.20~2)
+NOTICE: [23/28] espressif/mdns (1.8.2)
+NOTICE: [24/28] espressif/network_provisioning (1.0.5)
+NOTICE: [25/28] espressif/qrcode (0.1.0~2)
+NOTICE: [26/28] espressif/rmaker_common (1.5.2)
+NOTICE: [27/28] joltwallet/littlefs (1.20.1)
+NOTICE: [28/28] idf (5.1.6)
+-- DEBUG: Use esp-modbus component folder: C:/Users/DELL/workspace/IDF/ESP_MUL/Muti/managed_components/espressif__esp-modbus.
+NOTICE: Skipping optional dependency: espressif/esp-sr
+NOTICE: Skipping optional dependency: espressif/usb_host_cdc_acm
+NOTICE: Skipping optional dependency: espressif/usb_host_ch34x_vcp
+NOTICE: Skipping optional dependency: espressif/usb_host_cp210x_vcp
+-- Project sdkconfig file C:/Users/DELL/workspace/IDF/ESP_MUL/Muti/sdkconfig
+-- Could NOT find Threads (missing: Threads_FOUND) 
+-- App "ESP_MultiFlasher" version: 8a81c14-dirty
+-- Adding linker script C:/Users/DELL/workspace/IDF/ESP_MUL/Muti/build/esp-idf/esp_system/ld/memory.ld
+-- Adding linker script C:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_system/ld/esp32c3/sections.ld.in
+-- Adding linker script C:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_rom/esp32c3/ld/esp32c3.rom.ld
+-- Adding linker script C:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_rom/esp32c3/ld/esp32c3.rom.api.ld
+-- Adding linker script C:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_rom/esp32c3/ld/esp32c3.rom.bt_funcs.ld
+-- Adding linker script C:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_rom/esp32c3/ld/esp32c3.rom.libgcc.ld
+-- Adding linker script C:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_rom/esp32c3/ld/esp32c3.rom.newlib.ld
+-- Adding linker script C:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_rom/esp32c3/ld/esp32c3.rom.version.ld
+-- Adding linker script C:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_rom/esp32c3/ld/esp32c3.rom.eco3.ld
+-- Adding linker script C:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_rom/esp32c3/ld/esp32c3.rom.eco3_bt_funcs.ld
+-- Adding linker script C:/Espressif/frameworks/esp-idf-v5.1.6/components/soc/esp32c3/ld/esp32c3.peripherals.ld
+-- DEBUG: Use esp-modbus component folder: C:/Users/DELL/workspace/IDF/ESP_MUL/Muti/managed_components/espressif__esp-modbus.
+-- Components: Adafruit_BusIO Adafruit_GFX Adafruit_SSD1306 app_trace app_update bblanchon__ArduinoJson bootloader bootloader_support bt chmorgan__esp-libhelix-mp3 cmock console cxx driver efuse esp-tls esp_adc esp_app_format esp_coex esp_common esp_eth esp_event esp_gdbstub esp_hid esp_http_client esp_http_server esp_https_ota esp_https_server esp_hw_support esp_lcd esp_local_ctrl esp_mm esp_netif esp_netif_stack esp_partition esp_phy esp_pm esp_psram esp_ringbuf esp_rom esp_system esp_timer esp_wifi espcoredump espressif__arduino-esp32 espressif__cbor espressif__esp-dsp espressif__esp-modbus espressif__esp-serial-flasher espressif__esp-zboss-lib espressif__esp-zigbee-lib espressif__esp_daylight espressif__esp_diag_data_store espressif__esp_diagnostics espressif__esp_insights espressif__esp_modem espressif__esp_rainmaker espressif__esp_rcp_update espressif__esp_schedule espressif__esp_secure_cert_mgr espressif__jsmn espressif__json_generator espressif__json_parser espressif__libsodium espressif__mdns espressif__network_provisioning espressif__qrcode espressif__rmaker_common esptool_py fatfs freertos hal heap http_parser idf_test ieee802154 joltwallet__littlefs json log lwip main mbedtls mqtt newlib nvs_flash openthread partition_table protobuf-c protocomm pthread riscv sdmmc soc spi_flash spiffs tcp_transport ulp unity usb vfs wear_levelling wifi_provisioning wpa_supplicant
+-- Component paths: C:/Users/DELL/workspace/IDF/ESP_MUL/Muti/components/Adafruit_BusIO C:/Users/DELL/workspace/IDF/ESP_MUL/Muti/components/Adafruit_GFX C:/Users/DELL/workspace/IDF/ESP_MUL/Muti/components/Adafruit_SSD1306 C:/Espressif/frameworks/esp-idf-v5.1.6/components/app_trace C:/Espressif/frameworks/esp-idf-v5.1.6/components/app_update C:/Users/DELL/workspace/IDF/ESP_MUL/Muti/managed_components/bblanchon__ArduinoJson C:/Espressif/frameworks/esp-idf-v5.1.6/components/bootloader C:/Espressif/frameworks/esp-idf-v5.1.6/components/bootloader_support C:/Espressif/frameworks/esp-idf-v5.1.6/components/bt C:/Users/DELL/workspace/IDF/ESP_MUL/Muti/managed_components/chmorgan__esp-libhelix-mp3 C:/Espressif/frameworks/esp-idf-v5.1.6/components/cmock C:/Espressif/frameworks/esp-idf-v5.1.6/components/console C:/Espressif/frameworks/esp-idf-v5.1.6/components/cxx C:/Espressif/frameworks/esp-idf-v5.1.6/components/driver C:/Espressif/frameworks/esp-idf-v5.1.6/components/efuse C:/Espressif/frameworks/esp-idf-v5.1.6/components/esp-tls C:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_adc C:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_app_format C:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_coex C:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_common C:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_eth C:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_event C:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_gdbstub C:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_hid C:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_http_client C:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_http_server C:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_https_ota C:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_https_server C:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_hw_support C:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_lcd C:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_local_ctrl C:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_mm C:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_netif C:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_netif_stack C:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_partition C:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_phy C:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_pm C:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_psram C:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_ringbuf C:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_rom C:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_system C:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_timer C:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_wifi C:/Espressif/frameworks/esp-idf-v5.1.6/components/espcoredump C:/Users/DELL/workspace/IDF/ESP_MUL/Muti/managed_components/espressif__arduino-esp32 C:/Users/DELL/workspace/IDF/ESP_MUL/Muti/managed_components/espressif__cbor C:/Users/DELL/workspace/IDF/ESP_MUL/Muti/managed_components/espressif__esp-dsp C:/Users/DELL/workspace/IDF/ESP_MUL/Muti/managed_components/espressif__esp-modbus C:/Users/DELL/workspace/IDF/ESP_MUL/Muti/managed_components/espressif__esp-serial-flasher C:/Users/DELL/workspace/IDF/ESP_MUL/Muti/managed_components/espressif__esp-zboss-lib C:/Users/DELL/workspace/IDF/ESP_MUL/Muti/managed_components/espressif__esp-zigbee-lib C:/Users/DELL/workspace/IDF/ESP_MUL/Muti/managed_components/espressif__esp_daylight C:/Users/DELL/workspace/IDF/ESP_MUL/Muti/managed_components/espressif__esp_diag_data_store C:/Users/DELL/workspace/IDF/ESP_MUL/Muti/managed_components/espressif__esp_diagnostics C:/Users/DELL/workspace/IDF/ESP_MUL/Muti/managed_components/espressif__esp_insights C:/Users/DELL/workspace/IDF/ESP_MUL/Muti/managed_components/espressif__esp_modem C:/Users/DELL/workspace/IDF/ESP_MUL/Muti/managed_components/espressif__esp_rainmaker C:/Users/DELL/workspace/IDF/ESP_MUL/Muti/managed_components/espressif__esp_rcp_update C:/Users/DELL/workspace/IDF/ESP_MUL/Muti/managed_components/espressif__esp_schedule C:/Users/DELL/workspace/IDF/ESP_MUL/Muti/managed_components/espressif__esp_secure_cert_mgr C:/Users/DELL/workspace/IDF/ESP_MUL/Muti/managed_components/espressif__jsmn C:/Users/DELL/workspace/IDF/ESP_MUL/Muti/managed_components/espressif__json_generator C:/Users/DELL/workspace/IDF/ESP_MUL/Muti/managed_components/espressif__json_parser C:/Users/DELL/workspace/IDF/ESP_MUL/Muti/managed_components/espressif__libsodium C:/Users/DELL/workspace/IDF/ESP_MUL/Muti/managed_components/espressif__mdns C:/Users/DELL/workspace/IDF/ESP_MUL/Muti/managed_components/espressif__network_provisioning C:/Users/DELL/workspace/IDF/ESP_MUL/Muti/managed_components/espressif__qrcode C:/Users/DELL/workspace/IDF/ESP_MUL/Muti/managed_components/espressif__rmaker_common C:/Espressif/frameworks/esp-idf-v5.1.6/components/esptool_py C:/Espressif/frameworks/esp-idf-v5.1.6/components/fatfs C:/Espressif/frameworks/esp-idf-v5.1.6/components/freertos C:/Espressif/frameworks/esp-idf-v5.1.6/components/hal C:/Espressif/frameworks/esp-idf-v5.1.6/components/heap C:/Espressif/frameworks/esp-idf-v5.1.6/components/http_parser C:/Espressif/frameworks/esp-idf-v5.1.6/components/idf_test C:/Espressif/frameworks/esp-idf-v5.1.6/components/ieee802154 C:/Users/DELL/workspace/IDF/ESP_MUL/Muti/managed_components/joltwallet__littlefs C:/Espressif/frameworks/esp-idf-v5.1.6/components/json C:/Espressif/frameworks/esp-idf-v5.1.6/components/log C:/Espressif/frameworks/esp-idf-v5.1.6/components/lwip C:/Users/DELL/workspace/IDF/ESP_MUL/Muti/main C:/Espressif/frameworks/esp-idf-v5.1.6/components/mbedtls C:/Espressif/frameworks/esp-idf-v5.1.6/components/mqtt C:/Espressif/frameworks/esp-idf-v5.1.6/components/newlib C:/Espressif/frameworks/esp-idf-v5.1.6/components/nvs_flash C:/Espressif/frameworks/esp-idf-v5.1.6/components/openthread C:/Espressif/frameworks/esp-idf-v5.1.6/components/partition_table C:/Espressif/frameworks/esp-idf-v5.1.6/components/protobuf-c C:/Espressif/frameworks/esp-idf-v5.1.6/components/protocomm C:/Espressif/frameworks/esp-idf-v5.1.6/components/pthread C:/Espressif/frameworks/esp-idf-v5.1.6/components/riscv C:/Espressif/frameworks/esp-idf-v5.1.6/components/sdmmc C:/Espressif/frameworks/esp-idf-v5.1.6/components/soc C:/Espressif/frameworks/esp-idf-v5.1.6/components/spi_flash C:/Espressif/frameworks/esp-idf-v5.1.6/components/spiffs C:/Espressif/frameworks/esp-idf-v5.1.6/components/tcp_transport C:/Espressif/frameworks/esp-idf-v5.1.6/components/ulp C:/Espressif/frameworks/esp-idf-v5.1.6/components/unity C:/Espressif/frameworks/esp-idf-v5.1.6/components/usb C:/Espressif/frameworks/esp-idf-v5.1.6/components/vfs C:/Espressif/frameworks/esp-idf-v5.1.6/components/wear_levelling C:/Espressif/frameworks/esp-idf-v5.1.6/components/wifi_provisioning C:/Espressif/frameworks/esp-idf-v5.1.6/components/wpa_supplicant
+-- Configuring done (23.6s)
+-- Generating done (2.0s)
+-- Build files have been written to: C:/Users/DELL/workspace/IDF/ESP_MUL/Muti/build
+[1/13] Building C object esp-idf/esp_app_format/CMakeFiles/__idf_esp_app_format.dir/esp_app_desc.c.obj
+[2/13] Linking C static library esp-idf\esp_app_format\libesp_app_format.a
+[3/13] Building CXX object esp-idf/main/CMakeFiles/__idf_main.dir/main.cpp.obj
+[4/13] Linking C static library esp-idf\main\libmain.a
+[5/13] Performing build step for 'bootloader'
+[0/1] Re-running CMake...
+-- Building ESP-IDF components for target esp32c3
+-- Project sdkconfig file C:/Users/DELL/workspace/IDF/ESP_MUL/Muti/sdkconfig
+-- Adding linker script C:/Espressif/frameworks/esp-idf-v5.1.6/components/soc/esp32c3/ld/esp32c3.peripherals.ld
+-- App "bootloader" version: v5.1.6-dirty
+-- Adding linker script C:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_rom/esp32c3/ld/esp32c3.rom.ld
+-- Adding linker script C:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_rom/esp32c3/ld/esp32c3.rom.api.ld
+-- Adding linker script C:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_rom/esp32c3/ld/esp32c3.rom.bt_funcs.ld
+-- Adding linker script C:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_rom/esp32c3/ld/esp32c3.rom.libgcc.ld
+-- Adding linker script C:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_rom/esp32c3/ld/esp32c3.rom.newlib.ld
+-- Adding linker script C:/Espressif/frameworks/esp-idf-v5.1.6/components/bootloader/subproject/main/ld/esp32c3/bootloader.ld
+-- Adding linker script C:/Espressif/frameworks/esp-idf-v5.1.6/components/bootloader/subproject/main/ld/esp32c3/bootloader.rom.ld
+-- Components: bootloader bootloader_support efuse esp_app_format esp_common esp_hw_support esp_rom esp_system esptool_py freertos hal log main micro-ecc newlib partition_table riscv soc spi_flash
+-- Component paths: C:/Espressif/frameworks/esp-idf-v5.1.6/components/bootloader C:/Espressif/frameworks/esp-idf-v5.1.6/components/bootloader_support C:/Espressif/frameworks/esp-idf-v5.1.6/components/efuse C:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_app_format C:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_common C:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_hw_support C:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_rom C:/Espressif/frameworks/esp-idf-v5.1.6/components/esp_system C:/Espressif/frameworks/esp-idf-v5.1.6/components/esptool_py C:/Espressif/frameworks/esp-idf-v5.1.6/components/freertos C:/Espressif/frameworks/esp-idf-v5.1.6/components/hal C:/Espressif/frameworks/esp-idf-v5.1.6/components/log C:/Espressif/frameworks/esp-idf-v5.1.6/components/bootloader/subproject/main C:/Espressif/frameworks/esp-idf-v5.1.6/components/bootloader/subproject/components/micro-ecc C:/Espressif/frameworks/esp-idf-v5.1.6/components/newlib C:/Espressif/frameworks/esp-idf-v5.1.6/components/partition_table C:/Espressif/frameworks/esp-idf-v5.1.6/components/riscv C:/Espressif/frameworks/esp-idf-v5.1.6/components/soc C:/Espressif/frameworks/esp-idf-v5.1.6/components/spi_flash
+-- Configuring done (9.1s)
+-- Generating done (0.2s)
+-- Build files have been written to: C:/Users/DELL/workspace/IDF/ESP_MUL/Muti/build/bootloader
+[1/2] C:\Windows\system32\cmd.exe /C "cd /D C:\Users\DELL\workspace\IDF\ESP_MUL\Muti\build\bootloader\esp-idf\esptool_py && C:\Espressif\python_env\idf5.1_py3.11_env\Scripts\python.exe C:/Espressif/frameworks/esp-idf-v5.1.6/components/partition_table/check_sizes.py --offset 0x8000 bootloader 0x0 C:/Users/DELL/workspace/IDF/ESP_MUL/Muti/build/bootloader/bootloader.bin"
+Bootloader binary size 0x5070 bytes. 0x2f90 bytes (37%) free.
+[6/13] No install step for 'bootloader'
+[7/13] Completed 'bootloader'
+[8/13] Generating ld/sections.ld
+[9/13] Linking CXX executable ESP_MultiFlasher.elf
+[10/13] Generating binary image from built executable
+esptool.py v4.10.0
+Creating esp32c3 image...
+Merged 2 ELF sections
+Successfully created esp32c3 image.
+Generated C:/Users/DELL/workspace/IDF/ESP_MUL/Muti/build/ESP_MultiFlasher.bin
+[11/13] C:\Windows\system32\cmd.exe /C "cd /D C:\Users\DELL\workspace\IDF\ESP_MUL\Muti\build\esp-idf\esptool_py && C:\Espressif\python_env\idf5.1_py3.11_env\Scripts\python.exe C:/Espressif/frameworks/esp-idf-v5.1.6/components/partition_table/check_sizes.py --offset 0x8000 partition --type app C:/Users/DELL/workspace/IDF/ESP_MUL/Muti/build/partition_table/partition-table.bin C:/Users/DELL/workspace/IDF/ESP_MUL/Muti/build/ESP_MultiFlasher.bin"
+ESP_MultiFlasher.bin binary size 0x5ed00 bytes. Smallest app partition is 0x100000 bytes. 0xa1300 bytes (63%) free.
+[11/13] C:\Windows\system32\cmd.exe /C "cd /D C:\Espressif\frameworks\esp-idf-v5.1.6\components\esptool_py && C:\Espressif\tools\cmake\3.30.2\bin\cmake.exe -D IDF_PATH=C:/Espressif/frameworks/esp-idf-v5.1.6 -D SERIAL_TOOL=C:/Espressif/python_env/idf5.1_py3.11_env/Scripts/python.exe;;C:/Espressif/frameworks/esp-idf-v5.1.6/components/esptool_py/esptool/esptool.py;--chip;esp32c3 -D SERIAL_TOOL_ARGS=--before=default_reset;--after=hard_reset;write_flash;@flash_args -D WORKING_DIRECTORY=C:/Users/DELL/workspace/IDF/ESP_MUL/Muti/build -P C:/Espressif/frameworks/esp-idf-v5.1.6/components/esptool_py/run_serial_tool.cmake"
+esptool.py --chip esp32c3 -p COM5 -b 460800 --before=default_reset --after=hard_reset write_flash --flash_mode dio --flash_freq 80m --flash_size 2MB 0x0 bootloader/bootloader.bin 0x10000 ESP_MultiFlasher.bin 0x8000 partition_table/partition-table.bin
+esptool.py v4.10.0
+Serial port COM5
+Connecting...
+Chip is ESP32-C3 (QFN32) (revision v0.4)
+Features: WiFi, BLE, Embedded Flash 4MB (XMC)
+Crystal is 40MHz
+USB mode: USB-Serial/JTAG
+MAC: 20:6e:f1:6a:d5:3c
+Uploading stub...
+Running stub...
+Stub running...
+Changing baud rate to 460800
+Changed.
+Configuring flash size...
+Flash will be erased from 0x00000000 to 0x00005fff...
+Flash will be erased from 0x00010000 to 0x0006efff...
+Flash will be erased from 0x00008000 to 0x00008fff...
+SHA digest in image updated
+Compressed 20592 bytes to 12641...
+Writing at 0x00000000... (100 %)
+Wrote 20592 bytes (12641 compressed) at 0x00000000 in 0.2 seconds (effective 959.2 kbit/s)...
+Hash of data verified.
+Compressed 388352 bytes to 204350...
+Writing at 0x00010000... (7 %)
+Writing at 0x0001a5d4... (15 %)
+Writing at 0x00024a5f... (23 %)
+Writing at 0x0002b5ed... (30 %)
+Writing at 0x00032490... (38 %)
+Writing at 0x00039696... (46 %)
+Writing at 0x00040820... (53 %)
+Writing at 0x00048793... (61 %)
+Writing at 0x0004e88c... (69 %)
+Writing at 0x0005723a... (76 %)
+Writing at 0x0005db9b... (84 %)
+Writing at 0x00064e8b... (92 %)
+Writing at 0x0006b341... (100 %)
+Wrote 388352 bytes (204350 compressed) at 0x00010000 in 1.6 seconds (effective 1948.8 kbit/s)...
+Hash of data verified.
+Compressed 3072 bytes to 103...
+Writing at 0x00008000... (100 %)
+Wrote 3072 bytes (103 compressed) at 0x00008000 in 0.0 seconds (effective 1723.6 kbit/s)...
+Hash of data verified.
+
+Leaving...
+Hard resetting via RTS pin...

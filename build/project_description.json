@@ -1,7 +1,7 @@
 {
     "version":            "1.1",
     "project_name":       "ESP_MultiFlasher",
-    "project_version":    "1",
+    "project_version":    "8a81c14-dirty",
     "project_path":       "C:/Users/DELL/workspace/IDF/ESP_MUL/Muti",
     "idf_path":           "C:/Espressif/frameworks/esp-idf-v5.1.6",
     "build_dir":          "C:/Users/DELL/workspace/IDF/ESP_MUL/Muti/build",

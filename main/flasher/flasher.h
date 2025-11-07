@@ -41,5 +41,13 @@ esp_err_t flasher_begin_session(const std::string& fw_id);
 
 esp_err_t flasher_write_segment(const std::string& file_path, uint32_t offset, const std::string& md5 = "");
 
+/**
+ * @brief Xóa toàn bộ flash của chip Target.
+ */
+esp_err_t flasher_chip_erase(void);
 
+/**
+ * @brief Hiển thị thông báo và khởi động lại ESP32 Host.
+ */
+void host_system_restart();
 #endif // __FLASHER_H__

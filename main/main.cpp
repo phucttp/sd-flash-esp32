@@ -18,19 +18,6 @@ static const char *TAG = "MAIN";
 #define BUF_LEN 128
 
 static uint8_t buf[BUF_LEN] = {0};
-//Task nhận UART từ slave (target)
-static void slave_monitor(void *arg)
-{
-    uart_flush_input(UART_NUM_1);
-    uart_set_baudrate(UART_NUM_1, 115200);
-    while (1) {
-        int rxBytes = uart_read_bytes(UART_NUM_1, buf, BUF_LEN, 100 / portTICK_PERIOD_MS);
-        if (rxBytes > 0) {
-            buf[rxBytes] = 0;
-            ESP_LOGI(TAG, "%s", buf);
-        }
-    }
-}
 
 // --- CẤU HÌNH PHẦN CỨNG ---
 // Các #define cho OLED (SCREEN_WIDTH, v.v.) và
@@ -128,7 +115,7 @@ void loop() {
             if(flasher_begin_session(fw_id_to_flash) != ESP_OK){
                 ESP_LOGE(TAG, "Flash that bai do loi flasher.");
                 oled_show_message("Error", "Flasher failed.");
-                vTaskDelay(pdMS_TO_TICKS(1000));
+                vTaskDelay(pdMS_TO_TICKS(2000));
                 // Quay lại menu
                 menu_redisplay();
                 return;
@@ -137,18 +124,21 @@ void loop() {
             // Hiển thị thông báo thành công
             ESP_LOGI(TAG, "Flash hoan tat.");
             oled_show_message("Success!", "Flash complete.");
-            vTaskDelay(pdMS_TO_TICKS(1000)); // Hiển thị 2s
+            vTaskDelay(pdMS_TO_TICKS(2000)); // Hiển thị 2s
 
         } else {
             // Trường hợp chọn "Exit" (có ID là "NULL") hoặc ID bị rỗng
-            ESP_LOGI(TAG, "Chon muc khong can flash (NULL).");
-            oled_show_message("Action cancelled", "");
+            ESP_LOGI(TAG, "Xoa du lieu flash tren chip Target.");
+            oled_show_message("Erasing Chip...", "Please wait.");
+            flasher_init();
+            oled_show_message("Erasing Chip...", "connected.");
+            flasher_chip_erase();
+            oled_show_message("Success!", "Chip erased.");
             vTaskDelay(pdMS_TO_TICKS(1000));
         }
+        // 5. Khởi động lại hệ thống sau khi hoàn tất
+        host_system_restart();
 
-        // 5. Sau khi làm xong, vẽ lại menu
-        menu_redisplay();
-        xTaskCreate(slave_monitor, "slave_monitor", 4096, NULL, 0, NULL);
     }
     // Thêm một chút delay để tránh vòng lặp chạy quá nhanh
     vTaskDelay(pdMS_TO_TICKS(10)); 

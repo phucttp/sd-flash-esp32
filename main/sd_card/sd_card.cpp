@@ -22,10 +22,13 @@ static std::vector<const char*> g_menuFirmwareIDsPtrs;
 
 //Khởi tạo giao tiêp thẻ SD
 esp_err_t sd_mount(int cs_pin) {
-    if (!SD.begin(cs_pin)) {
-        ESP_LOGE(TAG, "Card Mount Failed");
-        g_is_sd_mounted = false;
-        return ESP_FAIL;
+    if (!SD.begin(cs_pin, SPI, 40000000)) { // Thử 40MHz
+        ESP_LOGW(TAG, "Failed to mount at 40MHz, trying 20MHz...");
+        if (!SD.begin(cs_pin, SPI, 20000000)) { // Fallback về 20MHz nếu thất bại
+             ESP_LOGE(TAG, "Card Mount Failed at 20MHz too");
+             g_is_sd_mounted = false;
+             return ESP_FAIL;
+        }
     }
 
     ESP_LOGI(TAG, "SD initialized OK!");
@@ -102,7 +105,7 @@ esp_err_t sd_load_metadata(){
     }
     
     // (MỚI) Thêm mục Exit vào cuối
-    g_displayStrings.push_back(std::to_string(i) + ". (Exit)");
+    g_displayStrings.push_back(std::to_string(i) + ". (Erase Chip)");
     g_idStrings.push_back("NULL");
 
     // (MỚI) Tạo mảng con trỏ
