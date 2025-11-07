@@ -86,8 +86,10 @@ Dự án đi kèm **tool FlashPorter** giúp bạn chuẩn bị thẻ SD **chỉ
    → Tool sẽ tự động tạo cấu trúc và file `index.txt`.
 
 <p align="center">
-  <img src="image/APP1.JPG" alt="System Diagram" width="600">
+  <img src="image/APP1.JPG" alt="System Diagram" width="45%">
+  <img src="image/APP2.JPG" alt="User Interface" width="45%">
 </p>
+
 
 
 ### 📂 Cấu trúc Thẻ SD (Sau khi dùng FlashPorter)
