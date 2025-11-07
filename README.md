@@ -88,13 +88,13 @@ Dự án đi kèm **tool FlashPorter** giúp bạn chuẩn bị thẻ SD **chỉ
 ### 📂 Cấu trúc Thẻ SD (Sau khi dùng FlashPorter)
 
 SD_ROOT/
-|-- index.txt               # File quản lý chính (tự động tạo)
-|-- FW_S3_V1/               # Firmware cho ESP32-S3 (phiên bản V1)
-|   |-- bootloader.bin
-|   |-- partitions.bin
-|   `-- app.bin
-`-- FW_C3_V2/               # Firmware cho ESP32-C3 (phiên bản V2)
-    |-- bootloader.bin
-    |-- partitions.bin
-    `-- app.bin
+  - index.txt  ← File quản lý chính (tự động tạo)
+  - FW_S3_V1/
+      - bootloader.bin
+      - partitions.bin
+      - app.bin
+  - FW_C3_V2/
+      - bootloader.bin
+      - partitions.bin
+      - app.bin
 
