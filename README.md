@@ -104,72 +104,29 @@ Tool **FlashPorter** giúp chuẩn bị thẻ SD **chỉ trong vài cú click**.
 4. Nhấn **Export to SD Card** → Chọn ổ đĩa thẻ nhớ
 5. Tool tự động tạo cấu trúc và file `index.txt`
 
-### 🖥️ Giao diện FlashPorter (Mô phỏng):
+### 🖥️ Giao diện FlashPorter:
 
-**Tab 1: Thêm firmware (mới)**
-```
-┌─────────────────────────────────────────────────────────────────────────────┐
-│  [Thêm firmware (mới)]  │  Quản lý & Đồng bộ SD                             │
-├─────────────────────────────────────────────────────────────────────────────┤
-│  ┌─ 1. Thông tin Firmware ───────────────────────────────────────────────┐  │
-│  │  Firmware ID (Tên Folder):  [fw_esp32c3_v1        ▼]                  │  │
-│  │  Device Type (Gợi ý):       [ESP32-C3             ▼]                  │  │
-│  │  Version (vd: 1.0.0):       [1.0.0                 ]                  │  │
-│  └───────────────────────────────────────────────────────────────────────┘  │
-│  ┌─ 2. File Nguồn (.bin) ────────────────────────────────────────────────┐  │
-│  │  Application (-> FW.bin):   [C:/build/app.bin     ] [📂 Chọn...]     │  │
-│  │  Bootloader (-> BOTL.bin):  [C:/build/boot.bin    ] [📂 Chọn...]     │  │
-│  │  Partition (-> PART.bin):   [C:/build/part.bin    ] [📂 Chọn...]     │  │
-│  └───────────────────────────────────────────────────────────────────────┘  │
-│                                                                             │
-│  [🧹 Làm mới Form]                              [➕ THÊM MỚI FIRMWARE]      │
-├─────────────────────────────────────────────────────────────────────────────┤
-│  Log:                                                                       │
-│  ┌───────────────────────────────────────────────────────────────────────┐  │
-│  │ Đã thêm firmware 'fw_esp32c3_v1' vào thư viện                        │  │
-│  │ (với tên file FW.bin, BOTL.bin, PART.bin).                           │  │
-│  └───────────────────────────────────────────────────────────────────────┘  │
-└─────────────────────────────────────────────────────────────────────────────┘
-```
-
-**Tab 2: Quản lý & Đồng bộ SD**
-```
-┌─────────────────────────────────────────────────────────────────────────────┐
-│  Thêm firmware (mới)  │  [Quản lý & Đồng bộ SD]                             │
-├─────────────────────────────────────────────────────────────────────────────┤
-│ ┌─ 1. Local ──┐  ┌─ Cấu hình & Actions ─────┐  ┌─ 2. SD Card ───────────┐  │
-│ │ fw_c3_v1    │  │ AES Key: [123456789...] │  │ [D:/               ▼]  │  │
-│ │ fw_c3_v2    │  │ AES IV:  [000000000...] │  │ [Tải danh sách thẻ]    │  │
-│ │ fw_s3_v1    │  │ Git URL: [github.com..] │  ├─────────────────────────┤  │
-│ │             │  │ [💾 Lưu Cấu Hình]       │  │ fw_c3_v1              │  │
-│ │             │  ├──────────────────────────┤  │ fw_c3_v2              │  │
-│ │             │  │ [📂 Copy sang Thẻ Nhớ]  │  │                       │  │
-│ │             │  │ [📦 Mã hóa & Xuất file] │  ├─ Chi tiết (Metadata) ──┤  │
-│ │             │  │ [🗑️ Xoá khỏi Thẻ Nhớ]   │  │ fw_id: "fw_c3_v1"     │  │
-│ ├─────────────┤  ├──────────────────────────┤  │ device: "ESP32-C3"    │  │
-│ │[❌Xoá][🔄] │  │ [☁️ PUSH LÊN CLOUD]     │  │ version: "1.0.0"      │  │
-│ └─────────────┘  └──────────────────────────┘  │ md5: "abc123..."      │  │
-│                                                 └─────────────────────────┘  │
-├─────────────────────────────────────────────────────────────────────────────┤
-│  Log: Đã copy xong 2 mục. | Đã cập nhật file 'index.txt' trên thẻ.         │
-└─────────────────────────────────────────────────────────────────────────────┘
-```
+📌 **[Xem UI Mockup tương tác (HTML)](toolAddFirmware/ui-mockup.html)** - Mở file HTML để xem giao diện mô phỏng chi tiết.
 
 **Workflow chính:**
 ```
-    ┌─────────────┐      ┌─────────────┐      ┌─────────────┐
-    │  Tab 1:     │      │  Tab 2:     │      │  Tab 2:     │
-    │  Thêm FW    │ ───► │  Copy SD    │ ───► │  Push Cloud │
-    │  (Local)    │      │  (Offline)  │      │  (Online)   │
-    └─────────────┘      └─────────────┘      └─────────────┘
-         │                    │                    │
-         ▼                    ▼                    ▼
-    firmware_library/    SD Card (FAT32)    GitHub Repository
-    └── fw_id/           └── fw_id/         └── fw_id/
-        ├── FW.bin           ├── FW.bin         ├── FW.enc
-        ├── BOTL.bin         ├── BOTL.bin       ├── BOTL.enc
-        └── PART.bin         └── PART.bin       └── PART.enc
+┌─────────────┐      ┌─────────────┐      ┌─────────────┐
+│   Tab 1:    │      │   Tab 2:    │      │   Tab 2:    │
+│  Thêm FW    │ ───► │  Copy SD    │ ───► │ Push Cloud  │
+│  (Local)    │      │  (Offline)  │      │  (Online)   │
+└─────────────┘      └─────────────┘      └─────────────┘
+      │                    │                    │
+      ▼                    ▼                    ▼
+firmware_library/    SD Card (FAT32)    GitHub Repository
+└── fw_id/           └── fw_id/         └── fw_id/
+    ├── FW.bin           ├── FW.bin         ├── FW.enc
+    ├── BOTL.bin         ├── BOTL.bin       ├── BOTL.enc
+    └── PART.bin         └── PART.bin       └── PART.enc
 ```
+
+**Tab 1 - Thêm Firmware:** Nhập thông tin (ID, Device Type, Version) + chọn 3 file .bin → Lưu vào thư viện local.
+
+**Tab 2 - Quản lý & Sync:** Copy ra SD Card (plain) hoặc mã hóa AES-128-CBC + push lên GitHub
 
 ---
 

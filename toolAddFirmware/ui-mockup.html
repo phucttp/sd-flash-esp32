@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FlashPorter UI Mockup</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        h1 {
+            text-align: center;
+            color: white;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        .subtitle {
+            text-align: center;
+            color: rgba(255,255,255,0.9);
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+
+        /* Window Frame */
+        .window {
+            background: #f0f0f0;
+            border-radius: 8px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            overflow: hidden;
+            margin-bottom: 30px;
+        }
+        .title-bar {
+            background: linear-gradient(180deg, #ffffff 0%, #e0e0e0 100%);
+            padding: 8px 12px;
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid #ccc;
+        }
+        .title-bar-buttons {
+            display: flex;
+            gap: 8px;
+        }
+        .title-bar-btn {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            border: none;
+        }
+        .btn-close { background: #ff5f57; }
+        .btn-minimize { background: #ffbd2e; }
+        .btn-maximize { background: #28ca41; }
+        .title-bar-text {
+            flex: 1;
+            text-align: center;
+            font-size: 13px;
+            color: #333;
+            font-weight: 500;
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            background: #e8e8e8;
+            border-bottom: 1px solid #ccc;
+        }
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            border: none;
+            background: transparent;
+            font-size: 13px;
+            color: #666;
+            border-bottom: 2px solid transparent;
+            transition: all 0.2s;
+        }
+        .tab:hover {
+            background: #f5f5f5;
+        }
+        .tab.active {
+            background: #fff;
+            color: #0066cc;
+            border-bottom-color: #0066cc;
+            font-weight: 600;
+        }
+
+        /* Content */
+        .content {
+            background: #fff;
+            padding: 20px;
+            min-height: 400px;
+        }
+
+        /* Form Groups */
+        .form-group {
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            padding: 15px;
+            margin-bottom: 15px;
+            background: #fafafa;
+        }
+        .form-group-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #eee;
+        }
+        .form-row {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .form-row:last-child {
+            margin-bottom: 0;
+        }
+        .form-label {
+            width: 200px;
+            font-size: 12px;
+            color: #555;
+        }
+        .form-input {
+            flex: 1;
+            padding: 8px 12px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 12px;
+            font-family: 'Consolas', monospace;
+        }
+        .form-input:focus {
+            border-color: #0066cc;
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(0,102,204,0.2);
+        }
+        .form-input.readonly {
+            background: #f5f5f5;
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s;
+        }
+        .btn-small {
+            padding: 6px 12px;
+            font-size: 11px;
+        }
+        .btn-primary {
+            background: linear-gradient(180deg, #0078d4 0%, #006cbd 100%);
+            color: white;
+            font-weight: 600;
+        }
+        .btn-primary:hover {
+            background: linear-gradient(180deg, #006cbd 0%, #005a9e 100%);
+        }
+        .btn-danger {
+            background: #fff;
+            color: #d32f2f;
+            border: 1px solid #d32f2f;
+        }
+        .btn-danger:hover {
+            background: #ffebee;
+        }
+        .btn-secondary {
+            background: #fff;
+            color: #333;
+            border: 1px solid #ccc;
+        }
+        .btn-secondary:hover {
+            background: #f5f5f5;
+        }
+
+        .actions-row {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 15px;
+        }
+
+        /* Log Area */
+        .log-area {
+            background: #1e1e1e;
+            color: #4ec9b0;
+            padding: 12px;
+            border-radius: 4px;
+            font-family: 'Consolas', monospace;
+            font-size: 11px;
+            height: 80px;
+            overflow-y: auto;
+        }
+        .log-area .log-line {
+            margin-bottom: 4px;
+        }
+        .log-area .timestamp {
+            color: #808080;
+        }
+        .log-area .success {
+            color: #4ec9b0;
+        }
+
+        /* Tab 2 Layout */
+        .manage-layout {
+            display: grid;
+            grid-template-columns: 200px 1fr 250px;
+            gap: 15px;
+        }
+        .panel {
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            background: #fafafa;
+            overflow: hidden;
+        }
+        .panel-header {
+            background: #e8e8e8;
+            padding: 10px 12px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #333;
+            border-bottom: 1px solid #ddd;
+        }
+        .panel-content {
+            padding: 10px;
+        }
+
+        /* Listbox */
+        .listbox {
+            background: #fff;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            height: 150px;
+            overflow-y: auto;
+        }
+        .listbox-item {
+            padding: 8px 12px;
+            font-size: 12px;
+            font-family: 'Consolas', monospace;
+            cursor: pointer;
+            border-bottom: 1px solid #eee;
+        }
+        .listbox-item:last-child {
+            border-bottom: none;
+        }
+        .listbox-item:hover {
+            background: #f0f7ff;
+        }
+        .listbox-item.selected {
+            background: #0078d4;
+            color: white;
+        }
+
+        /* Config Section */
+        .config-input {
+            width: 100%;
+            padding: 6px 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 11px;
+            font-family: 'Consolas', monospace;
+            margin-bottom: 8px;
+        }
+        .config-label {
+            font-size: 11px;
+            color: #666;
+            margin-bottom: 4px;
+            display: block;
+        }
+
+        .action-btn {
+            width: 100%;
+            margin-bottom: 8px;
+            justify-content: center;
+        }
+
+        .separator {
+            height: 1px;
+            background: #ddd;
+            margin: 12px 0;
+        }
+
+        /* Metadata Display */
+        .metadata-display {
+            background: #fff;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            padding: 10px;
+            font-family: 'Consolas', monospace;
+            font-size: 11px;
+            height: 120px;
+            overflow-y: auto;
+        }
+        .metadata-key {
+            color: #0066cc;
+        }
+        .metadata-value {
+            color: #008000;
+        }
+
+        /* SD Path Row */
+        .sd-path-row {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+        .sd-path-row input {
+            flex: 1;
+        }
+
+        /* Workflow Diagram */
+        .workflow {
+            background: #fff;
+            border-radius: 8px;
+            padding: 30px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+        }
+        .workflow h2 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+            font-size: 18px;
+        }
+        .workflow-steps {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            gap: 20px;
+        }
+        .workflow-step {
+            text-align: center;
+            flex: 1;
+            max-width: 200px;
+        }
+        .workflow-box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+        .workflow-box h3 {
+            font-size: 13px;
+            margin-bottom: 5px;
+        }
+        .workflow-box p {
+            font-size: 11px;
+            opacity: 0.9;
+        }
+        .workflow-arrow {
+            font-size: 24px;
+            color: #667eea;
+            margin-top: 30px;
+        }
+        .workflow-output {
+            background: #f5f5f5;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            padding: 12px;
+            font-family: 'Consolas', monospace;
+            font-size: 10px;
+            text-align: left;
+        }
+        .workflow-output .folder {
+            color: #0066cc;
+        }
+        .workflow-output .file {
+            color: #333;
+            margin-left: 15px;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            color: rgba(255,255,255,0.8);
+            font-size: 12px;
+            margin-top: 20px;
+        }
+        .footer a {
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>FlashPorter UI Mockup</h1>
+        <p class="subtitle">Firmware Library Manager - Tool chuẩn bị thẻ SD cho ESP32 Multi-Flasher</p>
+
+        <!-- Tab 1: Add Firmware -->
+        <div class="window">
+            <div class="title-bar">
+                <div class="title-bar-buttons">
+                    <div class="title-bar-btn btn-close"></div>
+                    <div class="title-bar-btn btn-minimize"></div>
+                    <div class="title-bar-btn btn-maximize"></div>
+                </div>
+                <span class="title-bar-text">Firmware Library Manager (Metadata Index)</span>
+            </div>
+            <div class="tabs">
+                <button class="tab active">Thêm firmware (mới)</button>
+                <button class="tab">Quản lý & Đồng bộ SD</button>
+            </div>
+            <div class="content">
+                <div class="form-group">
+                    <div class="form-group-title">1. Thông tin Firmware</div>
+                    <div class="form-row">
+                        <label class="form-label">Firmware ID (Tên Folder):</label>
+                        <input type="text" class="form-input" value="fw_esp32c3_v1" style="font-weight: bold;">
+                    </div>
+                    <div class="form-row">
+                        <label class="form-label">Device Type (Gợi ý):</label>
+                        <input type="text" class="form-input" value="ESP32-C3">
+                    </div>
+                    <div class="form-row">
+                        <label class="form-label">Version (vd: 1.0.0):</label>
+                        <input type="text" class="form-input" value="1.0.0">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="form-group-title">2. File Nguồn (.bin)</div>
+                    <div class="form-row">
+                        <label class="form-label">Application (-> FW.bin):</label>
+                        <input type="text" class="form-input readonly" value="C:/esp/build/firmware.bin" readonly>
+                        <button class="btn btn-secondary btn-small" style="margin-left: 8px;">📂 Chọn...</button>
+                    </div>
+                    <div class="form-row">
+                        <label class="form-label">Bootloader (-> BOTL.bin):</label>
+                        <input type="text" class="form-input readonly" value="C:/esp/build/bootloader.bin" readonly>
+                        <button class="btn btn-secondary btn-small" style="margin-left: 8px;">📂 Chọn...</button>
+                    </div>
+                    <div class="form-row">
+                        <label class="form-label">Partition (-> PART.bin):</label>
+                        <input type="text" class="form-input readonly" value="C:/esp/build/partition-table.bin" readonly>
+                        <button class="btn btn-secondary btn-small" style="margin-left: 8px;">📂 Chọn...</button>
+                    </div>
+                </div>
+
+                <div class="actions-row">
+                    <button class="btn btn-danger">🧹 Làm mới Form</button>
+                    <button class="btn btn-primary" style="padding: 12px 24px; font-size: 14px;">➕ THÊM MỚI FIRMWARE</button>
+                </div>
+
+                <div style="margin-top: 20px;">
+                    <div style="font-size: 12px; color: #666; margin-bottom: 5px;">Log:</div>
+                    <div class="log-area">
+                        <div class="log-line"><span class="timestamp">[10:23:45]</span> <span class="success">Đã thêm firmware 'fw_esp32c3_v1' vào thư viện</span></div>
+                        <div class="log-line"><span class="timestamp">[10:23:45]</span> <span class="success">(với tên file FW.bin, BOTL.bin, PART.bin).</span></div>
+                        <div class="log-line"><span class="timestamp">[10:23:46]</span> MD5 App: a1b2c3d4e5f6...</div>
+                        <div class="log-line"><span class="timestamp">[10:23:46]</span> MD5 Bootloader: f6e5d4c3b2a1...</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab 2: Manage & Sync -->
+        <div class="window">
+            <div class="title-bar">
+                <div class="title-bar-buttons">
+                    <div class="title-bar-btn btn-close"></div>
+                    <div class="title-bar-btn btn-minimize"></div>
+                    <div class="title-bar-btn btn-maximize"></div>
+                </div>
+                <span class="title-bar-text">Firmware Library Manager (Metadata Index)</span>
+            </div>
+            <div class="tabs">
+                <button class="tab">Thêm firmware (mới)</button>
+                <button class="tab active">Quản lý & Đồng bộ SD</button>
+            </div>
+            <div class="content">
+                <div class="manage-layout">
+                    <!-- Left Panel: Local Library -->
+                    <div class="panel">
+                        <div class="panel-header">1. Thư viện Cục bộ (Local)</div>
+                        <div class="panel-content">
+                            <div class="listbox">
+                                <div class="listbox-item selected">fw_c3_v1</div>
+                                <div class="listbox-item">fw_c3_v2</div>
+                                <div class="listbox-item">fw_s3_v1</div>
+                                <div class="listbox-item">fw_s3_v2</div>
+                            </div>
+                            <div style="display: flex; gap: 5px; margin-top: 10px;">
+                                <button class="btn btn-danger btn-small" style="flex: 1;">❌ Xoá FW</button>
+                                <button class="btn btn-secondary btn-small" style="flex: 1;">🔄 Refresh</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Center Panel: Config & Actions -->
+                    <div class="panel">
+                        <div class="panel-header">Cấu hình Kết nối & Mã hóa</div>
+                        <div class="panel-content">
+                            <label class="config-label">AES Key (16 chars):</label>
+                            <input type="text" class="config-input" value="1234567890123456">
+
+                            <label class="config-label">AES IV (16 chars):</label>
+                            <input type="text" class="config-input" value="0000000000005555">
+
+                            <label class="config-label">Git Repository URL (.git):</label>
+                            <input type="text" class="config-input" value="https://github.com/user/firmware-repo.git">
+
+                            <button class="btn btn-secondary action-btn">💾 Lưu Cấu Hình</button>
+
+                            <div class="separator"></div>
+
+                            <div style="font-size: 11px; font-weight: 600; color: #333; margin-bottom: 8px;">Thao tác (Actions)</div>
+
+                            <button class="btn btn-secondary action-btn">📂 Copy sang Thẻ Nhớ (Plain)</button>
+                            <button class="btn btn-secondary action-btn">📦 Mã hóa & Xuất file (Local)</button>
+                            <button class="btn btn-danger action-btn">🗑️ Xoá khỏi Thẻ Nhớ</button>
+
+                            <div class="separator"></div>
+
+                            <button class="btn btn-primary action-btn" style="padding: 12px;">☁️ PUSH LÊN CLOUD NGAY</button>
+                        </div>
+                    </div>
+
+                    <!-- Right Panel: SD Card -->
+                    <div class="panel">
+                        <div class="panel-header">2. Thẻ nhớ (SD Card)</div>
+                        <div class="panel-content">
+                            <div class="sd-path-row">
+                                <input type="text" class="config-input" value="D:/" style="margin-bottom: 0;">
+                                <button class="btn btn-secondary btn-small">Chọn...</button>
+                            </div>
+                            <button class="btn btn-secondary" style="width: 100%; margin-bottom: 10px;">Tải danh sách thẻ</button>
+
+                            <div class="listbox" style="height: 80px;">
+                                <div class="listbox-item selected">fw_c3_v1</div>
+                                <div class="listbox-item">fw_c3_v2</div>
+                            </div>
+
+                            <div style="font-size: 11px; color: #666; margin: 10px 0 5px;">Chi tiết (Metadata):</div>
+                            <div class="metadata-display">
+<span class="metadata-key">"fw_id"</span>: <span class="metadata-value">"fw_c3_v1"</span>,
+<span class="metadata-key">"device_type"</span>: <span class="metadata-value">"ESP32-C3"</span>,
+<span class="metadata-key">"version"</span>: <span class="metadata-value">"1.0.0"</span>,
+<span class="metadata-key">"path"</span>: <span class="metadata-value">"/fw_c3_v1/FW.bin"</span>,
+<span class="metadata-key">"md5"</span>: <span class="metadata-value">"a1b2c3d4..."</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="margin-top: 15px;">
+                    <div class="log-area">
+                        <div class="log-line"><span class="timestamp">[10:25:30]</span> <span class="success">Đã copy xong 2 mục.</span></div>
+                        <div class="log-line"><span class="timestamp">[10:25:31]</span> <span class="success">Đã cập nhật file 'index.txt' trên thẻ.</span></div>
+                        <div class="log-line"><span class="timestamp">[10:26:15]</span> Đang mã hóa fw_c3_v1...</div>
+                        <div class="log-line"><span class="timestamp">[10:26:16]</span> <span class="success">OK: FW.enc, BOTL.enc, PART.enc</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Workflow Diagram -->
+        <div class="workflow">
+            <h2>📊 Workflow chính</h2>
+            <div class="workflow-steps">
+                <div class="workflow-step">
+                    <div class="workflow-box">
+                        <h3>Tab 1</h3>
+                        <p>Thêm FW (Local)</p>
+                    </div>
+                    <div class="workflow-output">
+                        <div class="folder">📁 firmware_library/</div>
+                        <div class="folder" style="margin-left: 10px;">└── fw_id/</div>
+                        <div class="file">├── FW.bin</div>
+                        <div class="file">├── BOTL.bin</div>
+                        <div class="file">└── PART.bin</div>
+                    </div>
+                </div>
+
+                <div class="workflow-arrow">➡️</div>
+
+                <div class="workflow-step">
+                    <div class="workflow-box" style="background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);">
+                        <h3>Tab 2</h3>
+                        <p>Copy SD (Offline)</p>
+                    </div>
+                    <div class="workflow-output">
+                        <div class="folder">💾 SD Card (FAT32)/</div>
+                        <div class="folder" style="margin-left: 10px;">└── fw_id/</div>
+                        <div class="file">├── FW.bin (padded)</div>
+                        <div class="file">├── BOTL.bin</div>
+                        <div class="file">└── PART.bin</div>
+                    </div>
+                </div>
+
+                <div class="workflow-arrow">➡️</div>
+
+                <div class="workflow-step">
+                    <div class="workflow-box" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+                        <h3>Tab 2</h3>
+                        <p>Push Cloud (Online)</p>
+                    </div>
+                    <div class="workflow-output">
+                        <div class="folder">☁️ GitHub Repository/</div>
+                        <div class="folder" style="margin-left: 10px;">└── fw_id/</div>
+                        <div class="file">├── FW.enc</div>
+                        <div class="file">├── BOTL.enc</div>
+                        <div class="file">└── PART.enc</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>ESP32 Multi-Flasher Project | <a href="https://github.com/phucttp/sd-flash-esp32">GitHub Repository</a></p>
+            <p style="margin-top: 5px;">TTP27 © 2025</p>
+        </div>
+    </div>
+</body>
+</html>
