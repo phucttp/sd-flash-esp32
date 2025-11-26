@@ -12,6 +12,7 @@
 #include "SD.h"      // Thư viện giao tiếp thẻ SD
 #include <string>   // Thư viện C++ cho std::string
 #include <map>      // Thư viện C++ cho std::map (để lưu metadata)
+#include "../firmware_types.h" // Định nghĩa firmware_metadata_t và FirmwareMap
 // Lưu ý: Kiểu esp_err_t được định nghĩa bên trong các header của ESP-IDF,
 // thường đã được "Arduino.h" (cho ESP32) include sẵn.
 
@@ -31,16 +32,16 @@ extern bool g_is_sd_mounted;
  * @brief Cấu trúc (struct) để lưu trữ thông tin metadata
  * của một phiên bản firmware cụ thể.
  */
-typedef struct {
-    std::string device_type;      // Loại thiết bị (ví dụ: "ESP32-S3-DevKit")
-    std::string version;          // Phiên bản firmware (ví dụ: "1.0.2")
-    std::string path;             // Đường dẫn tới file .bin chính của firmware
-    std::string md5;              // Mã MD5 hash của file .bin chính
-    std::string path_bootloader;  // Đường dẫn tới file bootloader.bin (nếu có)
-    std::string md5_bootloader;   // Mã MD5 của file bootloader
-    std::string path_partition;   // Đường dẫn tới file partitions.bin (nếu có)
-    std::string md5_partition;    // Mã MD5 của file partitions
-} firmware_metadata_t;
+// typedef struct {
+//     std::string device_type;      // Loại thiết bị (ví dụ: "ESP32-S3-DevKit")
+//     std::string version;          // Phiên bản firmware (ví dụ: "1.0.2")
+//     std::string path;             // Đường dẫn tới file .bin chính của firmware
+//     std::string md5;              // Mã MD5 hash của file .bin chính
+//     std::string path_bootloader;  // Đường dẫn tới file bootloader.bin (nếu có)
+//     std::string md5_bootloader;   // Mã MD5 của file bootloader
+//     std::string path_partition;   // Đường dẫn tới file partitions.bin (nếu có)
+//     std::string md5_partition;    // Mã MD5 của file partitions
+// } firmware_metadata_t;
 
 //===== BIẾN TOÀN CỤC (KHAI BÁO) =====
 

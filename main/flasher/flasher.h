@@ -12,18 +12,10 @@
 #define ESP_PARTITION_ADDR  0x8000   // Địa chỉ nạp Bảng phân vùng
 #define ESP_APPLICATION_ADDR 0x10000 // Địa chỉ nạp App (app0)
 #define BUFFER_SIZE 4096            // Kích thước buffer đọc/ghi (4KB)
-/*
- * @brief Cấu trúc mô tả một "công việc" nạp file.
- * Nó cho biết nạp file NÀO, vào ĐÂU, và kiểm tra bằng MD5 NÀO.
- */
-typedef struct {
-    uint32_t    file_size;                  // Kích thước file firmware
-    uint32_t    buffer_size;                // Kích thước buffer đọc/ghi
-    uint32_t    address_bootloader;        // Địa chỉ nạp trên thiết bị target
-    uint32_t    address_partition_table;   // Địa chỉ nạp trên thiết bị target
-    uint32_t    address_application;       // Địa chỉ nạp trên thiết bị target
-} flash_job_t;
-
+#define FLASH_UART_TX_PIN      GPIO_NUM_0   // TX từ ESP Host → RX Target
+#define FLASH_UART_RX_PIN      GPIO_NUM_1   // RX từ ESP Host ← TX Target
+#define FLASH_RESET_PIN        GPIO_NUM_2   // Điều khiển RESET của Target
+#define FLASH_BOOT_PIN         GPIO_NUM_3   // Điều khiển GPIO0 của Target (BOOT mode)
 
 /**
  * @brief Khởi tạo phần cứng (UART, GPIO) cho module flasher.

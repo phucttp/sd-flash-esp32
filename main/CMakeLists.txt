@@ -1,9 +1,17 @@
 # set(srcs main.c example_common.c)
-set(srcs "main.cpp" "sd_card/sd_card.cpp" "flasher/flasher.cpp" "oled/menu.cpp")
+set(srcs "main.cpp"
+         "sd_card/sd_card.cpp"
+         "flasher/flasher.cpp"
+         "oled/menu.cpp" 
+         "wifi_config/wifi_config.cpp" 
+         "ota_downloader/ota_downloader.cpp"
+         "metadata_parser/metadata_parser.cpp"
+         "sync_engine/sync_engine.cpp"
+         )
 
 idf_component_register(SRCS ${srcs}
                        INCLUDE_DIRS ${include_dirs}
-                       REQUIRES espressif__arduino-esp32 Adafruit_GFX Adafruit_SSD1306)
+                       REQUIRES espressif__arduino-esp32 Adafruit_GFX Adafruit_SSD1306 WiFiManager esp_http_client mbedtls)
 
 
 # ⚠️ Thêm dòng này ngay sau idf_component_register

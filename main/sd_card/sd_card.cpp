@@ -60,7 +60,7 @@ esp_err_t sd_load_metadata(){
 
     // 3. Phân tích cú pháp JSON
     // Cấp phát bộ nhớ động cho bộ đệm JSON
-    const size_t JSON_BUFFER_SIZE = 10 * 1024; // 10KB
+    const size_t JSON_BUFFER_SIZE = 20 * 1024; // 10KB
     DynamicJsonDocument doc(JSON_BUFFER_SIZE);
     DeserializationError error = deserializeJson(doc, metadataFile);
     metadataFile.close(); 
@@ -104,7 +104,13 @@ esp_err_t sd_load_metadata(){
         ESP_LOGD(TAG1, "Tải FW: %s (Path: %s)", fw_id, metadata.path.c_str());
     }
     
-    // (MỚI) Thêm mục Exit vào cuối
+    // Thêm 3 mục đặc biệt: Monitor, Sync FW, Erase Chip
+    g_displayStrings.push_back(std::to_string(i) + ". (Monitor)");
+    i++;
+    g_idStrings.push_back("Monitor");
+    g_displayStrings.push_back(std::to_string(i) + ". (SyncFW)");
+    i++;
+    g_idStrings.push_back("SyncFW");    
     g_displayStrings.push_back(std::to_string(i) + ". (Erase Chip)");
     g_idStrings.push_back("NULL");
 
