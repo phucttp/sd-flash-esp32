@@ -42,4 +42,27 @@ esp_err_t flasher_chip_erase(void);
  * @brief Hiển thị thông báo và khởi động lại ESP32 Host.
  */
 void host_system_restart();
+
+// ============================================================
+// AUTO-RETRY API - Quản lý phiên nạp với retry tự động
+// ============================================================
+
+/**
+ * @brief Kiểm tra có đang nạp dở không (gọi trong setup sau SD mount).
+ * @return true nếu có pending flash cần resume.
+ */
+bool flasher_has_pending(void);
+
+/**
+ * @brief Lấy fw_id đang nạp dở.
+ * @return Pointer đến chuỗi fw_id, hoặc "" nếu không có.
+ */
+const char* flasher_get_pending_fw_id(void);
+
+/**
+ * @brief Bắt đầu phiên nạp mới (khởi tạo state từ đầu).
+ * @param fw_id Firmware ID cần nạp.
+ */
+void flasher_start_new_session(const char* fw_id);
+
 #endif // __FLASHER_H__

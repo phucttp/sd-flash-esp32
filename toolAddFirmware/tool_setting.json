@@ -2,5 +2,8 @@
   "key": "1234567890123456",
   "iv": "0000000000005555",
   "sd_path": "D:/",
-  "repo_url": "https://github.com/PPhucNAME/hehe.git"
+  "repo_url": "https://github.com/PPhucNAME/hehe.git",
+  "cloud_url": "http://firmware.quanlytuxa.com",
+  "cloud_user": "phongsanxuat",
+  "cloud_pass": "123456789"
 }

@@ -11,22 +11,39 @@ Firmware Library Manager (Tkinter) - v2.1 (Fixed filenames)
 import os
 import shutil
 import json
+import time
 import tkinter as tk
 from tkinter import ttk, filedialog, messagebox, scrolledtext
 import hashlib
 import subprocess # Cần cho 'on_open_folder'
 
- # Import thư viện cần thiết
-from Crypto.Cipher import AES      # <--- Tách ra dòng này
-from Crypto.Util.Padding import pad # <--- Và dòng này
-import hashlib
+# Lazy load: Crypto và esp_encryptor sẽ được import khi cần
+# Giúp khởi động app nhanh hơn
+_crypto_loaded = False
+AES = None
+pad = None
+FWEncryptor = None
 
-try:
-    from esp_encryptor import FWEncryptor
-    HAS_CRYPTO = True
-except ImportError:
-    HAS_CRYPTO = False
-    print("Không tìm thấy file 'esp_encryptor.py' hoặc thiếu thư viện Crypto")
+def _load_crypto():
+    """Lazy load Crypto libraries khi cần."""
+    global _crypto_loaded, AES, pad, FWEncryptor
+    if _crypto_loaded:
+        return True
+    try:
+        from Crypto.Cipher import AES as _AES
+        from Crypto.Util.Padding import pad as _pad
+        AES = _AES
+        pad = _pad
+        _crypto_loaded = True
+    except ImportError:
+        return False
+    # Load encryptor
+    try:
+        from esp_encryptor import FWEncryptor as _FWEnc
+        FWEncryptor = _FWEnc
+    except ImportError:
+        pass
+    return True
 
 # ---------------- Utility Functions ----------------
 APP_TITLE = "Firmware Library Manager (Metadata Index)"
@@ -44,6 +61,50 @@ def safe_name(name: str) -> str:
     s = name.strip().replace(" ", "_").lower()
     allowed = "-_.0123456789abcdefghijklmnopqrstuvwxyz"
     return "".join(c for c in s if c in allowed)
+
+def generate_short_fw_id():
+    """Sinh fw_id ngắn dạng FW001, FW002... (FAT32 5.3 compatible - max 5 ký tự)."""
+    ensure_lib_root()
+    existing = set()
+    for name in os.listdir(LIB_ROOT):
+        if name.upper().startswith("FW") and len(name) <= 5:
+            existing.add(name.upper())
+
+    # Tìm số tiếp theo (FW001 -> FW999)
+    for i in range(1, 1000):
+        fw_id = f"FW{i:03d}"  # FW001, FW002, ...
+        if fw_id not in existing:
+            return fw_id
+    return f"FW{int(time.time()) % 1000:03d}"  # Fallback
+
+def shorten_device_type(name: str) -> str:
+    """Rút gọn device_type: GAP_THU_DIEN_DUNG -> GTDD (viết tắt chữ cái đầu)."""
+    if not name:
+        return ""
+    # Tách theo _ và lấy chữ cái đầu mỗi từ
+    parts = name.replace("-", "_").split("_")
+    abbrev = "".join(p[0].upper() for p in parts if p)
+    return abbrev[:8]  # Max 8 ký tự
+
+def shorten_version(ver: str) -> str:
+    """Rút gọn version: v1.1.2_XXX_H -> v1.1_H (giữ vX.Y + chữ cái cuối V/H)."""
+    if not ver:
+        return ""
+    import re
+
+    # Lấy chữ cái cuối nếu là V hoặc H (loại thiết bị)
+    suffix = ""
+    if ver and ver[-1].upper() in ('V', 'H'):
+        suffix = "_" + ver[-1].upper()
+
+    # Tìm pattern vX.Y hoặc vX.Y.Z
+    match = re.match(r'(v?\d+\.\d+)', ver, re.IGNORECASE)
+    if match:
+        result = match.group(1)
+        if not result.lower().startswith('v'):
+            result = 'v' + result
+        return result + suffix
+    return ver[:5] + suffix  # Fallback
 
 def calculate_md5(filepath):
     """Tính toán MD5 của một file."""
@@ -104,6 +165,14 @@ class App(tk.Tk):
         self.git_repo_url = tk.StringVar(value=saved_cfg.get("repo_url", ""))
         # Biến lưu trữ index của thẻ SD
         self.sd_index_data = [] # List of metadata objects
+
+        # --- Cloud Sync Variables ---
+        self.cloud_base_url = tk.StringVar(value=saved_cfg.get("cloud_url", "http://firmware.quanlytuxa.com"))
+        self.cloud_username = tk.StringVar(value=saved_cfg.get("cloud_user", ""))
+        self.cloud_password = tk.StringVar(value=saved_cfg.get("cloud_pass", ""))
+        self.cloud_token = None  # JWT token sau khi login
+        self.cloud_customers = []  # List customers từ API
+        self.cloud_firmware_list = []  # List firmware versions
         
        # --- SETUP STYLE (GIAO DIỆN ĐẸP) ---
         style = ttk.Style()
@@ -134,6 +203,11 @@ class App(tk.Tk):
         frm_manage = ttk.Frame(nb)
         nb.add(frm_manage, text="Quản lý & Đồng bộ SD")
         self._build_manage_tab(frm_manage)
+
+        # Tab: Sync Cloud (NEW)
+        frm_cloud = ttk.Frame(nb)
+        nb.add(frm_cloud, text="☁️ Sync Cloud")
+        self._build_cloud_tab(frm_cloud)
 
         # Log area (bottom)
         log_frame = ttk.Frame(self)
@@ -291,11 +365,11 @@ class App(tk.Tk):
                 "fw_id": fw_id,
                 "device_type": dev_type,
                 "version": version,
-                "path": f"/{folder_name}/FW.bin",
+                "path": f"{folder_name}/FW.bin",
                 "md5": md5_app,
-                "path_bootloader": f"/{folder_name}/BOTL.bin",
+                "path_bootloader": f"{folder_name}/BOTL.bin",
                 "md5_bootloader": md5_boot,
-                "path_partition": f"/{folder_name}/PART.bin",
+                "path_partition": f"{folder_name}/PART.bin",
                 "md5_partition": md5_part
             }
 
@@ -615,13 +689,9 @@ class App(tk.Tk):
         if not messagebox.askyesno("Xác nhận", f"Bạn muốn copy {len(selections)} firmware?\n(Sẽ tính toán và lưu thêm MD5 Padding vào metadata)"):
             return
 
-        # Import thư viện
-        try:
-            from Crypto.Cipher import AES
-            from Crypto.Util.Padding import pad
-        except ImportError:
+        # Load thư viện Crypto (lazy load)
+        if not _load_crypto():
             return messagebox.showerror("Lỗi", "Thiếu thư viện Crypto.")
-        import hashlib
 
         success_count = 0
         
@@ -763,7 +833,11 @@ class App(tk.Tk):
         selections = self.fw_listbox.curselection()
         if not selections: return messagebox.showinfo("Info", "Vui lòng chọn firmware cần xuất.")
 
-        # 2. Init Tool Mã Hóa
+        # 2. Init Tool Mã Hóa (lazy load)
+        if not _load_crypto():
+            return messagebox.showerror("Lỗi", "Thiếu thư viện Crypto.")
+        if FWEncryptor is None:
+            return messagebox.showerror("Lỗi", "Không tìm thấy esp_encryptor.py")
         try:
             tool = FWEncryptor(self.enc_key.get(), self.enc_iv.get())
         except ValueError as e:
@@ -925,8 +999,12 @@ class App(tk.Tk):
         data = {
             "key": self.enc_key.get(),
             "iv": self.enc_iv.get(),
-            "sd_path": self.sd_path_var.get(),   # Lưu luôn đường dẫn thẻ nhớ cho tiện
-            "repo_url": self.git_repo_url.get()
+            "sd_path": self.sd_path_var.get(),
+            "repo_url": self.git_repo_url.get(),
+            # Cloud settings
+            "cloud_url": self.cloud_base_url.get(),
+            "cloud_user": self.cloud_username.get(),
+            "cloud_pass": self.cloud_password.get()
         }
         try:
             with open(CONFIG_FILE, "w") as f:
@@ -963,26 +1041,396 @@ class App(tk.Tk):
         selected_id = self.combo_id.get()
         path = os.path.join(LIB_ROOT, selected_id)
         meta_path = os.path.join(path, LOCAL_META_FILE)
-        
+
         if os.path.isfile(meta_path):
             try:
                 with open(meta_path, "r", encoding="utf-8") as f:
                     data = json.load(f)
-                
+
                 # Tự động điền Device Type
                 self.add_device_type_var.set(data.get("device_type", ""))
-                
+
                 # Gợi ý version kế tiếp (Logic đơn giản: lấy ver cũ thêm chữ OLD)
                 old_ver = data.get("version", "0.0.0")
-                self.add_version_var.set(old_ver) 
-                
+                self.add_version_var.set(old_ver)
+
                 # Đổi màu nút để báo hiệu là "Cập nhật"
                 self.btn_add.configure(text="🔄 CẬP NHẬT FIRMWARE NÀY", style="Primary.TButton")
-                
+
             except: pass
         else:
             # Nếu là ID mới
             self.btn_add.configure(text="➕ THÊM MỚI FIRMWARE", style="Primary.TButton")
+
+    # ================== CLOUD SYNC TAB ==================
+    def _build_cloud_tab(self, parent):
+        """Xây dựng giao diện Tab Sync Cloud."""
+        frm = ttk.Frame(parent, padding=15)
+        frm.pack(fill=tk.BOTH, expand=True)
+
+        # ==================================================
+        # GROUP 1: ĐĂNG NHẬP CLOUD
+        # ==================================================
+        grp_login = ttk.LabelFrame(frm, text="1. Đăng nhập Server", padding=10)
+        grp_login.pack(fill=tk.X, pady=(0, 10))
+        grp_login.columnconfigure(1, weight=1)
+
+        ttk.Label(grp_login, text="Server URL:").grid(row=0, column=0, sticky="w", pady=3)
+        ttk.Entry(grp_login, textvariable=self.cloud_base_url, font=("Consolas", 9)).grid(row=0, column=1, padx=5, sticky="ew")
+
+        ttk.Label(grp_login, text="Username:").grid(row=1, column=0, sticky="w", pady=3)
+        ttk.Entry(grp_login, textvariable=self.cloud_username, font=("Consolas", 9)).grid(row=1, column=1, padx=5, sticky="ew")
+
+        ttk.Label(grp_login, text="Password:").grid(row=2, column=0, sticky="w", pady=3)
+        ttk.Entry(grp_login, textvariable=self.cloud_password, show="*", font=("Consolas", 9)).grid(row=2, column=1, padx=5, sticky="ew")
+
+        btn_row = ttk.Frame(grp_login)
+        btn_row.grid(row=3, column=0, columnspan=2, pady=10)
+        ttk.Button(btn_row, text="🔐 Đăng nhập", command=self.cloud_login).pack(side=tk.LEFT, padx=5)
+        ttk.Button(btn_row, text="💾 Lưu thông tin", command=self.cloud_save_credentials).pack(side=tk.LEFT, padx=5)
+
+        self.cloud_status_label = ttk.Label(grp_login, text="Chưa đăng nhập", foreground="gray")
+        self.cloud_status_label.grid(row=4, column=0, columnspan=2)
+
+        # ==================================================
+        # GROUP 2: CHỌN FIRMWARE TỪ CLOUD
+        # ==================================================
+        grp_select = ttk.LabelFrame(frm, text="2. Chọn Firmware từ Cloud", padding=10)
+        grp_select.pack(fill=tk.BOTH, expand=True, pady=(0, 10))
+
+        # Row 1: Customer dropdown
+        row1 = ttk.Frame(grp_select)
+        row1.pack(fill=tk.X, pady=5)
+        ttk.Label(row1, text="Customer:").pack(side=tk.LEFT)
+        self.cloud_customer_combo = ttk.Combobox(row1, state="readonly", width=40)
+        self.cloud_customer_combo.pack(side=tk.LEFT, padx=10, fill=tk.X, expand=True)
+        self.cloud_customer_combo.bind("<<ComboboxSelected>>", self.cloud_load_firmware)
+        ttk.Button(row1, text="🔄", width=3, command=self.cloud_load_customers).pack(side=tk.LEFT)
+
+        # Row 2: Firmware list
+        ttk.Label(grp_select, text="Firmware Versions:").pack(anchor="w", pady=(10, 5))
+
+        # Treeview để hiển thị firmware
+        columns = ("version", "description", "status", "files")
+        self.cloud_fw_tree = ttk.Treeview(grp_select, columns=columns, show="headings", height=8)
+        self.cloud_fw_tree.heading("version", text="Version")
+        self.cloud_fw_tree.heading("description", text="Mô tả")
+        self.cloud_fw_tree.heading("status", text="Status")
+        self.cloud_fw_tree.heading("files", text="Files")
+        self.cloud_fw_tree.column("version", width=150)
+        self.cloud_fw_tree.column("description", width=200)
+        self.cloud_fw_tree.column("status", width=80)
+        self.cloud_fw_tree.column("files", width=250)
+        self.cloud_fw_tree.pack(fill=tk.BOTH, expand=True, pady=5)
+
+        # ==================================================
+        # GROUP 3: ACTIONS
+        # ==================================================
+        grp_action = ttk.Frame(frm)
+        grp_action.pack(fill=tk.X, pady=10)
+
+        ttk.Button(grp_action, text="⬇️ TẢI VỀ THƯ VIỆN", style="Primary.TButton",
+                   width=25, command=self.cloud_download_to_library).pack(side=tk.RIGHT, padx=5)
+        ttk.Button(grp_action, text="⬇️ Tải TẤT CẢ về", width=20,
+                   command=self.cloud_download_all).pack(side=tk.RIGHT, padx=5)
+
+    def cloud_login(self):
+        """Đăng nhập vào Cloud Server."""
+        import urllib.request
+        import urllib.parse
+
+        base_url = self.cloud_base_url.get().strip().rstrip('/')
+        username = self.cloud_username.get().strip()
+        password = self.cloud_password.get().strip()
+
+        if not all([base_url, username, password]):
+            return messagebox.showerror("Lỗi", "Vui lòng điền đầy đủ thông tin đăng nhập.")
+
+        self.log_msg(f"[Cloud] Đang đăng nhập: {username}@{base_url}...")
+        self.cloud_status_label.config(text="Đang đăng nhập...", foreground="orange")
+        self.update()
+
+        try:
+            # POST login
+            login_url = f"{base_url}/login"
+            data = urllib.parse.urlencode({"username": username, "password": password}).encode()
+
+            req = urllib.request.Request(login_url, data=data, method='POST')
+            req.add_header('Content-Type', 'application/x-www-form-urlencoded')
+
+            # Tạo opener để bắt cookies
+            import http.cookiejar
+            cookie_jar = http.cookiejar.CookieJar()
+            opener = urllib.request.build_opener(urllib.request.HTTPCookieProcessor(cookie_jar))
+
+            response = opener.open(req)
+
+            # Tìm token trong cookies
+            for cookie in cookie_jar:
+                if cookie.name == "access_token":
+                    self.cloud_token = cookie.value
+                    break
+
+            if self.cloud_token:
+                self.cloud_status_label.config(text=f"✅ Đã đăng nhập: {username}", foreground="green")
+                self.log_msg(f"[Cloud] Đăng nhập thành công!")
+                # Tự động load customers
+                self.cloud_load_customers()
+            else:
+                self.cloud_status_label.config(text="❌ Không nhận được token", foreground="red")
+                self.log_msg("[Cloud] Lỗi: Không nhận được access_token từ server.")
+
+        except urllib.error.HTTPError as e:
+            self.cloud_status_label.config(text=f"❌ Lỗi {e.code}", foreground="red")
+            self.log_msg(f"[Cloud] Lỗi đăng nhập: HTTP {e.code} - {e.reason}")
+        except Exception as e:
+            self.cloud_status_label.config(text="❌ Lỗi kết nối", foreground="red")
+            self.log_msg(f"[Cloud] Lỗi: {e}")
+
+    def cloud_save_credentials(self):
+        """Lưu thông tin đăng nhập cloud."""
+        self.save_settings()
+        self.log_msg("[Cloud] Đã lưu thông tin đăng nhập.")
+
+    def cloud_load_customers(self):
+        """Load danh sách customers từ API."""
+        import urllib.request
+
+        if not self.cloud_token:
+            return messagebox.showwarning("Chưa đăng nhập", "Vui lòng đăng nhập trước.")
+
+        base_url = self.cloud_base_url.get().strip().rstrip('/')
+
+        try:
+            req = urllib.request.Request(f"{base_url}/api/customers")
+            req.add_header('Cookie', f'access_token={self.cloud_token}')
+
+            with urllib.request.urlopen(req) as response:
+                data = json.loads(response.read().decode())
+
+            self.cloud_customers = [c.get("customer_id", "") for c in data]
+            self.cloud_customer_combo['values'] = self.cloud_customers
+
+            if self.cloud_customers:
+                self.cloud_customer_combo.set(self.cloud_customers[0])
+                self.log_msg(f"[Cloud] Đã tải {len(self.cloud_customers)} customers.")
+                self.cloud_load_firmware()  # Tự động load firmware của customer đầu tiên
+            else:
+                self.log_msg("[Cloud] Không có customer nào.")
+
+        except Exception as e:
+            self.log_msg(f"[Cloud] Lỗi load customers: {e}")
+
+    def cloud_load_firmware(self, event=None):
+        """Load danh sách firmware versions cho customer được chọn."""
+        import urllib.request
+
+        customer_id = self.cloud_customer_combo.get()
+        if not customer_id or not self.cloud_token:
+            return
+
+        base_url = self.cloud_base_url.get().strip().rstrip('/')
+
+        # Clear tree
+        for item in self.cloud_fw_tree.get_children():
+            self.cloud_fw_tree.delete(item)
+        self.cloud_firmware_list = []
+
+        try:
+            req = urllib.request.Request(f"{base_url}/api/firmware/{customer_id}")
+            req.add_header('Cookie', f'access_token={self.cloud_token}')
+
+            with urllib.request.urlopen(req) as response:
+                data = json.loads(response.read().decode())
+
+            self.cloud_firmware_list = data
+
+            for fw in data:
+                version = fw.get("version", "")
+                description = fw.get("description", "")
+                status = fw.get("status", "")
+                files = fw.get("files", [])
+                files_str = ", ".join([f.get("filename", "") if isinstance(f, dict) else f for f in files])
+
+                self.cloud_fw_tree.insert("", "end", values=(version, description, status, files_str))
+
+            self.log_msg(f"[Cloud] Đã tải {len(data)} firmware cho '{customer_id}'.")
+
+        except Exception as e:
+            self.log_msg(f"[Cloud] Lỗi load firmware: {e}")
+
+    def cloud_download_to_library(self):
+        """Download firmware được chọn về thư viện local (theo flow FlashPorter)."""
+        import urllib.request
+        from urllib.parse import quote
+
+        # 1. Kiểm tra đã chọn firmware chưa
+        selection = self.cloud_fw_tree.selection()
+        if not selection:
+            return messagebox.showinfo("Info", "Vui lòng chọn firmware cần tải.")
+
+        if not self.cloud_token:
+            return messagebox.showwarning("Chưa đăng nhập", "Vui lòng đăng nhập trước.")
+
+        customer_id = self.cloud_customer_combo.get()
+        if not customer_id:
+            return messagebox.showerror("Lỗi", "Chưa chọn Customer.")
+
+        base_url = self.cloud_base_url.get().strip().rstrip('/')
+
+        # 2. Lấy thông tin firmware được chọn
+        item = selection[0]
+        values = self.cloud_fw_tree.item(item, "values")
+        version = values[0]
+
+        # Tìm firmware data
+        fw_data = None
+        for fw in self.cloud_firmware_list:
+            if fw.get("version") == version:
+                fw_data = fw
+                break
+
+        if not fw_data:
+            return messagebox.showerror("Lỗi", "Không tìm thấy thông tin firmware.")
+
+        files = fw_data.get("files", [])
+        if not files:
+            return messagebox.showerror("Lỗi", "Firmware không có file nào.")
+
+        # 3. Tạo fw_id ngắn (FAT32 8.3 compatible): FW00001, FW00002...
+        fw_id = generate_short_fw_id()
+        dest_dir = os.path.join(LIB_ROOT, fw_id)
+        os.makedirs(dest_dir, exist_ok=True)
+
+        self.log_msg(f"[Cloud] Đang tải firmware: {customer_id}/{version}...")
+
+        try:
+            # 4. Download và phân loại files
+            app_file = None
+            boot_file = None
+            part_file = None
+
+            for file_info in files:
+                filename = file_info.get("filename", "") if isinstance(file_info, dict) else file_info
+                address = file_info.get("address", "0x10000") if isinstance(file_info, dict) else "0x10000"
+
+                # Download file
+                download_url = f"{base_url}/firmware/{customer_id}/{version}/download/{quote(filename)}"
+                req = urllib.request.Request(download_url)
+                req.add_header('Cookie', f'access_token={self.cloud_token}')
+
+                local_temp = os.path.join(dest_dir, filename)
+                self.log_msg(f"  -> Đang tải: {filename}...")
+
+                with urllib.request.urlopen(req) as response:
+                    with open(local_temp, 'wb') as f:
+                        f.write(response.read())
+
+                # Phân loại theo address hoặc tên file
+                fname_lower = filename.lower()
+                if address == "0x01000" or "bootloader" in fname_lower:
+                    boot_file = local_temp
+                elif address == "0x8000" or "partition" in fname_lower:
+                    part_file = local_temp
+                else:  # 0x10000 hoặc file còn lại -> FW (application)
+                    app_file = local_temp
+
+            # 5. Kiểm tra đủ 3 file
+            if not all([app_file, boot_file, part_file]):
+                missing = []
+                if not app_file: missing.append("Application")
+                if not boot_file: missing.append("Bootloader")
+                if not part_file: missing.append("Partition")
+                raise Exception(f"Thiếu file: {', '.join(missing)}")
+
+            # 6. Rename theo chuẩn FlashPorter
+            dest_app = os.path.join(dest_dir, "FW.bin")
+            dest_boot = os.path.join(dest_dir, "BOTL.bin")
+            dest_part = os.path.join(dest_dir, "PART.bin")
+
+            if app_file != dest_app:
+                shutil.move(app_file, dest_app)
+            if boot_file != dest_boot:
+                shutil.move(boot_file, dest_boot)
+            if part_file != dest_part:
+                shutil.move(part_file, dest_part)
+
+            # 7. Tính MD5
+            md5_app = calculate_md5(dest_app)
+            md5_boot = calculate_md5(dest_boot)
+            md5_part = calculate_md5(dest_part)
+
+            if not all([md5_app, md5_boot, md5_part]):
+                raise Exception("Không thể tính MD5.")
+
+            # 8. Tạo metadata theo chuẩn FlashPorter (rút gọn cho màn hình nhỏ)
+            metadata = {
+                "fw_id": fw_id,
+                "device_type": shorten_device_type(customer_id),  # VENDING_MINI_DIEN_DUNG -> VMDD
+                "version": shorten_version(version),  # v1.1.2_XXX -> v1.1
+                "path": f"/{fw_id}/FW.bin",
+                "md5": md5_app,
+                "path_bootloader": f"/{fw_id}/BOTL.bin",
+                "md5_bootloader": md5_boot,
+                "path_partition": f"/{fw_id}/PART.bin",
+                "md5_partition": md5_part,
+                # Thêm thông tin cloud đầy đủ để tracking
+                "cloud_source": {
+                    "customer_id": customer_id,
+                    "version": version,
+                    "description": fw_data.get("description", ""),
+                    "status": fw_data.get("status", "")
+                }
+            }
+
+            # 9. Lưu metadata
+            meta_path = os.path.join(dest_dir, LOCAL_META_FILE)
+            with open(meta_path, "w", encoding="utf-8") as f:
+                json.dump(metadata, f, indent=2, ensure_ascii=False)
+
+            # 10. Cleanup - xóa các file tạm không cần
+            for f in os.listdir(dest_dir):
+                if f not in ["FW.bin", "BOTL.bin", "PART.bin", LOCAL_META_FILE]:
+                    try:
+                        os.remove(os.path.join(dest_dir, f))
+                    except: pass
+
+            self.log_msg(f"[Cloud] ✅ Đã tải xong: {fw_id}")
+            self.refresh_firmware_list()
+            messagebox.showinfo("Thành công", f"Đã tải firmware '{fw_id}' vào thư viện!")
+
+        except Exception as e:
+            self.log_msg(f"[Cloud] ❌ Lỗi: {e}")
+            messagebox.showerror("Lỗi tải firmware", str(e))
+            # Cleanup nếu lỗi
+            if os.path.exists(dest_dir):
+                shutil.rmtree(dest_dir)
+
+    def cloud_download_all(self):
+        """Tải tất cả firmware của customer hiện tại."""
+        if not self.cloud_firmware_list:
+            return messagebox.showinfo("Info", "Không có firmware nào để tải.")
+
+        count = len(self.cloud_firmware_list)
+        if not messagebox.askyesno("Xác nhận", f"Bạn muốn tải TẤT CẢ {count} firmware về thư viện?"):
+            return
+
+        # Select all items in tree
+        for item in self.cloud_fw_tree.get_children():
+            self.cloud_fw_tree.selection_add(item)
+
+        # Download từng cái
+        success = 0
+        for item in self.cloud_fw_tree.get_children():
+            self.cloud_fw_tree.selection_set(item)
+            try:
+                self.cloud_download_to_library()
+                success += 1
+            except Exception as e:
+                self.log_msg(f"[Cloud] Lỗi tải: {e}")
+
+        self.log_msg(f"[Cloud] Hoàn tất: {success}/{count} firmware.")
+        messagebox.showinfo("Hoàn tất", f"Đã tải {success}/{count} firmware.")
 
 if __name__ == "__main__":
     app = App()

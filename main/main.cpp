@@ -164,7 +164,7 @@ static void run_chip_erase() {
  */
 static void run_flash_fw(const std::string& fw_id) {
     ESP_LOGI(TAG, ">>> FLASH FW: %s", fw_id.c_str());
-    
+
     std::string msg = "Flash: " + fw_id;
     oled_show_message("Flashing...", msg.c_str());
 
@@ -176,11 +176,12 @@ static void run_flash_fw(const std::string& fw_id) {
     }
 
     flasher_init();
-    
+
     if (flasher_begin_session(fw_id) == ESP_OK) {
         oled_show_message("Done!", "Flash Complete");
     } else {
-        oled_show_message("Failed!", "Check Log");
+        // Nếu fail, flasher sẽ tự restart HOST để retry với profile tiếp theo
+        oled_show_message("Retrying...", "Check Log");
     }
     vTaskDelay(pdMS_TO_TICKS(2000));
 }

@@ -20,7 +20,6 @@
 #include "driver/uart.h"
 #include "driver/gpio.h"
 
-
 // ============================================================
 // 2. ESP-SERIAL-FLASHER LIBRARIES
 // ============================================================
@@ -37,31 +36,26 @@
 
 // TAG dùng để lọc log cho module này
 static const char *TAG = "FLASHER";
-struct TimingParams {
-    uint32_t reset_hold; 
-    uint32_t boot_wait;
-    const char* name;
-};
 
-// 8 Timing Profiles
-const TimingParams TIMING_PROFILES[] = {
-    // [0] TURBO: Dành cho mạch custom xịn, không tụ hoặc tụ 100nF
-    {1500,   2000,   "0. TURBO (Custom)"},
-    // [1] FAST: Chuẩn ESP-DevKitC (Tụ 1uF), WROOM-32E, ESP32-S3
-    {200,   1000,  "1. FAST (Standard)"},
-    // [2] MEDIUM: An toàn cho đa số chip ESP32 thường
-    {200,  200,  "2. MEDIUM (Safe)"},
-    // [3] SLOW: Dành cho WROOM-32U hoặc mạch có tụ lọc nguồn lớn (Reset lâu)
-    {200,  450,  "3. SLOW (32U/Cap)"},
-    // [4] LAZY: Mạch cũ, thạch anh khởi động chậm
-    {300,  600,  "4. LAZY (Old Osc)"},
-    // [5] EXTRA: Chống nhiễu cao, chờ Bootloader ổn định hẳn
-    {500,  800,  "5. EXTRA SLOW"},
-    // [6] HEAVY: Dành cho mạch có tụ Reset cực lớn (10uF+)
-    {800,  1200, "6. HEAVY (Big Cap)"},
-    // [7] DESPERATE: Kịch bản "Cứu cánh" cuối cùng (Giữ reset 1.5s)
-    {20, 50, "7. DESPERATE"}  
+// ============================================================
+// TIMING PROFILES - Cho các loại chip/mạch khác nhau
+// ============================================================
+typedef struct {
+	uint32_t reset_hold_ms;   // Thời gian giữ EN=LOW
+	uint32_t boot_hold_ms;    // Thời gian chờ sau khi thả EN (IO0 vẫn LOW)
+	const char* name;
+} timing_profile_t;
+
+static const timing_profile_t TIMING_PROFILES[] = {
+	{  50,  50, "ULTRA_FAST" },     // Rất nhanh
+	{ 100, 100, "FAST" },           // Nhanh
+	{ 100, 150, "NORMAL" },         // Chuẩn
+	{ 150, 200, "MEDIUM" },         // Trung bình
+	{ 150, 300, "SLOW" },           // Chậm, boot_hold dài hơn
+	{  80, 120, "SHORT" },          // Reset ngắn
 };
+#define NUM_PROFILES (sizeof(TIMING_PROFILES) / sizeof(TIMING_PROFILES[0]))
+
 /**
  * @brief Khởi tạo phần cứng của HOST (ESP32-C3) để giao tiếp với TARGET.
  * Hàm này cài đặt các chân UART (TX/RX) và các chân điều khiển
@@ -78,11 +72,10 @@ const loader_esp32_config_t config = {
 	.gpio0_trigger_pin = FLASH_BOOT_PIN, // Chân HOST điều khiển chân BOOT/GPIO0 của Target
 };
 
-TimingParams timing_profile = TIMING_PROFILES[0]; // Mặc định dùng kịch bản nhanh
+// Khai báo hàm
+static esp_err_t reset_sequence_with_profile(const loader_esp32_config_t *config, const timing_profile_t *profile);
+static esp_err_t try_connect(void);
 
-// Khai báo hàm reset_sequence để sử dụng trước khi định nghĩa
-static esp_err_t reset_sequence(const loader_esp32_config_t *config, uint8_t profile_index);
-// static esp_err_t try_reset_sequence();
 /**
  * @brief Khởi tạo giao tiếp UART và cổng nạp.
  * @return ESP_OK nếu thành công, ESP_FAIL nếu thất bại.
@@ -161,8 +154,8 @@ esp_err_t flasher_write_segment(const std::string& file_path, uint32_t offset, c
 		bytes_written += bytes_read;
 		// Tính toán và hiển thị tiến trình nạp
 		uint32_t progress = (uint32_t)((bytes_written * 100) / total_size);
-		
-		if (progress % 20 == 0) {
+
+		if (progress % 25 == 0) {
 			ESP_LOGI(TAG, "Progress: %" PRIu32 "%%", progress);
 			// Cập nhật thông báo lên màn hình OLED
 			oled_show_message(file_path.c_str(), (String("Progress: ") + String(progress) + String("%")).c_str());
@@ -214,23 +207,16 @@ esp_err_t flasher_begin_session(const std::string& fw_id)
 		return ret;
 	}
 
-	// --- BƯỚC 2: HANDSHAKE (ĐƯA TARGET VÀO BOOTLOADER) ---
-	esp_loader_connect_args_t connect_config = ESP_LOADER_CONNECT_DEFAULT();
-	connect_config.sync_timeout = 1000; // <--- Chúng ta tăng lên 1 giây (1000ms)
-    // connect_config.trials = 5;          // <--- Thử 2 lần mỗi profile
-	// Thực hiện chuỗi reset để target vào bootloader ROM
-	reset_sequence(&config, 1); 
-	// try_reset_sequence();
-
-	// Initialize and connect
-	esp_loader_error_t err_demo;
-
-	err_demo = esp_loader_connect(&connect_config);
-	if (err_demo != ESP_LOADER_SUCCESS) {
-		ESP_LOGE(TAG, "Failed to connect to target device. err=%d", err_demo);
-		return err_demo;
+	if (try_connect() != ESP_OK) {
+		ESP_LOGE(TAG, "Failed to connect to target.");
+		oled_show_message("Flash Session", "connect failed.");
+		vTaskDelay(pdMS_TO_TICKS(500));
+		return ESP_FAIL;
+	} else {
+		ESP_LOGI(TAG, "Connected to target successfully.");
+		oled_show_message("Flash Session", "connected.");
 	}
-	
+
 	// --- BƯỚC 3: BOOST BAUDRATE ---
 	uint32_t new_baud = 921600;
 	// Gửi lệnh thay đổi baudrate đến target
@@ -245,17 +231,17 @@ esp_err_t flasher_begin_session(const std::string& fw_id)
 
 
 	// --- BƯỚC 4: GHI TỪNG PHÂN VÙNG THEO THỨ TỰ ---
-	
+
 	// 4a. Nạp bootloader (Offset: 0x1000)
-	ret = flasher_write_segment(metadata.path_bootloader, 0x1000, metadata.md5_bootloader);
+	ret = flasher_write_segment(metadata.path_bootloader, ESP_BOOTLOADER_ADDR, metadata.md5_bootloader);
 	if (ret != ESP_OK) return ret;
 
 	// 4b. Nạp partition table (Offset: 0x8000)
-	ret = flasher_write_segment(metadata.path_partition, 0x8000, metadata.md5_partition);
+	ret = flasher_write_segment(metadata.path_partition, ESP_PARTITION_ADDR, metadata.md5_partition);
 	if (ret != ESP_OK) return ret;
 
 	// 4c. Nạp firmware chính (Offset: 0x10000)
-	ret = flasher_write_segment(metadata.path, 0x10000, metadata.md5);
+	ret = flasher_write_segment(metadata.path, ESP_APPLICATION_ADDR, metadata.md5);
 	if (ret != ESP_OK) return ret;
 
 	// --- BƯỚC 5: RESET TARGET VỀ CHẾ ĐỘ THƯỜNG ---
@@ -271,96 +257,31 @@ esp_err_t flasher_begin_session(const std::string& fw_id)
 }
 
 /**
- * @brief Thực hiện chuỗi thao tác reset target để đưa nó vào chế độ bootloader (download mode).
- * @param config Cấu hình chân GPIO điều khiển.
- * @return ESP_OK nếu cấu hình GPIO thành công.
+ * @brief Thực hiện reset sequence với timing profile cụ thể
+ * @param config Cấu hình chân GPIO
+ * @param profile Timing profile
+ * @return ESP_OK nếu thành công
  */
-/**
- * @brief Reset Sequence DÀNH RIÊNG CHO MẠCH AUTOBOOT (DTR/RTS)
- * Logic điều khiển Transistor Q1/Q2 đan chéo.
- * * Yêu cầu đấu nối:
- * - config->reset_trigger_pin nối vào chân RTS
- * - config->gpio0_trigger_pin nối vào chân DTR
- */
-static esp_err_t reset_sequence(const loader_esp32_config_t *config, uint8_t profile_index)
+static esp_err_t reset_sequence_with_profile(const loader_esp32_config_t *config, const timing_profile_t *profile)
 {
-    timing_profile = TIMING_PROFILES[profile_index];
+	// Cấu hình các chân điều khiển (EN và GPIO0) là OUTPUT
+	gpio_set_direction((gpio_num_t)config->gpio0_trigger_pin, GPIO_MODE_OUTPUT);
+	gpio_set_direction((gpio_num_t)config->reset_trigger_pin, GPIO_MODE_OUTPUT);
 
-    // 1. Cấu hình GPIO là OUTPUT (Push-Pull để kích dòng cho Transistor)
-    gpio_reset_pin((gpio_num_t)config->gpio0_trigger_pin);
-    gpio_reset_pin((gpio_num_t)config->reset_trigger_pin);
-    
-    gpio_set_direction((gpio_num_t)config->gpio0_trigger_pin, GPIO_MODE_OUTPUT);
-    gpio_set_direction((gpio_num_t)config->reset_trigger_pin, GPIO_MODE_OUTPUT);
-    
-    // Tăng dòng kích
-    gpio_set_drive_capability((gpio_num_t)config->gpio0_trigger_pin, GPIO_DRIVE_CAP_3);
-    gpio_set_drive_capability((gpio_num_t)config->reset_trigger_pin, GPIO_DRIVE_CAP_3);
+	ESP_LOGI(TAG, "Reset [%s]: hold=%lums, boot=%lums",
+	         profile->name, profile->reset_hold_ms, profile->boot_hold_ms);
 
-    ESP_LOGI(TAG, "Entering Bootloader via DTR/RTS Circuit...");
+	// 1. Kéo GPIO0 xuống LOW (chuẩn bị vào download mode)
+	gpio_set_level((gpio_num_t)config->gpio0_trigger_pin, 1);
+	gpio_set_level((gpio_num_t)config->reset_trigger_pin, 0);
+	vTaskDelay(pdMS_TO_TICKS(profile->reset_hold_ms));
 
-    // --- TRẠNG THÁI IDLE (Cả 2 cùng High hoặc cùng Low để ngắt Transistor) ---
-    // Để DTR=1, RTS=1 (Mức nghỉ, Transistor tắt)
-    gpio_set_level((gpio_num_t)config->gpio0_trigger_pin, 1); // DTR = 1
-    gpio_set_level((gpio_num_t)config->reset_trigger_pin, 1); // RTS = 1
-    vTaskDelay(pdMS_TO_TICKS(100));
+	gpio_set_level((gpio_num_t)config->gpio0_trigger_pin, 0);
+	gpio_set_level((gpio_num_t)config->reset_trigger_pin, 1);
+	vTaskDelay(pdMS_TO_TICKS(profile->boot_hold_ms));
 
-    // --- BƯỚC 1: KÍCH RESET (Target EN = 0) ---
-    // Logic: RTS = 1, DTR = 0 ==> Q1 dẫn, Q2 tắt ==> EN bị kéo xuống Mass
-    gpio_set_level((gpio_num_t)config->reset_trigger_pin, 1); // RTS = 1
-    gpio_set_level((gpio_num_t)config->gpio0_trigger_pin, 0); // DTR = 0
-    
-    // Giữ trạng thái Reset
-    vTaskDelay(pdMS_TO_TICKS(200)); 
-
-    // --- BƯỚC 2: VÀO BOOTLOADER (Target IO0 = 0, EN = 1) ---
-    // Logic: DTR = 1, RTS = 0 ==> Q2 dẫn, Q1 tắt 
-    // ==> IO0 bị kéo xuống Mass, EN được thả ra (Chip khởi động)
-    gpio_set_level((gpio_num_t)config->gpio0_trigger_pin, 1); // DTR = 1
-    gpio_set_level((gpio_num_t)config->reset_trigger_pin, 0); // RTS = 0
-    
-    // Giữ trạng thái này để tụ EN nạp lên và Chip chốt IO0
-    // Đây là lúc EN đang bò từ 0V lên 3.3V, còn IO0 đang bị gim xuống 0V
-    ESP_LOGI(TAG, "Hold Boot (DTR=1, RTS=0)...");
-    vTaskDelay(pdMS_TO_TICKS(200)); // Chờ 500ms cho chắc
-
-    // --- BƯỚC 3: THẢ TAY (Normal) ---
-    // DTR=1, RTS=1 ==> Cả 2 transistor tắt ==> Chip chạy tiếp
-    gpio_set_level((gpio_num_t)config->gpio0_trigger_pin, 1); // DTR = 1
-    gpio_set_level((gpio_num_t)config->reset_trigger_pin, 1); // RTS = 1
-    
-    ESP_LOGI(TAG, "DTR/RTS Sequence Done.");
-    vTaskDelay(pdMS_TO_TICKS(100));
-
-    return ESP_OK;
+	return ESP_OK;
 }
-
-// static esp_err_t try_reset_sequence() {
-// 	for (uint8_t i = 0; i < sizeof(TIMING_PROFILES) / sizeof(TimingParams); i++) {
-// 		ESP_LOGI(TAG, "Trying reset sequence with profile: %s", TIMING_PROFILES[i].name);
-		
-// 		// --- BƯỚC 2: HANDSHAKE (ĐƯA TARGET VÀO BOOTLOADER) ---
-// 		esp_loader_connect_args_t connect_config = ESP_LOADER_CONNECT_DEFAULT();
-// 		// Thực hiện chuỗi reset để target vào bootloader ROM
-// 		// [QUAN TRỌNG] Xả rác trước khi connect lần đầu (cho chắc)
-//     	reset_sequence(&config, i); 
-// 		vTaskDelay(pdMS_TO_TICKS(200));
-// 		uart_flush_input(UART_NUM_1);
-
-// 		// Thử kết nối với Target
-// 		if (esp_loader_connect(&connect_config) != ESP_LOADER_SUCCESS) {
-// 			ESP_LOGE(TAG, "Failed to connect to target device with profile: %s", TIMING_PROFILES[i].name);
-// 			// // continue; // Thử profile tiếp theo
-// 			// return ESP_FAIL;
-// 		} else {
-// 			ESP_LOGI(TAG, "Connected to target device with profile: %s", TIMING_PROFILES[i].name);
-// 			return ESP_OK;
-// 		}
-// 		vTaskDelay(pdMS_TO_TICKS(500)); // Đợi một chút trước khi thử lại
-// 	}
-// 		ESP_LOGE(TAG, "All reset sequence profiles failed.");
-// 		return ESP_FAIL;
-// }
 
 /**
  * @brief Xóa toàn bộ flash của chip Target.
@@ -369,11 +290,8 @@ static esp_err_t reset_sequence(const loader_esp32_config_t *config, uint8_t pro
 esp_err_t flasher_chip_erase() {
 	ESP_LOGI(TAG, "--- START CHIP ERASE ---");
 
-	// 1. Handshake với Target (đưa Target vào download mode và kết nối)
-	esp_loader_connect_args_t connect_config = ESP_LOADER_CONNECT_DEFAULT();
-	reset_sequence(&config, 1); // Gọi lại sequence reset để vào bootloader
-	
-	if (esp_loader_connect(&connect_config) != ESP_LOADER_SUCCESS) {
+	// 1. Handshake với Target (tự động thử các timing profiles)
+	if (try_connect() != ESP_OK) {
 		ESP_LOGE(TAG, "Failed to connect to target for erase.");
 		oled_show_message("Erasing Chip", "failed to connect.");
 		return ESP_FAIL;
@@ -392,10 +310,10 @@ esp_err_t flasher_chip_erase() {
 
 	ESP_LOGI(TAG, "Chip erase completed successfully!");
 	oled_show_message("Erasing Chip", "SUCCESS!");
-	
+
 	// 3. Reset target lại để target chạy lại app (hoặc chỉ chạy bootloader nếu chưa có app)
 	esp_loader_reset_target();
-	
+
 	return ESP_OK;
 }
 
@@ -404,14 +322,41 @@ esp_err_t flasher_chip_erase() {
  */
 void host_system_restart() {
 	ESP_LOGI(TAG, "Dang khoi dong lai he thong...");
-	
+
 	// Hiệu ứng dấu chấm động: Restarting. -> Restarting.. -> Restarting...
 	for (int i = 1; i <= 3; i++) {
 		std::string dots(i, '.'); // Tạo chuỗi chứa i dấu chấm
 		oled_show_message("Restarting", dots.c_str());
-		vTaskDelay(pdMS_TO_TICKS(200)); 
+		vTaskDelay(pdMS_TO_TICKS(200));
 	}
-	
+
 	// Gọi hàm khởi động lại hệ thống ESP-IDF
 	esp_restart();
+}
+
+static esp_err_t try_connect(void){
+	// --- BƯỚC 2: HANDSHAKE (ĐƯA TARGET VÀO BOOTLOADER) ---
+	esp_loader_connect_args_t connect_config = ESP_LOADER_CONNECT_DEFAULT();
+	
+	const timing_profile_t *profile = &TIMING_PROFILES[0];
+	ESP_LOGI(TAG, "Connecting to target using profile: %s", profile->name);
+
+	// Reset vào bootloader
+	reset_sequence_with_profile(&config, profile);
+
+	// Flush UART - cả RX và TX để đảm bảo buffer sạch
+	uart_flush(config.uart_port);          // Flush TX
+	uart_flush_input(config.uart_port);    // Flush RX
+	vTaskDelay(pdMS_TO_TICKS(50));         // Chờ ổn định
+
+	// Thử kết nối
+	if (esp_loader_connect(&connect_config) == ESP_LOADER_SUCCESS) {
+		ESP_LOGI(TAG, "SUCCESS! Connected with profile: %s", profile->name);
+		return ESP_OK;
+	} else {
+		ESP_LOGE(TAG, "Failed to connect to target.");
+		oled_show_message("Flash Session", "connect failed.");
+		vTaskDelay(pdMS_TO_TICKS(500));
+		return ESP_FAIL;
+	}
 }
