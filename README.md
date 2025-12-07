@@ -106,7 +106,7 @@ Tool **FlashPorter** giúp chuẩn bị thẻ SD **chỉ trong vài cú click**.
 
 ### 🖥️ Giao diện FlashPorter:
 
-📌 **[Xem UI Mockup tương tác (HTML)](toolAddFirmware/ui-mockup.html)** - Mở file HTML để xem giao diện mô phỏng chi tiết.
+📌 **[Xem UI Mockup tương tác (HTML)]( https://htmlpreview.github.io/?https://github.com/phucttp/sd-flash-esp32/blob/main/toolAddFirmware/ui-mockup.html)** - Mở file HTML để xem giao diện mô phỏng chi tiết.
 
 **Workflow chính:**
 ```
