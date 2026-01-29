@@ -257,30 +257,147 @@ esp_err_t flasher_begin_session(const std::string& fw_id)
 }
 
 /**
- * @brief Thực hiện reset sequence với timing profile cụ thể
+ * @brief Thực hiện reset sequence với timing profile cụ thể (OLD - direct GPIO)
  * @param config Cấu hình chân GPIO
  * @param profile Timing profile
  * @return ESP_OK nếu thành công
  */
+// static esp_err_t reset_sequence_with_profile(const loader_esp32_config_t *config, const timing_profile_t *profile)
+// {
+// 	// Cấu hình các chân điều khiển (EN và GPIO0) là OUTPUT
+// 	gpio_set_direction((gpio_num_t)config->gpio0_trigger_pin, GPIO_MODE_OUTPUT);
+// 	gpio_set_direction((gpio_num_t)config->reset_trigger_pin, GPIO_MODE_OUTPUT);
+
+// 	ESP_LOGI(TAG, "Reset [%s]: hold=%lums, boot=%lums",
+// 	         profile->name, profile->reset_hold_ms, profile->boot_hold_ms);
+
+// 	// 1. Kéo GPIO0 xuống LOW (chuẩn bị vào download mode)
+// 	gpio_set_level((gpio_num_t)config->gpio0_trigger_pin, 0);
+// 	gpio_set_level((gpio_num_t)config->reset_trigger_pin, 1);
+// 	vTaskDelay(pdMS_TO_TICKS(profile->reset_hold_ms));
+
+// 	gpio_set_level((gpio_num_t)config->gpio0_trigger_pin, 1);
+// 	gpio_set_level((gpio_num_t)config->reset_trigger_pin, 0);
+// 	vTaskDelay(pdMS_TO_TICKS(profile->boot_hold_ms));
+
+// 	return ESP_OK;
+// }
+
+/**
+ * @brief Reset sequence kiểu esptool - brute force thử tất cả logic combinations
+ * @param config Cấu hình GPIO
+ * @param reset_invert 0=direct (LOW=LOW), 1=transistor (HIGH=LOW)
+ * @param boot_invert 0=direct (LOW=LOW), 1=transistor (HIGH=LOW)
+ */
+static void do_reset_sequence(const loader_esp32_config_t *config, int reset_invert, int boot_invert, uint32_t reset_ms, uint32_t boot_ms)
+{
+	int reset_active = reset_invert ? 1 : 0;
+	int reset_idle = reset_invert ? 0 : 1;
+	int boot_active = boot_invert ? 1 : 0;
+	int boot_idle = boot_invert ? 0 : 1;
+
+	// Step 1: Set GPIO0 to boot mode (active = LOW on target)
+	gpio_set_level((gpio_num_t)config->gpio0_trigger_pin, boot_active);
+	vTaskDelay(pdMS_TO_TICKS(50));
+
+	// Step 2: Pulse reset
+	gpio_set_level((gpio_num_t)config->reset_trigger_pin, reset_active);  // EN = LOW
+	vTaskDelay(pdMS_TO_TICKS(reset_ms));
+	gpio_set_level((gpio_num_t)config->reset_trigger_pin, reset_idle);    // EN = HIGH
+
+	// Step 3: Hold GPIO0 for boot sampling
+	vTaskDelay(pdMS_TO_TICKS(boot_ms));
+
+	// Step 4: Release GPIO0
+	gpio_set_level((gpio_num_t)config->gpio0_trigger_pin, boot_idle);
+}
+
+/**
+ * @brief Reset sequence với timing profile - thử combination được chỉ định
+ */
 static esp_err_t reset_sequence_with_profile(const loader_esp32_config_t *config, const timing_profile_t *profile)
 {
-	// Cấu hình các chân điều khiển (EN và GPIO0) là OUTPUT
 	gpio_set_direction((gpio_num_t)config->gpio0_trigger_pin, GPIO_MODE_OUTPUT);
 	gpio_set_direction((gpio_num_t)config->reset_trigger_pin, GPIO_MODE_OUTPUT);
 
 	ESP_LOGI(TAG, "Reset [%s]: hold=%lums, boot=%lums",
 	         profile->name, profile->reset_hold_ms, profile->boot_hold_ms);
 
-	// 1. Kéo GPIO0 xuống LOW (chuẩn bị vào download mode)
-	gpio_set_level((gpio_num_t)config->gpio0_trigger_pin, 1);
-	gpio_set_level((gpio_num_t)config->reset_trigger_pin, 0);
-	vTaskDelay(pdMS_TO_TICKS(profile->reset_hold_ms));
-
-	gpio_set_level((gpio_num_t)config->gpio0_trigger_pin, 0);
-	gpio_set_level((gpio_num_t)config->reset_trigger_pin, 1);
-	vTaskDelay(pdMS_TO_TICKS(profile->boot_hold_ms));
+	// Dùng combination mặc định (cả hai transistor/inverted)
+	do_reset_sequence(config, 1, 1, profile->reset_hold_ms, profile->boot_hold_ms);
 
 	return ESP_OK;
+}
+
+/**
+ * @brief Brute force try tất cả GPIO logic combinations như esptool
+ * @return ESP_OK nếu kết nối thành công
+ */
+static esp_err_t try_all_reset_combinations(const loader_esp32_config_t *config)
+{
+	gpio_set_direction((gpio_num_t)config->gpio0_trigger_pin, GPIO_MODE_OUTPUT);
+	gpio_set_direction((gpio_num_t)config->reset_trigger_pin, GPIO_MODE_OUTPUT);
+
+	esp_loader_connect_args_t connect_config = ESP_LOADER_CONNECT_DEFAULT();
+
+	// 4 combinations: (reset_invert, boot_invert)
+	// 0,0 = both direct
+	// 0,1 = reset direct, boot transistor
+	// 1,0 = reset transistor, boot direct
+	// 1,1 = both transistor
+	const int combinations[4][2] = {
+		{1, 1},  // Both transistor (most common for autoboot boards)
+		{1, 0},  // Reset transistor, Boot direct
+		{0, 1},  // Reset direct, Boot transistor
+		{0, 0},  // Both direct
+	};
+	const char* combo_names[4] = {
+		"RST=inv, BOOT=inv",
+		"RST=inv, BOOT=dir",
+		"RST=dir, BOOT=inv",
+		"RST=dir, BOOT=dir",
+	};
+
+	// Timing variations
+	const uint32_t timings[3][2] = {
+		{100, 50},   // Fast
+		{100, 100},  // Normal
+		{200, 200},  // Slow
+	};
+
+	for (int t = 0; t < 3; t++) {
+		for (int c = 0; c < 4; c++) {
+			ESP_LOGI(TAG, "Trying: %s, timing=%lu/%lu ms",
+			         combo_names[c], timings[t][0], timings[t][1]);
+
+			// Release all first
+			gpio_set_level((gpio_num_t)config->gpio0_trigger_pin, combinations[c][1] ? 0 : 1);
+			gpio_set_level((gpio_num_t)config->reset_trigger_pin, combinations[c][0] ? 0 : 1);
+			vTaskDelay(pdMS_TO_TICKS(100));
+
+			// Do reset sequence
+			do_reset_sequence(config, combinations[c][0], combinations[c][1],
+			                  timings[t][0], timings[t][1]);
+
+			// Flush UART
+			uart_flush(config->uart_port);
+			uart_flush_input(config->uart_port);
+			vTaskDelay(pdMS_TO_TICKS(50));
+
+			// Try connect
+			if (esp_loader_connect(&connect_config) == ESP_LOADER_SUCCESS) {
+				ESP_LOGI(TAG, "SUCCESS! Working combination: %s, timing=%lu/%lu",
+				         combo_names[c], timings[t][0], timings[t][1]);
+				return ESP_OK;
+			}
+
+			ESP_LOGW(TAG, "Failed, trying next...");
+			vTaskDelay(pdMS_TO_TICKS(100));
+		}
+	}
+
+	ESP_LOGE(TAG, "All combinations failed!");
+	return ESP_FAIL;
 }
 
 /**
@@ -335,27 +452,18 @@ void host_system_restart() {
 }
 
 static esp_err_t try_connect(void){
-	// --- BƯỚC 2: HANDSHAKE (ĐƯA TARGET VÀO BOOTLOADER) ---
-	esp_loader_connect_args_t connect_config = ESP_LOADER_CONNECT_DEFAULT();
-	
-	const timing_profile_t *profile = &TIMING_PROFILES[0];
-	ESP_LOGI(TAG, "Connecting to target using profile: %s", profile->name);
+	// --- BRUTE FORCE: Thử tất cả GPIO logic combinations ---
+	ESP_LOGI(TAG, "=== BRUTE FORCE CONNECT (esptool style) ===");
+	oled_show_message("Connecting...", "trying all combos");
 
-	// Reset vào bootloader
-	reset_sequence_with_profile(&config, profile);
+	esp_err_t result = try_all_reset_combinations(&config);
 
-	// Flush UART - cả RX và TX để đảm bảo buffer sạch
-	uart_flush(config.uart_port);          // Flush TX
-	uart_flush_input(config.uart_port);    // Flush RX
-	vTaskDelay(pdMS_TO_TICKS(50));         // Chờ ổn định
-
-	// Thử kết nối
-	if (esp_loader_connect(&connect_config) == ESP_LOADER_SUCCESS) {
-		ESP_LOGI(TAG, "SUCCESS! Connected with profile: %s", profile->name);
+	if (result == ESP_OK) {
+		oled_show_message("Connected!", "found working combo");
 		return ESP_OK;
 	} else {
-		ESP_LOGE(TAG, "Failed to connect to target.");
-		oled_show_message("Flash Session", "connect failed.");
+		ESP_LOGE(TAG, "All reset combinations failed!");
+		oled_show_message("Connect FAILED", "check wiring");
 		vTaskDelay(pdMS_TO_TICKS(500));
 		return ESP_FAIL;
 	}

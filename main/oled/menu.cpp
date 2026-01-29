@@ -2,7 +2,8 @@
 #include "menu.h"
 
 // --- CÁC BIẾN NỘI BỘ (STATIC) ---
-static Adafruit_SSD1306* _display;
+// static Adafruit_SSD1306* _display;  // OLD
+static Adafruit_SH1106G* _display;     // NEW: SH1106G
 static const char** _menuItems;
 static const char** _fw_ids;
 static int _menuLength;
@@ -11,11 +12,13 @@ static int _currentIndex;
 // (MỚI) Biến theo dõi scrolling
 // _menuTopIndex là index của mục đang hiển thị ở dòng TRÊN CÙNG
 static int _menuTopIndex; 
-static const int _maxLines = 4; // Vì màn hình 32 / 8 = 4 dòng
+// static const int _maxLines = 4; // OLD: màn hình 32 / 8 = 4 dòng
+static const int _maxLines = 8;    // NEW: SH1106G 64 / 8 = 8 dòng
 
 static unsigned long _lastDebounce = 0;
 static const unsigned long _debounceDelay = 200;
-extern Adafruit_SSD1306 display;
+// extern Adafruit_SSD1306 display;  // OLD
+extern Adafruit_SH1106G display;      // NEW: SH1106G
 
 // --- HÀM NỘI BỘ (STATIC) ---
 
@@ -23,31 +26,31 @@ extern Adafruit_SSD1306 display;
 static void drawMenu() {
     _display->clearDisplay();
     _display->setTextSize(1);
-    _display->setTextColor(SSD1306_WHITE);
+    _display->setTextColor(SH110X_WHITE);  // NEW: SH110X
 
     // Vòng lặp này chỉ chạy 4 lần (cho 4 dòng)
     for (int i = 0; i < _maxLines; i++) {
-        
+
         // Tính toán index thật của mục menu
-        int itemIndex = _menuTopIndex + i; 
+        int itemIndex = _menuTopIndex + i;
 
         // Nếu itemIndex vượt quá menu, không vẽ nữa
         if (itemIndex >= _menuLength) {
-            break; 
+            break;
         }
 
         // Tính toán tọa độ Y cho dòng (luôn là 0, 8, 16, 24)
-        int yPos = i * 8; 
+        int yPos = i * 8;
 
         // Lấy nội dung text
         const char* itemText = _menuItems[itemIndex];
 
         // So sánh index thật với index đang chọn
         if (itemIndex == _currentIndex) {
-            _display->fillRect(0, yPos, SCREEN_WIDTH, 8, SSD1306_WHITE);
-            _display->setTextColor(SSD1306_BLACK, SSD1306_WHITE); // highlight
+            _display->fillRect(0, yPos, SCREEN_WIDTH, 8, SH110X_WHITE);        // NEW: SH110X
+            _display->setTextColor(SH110X_BLACK, SH110X_WHITE); // highlight   // NEW: SH110X
         } else {
-            _display->setTextColor(SSD1306_WHITE, SSD1306_BLACK);
+            _display->setTextColor(SH110X_WHITE, SH110X_BLACK);                // NEW: SH110X
         }
         
         _display->setCursor(2, yPos);
@@ -59,7 +62,8 @@ static void drawMenu() {
 // --- ĐỊNH NGHĨA CÁC HÀM PUBLIC ---
 
 // (CẬP NHẬT) menu_init
-void menu_init(Adafruit_SSD1306& disp, const char* displayItems[], const char* idItems[], int len) {
+// void menu_init(Adafruit_SSD1306& disp, ...) // OLD
+void menu_init(Adafruit_SH1106G& disp, const char* displayItems[], const char* idItems[], int len) {  // NEW: SH1106G
     _display = &disp;
     _menuItems = displayItems;
     _fw_ids = idItems;
@@ -146,7 +150,7 @@ void menu_display_selection(int index) {
 
     _display->clearDisplay();
     _display->setTextSize(1);
-    _display->setTextColor(SSD1306_WHITE);
+    _display->setTextColor(SH110X_WHITE);   // NEW: SH110X
     _display->setCursor(10, 10);
     _display->println("Selected:");
     _display->setCursor(10, 20);
@@ -177,7 +181,7 @@ void menu_redisplay() {
 void oled_show_message(const char* line1, const char* line2) {
     display.clearDisplay();
     display.setTextSize(1);
-    display.setTextColor(SSD1306_WHITE);
+    display.setTextColor(SH110X_WHITE);   // NEW: SH110X
     display.setCursor(0, 10);
     display.println(line1);
     if (strlen(line2) > 0) {

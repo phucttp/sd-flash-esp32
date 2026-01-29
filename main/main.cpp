@@ -47,7 +47,8 @@ bool force_delete = false;
 #define BUF_LEN     128
 
 // Đối tượng màn hình
-Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
+// Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);  // OLD
+Adafruit_SH1106G display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);     // NEW: SH1106G
 
 // Buffer tạm
 static uint8_t buf[BUF_LEN] = {0};
@@ -197,7 +198,8 @@ void setup() {
 
     // 2. Init OLED
     Wire.begin(SDA_PIN, SCL_PIN);
-    if (!display.begin(SSD1306_SWITCHCAPVCC, OLED_I2C_ADDR)) {
+    // if (!display.begin(SSD1306_SWITCHCAPVCC, OLED_I2C_ADDR)) {  // OLD
+    if (!display.begin(OLED_I2C_ADDR, true)) {                      // NEW: SH1106G (addr, reset)
         ESP_LOGE(TAG, "OLED Init Failed");
         for(;;);
     }

@@ -11,7 +11,7 @@ set(srcs "main.cpp"
 
 idf_component_register(SRCS ${srcs}
                        INCLUDE_DIRS ${include_dirs}
-                       REQUIRES espressif__arduino-esp32 Adafruit_GFX Adafruit_SSD1306 WiFiManager esp_http_client mbedtls)
+                       REQUIRES espressif__arduino-esp32 Adafruit_GFX Adafruit_SSD1306 Adafruit_SH110X WiFiManager esp_http_client mbedtls)  # Added SH110X
 
 
 # ⚠️ Thêm dòng này ngay sau idf_component_register

@@ -4,14 +4,15 @@
 
 #include <Arduino.h>
 #include <Adafruit_GFX.h>
-#include <Adafruit_SSD1306.h>
+// #include <Adafruit_SSD1306.h>  // OLD: SSD1306
+#include <Adafruit_SH110X.h>      // NEW: SH1106G
 
 // --- CẤU HÌNH CỨNG (Không đổi) ---
 #define BTN_UP    21
 #define BTN_DOWN  20
 #define BTN_OK    10
 #define SCREEN_WIDTH 128
-#define SCREEN_HEIGHT 32
+#define SCREEN_HEIGHT 64
 #define OLED_RESET -1
 #define OLED_I2C_ADDR 0x3C
 
@@ -24,7 +25,8 @@
  * @param idItems      Mảng chuỗi là ID tương ứng (ví dụ: "FW_001.bin")
  * @param len          Số lượng mục (phải giống nhau cho cả 2 mảng)
  */
-void menu_init(Adafruit_SSD1306& disp, const char* displayItems[], const char* idItems[], int len);
+// void menu_init(Adafruit_SSD1306& disp, const char* displayItems[], const char* idItems[], int len);  // OLD
+void menu_init(Adafruit_SH1106G& disp, const char* displayItems[], const char* idItems[], int len);     // NEW: SH1106G
 
 /**
  * @brief Cập nhật trạng thái menu, kiểm tra nút nhấn.
