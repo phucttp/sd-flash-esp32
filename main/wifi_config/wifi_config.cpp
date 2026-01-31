@@ -9,9 +9,11 @@
 #include "esp_system.h"
 
 // --- MODULE KHÁC TRONG DỰ ÁN ---
-#include "../oled/menu.h"
+#include "oled_ui.h"
 #include "../sd_card/sd_card.h"
 #include "../file_utils/file_utils.h"  // Centralized file operations
+
+extern OledUI ui;
 
 // --- BIẾN TOÀN CỤC NỘI BỘ (STATIC) ---
 static const char *TAG = "WIFI_CFG"; // Tag log cho module này
@@ -38,14 +40,14 @@ void wifi_config_get_params(char* out_url, char* out_key, char* out_iv) {
 bool wifi_config_connect() {
     WiFiManager wm;
     wm.setConfigPortalTimeout(180); 
-    oled_show_message("Connecting to", "WiFi...");
+    ui.showMessage("Connecting to", "WiFi...");
     return wm.autoConnect("Universal-Flasher-Config");
 }
 
 // Hàm Setup chính: Hiện 3 ô nhập liệu
 void wifi_config_force_portal() {
     ESP_LOGI(TAG, ">>> OPEN SETUP PORTAL");
-    oled_show_message("Setup Mode", "Connect Wifi...");
+    ui.showMessage("Setup Mode", "Connect Wifi...");
 
     WiFiManager wm;
     shouldSaveConfig = false;
@@ -77,7 +79,7 @@ void wifi_config_force_portal() {
     wm.setCaptivePortalEnable(true);
     if (!wm.startConfigPortal("Universal-Flasher-Setup")) {
         ESP_LOGW(TAG, "Timeout/Exit");
-        oled_show_message("Setup", "Cancelled");
+        ui.showMessage("Setup", "Cancelled");
         delay(1000);
     } else {
         // --- B4: Xử lý Save ---
@@ -99,7 +101,7 @@ void wifi_config_force_portal() {
             _write_file(CONFIG_FILE_KEY, new_key);
             _write_file(CONFIG_FILE_IV,  new_iv);
 
-            oled_show_message("Setup", "Saved & Reboot");
+            ui.showMessage("Setup", "Saved & Reboot");
             delay(2000);
             
             esp_restart(); // Reset ngay để áp dụng

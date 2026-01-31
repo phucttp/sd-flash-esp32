@@ -12,10 +12,12 @@
 // ============================================================
 #include "esp_http_client.h"
 #include "esp_log.h"
-#include "esp_crt_bundle.h" 
-#include "mbedtls/aes.h" 
+#include "esp_crt_bundle.h"
+#include "mbedtls/aes.h"
 #include "esp_system.h"
-#include "../oled/menu.h"
+#include "oled_ui.h"
+
+extern OledUI ui;
 
 static const char* TAG = "OTA_DL";
 
@@ -216,7 +218,7 @@ bool ota_download_file_encrypted(const char* url, const char* save_path, const c
                             
                             if (current_kb - last_kb >= 50) { // Thay đổi >= 50KB mới vẽ lại
                                 String msg = "Size: " + String(current_kb) + " KB";
-                                oled_show_message("Downloading...", msg.c_str());
+                                ui.showMessage("Downloading...", msg.c_str());
                                 
                                 last_kb = current_kb; // Lưu mốc mới
                                 ESP_LOGI(TAG, "Downloaded %d KB", current_kb); // Log nhẹ

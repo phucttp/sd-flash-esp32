@@ -11,8 +11,10 @@
 #include "../ota_downloader/ota_downloader.h"
 #include "../metadata_parser/metadata_parser.h"
 #include "../sd_card/sd_card.h"
-#include "../oled/menu.h"
-#include "../file_utils/file_utils.h"  // Centralized file operations                   
+#include "oled_ui.h"
+#include "../file_utils/file_utils.h"  // Centralized file operations
+
+extern OledUI ui;                   
 
 static const char* TAG = "SYNC_ENGINE";
 
@@ -122,7 +124,7 @@ void sync_engine_run(bool force_clean) {
     // [MỚI] Nếu yêu cầu Xóa sạch (Reset gốc)
     if (force_clean) {
         ESP_LOGW(TAG, "FORCE CLEAN ACTIVATED! Wiping all firmware...");
-        oled_show_message("Resetting...", "Wiping SD");
+        ui.showMessage("Resetting...", "Wiping SD");
         vTaskDelay(pdMS_TO_TICKS(500));
 
         // [FIX] Xóa THẬT SỰ tất cả firmware files
@@ -154,10 +156,10 @@ void sync_engine_run(bool force_clean) {
         g_firmware_map.clear(); // Xóa RAM
 
         ESP_LOGI(TAG, "Wipe Done. Starting fresh sync...");
-        oled_show_message("Wipe Done", "Re-Syncing");
+        ui.showMessage("Wipe Done", "Re-Syncing");
         delay(1000);
     }
-    oled_show_message("Syncing...", "Init...");
+    ui.showMessage("Syncing...", "Init...");
 
     // 1. Lấy Config
     static char url_cfg[256], key[33], iv[33];
@@ -166,12 +168,12 @@ void sync_engine_run(bool force_clean) {
 
     if (baseUrl.length() < 10) {
         ESP_LOGE(TAG, "Invalid URL Config");
-        oled_show_message("Error", "No URL Config");
+        ui.showMessage("Error", "No URL Config");
         return;
     }
 
     // 2. Tải Index Server -> Lưu vào FILE_IDX_TMP (File tên ngắn)
-    oled_show_message("Syncing...", "DL Index");
+    ui.showMessage("Syncing...", "DL Index");
     
     // Xóa file tạm cũ nếu còn sót
     fu_file_delete(FILE_IDX_TMP);
@@ -181,18 +183,18 @@ void sync_engine_run(bool force_clean) {
     
     if (json_std.length() == 0) {
         ESP_LOGE(TAG, "Download Index Failed");
-        oled_show_message("Error", "DL Index Fail");
+        ui.showMessage("Error", "DL Index Fail");
         // Dọn dẹp nếu file rác được tạo ra
         fu_file_delete(FILE_IDX_TMP);
         return;
     }
 
     // 3. Parse Index Server
-    oled_show_message("Syncing...", "Parsing");
+    ui.showMessage("Syncing...", "Parsing");
     FirmwareMap server_map;
     // Parse từ chuỗi RAM (json_std)
     if (!metadata_parse_json(String(json_std.c_str()), server_map)) {
-        oled_show_message("Error", "Bad JSON");
+        ui.showMessage("Error", "Bad JSON");
         fu_file_delete(FILE_IDX_TMP); // Xóa file lỗi
         return;
     }
@@ -206,7 +208,7 @@ void sync_engine_run(bool force_clean) {
         count++;
         char msgBuf[32];
         snprintf(msgBuf, sizeof(msgBuf), "Check %d/%d", count, server_map.size());
-        oled_show_message("Syncing...", msgBuf);
+        ui.showMessage("Syncing...", msgBuf);
 
         bool need_dl_app = false;
         bool need_dl_boot = false;
@@ -278,7 +280,7 @@ void sync_engine_run(bool force_clean) {
                 savePath.replace(".enc", ".bin");
             }
 
-            oled_show_message("DL...", item_name);
+            ui.showMessage("DL...", item_name);
             
             // 3. Gọi hàm tải:
             // - Tải từ dlUrl (.enc)
@@ -296,7 +298,7 @@ void sync_engine_run(bool force_clean) {
     }
 
     // 5. DỌN DẸP - Xóa firmware không còn trên server
-    oled_show_message("Syncing...", "Cleaning");
+    ui.showMessage("Syncing...", "Cleaning");
     std::vector<std::string> to_delete;
     for (auto const& [id, local_meta] : local_map) {
         if (server_map.find(id) == server_map.end()) {
@@ -332,14 +334,14 @@ void sync_engine_run(bool force_clean) {
         // Cập nhật bằng cách đổi tên file tạm -> /index.txt
         if (update_index_file()) {
             sd_load_metadata(); // Reload RAM
-            oled_show_message("Sync Done", "Updated!");
+            ui.showMessage("Sync Done", "Updated!");
         } else {
-            oled_show_message("Sync Error", "Save Fail");
+            ui.showMessage("Sync Error", "Save Fail");
         }
     } else {
         fu_file_delete(FILE_IDX_TMP); // Xóa file tạm vì không dùng
         ESP_LOGI(TAG, "System Up-to-date.");
-        oled_show_message("Sync Done", "Up-to-date");
+        ui.showMessage("Sync Done", "Up-to-date");
     }
     
     vTaskDelay(2000);

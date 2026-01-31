@@ -32,7 +32,10 @@
 #include "FS.h"
 #include "SD.h"
 #include "Arduino.h"
-#include "../oled/menu.h" 	 // Hỗ trợ hiển thị tiến trình lên màn hình OLED
+#include "oled_ui.h"         // OledUI Library
+
+// Extern UI instance from main.cpp
+extern OledUI ui;
 
 // TAG dùng để lọc log cho module này
 static const char *TAG = "FLASHER";
@@ -83,11 +86,20 @@ const loader_esp32_config_t config = {
 static esp_err_t reset_sequence_with_profile(const loader_esp32_config_t *config, const timing_profile_t *profile);
 static esp_err_t try_connect(void);
 
+// Flag để tránh init UART nhiều lần
+static bool g_flasher_initialized = false;
+
 /**
  * @brief Khởi tạo giao tiếp UART và cổng nạp.
  * @return ESP_OK nếu thành công, ESP_FAIL nếu thất bại.
  */
 esp_err_t flasher_init() {
+	// Skip nếu đã init rồi
+	if (g_flasher_initialized) {
+		ESP_LOGI(TAG, "Flasher already initialized, skipping...");
+		return ESP_OK;
+	}
+
 	ESP_LOGI(TAG, "Initializing UART connection for flasher...");
 	// Khởi tạo UART và cấu hình GPIO theo `config` cho thư viện esp_loader
 	if (loader_port_esp32_init(&config) != ESP_LOADER_SUCCESS) {
@@ -95,6 +107,7 @@ esp_err_t flasher_init() {
 		return ESP_FAIL;
 	}
 
+	g_flasher_initialized = true;
 	ESP_LOGI(TAG, "UART connection initialized at baud rate 115200");
 	return ESP_OK;
 }
@@ -165,7 +178,7 @@ esp_err_t flasher_write_segment(const std::string& file_path, uint32_t offset, c
 		if (progress % 5 == 0) {
 			ESP_LOGI(TAG, "Progress: %" PRIu32 "%%", progress);
 			// Cập nhật thông báo lên màn hình OLED
-			oled_show_message(file_path.c_str(), (String("Progress: ") + String(progress) + String("%")).c_str());
+			ui.showMessage(file_path.c_str(), (String("Progress: ") + String(progress) + String("%")).c_str());
 		}
 	}
 
@@ -216,12 +229,12 @@ esp_err_t flasher_begin_session(const std::string& fw_id)
 
 	if (try_connect() != ESP_OK) {
 		ESP_LOGE(TAG, "Failed to connect to target.");
-		oled_show_message("Flash Session", "connect failed.");
+		ui.showMessage("Flash Session", "connect failed.");
 		vTaskDelay(pdMS_TO_TICKS(500));
 		return ESP_FAIL;
 	} else {
 		ESP_LOGI(TAG, "Connected to target successfully.");
-		oled_show_message("Flash Session", "connected.");
+		ui.showMessage("Flash Session", "connected.");
 	}
 
 	// --- BƯỚC 3: BOOST BAUDRATE ---
@@ -386,7 +399,7 @@ static esp_err_t try_all_reset_combinations(const loader_esp32_config_t *config)
 			char line2[22];
 			snprintf(line1, sizeof(line1), "Connecting %c", spinner[attempt % 4]);
 			snprintf(line2, sizeof(line2), "Try %d/%d...", attempt, totalAttempts);
-			oled_show_message(line1, line2);
+			ui.showMessage(line1, line2);
 
 			ESP_LOGI(TAG, "Trying [%d/%d]: %s, timing=%lu/%lu ms",
 			         attempt, totalAttempts, combo_names[c], timings[t][0], timings[t][1]);
@@ -409,7 +422,7 @@ static esp_err_t try_all_reset_combinations(const loader_esp32_config_t *config)
 			if (esp_loader_connect(&connect_config) == ESP_LOADER_SUCCESS) {
 				ESP_LOGI(TAG, "SUCCESS! Working combination: %s, timing=%lu/%lu",
 				         combo_names[c], timings[t][0], timings[t][1]);
-				oled_show_message("Connected!", "Success");
+				ui.showMessage("Connected!", "Success");
 				return ESP_OK;
 			}
 
@@ -432,23 +445,23 @@ esp_err_t flasher_chip_erase() {
 	// 1. Handshake với Target (tự động thử các timing profiles)
 	if (try_connect() != ESP_OK) {
 		ESP_LOGE(TAG, "Failed to connect to target for erase.");
-		oled_show_message("Erasing Chip", "failed to connect.");
+		ui.showMessage("Erasing Chip", "failed to connect.");
 		return ESP_FAIL;
 	}
 	ESP_LOGI(TAG, "Connected. Erasing chip (please wait)...");
-	oled_show_message("Erasing Chip", "connected.");
+	ui.showMessage("Erasing Chip", "connected.");
 
 	// 2. Gọi lệnh xóa toàn bộ (Hàm này sẽ BLOCK cho đến khi xóa xong, có thể mất vài giây)
-	oled_show_message("Erasing Chip", "erasing...");
+	ui.showMessage("Erasing Chip", "erasing...");
 	esp_loader_error_t err = esp_loader_flash_erase();
 	if (err != ESP_LOADER_SUCCESS) {
 		ESP_LOGE(TAG, "Chip erase failed with error: %d", err);
-		oled_show_message("Erasing Chip", "erase failed!");
+		ui.showMessage("Erasing Chip", "erase failed!");
 		return ESP_FAIL;
 	}
 
 	ESP_LOGI(TAG, "Chip erase completed successfully!");
-	oled_show_message("Erasing Chip", "SUCCESS!");
+	ui.showMessage("Erasing Chip", "SUCCESS!");
 
 	// 3. Reset target lại để target chạy lại app (hoặc chỉ chạy bootloader nếu chưa có app)
 	esp_loader_reset_target();
@@ -465,7 +478,7 @@ void host_system_restart() {
 	// Hiệu ứng dấu chấm động: Restarting. -> Restarting.. -> Restarting...
 	for (int i = 1; i <= 3; i++) {
 		std::string dots(i, '.'); // Tạo chuỗi chứa i dấu chấm
-		oled_show_message("Restarting", dots.c_str());
+		ui.showMessage("Restarting", dots.c_str());
 		vTaskDelay(pdMS_TO_TICKS(200));
 	}
 
@@ -630,7 +643,7 @@ int flasher_scan_and_save_combo(void) {
 			char line2[22];
 			snprintf(line1, sizeof(line1), "Scanning %c", spinner[attempt % 4]);
 			snprintf(line2, sizeof(line2), "Try %d/%d...", attempt, totalAttempts);
-			oled_show_message(line1, line2);
+			ui.showMessage(line1, line2);
 
 			ESP_LOGI(TAG, "Scan [%d/%d]: %s, timing=%lu/%lu",
 			         attempt, totalAttempts, combo_names[c], timings[t][0], timings[t][1]);
@@ -654,7 +667,7 @@ int flasher_scan_and_save_combo(void) {
 				// Lưu combo vào SD
 				save_combo_to_sd(combo_index);
 
-				oled_show_message("FOUND!", line2);
+				ui.showMessage("FOUND!", line2);
 				vTaskDelay(pdMS_TO_TICKS(500));
 
 				// Reset target để thoát bootloader
@@ -676,10 +689,10 @@ static esp_err_t try_connect(void) {
 	int saved = flasher_load_saved_combo();
 	if (saved >= 0) {
 		ESP_LOGI(TAG, "=== FAST CONNECT (saved combo #%d) ===", saved);
-		oled_show_message("Connecting...", "Using saved cfg");
+		ui.showMessage("Connecting...", "Using saved cfg");
 
 		if (try_connect_with_combo(saved) == ESP_OK) {
-			oled_show_message("Connected!", "Fast mode");
+			ui.showMessage("Connected!", "Fast mode");
 			vTaskDelay(pdMS_TO_TICKS(300));
 			return ESP_OK;
 		}
@@ -699,7 +712,7 @@ static esp_err_t try_connect(void) {
 		return ESP_OK;
 	} else {
 		ESP_LOGE(TAG, "All reset combinations failed!");
-		oled_show_message("FAILED!", "Check wiring");
+		ui.showMessage("FAILED!", "Check wiring");
 		vTaskDelay(pdMS_TO_TICKS(1500));
 		return ESP_FAIL;
 	}

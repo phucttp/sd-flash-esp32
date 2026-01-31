@@ -1,4 +1,4 @@
-# 🚀 ESP32 Multi-Flasher
+# 🚀 ESP32 Multi-Flasher (FlashPorter)
 
 **ESP32 Multi-Flasher** biến một bo **ESP32 (Host)** thành một thiết bị **nạp firmware di động**, **không cần máy tính**.
 Hỗ trợ hai chế độ hoạt động: **Offline (từ thẻ SD)** và **Online (đồng bộ qua WiFi)**.
@@ -7,12 +7,17 @@ Hỗ trợ hai chế độ hoạt động: **Offline (từ thẻ SD)** và **Onl
 
 ## 🌟 Tính năng
 
-### 📱 Chế độ Offline (SD Card)
-- **Menu OLED:** Giao diện menu tương tác trên màn hình SSD1306 (128x32)
+### 📱 Giao diện Tabs-Based UI
+- **OLED SH1106G (128x64):** Giao diện tab hiện đại, dễ điều khiển
+- **4 Tab chính:** FW (Firmware) | Tools | Status | Info
+- **Điều hướng thông minh:** UP+DOWN đồng thời để chuyển tab, riêng lẻ để chọn item
+- **OledUI Library:** Thư viện UI tùy chỉnh hỗ trợ menu, dialog, progress bar, spinner
+
+### 📦 Chế độ Offline (SD Card)
 - **Nạp từ Thẻ SD:** Đọc danh sách firmware động từ file `index.txt` (định dạng JSON)
 - **Flash Nhanh:** Sử dụng thư viện `espressif/esp-serial-flasher` để nạp qua UART tốc độ cao
 - **Xác thực MD5:** Kiểm tra tính toàn vẹn firmware sau khi nạp (tùy chọn)
-- **Điều khiển 3 nút:** UP, DOWN, OK với debounce để điều hướng menu
+- **Điều khiển 3 nút:** UP, DOWN, OK với debounce để điều hướng
 - **Monitor UART:** Xem log từ Target sau khi nạp xong
 - **Chip Erase:** Xóa toàn bộ flash của Target
 
@@ -41,12 +46,12 @@ Hỗ trợ hai chế độ hoạt động: **Offline (từ thẻ SD)** và **Onl
 
 | Thiết bị | Chân GPIO | Ghi chú |
 |----------|-----------|---------|
-| **OLED SSD1306** | SDA → GPIO 8 | I2C Address: 0x3C |
-|  | SCL → GPIO 9 | 128x32 pixels |
+| **OLED SH1106G** | SDA → GPIO 8 | I2C Address: 0x3C |
+|  | SCL → GPIO 9 | **128x64 pixels** |
 | **Thẻ SD** | CS → GPIO 7 | SPI mode, FAT filesystem |
 | **Nút UP** | GPIO 21 | Pull-up, nhấn → GND |
-| **Nút DOWN** | GPIO 20 | Pull-up, nhấn → GND |
-| **Nút OK** | GPIO 10 | Pull-up, nhấn → GND |
+| **Nút DOWN** | GPIO 10 | Pull-up, nhấn → GND |
+| **Nút OK** | GPIO 20 | Pull-up, nhấn → GND |
 
 ### 2️⃣ Target (Thiết bị được Nạp)
 
@@ -130,10 +135,49 @@ firmware_library/    SD Card (FAT32)    GitHub Repository
 
 ---
 
-<p align="center">
-  <img src="image/APP1.JPG" alt="System Diagram" width="45%">
-  <img src="image/APP2.JPG" alt="User Interface" width="45%">
-</p>
+## 🎮 Giao diện OLED Tabs UI
+
+📌 **[Xem UI Mockup tương tác (HTML)](https://htmlpreview.github.io/?https://github.com/phucttp/sd-flash-esp32/blob/main/landing-page/index.html)** - Mô phỏng giao diện trên web
+
+### Cấu trúc Tab:
+```
+┌──────────────────────────────────┐
+│  [FW]  Tools  Status  Info      │  ◄── Tab bar (UP+DOWN đổi tab)
+├──────────────────────────────────┤
+│                                  │
+│   ► ESP32_C3_V1                  │  ◄── Nội dung tab
+│     ESP32_S3_V2                  │      (UP/DOWN chọn item)
+│     ESP32_RELAY                  │
+│                                  │
+│                                  │
+│──────────────────────────────────│
+│  OK:Flash                        │  ◄── Hint bar
+└──────────────────────────────────┘
+```
+
+### Chi tiết các Tab:
+
+| Tab | Chức năng | Items |
+|-----|-----------|-------|
+| **FW** | Danh sách firmware từ SD | Dynamic (từ index.txt) |
+| **Tools** | Công cụ hệ thống | Sync, Config WiFi/URL, Monitor, Erase, Scan Boot |
+| **Status** | Trạng thái real-time | Progress bar, State text |
+| **Info** | Thông tin hệ thống | Version, Author, Build, Chip |
+
+### Điều khiển:
+```
+┌─────────────────────────────────────────────────────┐
+│                                                     │
+│   [UP] + [DOWN] cùng lúc  →  Chuyển Tab (trái/phải)│
+│                                                     │
+│   [UP] riêng lẻ           →  Di chuyển lên         │
+│   [DOWN] riêng lẻ         →  Di chuyển xuống       │
+│   [OK]                    →  Chọn/Xác nhận         │
+│                                                     │
+└─────────────────────────────────────────────────────┘
+```
+
+---
 
 ## 📂 Cấu trúc Thẻ SD
 
@@ -245,27 +289,35 @@ python FlashPorter.py
 - Copy ra thẻ SD (với PKCS7 padding)
 - Mã hóa AES-128-CBC và push lên GitHub
 
-### Nạp Firmware:
-1. Cuộn bằng UP/DOWN để chọn firmware
-2. Nhấn OK
-3. Đợi "Flashing..." → "Done!"
-4. Hệ thống tự động restart
+### Nạp Firmware (Tab FW):
+1. Mở tab **FW** (UP+DOWN nếu cần chuyển tab)
+2. Cuộn UP/DOWN để chọn firmware
+3. Nhấn OK → Xác nhận dialog
+4. Đợi "Flashing..." → "Done!"
+5. Hệ thống tự động restart
 
-### Đồng bộ WiFi:
-1. Chọn "Sync" từ menu
-2. Nhấn UP để xác nhận (hoặc DOWN để cấu hình WiFi)
-3. Đợi kết nối WiFi
+### Đồng bộ WiFi (Tab Tools → Sync):
+1. Chuyển sang tab **Tools** (UP+DOWN)
+2. Chọn "1. Sync Firmware" → OK
+3. Xác nhận dialog → Kết nối WiFi
 4. Đợi tải và giải mã firmware
-5. Hệ thống restart, menu cập nhật
+5. Hệ thống restart, tab FW cập nhật
 
-### Monitor Target:
-1. Chọn "Monitor" từ menu
-2. Xem log qua UART (hiển thị trên PC serial monitor)
+### Cấu hình WiFi/URL (Tab Tools → Config):
+1. Tab **Tools** → "2. Config WiFi/URL" → OK
+2. Captive Portal khởi động
+3. Kết nối WiFi "FlashPorter_Config" từ điện thoại
+4. Cấu hình WiFi SSID/Password và Server URL
+5. Lưu → Hệ thống restart
+
+### Monitor Target (Tab Tools → Monitor):
+1. Tab **Tools** → "3. Monitor/Test" → OK
+2. Xem log real-time trên OLED (7 dòng cuối)
 3. Nhấn OK để thoát
 
-### Chip Erase:
-1. Chọn "Erase" từ menu
-2. Đợi "Erasing..." → "SUCCESS!"
+### Chip Erase (Tab Tools → Erase):
+1. Tab **Tools** → "4. Erase Chip" → OK
+2. Xác nhận dialog → Đợi "Erasing..." → "SUCCESS!"
 
 ---
 
@@ -288,8 +340,11 @@ Xem thêm trong thư mục `docs/`:
 - `bblanchon/ArduinoJson` - JSON parsing
 - `mbedtls` - AES encryption
 
+**Custom Components:**
+- `OledUI` - Thư viện UI tùy chỉnh (Tabs, Menu, Dialog, Progress)
+
 **Arduino Libraries (via component):**
-- `Adafruit_SSD1306` - OLED display driver
+- `Adafruit_SH110X` - OLED SH1106G display driver
 - `Adafruit_GFX` - Graphics library
 - `WiFiManager` - WiFi configuration portal
 
@@ -307,10 +362,11 @@ Xem thêm trong thư mục `docs/`:
 
 ## 🐛 Troubleshooting
 
-**OLED không hiển thị:**
-- Kiểm tra kết nối I2C (SDA/SCL)
+**OLED SH1106G không hiển thị:**
+- Kiểm tra kết nối I2C (SDA: GPIO8, SCL: GPIO9)
 - Xác nhận địa chỉ I2C là 0x3C
 - Kiểm tra nguồn 3.3V
+- Màn hình phải là SH1106G 128x64 (không phải SSD1306)
 
 **Thẻ SD mount thất bại:**
 - Kiểm tra định dạng FAT32
@@ -335,4 +391,4 @@ Fork → Branch → Commit → Pull Request
 
 ---
 
-**MIT License** | **TTP27** (2025) | **v1.0.0** (27/11/2025)
+**MIT License** | **TTP27** (2025) | **v1.1.0** (31/01/2026) - Tabs UI Update
