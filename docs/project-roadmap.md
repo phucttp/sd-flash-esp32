@@ -1,374 +1,425 @@
-# Project Roadmap - ESP32 Multi-Flasher
+# Lộ Trình Dự Án - ESP32 Multi-Flasher
 
-## Current Status
+## Trạng Thái Hiện Tại
 
-**Version:** 1.0.0
-**Status:** Production-ready MVP
-**Last Updated:** 2025-11-27
-
----
-
-## Implemented Features (v1.0.0)
-
-### Core Functionality ✅
-- [x] Offline firmware flashing from SD card
-- [x] OLED menu interface with 3-button navigation
-- [x] JSON-based firmware catalog (index.txt)
-- [x] Multi-segment flash (bootloader + partition + app)
-- [x] MD5 verification post-flash
-- [x] Target boot control (EN/BOOT GPIO)
-- [x] System restart after operations (memory management)
-
-### Online Sync ✅
-- [x] WiFi connection via WiFiManager
-- [x] Captive portal for WiFi/server configuration
-- [x] Remote firmware download (HTTP/HTTPS)
-- [x] AES-128-CBC encrypted firmware decryption
-- [x] Smart sync (compare local vs remote index)
-- [x] Force clean mode (long-press to delete all local)
-- [x] Configuration files on SD (/config/*.txt)
-
-### Advanced Features ✅
-- [x] UART monitor mode (view Target logs)
-- [x] Chip erase command
-- [x] Progress feedback on OLED
-- [x] ESP-IDF logging system integration
-- [x] Arduino framework compatibility
-- [x] FAT32 SD card support (8.3 filename format)
-
-### Hardware Support ✅
-- [x] ESP32-C3 primary target
-- [x] SSD1306 OLED (128x32, I2C)
-- [x] SD card (SPI mode)
-- [x] Button debouncing with long-press detection
+**Phiên bản:** 1.0.1
+**Trạng thái:** MVP sẵn sàng sử dụng
+**Cập nhật:** 2026-01-30
 
 ---
 
-## Known Limitations
+## ✅ Kết Nối Universal: Software Brute-Force (v1.0.1)
 
-### Hardware Constraints
-- **RAM:** Limited by ESP32-C3 (~400KB total, ~200KB usable)
-- **SD Card:** FAT32 only, 8.3 filename format mandatory
-- **WiFi:** 2.4GHz only (no 5GHz support)
-- **Display:** 128x32 pixels limits visible menu items (~2 at a time)
+**Trạng thái:** HOÀN THÀNH
+**Độ ưu tiên:** QUAN TRỌNG
+**Hoàn thành:** 2026-01-30
 
-### Software Limitations
-- **No Multi-threading:** Single-threaded Arduino loop, all operations blocking
-- **No Persistent State:** System restarts after each operation
-- **No Error Recovery:** Flash interruption requires manual restart
-- **No Logging to SD:** All logs via UART only (volatile)
-- **No Secure Boot:** Host firmware unencrypted on flash
-- **AES Keys in Plaintext:** Stored on SD card (physical access risk)
+### Vấn đề ban đầu
 
-### FlashPorter Tool Status
-- **Status:** Mentioned in README, implementation details unknown
-- **Alternative:** Manual SD card preparation via JSON editing
+Flasher gặp vấn đề tương thích với các loại devkit khác nhau:
+- Logic GPIO đảo ngược tùy board
+- Timing khác nhau (RC filter, capacitor)
+- esptool dùng USB-UART chip có circuit chuẩn, FlashPod nối trực tiếp GPIO
 
----
+### Giải pháp: Software Brute-Force
 
-## Roadmap
+Thử tất cả 12 tổ hợp GPIO logic + timing cho đến khi kết nối thành công:
 
-### v1.1 - Stability & UX (Short-term)
+```cpp
+// 4 GPIO combinations x 3 timing profiles = 12 lần thử
+const int combinations[4][2] = {
+    {1, 1},  // RST đảo, BOOT đảo
+    {1, 0},  // RST đảo, BOOT thường
+    {0, 1},  // RST thường, BOOT đảo
+    {0, 0},  // RST thường, BOOT thường
+};
+const uint32_t timings[3][2] = {{100, 50}, {100, 100}, {200, 200}};
+```
 
-**Priority:** High
-**Timeline:** 1-2 months
+### Animation khi kết nối
 
-#### Bug Fixes & Improvements
-- [ ] Add watchdog timer for hang detection
-- [ ] Implement flash operation retry logic (3 attempts)
-- [ ] Add low battery detection (if battery-powered)
-- [ ] Improve error messages (more descriptive OLED feedback)
-- [ ] Add progress bar animation (not just percentage)
+```
+┌────────────────────┐
+│  Connecting |      │  <- spinner xoay: | / - \
+│  Try 5/12...       │  <- đếm số lần thử
+└────────────────────┘
+```
 
-#### User Experience
-- [ ] Boot splash screen with version info
-- [ ] Sound feedback (buzzer on success/error) - optional
-- [ ] LED status indicator (flashing during flash/sync)
-- [ ] Confirmation dialog for destructive operations (Erase, Force Clean)
-- [ ] Last flashed firmware indicator in menu
+### Công việc đã hoàn thành
 
-#### Documentation
-- [ ] Detailed troubleshooting guide with photos
-- [ ] Video tutorial for setup and usage
-- [ ] FlashPorter tool documentation and binary release
-- [ ] Schematic diagram for hardware connections
-- [ ] BOM (Bill of Materials) for production
+- [x] Implement `try_all_reset_combinations()` với 12 tổ hợp
+- [x] Thêm animation spinner + đếm số lần thử
+- [x] Test với DevKitC, NodeMCU, ESP32-C3, module trần
 
 ---
 
-### v1.2 - Advanced Features (Mid-term)
+## Tính Năng Đã Implement (v1.0.0)
 
-**Priority:** Medium
-**Timeline:** 3-4 months
+### Chức năng chính ✅
+- [x] Nạp firmware offline từ thẻ SD
+- [x] Giao diện menu OLED với 3 nút điều hướng
+- [x] Catalog firmware dạng JSON (index.txt)
+- [x] Nạp đa phân vùng (bootloader + partition + app)
+- [x] Xác thực MD5 sau khi nạp
+- [x] Điều khiển boot Target (EN/BOOT GPIO)
+- [x] Restart hệ thống sau mỗi thao tác (quản lý bộ nhớ)
 
-#### Firmware Management
-- [ ] Firmware version comparison (auto-suggest updates)
-- [ ] Rollback feature (keep previous firmware)
-- [ ] Batch flash mode (flash multiple targets sequentially)
-- [ ] Custom flash addresses (not just 0x1000/0x8000/0x10000)
-- [ ] Support for additional partitions (NVS, SPIFFS, etc.)
+### Đồng bộ Online ✅
+- [x] Kết nối WiFi qua WiFiManager
+- [x] Captive portal cấu hình WiFi/server
+- [x] Tải firmware từ xa (HTTP/HTTPS)
+- [x] Giải mã firmware mã hóa AES-128-CBC
+- [x] Đồng bộ thông minh (so sánh local vs remote)
+- [x] Chế độ xóa sạch (nhấn giữ để xóa tất cả local)
+- [x] File cấu hình trên SD (/config/*.txt)
 
-#### Logging & Diagnostics
-- [ ] Log to SD card (persistent error logs)
-- [ ] Export flash log to file (timestamp, operations, errors)
-- [ ] Target chip detection (ESP32/C3/S3 auto-detect)
-- [ ] Flash size detection and verification
-- [ ] Monitor mode with log filtering (error/warning only)
+### Tính năng nâng cao ✅
+- [x] Chế độ Monitor UART (xem log Target)
+- [x] Lệnh xóa chip
+- [x] Hiển thị tiến trình trên OLED
+- [x] Tích hợp hệ thống log ESP-IDF
+- [x] Tương thích Arduino framework
+- [x] Hỗ trợ thẻ SD FAT32 (định dạng tên 8.3)
 
-#### Security Enhancements
-- [ ] Secure boot for Host ESP32-C3
-- [ ] Flash encryption for Host firmware
-- [ ] HTTPS certificate validation for downloads
-- [ ] Encrypted AES keys (store in NVS, not SD plaintext)
-- [ ] Firmware signature verification (digital signatures)
-- [ ] Access control (PIN/password for operations)
-
----
-
-### v1.3 - Scalability (Long-term)
-
-**Priority:** Low
-**Timeline:** 6-12 months
-
-#### Multi-Target Support
-- [ ] Flash multiple targets in parallel (via UART multiplexing)
-- [ ] Support for non-ESP targets (STM32, RP2040 via SWD/JTAG)
-- [ ] Target auto-detection (probe connected chips)
-- [ ] Per-target configuration profiles
-
-#### Advanced UI
-- [ ] Larger OLED (128x64) support
-- [ ] Touch screen interface (optional)
-- [ ] Web UI (WiFi AP mode, control via browser)
-- [ ] Mobile app integration (BLE control)
-- [ ] Multi-language support (EN/VN/etc.)
-
-#### Network Features
-- [ ] MQTT for remote control/monitoring
-- [ ] Cloud firmware repository integration
-- [ ] Scheduled sync (auto-update at specific times)
-- [ ] Firmware update notifications (push alerts)
-- [ ] Multi-device fleet management
-
-#### Production Features
-- [ ] Factory test mode (automated testing sequence)
-- [ ] Serial number tracking (log which firmware flashed to which device)
-- [ ] QR code scanning for firmware selection
-- [ ] Barcode reader integration
-- [ ] Production statistics (total flashed, success rate)
+### Hỗ trợ phần cứng ✅
+- [x] ESP32-C3 làm Host chính
+- [x] OLED SH1106G (128x64, I2C)
+- [x] Thẻ SD (chế độ SPI)
+- [x] Chống rung nút nhấn với phát hiện nhấn giữ
+- [x] Hidden Tools Menu (UP+DOWN 3 giây)
 
 ---
 
-## Technical Debt
+## Hạn Chế Hiện Tại
 
-### Code Quality
-- [ ] Refactor Vietnamese comments to English (consistency)
-- [ ] Standardize header guards (`#pragma once` everywhere)
-- [ ] Add Doxygen documentation to all functions
+### Giới hạn phần cứng
+- **RAM:** Giới hạn bởi ESP32-C3 (~400KB tổng, ~200KB khả dụng)
+- **Thẻ SD:** Chỉ FAT32, bắt buộc định dạng tên 8.3
+- **WiFi:** Chỉ 2.4GHz (không hỗ trợ 5GHz)
+- **Màn hình:** 128x64 pixel, hiển thị ~6 dòng menu
+
+### Giới hạn phần mềm
+- **Không đa luồng:** Vòng lặp Arduino đơn luồng, tất cả thao tác blocking
+- **Không lưu trạng thái:** Hệ thống restart sau mỗi thao tác
+- **Không phục hồi lỗi:** Nạp bị gián đoạn cần restart thủ công
+- **Không ghi log SD:** Tất cả log qua UART (volatile)
+
+### Công cụ FlashPorter
+- **Trạng thái:** Đã có, đang phát triển thêm
+- **Thay thế:** Chuẩn bị thẻ SD thủ công qua JSON
+
+---
+
+## Lộ Trình
+
+### v1.0.1 - Kết nối Brute-Force (HOÀN THÀNH)
+
+**Độ ưu tiên:** QUAN TRỌNG
+**Trạng thái:** HOÀN THÀNH (2026-01-30)
+
+#### Thay đổi code (Đã xong)
+- [x] Implement `try_all_reset_combinations()` - brute force 12 tổ hợp GPIO
+- [x] Thêm animation kết nối (spinner + đếm số lần thử)
+- [x] Test với DevKitC, NodeMCU, ESP32-C3, module trần
+
+---
+
+### v1.1 - Ổn định & Trải nghiệm (Ngắn hạn)
+
+**Độ ưu tiên:** Cao
+**Thời gian:** 1-2 tháng
+
+#### Sửa lỗi & Cải tiến
+- [ ] Thêm watchdog timer phát hiện treo máy
+- [ ] Logic retry nạp firmware (3 lần thử)
+- [ ] Phát hiện pin yếu (nếu dùng pin)
+- [ ] Cải thiện thông báo lỗi (phản hồi OLED chi tiết hơn)
+- [ ] Animation thanh tiến trình (không chỉ phần trăm)
+
+#### Trải nghiệm người dùng
+- [ ] Màn hình khởi động với thông tin phiên bản
+- [ ] Phản hồi âm thanh (còi khi thành công/lỗi) - tùy chọn
+- [ ] Đèn LED trạng thái (nhấp nháy khi nạp/đồng bộ)
+- [ ] Hộp thoại xác nhận cho thao tác nguy hiểm (Xóa, Xóa sạch)
+- [ ] Hiển thị firmware vừa nạp trong menu
+
+#### Tài liệu
+- [ ] Hướng dẫn khắc phục sự cố chi tiết với hình ảnh
+- [ ] Video hướng dẫn thiết lập và sử dụng
+- [ ] Tài liệu và bản phát hành FlashPorter
+- [ ] Sơ đồ mạch kết nối phần cứng
+- [ ] BOM (Danh sách vật liệu) cho sản xuất
+
+---
+
+### v1.2 - Tính năng nâng cao (Trung hạn)
+
+**Độ ưu tiên:** Trung bình
+**Thời gian:** 3-4 tháng
+
+#### Quản lý Firmware
+- [ ] So sánh phiên bản firmware (gợi ý cập nhật tự động)
+- [ ] Tính năng rollback (giữ firmware trước)
+- [ ] Chế độ nạp hàng loạt (nạp nhiều target tuần tự)
+- [ ] Địa chỉ flash tùy chỉnh (không chỉ 0x1000/0x8000/0x10000)
+- [ ] Hỗ trợ phân vùng bổ sung (NVS, SPIFFS, v.v.)
+
+#### Log & Chẩn đoán
+- [ ] Ghi log vào thẻ SD (log lỗi lưu trữ)
+- [ ] Xuất log nạp ra file (timestamp, thao tác, lỗi)
+- [ ] Phát hiện loại chip Target (ESP32/C3/S3 tự động)
+- [ ] Phát hiện và xác minh kích thước flash
+- [ ] Chế độ Monitor với lọc log (chỉ error/warning)
+
+#### Bảo mật nâng cao
+- [ ] Secure boot cho Host ESP32-C3
+- [ ] Mã hóa flash cho firmware Host
+- [ ] Xác thực chứng chỉ HTTPS cho download
+- [ ] Mã hóa key AES (lưu trong NVS, không phải SD plaintext)
+- [ ] Xác minh chữ ký firmware (chữ ký số)
+- [ ] Kiểm soát truy cập (PIN/mật khẩu cho thao tác)
+
+---
+
+### v1.3 - netFlashTTP: Nạp song song đa node (Dài hạn)
+
+**Độ ưu tiên:** Trung bình
+**Thời gian:** 6-12 tháng
+
+#### Giao thức netFlashTTP
+
+Hệ thống nạp firmware song song cho nhiều target cùng lúc qua mạng ESP-NOW wireless.
+
+```
+                         ┌─────────────────┐
+                         │   FlashPod      │
+                         │    MASTER       │
+                         │  (Controller)   │
+                         └────────┬────────┘
+                                  │ ESP-NOW (netFlashTTP)
+              ┌───────────────────┼───────────────────┐
+              │                   │                   │
+              ▼                   ▼                   ▼
+       ┌────────────┐      ┌────────────┐      ┌────────────┐
+       │  Node 1    │      │  Node 2    │      │  Node 3    │
+       │  (Slave)   │      │  (Slave)   │      │  (Slave)   │
+       │  SD Card   │      │  SD Card   │      │  SD Card   │
+       └─────┬──────┘      └─────┬──────┘      └─────┬──────┘
+             │                   │                   │
+             ▼                   ▼                   ▼
+       ┌──────────┐        ┌──────────┐        ┌──────────┐
+       │ Target 1 │        │ Target 2 │        │ Target 3 │
+       │  ESP32   │        │  ESP32   │        │  ESP32   │
+       └──────────┘        └──────────┘        └──────────┘
+```
+
+**Đặc điểm:**
+- Mỗi node lưu firmware trên SD Card riêng → Flash song song 100%
+- Master chỉ gửi lệnh đồng bộ → Bandwidth không phải bottleneck
+- Wireless (ESP-NOW) → Không cần nối dây giữa các node
+- Mở rộng: 1 Master điều khiển tối đa 20 nodes
+
+#### Giao diện Master OLED
+
+```
+┌────────────────────┐
+│ netFlashTTP: FW001 │
+├────────────────────┤
+│ Node1: ████░░ 67%  │
+│ Node2: █████░ 83%  │
+│ Node3: ██████ XONG │
+│ Node4: ░░░░░░ LỖI  │
+└────────────────────┘
+```
+
+#### Công việc cần làm
+
+- [ ] Thiết kế đặc tả giao thức netFlashTTP
+- [ ] Implement giao tiếp ESP-NOW master/slave
+- [ ] Tạo cơ chế phát hiện & ghép nối node
+- [ ] Build firmware slave (tối giản, không OLED)
+- [ ] Thêm hiển thị trạng thái đa node trên Master OLED
+- [ ] Implement lệnh nạp broadcast
+- [ ] Thêm điều khiển node riêng lẻ (retry, bỏ qua)
+- [ ] Thiết kế PCB "Expansion Node"
+- [ ] Viết hướng dẫn ghép nối & tài liệu
+
+#### Mô hình kinh doanh
+
+| Sản phẩm | Mô tả | Giá |
+|----------|-------|-----|
+| FlashPod Lite | Đơn node, bộ kit DIY | 199K |
+| FlashPod Standard | Đơn node, đã lắp ráp | 399K |
+| FlashPod Pro | Master + 2 nodes | 799K |
+| Expansion Node | Node slave bổ sung | 150K |
+| Factory Kit | Master + 8 nodes | 2.5M |
+
+---
+
+### v2.0 - Hỗ trợ đa MCU (Tương lai)
+
+**Độ ưu tiên:** Thấp
+**Thời gian:** 12-18 tháng
+
+#### Tầm nhìn: Programmer di động đa năng
+
+Mở rộng hỗ trợ nhiều loại MCU, không chỉ ESP32.
+
+| Họ MCU | Giao thức | Độ khó | Trạng thái |
+|--------|-----------|--------|------------|
+| ESP32/C3/S3/S2 | UART ROM bootloader | ✅ Xong | v1.0 |
+| STM32F0/F1/F4 | UART bootloader | Trung bình | v2.0 |
+| STM32G0/G4 | UART bootloader | Trung bình | v2.0 |
+| ATmega328/2560 | STK500v1 (ISP) | Trung bình | v2.1 |
+| ATtiny (UPDI) | Giao thức UPDI | Trung bình | v2.1 |
+| RP2040 | USB Mass Storage | Khó | Nghiên cứu |
+| nRF52 | SWD/JTAG | Khó | Nghiên cứu |
+
+**Điểm bán hàng độc đáo:**
+- ✅ Không cần PC (standalone)
+- ✅ Đa MCU trong 1 thiết bị
+- ✅ Giá rẻ hơn J-Link/công cụ chuyên nghiệp
+- ✅ Mã nguồn mở, thân thiện DIY
+
+---
+
+### Tính năng Legacy v1.x
+
+#### Giao diện nâng cao
+- [ ] Hỗ trợ OLED lớn hơn (128x64)
+- [ ] Giao diện màn hình cảm ứng (tùy chọn)
+- [ ] Web UI (chế độ WiFi AP, điều khiển qua trình duyệt)
+- [ ] Tích hợp ứng dụng di động (điều khiển BLE)
+- [ ] Hỗ trợ đa ngôn ngữ (EN/VN/v.v.)
+
+#### Tính năng sản xuất
+- [ ] Chế độ test nhà máy (chuỗi test tự động)
+- [ ] Theo dõi số serial (log firmware nào nạp vào thiết bị nào)
+- [ ] Quét mã QR để chọn firmware
+- [ ] Tích hợp đầu đọc barcode
+- [ ] Thống kê sản xuất (tổng số nạp, tỷ lệ thành công)
+
+---
+
+## Nợ Kỹ Thuật
+
+### Chất lượng code
+- [ ] Refactor comment tiếng Việt sang tiếng Anh (nhất quán)
+- [ ] Chuẩn hóa header guards (`#pragma once` everywhere)
+- [ ] Thêm tài liệu Doxygen cho tất cả hàm
 - [ ] Implement unit tests (Google Test framework)
-- [ ] Static analysis integration (Clang-Tidy, Cppcheck)
-- [ ] Code formatting with clang-format (auto-format on commit)
+- [ ] Tích hợp phân tích tĩnh (Clang-Tidy, Cppcheck)
 
-### Architecture Improvements
-- [ ] Separate hardware abstraction layer (HAL)
-- [ ] Implement dependency injection (reduce global state)
-- [ ] Use FreeRTOS tasks (concurrent menu + background sync)
-- [ ] Implement event-driven architecture (message queues)
-- [ ] Add plugin system (loadable modules for new features)
+### Cải tiến kiến trúc
+- [ ] Tách lớp trừu tượng phần cứng (HAL)
+- [ ] Implement dependency injection (giảm global state)
+- [ ] Dùng FreeRTOS tasks (menu + sync chạy đồng thời)
+- [ ] Implement kiến trúc hướng sự kiện (message queues)
 
-### Build System
-- [ ] CI/CD pipeline (GitHub Actions for auto-build)
-- [ ] Automated testing on hardware (ESP32-C3 test rig)
-- [ ] Binary release automation (GitHub Releases)
-- [ ] Over-the-Air (OTA) updates for Host firmware
-- [ ] Multi-target build support (C3/S3/S2)
+### Hệ thống build
+- [ ] Pipeline CI/CD (GitHub Actions auto-build)
+- [ ] Test tự động trên phần cứng (ESP32-C3 test rig)
+- [ ] Tự động phát hành binary (GitHub Releases)
+- [ ] Cập nhật OTA cho firmware Host
+- [ ] Hỗ trợ build đa target (C3/S3/S2)
 
 ---
 
-## Feature Requests (Community)
+## Mục Tiêu Hiệu Suất
 
-### Requested but Not Prioritized
-- [ ] Bluetooth firmware upload (BLE instead of WiFi)
-- [ ] USB mass storage mode (SD card accessible as USB drive)
-- [ ] Voice feedback (text-to-speech for status)
-- [ ] Remote desktop sharing (VNC for OLED screen)
-- [ ] Custom firmware post-processing (auto-patch binaries)
+### Mục tiêu v1.1
+- Thời gian khởi động: <2 giây (hiện tại: ~2-3s)
+- Nạp firmware 1MB: <20 giây (hiện tại: ~30s)
+- Đồng bộ 10 firmware: <60 giây (hiện tại: thay đổi)
+- Phản hồi menu: <30ms (hiện tại: <50ms)
 
----
-
-## Breaking Changes (Future Versions)
-
-### v2.0 (Major Refactor)
-**Tentative Timeline:** 12-18 months
-**Breaking Changes:**
-- Move from Arduino to pure ESP-IDF (performance)
-- New JSON schema for index.txt (backward incompatible)
-- Remove restart-after-operation (task-based architecture)
-- Require ESP32-S3 minimum (more RAM, USB OTG)
-- Switch to LittleFS (deprecate FAT32)
-
-**Migration Path:**
-- v1.x will remain supported for 12 months
-- Migration tool provided for index.txt conversion
-- Dual-boot support (v1.x fallback)
+### Mục tiêu v1.2
+- Nạp song song 4 target: <30 giây tổng
+- Thời gian phản hồi Web UI: <100ms mỗi thao tác
+- Ghi log SD: <10ms mỗi entry (non-blocking)
 
 ---
 
-## Research & Exploration
+## Chỉ Số Thành Công
 
-### Under Investigation
-- [ ] RP2040 as Host (cheaper than ESP32, PIO for UART)
-- [ ] E-ink display (low power, always-on)
-- [ ] Solar charging integration (field deployment)
-- [ ] LoRaWAN for remote firmware delivery (long-range)
-- [ ] FPGA-based flash acceleration (parallel UART)
+### Baseline v1.0
+- Tỷ lệ nạp thành công: >95% (mục tiêu: >99%)
+- Độ hài lòng người dùng: Chưa đo (mục tiêu: khảo sát trong v1.1)
+- Báo lỗi: 0 nghiêm trọng, 2 nhỏ (theo dõi trên GitHub)
 
-### Proof of Concept Needed
-- [ ] Encrypted SD card filesystem (full-disk encryption)
-- [ ] AI-powered firmware analysis (detect compatibility issues)
-- [ ] Blockchain for firmware provenance (audit trail)
-- [ ] Quantum-resistant encryption (future-proofing)
+### Mục tiêu v1.1
+- Tỷ lệ nạp thành công: >99%
+- Không có lỗi nghiêm trọng trong production
+- 50+ người dùng active (GitHub stars/forks)
 
----
-
-## Performance Targets
-
-### v1.1 Goals
-- Boot time: <2 seconds (current: ~2-3s)
-- Flash 1MB firmware: <20 seconds (current: ~30s)
-- Sync 10 firmwares: <60 seconds (current: varies)
-- Menu response: <30ms (current: <50ms)
-
-### v1.2 Goals
-- Parallel flash 4 targets: <30 seconds total
-- Web UI response time: <100ms per action
-- Log to SD: <10ms per entry (non-blocking)
-
----
-
-## Success Metrics
-
-### v1.0 Baseline
-- Flash success rate: >95% (target: >99%)
-- User satisfaction: Not measured (target: survey in v1.1)
-- Bug reports: 0 critical, 2 minor (tracked on GitHub)
-- Adoption: Unknown (no telemetry)
-
-### v1.1 Targets
-- Flash success rate: >99%
-- Zero critical bugs in production
-- 50+ active users (GitHub stars/forks)
-- <5% support request rate
-
-### v1.2 Targets
-- 1000+ firmware flashes logged
-- 10+ production deployments
+### Mục tiêu v1.2
+- 1000+ lần nạp firmware được ghi log
+- 10+ triển khai sản xuất
 - 100+ GitHub stars
-- 3+ community contributors
+- 3+ người đóng góp cộng đồng
 
 ---
 
-## Dependencies & Blockers
+## Đánh Giá Rủi Ro
 
-### External Dependencies
-- **ESP-IDF:** Track v5.2.x releases (security patches)
-- **ArduinoJson:** Monitor for breaking changes
-- **Adafruit Libraries:** Pin to stable versions
-- **WiFiManager:** Community-maintained, potential deprecation risk
+### Rủi ro kỹ thuật
+- **Rò rỉ bộ nhớ:** Giảm thiểu bằng chiến lược restart, nhưng giới hạn độ phức tạp tính năng
+- **Hỏng thẻ SD:** Không có journaling, mất điện khi ghi là thảm họa
+- **Độ tin cậy WiFi:** Captive portal có thể fail trên mạng enterprise
+- **Bảo mật:** Key AES plaintext trên SD dễ bị tấn công vật lý
 
-### Potential Blockers
-- **ESP32-C3 Supply:** Chip shortages may delay production
-- **SD Card Compatibility:** Some cards fail FAT32 mount (test matrix needed)
-- **WiFiManager Portal:** Occasional captive portal detection failures on iOS
-- **AES Performance:** Large firmware downloads may timeout (need streaming optimization)
-
----
-
-## Community Engagement
-
-### Contribution Areas
-- [ ] Create CONTRIBUTING.md guide
-- [ ] Issue templates for bug reports/feature requests
-- [ ] Code of Conduct (adopt Contributor Covenant)
-- [ ] Set up Discussions forum (GitHub Discussions)
-- [ ] Monthly community calls (if interest grows)
-
-### Documentation Needs
-- [ ] Beginner tutorial (step-by-step with photos)
-- [ ] Advanced configuration guide (custom AES, HTTPS certs)
-- [ ] API reference for module integration
-- [ ] Architecture deep-dive (this doc + more)
-- [ ] Porting guide (adapt for other ESP32 variants)
+### Rủi ro dự án
+- **Availability maintainer:** Một maintainer (TTP27), bus factor = 1
+- **Tăng trưởng cộng đồng:** User base nhỏ có thể giới hạn feedback và đóng góp
+- **Lỗi thời phần cứng:** ESP32-C3 có thể bị thay thế bởi chip mới hơn
 
 ---
 
-## Funding & Resources
+## Nhật Ký Quyết Định
 
-### Current Status
-- **Funding:** Self-funded (TTP27)
-- **Hardware:** Personal development boards
-- **Hosting:** GitHub (free tier)
+### Quyết định kiến trúc chính
 
-### Future Needs
-- PCB manufacturing (custom flasher board design)
-- Cloud hosting for firmware repository (S3/CDN)
-- Test hardware (multiple ESP32 variants)
-- Community support infrastructure (Discord/Slack)
+**Quyết định:** Software brute-force cho boot control
+**Ngày:** 2026-01-30
+**Lý do:** Direct GPIO control không universal, mỗi devkit có logic/timing khác nhau. Dùng SOFTWARE brute-force thử tất cả 12 tổ hợp GPIO logic + timing.
+**Đánh đổi:** Thời gian kết nối 1-5 giây, nhưng KHÔNG cần thay đổi phần cứng
+**Trạng thái:** HOÀN THÀNH - Đã implement trong v1.0.1
 
 ---
 
-## Risk Assessment
+**Quyết định:** Restart sau mỗi thao tác
+**Lý do:** Đơn giản hóa quản lý bộ nhớ, tránh rò rỉ
+**Đánh đổi:** UX chậm hơn, không lưu trạng thái
+**Trạng thái:** Cam kết cho v1.x, xem xét lại trong v2.0
 
-### Technical Risks
-- **Memory Leaks:** Mitigated by restart strategy, but limits feature complexity
-- **SD Card Corruption:** No journaling, power loss during write is catastrophic
-- **WiFi Reliability:** Captive portals may fail on enterprise networks
-- **Security:** Plaintext AES keys on SD are vulnerable to physical access
+**Quyết định:** Arduino framework + ESP-IDF
+**Lý do:** Tận dụng thư viện có sẵn, phát triển dễ hơn
+**Đánh đổi:** Binary lớn hơn, chậm hơn IDF thuần
+**Trạng thái:** Cam kết cho v1.x, IDF thuần trong v2.0
 
-### Project Risks
-- **Maintainer Availability:** Single maintainer (TTP27), bus factor = 1
-- **Community Growth:** Small user base may limit feedback and contributions
-- **Hardware Obsolescence:** ESP32-C3 may be superseded by newer chips
-- **Library Dependencies:** Unmaintained libraries could break build
-
----
-
-## Decision Log
-
-### Key Architectural Decisions
-
-**Decision:** Restart after each operation
-**Rationale:** Simplifies memory management, prevents leaks
-**Trade-off:** Slower UX, no persistent state
-**Status:** Committed for v1.x, revisit in v2.0
-
-**Decision:** Arduino framework + ESP-IDF
-**Rationale:** Leverage existing libraries, easier development
-**Trade-off:** Larger binary size, slower than pure IDF
-**Status:** Committed for v1.x, pure IDF in v2.0
-
-**Decision:** FAT32 for SD card
-**Rationale:** Universal compatibility, simple implementation
-**Trade-off:** 8.3 filename limit, no journaling
-**Status:** Committed for v1.x, LittleFS in v2.0
-
-**Decision:** Single-threaded architecture
-**Rationale:** Simpler code, no synchronization needed
-**Trade-off:** All operations blocking, poor concurrency
-**Status:** Committed for v1.x, FreeRTOS tasks in v1.2
+**Quyết định:** FAT32 cho thẻ SD
+**Lý do:** Tương thích universal, implement đơn giản
+**Đánh đổi:** Giới hạn tên file 8.3, không có journaling
+**Trạng thái:** Cam kết cho v1.x, LittleFS trong v2.0
 
 ---
 
-## Changelog
+## Lịch Sử Thay Đổi
 
-### v1.0.0 (2025-11-27) - Initial Release
-- Complete offline and online firmware flashing
-- OLED menu with button navigation
-- WiFi sync with AES-128-CBC encryption
-- Monitor mode and chip erase
-- Documentation suite (README, PDR, architecture)
+### v1.0.1 (2026-01-30) - Software Brute-Force
+- Kết nối universal với brute-force 12 tổ hợp GPIO
+- Animation khi kết nối (spinner + đếm số lần thử)
+- Hidden Tools Menu (UP+DOWN 3 giây)
+- Loại bỏ item chức năng khỏi menu chính
+
+### v1.0.0 (2025-11-27) - Phát hành đầu tiên
+- Nạp firmware offline và online hoàn chỉnh
+- Menu OLED với điều hướng nút nhấn
+- Đồng bộ WiFi với mã hóa AES-128-CBC
+- Chế độ Monitor và xóa chip
+- Bộ tài liệu (README, PDR, architecture)
 
 ---
 
-**Roadmap Version:** 1.0
-**Next Review:** 2025-12-27 (monthly updates)
+**Phiên bản Roadmap:** 1.1
+**Đánh giá tiếp theo:** 2026-02-28 (cập nhật hàng tháng)

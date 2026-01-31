@@ -9,12 +9,16 @@
 
 // --- CẤU HÌNH CỨNG (Không đổi) ---
 #define BTN_UP    21
-#define BTN_DOWN  20
-#define BTN_OK    10
+#define BTN_DOWN  10
+#define BTN_OK    20
 #define SCREEN_WIDTH 128
 #define SCREEN_HEIGHT 64
 #define OLED_RESET -1
 #define OLED_I2C_ADDR 0x3C
+
+// --- GIÁ TRỊ TRẢ VỀ ĐẶC BIỆT ---
+#define MENU_NO_ACTION      -1   // Không có hành động
+#define MENU_TOOLS_GESTURE  -2   // Gesture UP+DOWN 3s -> Mở Tools Menu
 
 // --- KHAI BÁO CÁC HÀM CÔNG CỘNG ---
 

@@ -16,46 +16,64 @@ static int _menuTopIndex;
 static const int _maxLines = 8;    // NEW: SH1106G 64 / 8 = 8 dòng
 
 static unsigned long _lastDebounce = 0;
-static const unsigned long _debounceDelay = 200;
+static unsigned long _holdStartTime = 0;   // [NEW] Thời điểm bắt đầu giữ nút
+static bool _isHolding = false;            // [NEW] Đang giữ nút?
+static const unsigned long _debounceDelay = 200;      // Delay bình thường
+static const unsigned long _fastScrollDelay = 80;     // Delay khi cuộn nhanh
+static const unsigned long _holdThreshold = 500;      // Giữ 500ms = cuộn nhanh
+
+// [V1] Gesture: UP+DOWN 3s -> Tools Menu
+static unsigned long _comboStartTime = 0;  // Thời điểm bắt đầu giữ combo UP+DOWN
+static bool _comboActive = false;          // Đang giữ combo?
+static const unsigned long _comboThreshold = 800;  // 0.8 giây
 // extern Adafruit_SSD1306 display;  // OLD
 extern Adafruit_SH1106G display;      // NEW: SH1106G
 
 // --- HÀM NỘI BỘ (STATIC) ---
 
-// (CẬP NHẬT) Hàm drawMenu() giờ sẽ thông minh hơn
+// [FIX] drawMenu() với position indicator
 static void drawMenu() {
     _display->clearDisplay();
     _display->setTextSize(1);
-    _display->setTextColor(SH110X_WHITE);  // NEW: SH110X
+    _display->setTextColor(SH110X_WHITE);
 
-    // Vòng lặp này chỉ chạy 4 lần (cho 4 dòng)
+    // Vẽ các mục menu (tối đa _maxLines dòng)
     for (int i = 0; i < _maxLines; i++) {
-
-        // Tính toán index thật của mục menu
         int itemIndex = _menuTopIndex + i;
+        if (itemIndex >= _menuLength) break;
 
-        // Nếu itemIndex vượt quá menu, không vẽ nữa
-        if (itemIndex >= _menuLength) {
-            break;
-        }
-
-        // Tính toán tọa độ Y cho dòng (luôn là 0, 8, 16, 24)
         int yPos = i * 8;
-
-        // Lấy nội dung text
         const char* itemText = _menuItems[itemIndex];
 
-        // So sánh index thật với index đang chọn
+        // Highlight mục đang chọn
         if (itemIndex == _currentIndex) {
-            _display->fillRect(0, yPos, SCREEN_WIDTH, 8, SH110X_WHITE);        // NEW: SH110X
-            _display->setTextColor(SH110X_BLACK, SH110X_WHITE); // highlight   // NEW: SH110X
+            _display->fillRect(0, yPos, SCREEN_WIDTH, 8, SH110X_WHITE);
+            _display->setTextColor(SH110X_BLACK, SH110X_WHITE);
         } else {
-            _display->setTextColor(SH110X_WHITE, SH110X_BLACK);                // NEW: SH110X
+            _display->setTextColor(SH110X_WHITE, SH110X_BLACK);
         }
-        
+
         _display->setCursor(2, yPos);
         _display->println(itemText);
     }
+
+    // [NEW] Vẽ position indicator góc dưới phải (nếu có nhiều hơn 1 trang)
+    if (_menuLength > _maxLines) {
+        char posStr[24];  // Đủ lớn cho "2147483647/2147483647"
+        snprintf(posStr, sizeof(posStr), "%d/%d", _currentIndex + 1, _menuLength);
+
+        // Tính vị trí X để căn phải
+        int textWidth = strlen(posStr) * 6; // ~6 pixel/char ở textSize 1
+        int xPos = SCREEN_WIDTH - textWidth - 2;
+        int yPos = SCREEN_HEIGHT - 8; // Dòng cuối
+
+        // Vẽ nền đen để dễ đọc
+        _display->fillRect(xPos - 2, yPos, textWidth + 4, 8, SH110X_BLACK);
+        _display->setTextColor(SH110X_WHITE);
+        _display->setCursor(xPos, yPos);
+        _display->print(posStr);
+    }
+
     _display->display();
 }
 
@@ -88,59 +106,140 @@ const char* menu_get_id(int index) {
 }
 
 
-// (CẬP NHẬT) menu_update với logic SCROLLING
+// [V1] menu_update với FAST SCROLL và COMBO GESTURE
 int menu_update() {
-    if (millis() - _lastDebounce > _debounceDelay) {
-        
-        bool menuChanged = false; // Dùng cờ để biết khi nào cần vẽ lại
+    bool btnUp = (digitalRead(BTN_UP) == LOW);
+    bool btnDown = (digitalRead(BTN_DOWN) == LOW);
+    bool btnOk = (digitalRead(BTN_OK) == LOW);
 
-        // Nút UP
-        if (digitalRead(BTN_UP) == LOW) {
-            _currentIndex--;
-            if (_currentIndex < 0) {
-                // (MỚI) Quay vòng từ 0 lên cuối
-                _currentIndex = _menuLength - 1; 
-                // Cập nhật top index để thấy 4 mục cuối
-                _menuTopIndex = _menuLength - _maxLines;
-                if (_menuTopIndex < 0) _menuTopIndex = 0; // Cho list < 4 mục
-            }
-            
-            // (MỚI) Nếu index chọn < top index -> trượt menu xuống
-            if (_currentIndex < _menuTopIndex) {
-                _menuTopIndex = _currentIndex;
-            }
-            menuChanged = true;
-        }
-        // Nút DOWN
-        else if (digitalRead(BTN_DOWN) == LOW) {
-            _currentIndex++;
-            if (_currentIndex >= _menuLength) {
-                // (MỚI) Quay vòng từ cuối về 0
-                _currentIndex = 0; 
-                _menuTopIndex = 0; // Reset về đầu
-            }
+    // ============================================================
+    // [V1] COMBO GESTURE: UP + DOWN cùng lúc trong 3 giây -> Tools Menu
+    // ============================================================
+    if (btnUp && btnDown) {
+        if (!_comboActive) {
+            // Bắt đầu tracking combo
+            _comboStartTime = millis();
+            _comboActive = true;
+        } else {
+            // Đang giữ combo - tính thời gian
+            unsigned long elapsed = millis() - _comboStartTime;
 
-            // (MỚI) Nếu index chọn > (top + 3) -> trượt menu lên
-            // Vd: top=0, maxLines=4. Mục 3 (0+4-1) là mục cuối.
-            // Nếu _currentIndex > 3 (là 4), thì top=1 (4 - 4 + 1)
-            if (_currentIndex >= (_menuTopIndex + _maxLines)) {
-                _menuTopIndex = _currentIndex - _maxLines + 1;
-            }
-            menuChanged = true;
-        }
-        // Nút OK
-        else if (digitalRead(BTN_OK) == LOW) {
-            _lastDebounce = millis();
-            return _currentIndex; // Trả về index
-        }
+            // Hiển thị progress bar
+            int progress = (elapsed * 100) / _comboThreshold;
+            if (progress > 100) progress = 100;
 
-        // (MỚI) Chỉ vẽ lại khi menu thay đổi
-        if (menuChanged) {
-            drawMenu();
-            _lastDebounce = millis();
+            // Vẽ màn hình progress
+            _display->clearDisplay();
+            _display->setTextSize(1);
+            _display->setTextColor(SH110X_WHITE);
+
+            // Title
+            _display->setCursor(20, 10);
+            _display->println("TOOLS MENU");
+            _display->setCursor(15, 22);
+            _display->println("Hold to unlock...");
+
+            // Progress bar
+            int barX = 14;
+            int barY = 38;
+            int barW = 100;
+            int barH = 12;
+            _display->drawRect(barX, barY, barW, barH, SH110X_WHITE);
+            _display->fillRect(barX + 2, barY + 2, (barW - 4) * progress / 100, barH - 4, SH110X_WHITE);
+
+            // Countdown text
+            int remaining = (_comboThreshold - elapsed) / 1000 + 1;
+            if (remaining < 1) remaining = 0;
+            char countStr[16];
+            snprintf(countStr, sizeof(countStr), "%d sec", remaining);
+            _display->setCursor(50, 54);
+            _display->println(countStr);
+
+            _display->display();
+
+            // Đủ 3 giây -> Mở Tools Menu
+            if (elapsed >= _comboThreshold) {
+                _comboActive = false;
+                _comboStartTime = 0;
+                return MENU_TOOLS_GESTURE;
+            }
+        }
+        return MENU_NO_ACTION;  // Đang giữ combo, chưa xử lý gì khác
+    } else {
+        // Thả combo
+        if (_comboActive) {
+            _comboActive = false;
+            _comboStartTime = 0;
+            drawMenu();  // Vẽ lại menu bình thường
         }
     }
-    return -1;
+
+    // ============================================================
+    // XỬ LÝ BÌNH THƯỜNG: Cuộn menu
+    // ============================================================
+
+    // --- Xử lý Hold Detection (cho fast scroll) ---
+    if (btnUp || btnDown) {
+        if (!_isHolding) {
+            _holdStartTime = millis();
+            _isHolding = true;
+        }
+    } else {
+        _isHolding = false;
+        _holdStartTime = 0;
+    }
+
+    // --- Tính delay dựa trên thời gian giữ ---
+    unsigned long currentDelay = _debounceDelay;
+    if (_isHolding && (millis() - _holdStartTime > _holdThreshold)) {
+        currentDelay = _fastScrollDelay;
+    }
+
+    // --- Kiểm tra debounce ---
+    if (millis() - _lastDebounce < currentDelay) {
+        return MENU_NO_ACTION;
+    }
+
+    bool menuChanged = false;
+
+    // Nút UP (chỉ UP, không phải combo)
+    if (btnUp && !btnDown) {
+        _currentIndex--;
+        if (_currentIndex < 0) {
+            _currentIndex = _menuLength - 1;
+            _menuTopIndex = _menuLength - _maxLines;
+            if (_menuTopIndex < 0) _menuTopIndex = 0;
+        }
+        if (_currentIndex < _menuTopIndex) {
+            _menuTopIndex = _currentIndex;
+        }
+        menuChanged = true;
+    }
+    // Nút DOWN (chỉ DOWN, không phải combo)
+    else if (btnDown && !btnUp) {
+        _currentIndex++;
+        if (_currentIndex >= _menuLength) {
+            _currentIndex = 0;
+            _menuTopIndex = 0;
+        }
+        if (_currentIndex >= (_menuTopIndex + _maxLines)) {
+            _menuTopIndex = _currentIndex - _maxLines + 1;
+        }
+        menuChanged = true;
+    }
+    // Nút OK
+    else if (btnOk) {
+        _lastDebounce = millis();
+        _isHolding = false;
+        return _currentIndex;
+    }
+
+    if (menuChanged) {
+        drawMenu();
+        _lastDebounce = millis();
+    }
+
+    return MENU_NO_ACTION;
 }
 
 // (KHÔNG ĐỔI) menu_display_selection

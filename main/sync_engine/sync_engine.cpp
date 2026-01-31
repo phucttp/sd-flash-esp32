@@ -6,12 +6,13 @@
 #include <ArduinoJson.h>
 #include "esp_log.h"
 
-#include "../firmware_types.h"       
-#include "../wifi_config/wifi_config.h"     
-#include "../ota_downloader/ota_downloader.h" 
-#include "../metadata_parser/metadata_parser.h" 
-#include "../sd_card/sd_card.h"             
-#include "../oled/menu.h"                   
+#include "../firmware_types.h"
+#include "../wifi_config/wifi_config.h"
+#include "../ota_downloader/ota_downloader.h"
+#include "../metadata_parser/metadata_parser.h"
+#include "../sd_card/sd_card.h"
+#include "../oled/menu.h"
+#include "../file_utils/file_utils.h"  // Centralized file operations                   
 
 static const char* TAG = "SYNC_ENGINE";
 
@@ -52,7 +53,7 @@ bool update_index_file() {
 
     if (error) {
         ESP_LOGE(TAG, "JSON Parse Error: %s", error.c_str());
-        SD.remove(FILE_IDX_TMP);
+        fu_file_delete(FILE_IDX_TMP);
         return false;
     }
 
@@ -91,7 +92,7 @@ bool update_index_file() {
     }
 
     // 4. Ghi nội dung đã sửa vào file chính /index.txt
-    if (SD.exists("/index.txt")) SD.remove("/index.txt");
+    fu_file_delete("/index.txt"); // Xóa file cũ nếu có
     
     File fileMain = SD.open("/index.txt", FILE_WRITE);
     if (!fileMain) {
@@ -107,7 +108,7 @@ bool update_index_file() {
     fileMain.close();
 
     // 5. Dọn dẹp
-    SD.remove(FILE_IDX_TMP);
+    fu_file_delete(FILE_IDX_TMP);
     
     ESP_LOGI(TAG, "Index updated successfully.");
     return true;
@@ -123,20 +124,35 @@ void sync_engine_run(bool force_clean) {
         ESP_LOGW(TAG, "FORCE CLEAN ACTIVATED! Wiping all firmware...");
         oled_show_message("Resetting...", "Wiping SD");
         vTaskDelay(pdMS_TO_TICKS(500));
-        // Duyệt map hiện tại để xóa folder
+
+        // [FIX] Xóa THẬT SỰ tất cả firmware files
         for (auto const& [id, meta] : g_firmware_map) {
-            String p = String(meta.path.c_str());
-            int slash = p.lastIndexOf('/');
-            if (slash > 0) {
-                String dir = "/" + p.substring(0, slash);
-                // Hàm rmdir đệ quy (cần viết thêm nếu thư viện SD chuẩn không hỗ trợ xóa non-empty)
-                // Nhưng thường chỉ cần xóa file index.txt là lần sau nó tự coi là thẻ trống
+            ESP_LOGI(TAG, "Deleting firmware: %s", id.c_str());
+
+            // Xóa app file
+            if (!meta.path.empty()) {
+                fu_file_delete(meta.path.c_str());
+            }
+            // Xóa bootloader file
+            if (!meta.path_bootloader.empty()) {
+                fu_file_delete(meta.path_bootloader.c_str());
+            }
+            // Xóa partition file
+            if (!meta.path_partition.empty()) {
+                fu_file_delete(meta.path_partition.c_str());
+            }
+
+            // Xóa folder chứa (nếu empty)
+            std::string parent = fu_get_parent_dir(meta.path.c_str());
+            if (!parent.empty()) {
+                fu_dir_delete(parent.c_str()); // Chỉ xóa nếu empty
             }
         }
-        
-        // Cách nhanh nhất: Xóa file index.txt -> Coi như mất trí nhớ
-        SD.remove("/index.txt");
+
+        // Xóa index.txt
+        fu_file_delete("/index.txt");
         g_firmware_map.clear(); // Xóa RAM
+
         ESP_LOGI(TAG, "Wipe Done. Starting fresh sync...");
         oled_show_message("Wipe Done", "Re-Syncing");
         delay(1000);
@@ -158,7 +174,7 @@ void sync_engine_run(bool force_clean) {
     oled_show_message("Syncing...", "DL Index");
     
     // Xóa file tạm cũ nếu còn sót
-    if (SD.exists(FILE_IDX_TMP)) SD.remove(FILE_IDX_TMP);
+    fu_file_delete(FILE_IDX_TMP);
 
     // Tải về
     std::string json_std = ota_download_index(url_cfg, FILE_IDX_TMP);
@@ -167,7 +183,7 @@ void sync_engine_run(bool force_clean) {
         ESP_LOGE(TAG, "Download Index Failed");
         oled_show_message("Error", "DL Index Fail");
         // Dọn dẹp nếu file rác được tạo ra
-        if (SD.exists(FILE_IDX_TMP)) SD.remove(FILE_IDX_TMP);
+        fu_file_delete(FILE_IDX_TMP);
         return;
     }
 
@@ -177,7 +193,7 @@ void sync_engine_run(bool force_clean) {
     // Parse từ chuỗi RAM (json_std)
     if (!metadata_parse_json(String(json_std.c_str()), server_map)) {
         oled_show_message("Error", "Bad JSON");
-        SD.remove(FILE_IDX_TMP); // Xóa file lỗi
+        fu_file_delete(FILE_IDX_TMP); // Xóa file lỗi
         return;
     }
 
@@ -201,15 +217,12 @@ void sync_engine_run(bool force_clean) {
         // Logic: Đổi .enc -> .bin, Thêm / -> Check SD
         auto is_file_missing = [](String path) -> bool {
             if (path.length() == 0) return false; // Không có path thì ko tính là missing
-            
+
             // 1. Đổi đuôi .enc thành .bin (Vì trên thẻ lưu là .bin)
             if (path.endsWith(".enc")) path.replace(".enc", ".bin");
-            
-            // 2. Thêm dấu / vào đầu nếu thiếu
-            if (!path.startsWith("/")) path = "/" + path;
-            
-            // 3. Kiểm tra file có tồn tại không
-            return !SD.exists(path.c_str());
+
+            // 2. Kiểm tra file có tồn tại không (fu_file_exists tự normalize path)
+            return !fu_file_exists(path.c_str());
         };
 
         // --- LOGIC SO SÁNH ---
@@ -282,7 +295,7 @@ void sync_engine_run(bool force_clean) {
         if (need_dl_part) download_item(String(sv_meta.path_partition.c_str()), sv_meta.path_partition.c_str());
     }
 
-    // 5. DỌN DẸP
+    // 5. DỌN DẸP - Xóa firmware không còn trên server
     oled_show_message("Syncing...", "Cleaning");
     std::vector<std::string> to_delete;
     for (auto const& [id, local_meta] : local_map) {
@@ -292,16 +305,25 @@ void sync_engine_run(bool force_clean) {
     }
     for (const auto& id : to_delete) {
         firmware_metadata_t meta = local_map[id];
-        if (SD.exists(("/" + meta.path).c_str())) SD.remove(("/" + meta.path).c_str());
-        // ... Xóa các file khác nếu cần
-        
-        // Xóa folder cha
-        String pathStr = String(meta.path.c_str());
-        int slash = pathStr.lastIndexOf('/');
-        if (slash > 0) {
-            String dir = "/" + pathStr.substring(0, slash);
-            SD.rmdir(dir);
+        ESP_LOGI(TAG, "Removing obsolete firmware: %s", id.c_str());
+
+        // [FIX] Xóa đủ 3 file: app, bootloader, partition
+        if (!meta.path.empty()) {
+            fu_file_delete(meta.path.c_str());
         }
+        if (!meta.path_bootloader.empty()) {
+            fu_file_delete(meta.path_bootloader.c_str());
+        }
+        if (!meta.path_partition.empty()) {
+            fu_file_delete(meta.path_partition.c_str());
+        }
+
+        // Xóa folder cha (nếu empty)
+        std::string parent = fu_get_parent_dir(meta.path.c_str());
+        if (!parent.empty()) {
+            fu_dir_delete(parent.c_str());
+        }
+
         data_changed = true;
     }
 
@@ -315,7 +337,7 @@ void sync_engine_run(bool force_clean) {
             oled_show_message("Sync Error", "Save Fail");
         }
     } else {
-        SD.remove(FILE_IDX_TMP); // Xóa file tạm vì không dùng
+        fu_file_delete(FILE_IDX_TMP); // Xóa file tạm vì không dùng
         ESP_LOGI(TAG, "System Up-to-date.");
         oled_show_message("Sync Done", "Up-to-date");
     }

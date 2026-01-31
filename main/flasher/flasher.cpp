@@ -37,6 +37,13 @@
 // TAG dùng để lọc log cho module này
 static const char *TAG = "FLASHER";
 
+// File lưu boot combo config trên SD
+#define BOOT_CONFIG_PATH "/config/boot.txt"
+
+// Cached saved combo (load 1 lần từ SD)
+static int g_saved_combo = -1;
+static bool g_combo_loaded = false;
+
 // ============================================================
 // TIMING PROFILES - Cho các loại chip/mạch khác nhau
 // ============================================================
@@ -155,7 +162,7 @@ esp_err_t flasher_write_segment(const std::string& file_path, uint32_t offset, c
 		// Tính toán và hiển thị tiến trình nạp
 		uint32_t progress = (uint32_t)((bytes_written * 100) / total_size);
 
-		if (progress % 25 == 0) {
+		if (progress % 5 == 0) {
 			ESP_LOGI(TAG, "Progress: %" PRIu32 "%%", progress);
 			// Cập nhật thông báo lên màn hình OLED
 			oled_show_message(file_path.c_str(), (String("Progress: ") + String(progress) + String("%")).c_str());
@@ -365,10 +372,24 @@ static esp_err_t try_all_reset_combinations(const loader_esp32_config_t *config)
 		{200, 200},  // Slow
 	};
 
+	// Animation: spinning chars + attempt counter
+	const char spinner[] = "|/-\\";
+	int attempt = 0;
+	const int totalAttempts = 12;  // 3 timings x 4 combos
+
 	for (int t = 0; t < 3; t++) {
 		for (int c = 0; c < 4; c++) {
-			ESP_LOGI(TAG, "Trying: %s, timing=%lu/%lu ms",
-			         combo_names[c], timings[t][0], timings[t][1]);
+			attempt++;
+
+			// [ANIMATION] Hiển thị tiến trình kết nối
+			char line1[22];
+			char line2[22];
+			snprintf(line1, sizeof(line1), "Connecting %c", spinner[attempt % 4]);
+			snprintf(line2, sizeof(line2), "Try %d/%d...", attempt, totalAttempts);
+			oled_show_message(line1, line2);
+
+			ESP_LOGI(TAG, "Trying [%d/%d]: %s, timing=%lu/%lu ms",
+			         attempt, totalAttempts, combo_names[c], timings[t][0], timings[t][1]);
 
 			// Release all first
 			gpio_set_level((gpio_num_t)config->gpio0_trigger_pin, combinations[c][1] ? 0 : 1);
@@ -388,6 +409,7 @@ static esp_err_t try_all_reset_combinations(const loader_esp32_config_t *config)
 			if (esp_loader_connect(&connect_config) == ESP_LOADER_SUCCESS) {
 				ESP_LOGI(TAG, "SUCCESS! Working combination: %s, timing=%lu/%lu",
 				         combo_names[c], timings[t][0], timings[t][1]);
+				oled_show_message("Connected!", "Success");
 				return ESP_OK;
 			}
 
@@ -451,20 +473,234 @@ void host_system_restart() {
 	esp_restart();
 }
 
-static esp_err_t try_connect(void){
+// ============================================================
+// SCAN BOOT API - Save/Load boot combo config
+// ============================================================
+
+/**
+ * @brief Lưu combo index vào file trên SD
+ */
+static void save_combo_to_sd(int combo_index) {
+	// Tạo thư mục config nếu chưa có
+	if (!SD.exists("/config")) {
+		SD.mkdir("/config");
+	}
+
+	File f = SD.open(BOOT_CONFIG_PATH, FILE_WRITE);
+	if (f) {
+		f.printf("%d\n", combo_index);
+		f.close();
+		ESP_LOGI(TAG, "Saved boot combo #%d to SD", combo_index);
+		g_saved_combo = combo_index;
+		g_combo_loaded = true;
+	} else {
+		ESP_LOGE(TAG, "Failed to save boot config to SD");
+	}
+}
+
+/**
+ * @brief Load combo index từ file trên SD
+ */
+int flasher_load_saved_combo(void) {
+	if (g_combo_loaded) {
+		return g_saved_combo;
+	}
+
+	if (!SD.exists(BOOT_CONFIG_PATH)) {
+		ESP_LOGI(TAG, "No saved boot config found");
+		g_saved_combo = -1;
+		g_combo_loaded = true;
+		return -1;
+	}
+
+	File f = SD.open(BOOT_CONFIG_PATH, FILE_READ);
+	if (!f) {
+		ESP_LOGE(TAG, "Failed to open boot config");
+		g_saved_combo = -1;
+		g_combo_loaded = true;
+		return -1;
+	}
+
+	String line = f.readStringUntil('\n');
+	f.close();
+
+	int combo = line.toInt();
+	if (combo >= 0 && combo < 12) {
+		ESP_LOGI(TAG, "Loaded saved boot combo #%d", combo);
+		g_saved_combo = combo;
+	} else {
+		ESP_LOGW(TAG, "Invalid combo value in config: %d", combo);
+		g_saved_combo = -1;
+	}
+	g_combo_loaded = true;
+	return g_saved_combo;
+}
+
+/**
+ * @brief Xóa combo đã lưu
+ */
+void flasher_clear_saved_combo(void) {
+	if (SD.exists(BOOT_CONFIG_PATH)) {
+		SD.remove(BOOT_CONFIG_PATH);
+		ESP_LOGI(TAG, "Cleared saved boot config");
+	}
+	g_saved_combo = -1;
+	g_combo_loaded = true;
+}
+
+/**
+ * @brief Thử kết nối với combo cụ thể
+ * @param combo_index Index combo (0-11)
+ * @return ESP_OK nếu thành công
+ */
+static esp_err_t try_connect_with_combo(int combo_index) {
+	const int combinations[4][2] = {
+		{1, 1}, {1, 0}, {0, 1}, {0, 0}
+	};
+	const uint32_t timings[3][2] = {
+		{100, 50}, {100, 100}, {200, 200}
+	};
+
+	int t = combo_index / 4;  // timing index (0-2)
+	int c = combo_index % 4;  // combo index (0-3)
+
+	gpio_set_direction((gpio_num_t)config.gpio0_trigger_pin, GPIO_MODE_OUTPUT);
+	gpio_set_direction((gpio_num_t)config.reset_trigger_pin, GPIO_MODE_OUTPUT);
+
+	ESP_LOGI(TAG, "Trying saved combo #%d (timing=%lu/%lu)",
+	         combo_index, timings[t][0], timings[t][1]);
+
+	// Release all first
+	gpio_set_level((gpio_num_t)config.gpio0_trigger_pin, combinations[c][1] ? 0 : 1);
+	gpio_set_level((gpio_num_t)config.reset_trigger_pin, combinations[c][0] ? 0 : 1);
+	vTaskDelay(pdMS_TO_TICKS(100));
+
+	// Do reset sequence
+	do_reset_sequence(&config, combinations[c][0], combinations[c][1],
+	                  timings[t][0], timings[t][1]);
+
+	// Flush UART
+	uart_flush(config.uart_port);
+	uart_flush_input(config.uart_port);
+	vTaskDelay(pdMS_TO_TICKS(50));
+
+	// Try connect
+	esp_loader_connect_args_t connect_config = ESP_LOADER_CONNECT_DEFAULT();
+	if (esp_loader_connect(&connect_config) == ESP_LOADER_SUCCESS) {
+		ESP_LOGI(TAG, "Connected with saved combo #%d!", combo_index);
+		return ESP_OK;
+	}
+
+	return ESP_FAIL;
+}
+
+/**
+ * @brief Scan tất cả combo và lưu combo working
+ */
+int flasher_scan_and_save_combo(void) {
+	gpio_set_direction((gpio_num_t)config.gpio0_trigger_pin, GPIO_MODE_OUTPUT);
+	gpio_set_direction((gpio_num_t)config.reset_trigger_pin, GPIO_MODE_OUTPUT);
+
+	esp_loader_connect_args_t connect_config = ESP_LOADER_CONNECT_DEFAULT();
+
+	const int combinations[4][2] = {
+		{1, 1}, {1, 0}, {0, 1}, {0, 0}
+	};
+	const char* combo_names[4] = {
+		"RST=inv,BOOT=inv",
+		"RST=inv,BOOT=dir",
+		"RST=dir,BOOT=inv",
+		"RST=dir,BOOT=dir"
+	};
+	const uint32_t timings[3][2] = {
+		{100, 50}, {100, 100}, {200, 200}
+	};
+
+	const char spinner[] = "|/-\\";
+	int attempt = 0;
+	const int totalAttempts = 12;
+
+	for (int t = 0; t < 3; t++) {
+		for (int c = 0; c < 4; c++) {
+			int combo_index = t * 4 + c;
+			attempt++;
+
+			// Animation
+			char line1[22];
+			char line2[22];
+			snprintf(line1, sizeof(line1), "Scanning %c", spinner[attempt % 4]);
+			snprintf(line2, sizeof(line2), "Try %d/%d...", attempt, totalAttempts);
+			oled_show_message(line1, line2);
+
+			ESP_LOGI(TAG, "Scan [%d/%d]: %s, timing=%lu/%lu",
+			         attempt, totalAttempts, combo_names[c], timings[t][0], timings[t][1]);
+
+			// Release all first
+			gpio_set_level((gpio_num_t)config.gpio0_trigger_pin, combinations[c][1] ? 0 : 1);
+			gpio_set_level((gpio_num_t)config.reset_trigger_pin, combinations[c][0] ? 0 : 1);
+			vTaskDelay(pdMS_TO_TICKS(100));
+
+			do_reset_sequence(&config, combinations[c][0], combinations[c][1],
+			                  timings[t][0], timings[t][1]);
+
+			uart_flush(config.uart_port);
+			uart_flush_input(config.uart_port);
+			vTaskDelay(pdMS_TO_TICKS(50));
+
+			if (esp_loader_connect(&connect_config) == ESP_LOADER_SUCCESS) {
+				ESP_LOGI(TAG, "FOUND! Combo #%d: %s, timing=%lu/%lu",
+				         combo_index, combo_names[c], timings[t][0], timings[t][1]);
+
+				// Lưu combo vào SD
+				save_combo_to_sd(combo_index);
+
+				oled_show_message("FOUND!", line2);
+				vTaskDelay(pdMS_TO_TICKS(500));
+
+				// Reset target để thoát bootloader
+				esp_loader_reset_target();
+
+				return combo_index;
+			}
+
+			vTaskDelay(pdMS_TO_TICKS(100));
+		}
+	}
+
+	ESP_LOGE(TAG, "Scan failed - no working combo found!");
+	return -1;
+}
+
+static esp_err_t try_connect(void) {
+	// --- ƯU TIÊN: Thử saved combo trước ---
+	int saved = flasher_load_saved_combo();
+	if (saved >= 0) {
+		ESP_LOGI(TAG, "=== FAST CONNECT (saved combo #%d) ===", saved);
+		oled_show_message("Connecting...", "Using saved cfg");
+
+		if (try_connect_with_combo(saved) == ESP_OK) {
+			oled_show_message("Connected!", "Fast mode");
+			vTaskDelay(pdMS_TO_TICKS(300));
+			return ESP_OK;
+		}
+
+		// Saved combo failed -> clear và thử brute force
+		ESP_LOGW(TAG, "Saved combo failed, clearing and trying brute force...");
+		flasher_clear_saved_combo();
+	}
+
 	// --- BRUTE FORCE: Thử tất cả GPIO logic combinations ---
 	ESP_LOGI(TAG, "=== BRUTE FORCE CONNECT (esptool style) ===");
-	oled_show_message("Connecting...", "trying all combos");
 
 	esp_err_t result = try_all_reset_combinations(&config);
 
 	if (result == ESP_OK) {
-		oled_show_message("Connected!", "found working combo");
+		vTaskDelay(pdMS_TO_TICKS(300));  // Cho user thấy "Connected!"
 		return ESP_OK;
 	} else {
 		ESP_LOGE(TAG, "All reset combinations failed!");
-		oled_show_message("Connect FAILED", "check wiring");
-		vTaskDelay(pdMS_TO_TICKS(500));
+		oled_show_message("FAILED!", "Check wiring");
+		vTaskDelay(pdMS_TO_TICKS(1500));
 		return ESP_FAIL;
 	}
 }

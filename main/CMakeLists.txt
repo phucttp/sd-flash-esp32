@@ -7,6 +7,7 @@ set(srcs "main.cpp"
          "ota_downloader/ota_downloader.cpp"
          "metadata_parser/metadata_parser.cpp"
          "sync_engine/sync_engine.cpp"
+         "file_utils/file_utils.cpp"
          )
 
 idf_component_register(SRCS ${srcs}

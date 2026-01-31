@@ -11,6 +11,7 @@
 // --- MODULE KHÁC TRONG DỰ ÁN ---
 #include "../oled/menu.h"
 #include "../sd_card/sd_card.h"
+#include "../file_utils/file_utils.h"  // Centralized file operations
 
 // --- BIẾN TOÀN CỤC NỘI BỘ (STATIC) ---
 static const char *TAG = "WIFI_CFG"; // Tag log cho module này
@@ -22,6 +23,7 @@ static bool shouldSaveConfig = false; // Cờ để biết có cần lưu config
 static void _save_config_callback();
 static esp_err_t _read_file(const char* path, char* buffer, size_t size, const char* default_val);
 static esp_err_t _write_file(const char* path, const char* value);
+static String _normalize_git_url(const char* input_url);  // [NEW] Forward declaration
 
 // ============================================================
 // 2. HÀM CÔNG KHAI (PUBLIC FUNCTIONS)
@@ -58,8 +60,8 @@ void wifi_config_force_portal() {
     wifi_config_get_params(buf_url, buf_key, buf_iv);
 
     // --- B2: Tạo 3 ô nhập liệu ---
-    // Ô 1: URL
-    WiFiManagerParameter p_url("url", "Github Encrypted URL", buf_url, 256);
+    // Ô 1: URL (Hỗ trợ auto-convert GitHub/GitLab/Gitee/Bitbucket)
+    WiFiManagerParameter p_url("url", "Git URL (auto-convert to raw)", buf_url, 256);
     wm.addParameter(&p_url);
 
     // Ô 2: AES Key (Gợi ý: 16 ký tự)
@@ -81,14 +83,19 @@ void wifi_config_force_portal() {
         // --- B4: Xử lý Save ---
         if (shouldSaveConfig) {
             ESP_LOGI(TAG, "Saving new config...");
-            
+
             // Lấy giá trị từ các ô nhập
             const char* new_url = p_url.getValue();
             const char* new_key = p_key.getValue();
             const char* new_iv  = p_iv.getValue();
 
+            // [FIX] Tự động chuyển đổi URL Git sang Raw URL
+            String normalized_url = _normalize_git_url(new_url);
+            ESP_LOGI(TAG, "Original URL: %s", new_url);
+            ESP_LOGI(TAG, "Normalized URL: %s", normalized_url.c_str());
+
             // Lưu xuống 3 file riêng biệt
-            _write_file(CONFIG_FILE_URL, new_url);
+            _write_file(CONFIG_FILE_URL, normalized_url.c_str());
             _write_file(CONFIG_FILE_KEY, new_key);
             _write_file(CONFIG_FILE_IV,  new_iv);
 
@@ -118,52 +125,72 @@ static void _save_config_callback() {
     shouldSaveConfig = true;
 }
 
+/**
+ * @brief Tự động chuyển đổi URL Git sang Raw URL
+ * Hỗ trợ: GitHub, GitLab, Gitee, Bitbucket
+ *
+ * Ví dụ:
+ * - github.com/.../blob/main/... → raw.githubusercontent.com/.../main/...
+ * - gitlab.com/.../-/blob/...    → gitlab.com/.../-/raw/...
+ * - gitee.com/.../blob/...       → gitee.com/.../raw/...
+ * - bitbucket.org/.../src/...    → bitbucket.org/.../raw/...
+ */
+static String _normalize_git_url(const char* input_url) {
+    String url(input_url);
+    url.trim();
+
+    // --- GitHub ---
+    // https://github.com/user/repo/blob/branch/path/file
+    // → https://raw.githubusercontent.com/user/repo/branch/path/file
+    if (url.indexOf("github.com") >= 0 && url.indexOf("/blob/") >= 0) {
+        url.replace("github.com", "raw.githubusercontent.com");
+        url.replace("/blob/", "/");
+        ESP_LOGI(TAG, "Converted GitHub URL");
+    }
+    // --- GitLab ---
+    // https://gitlab.com/user/repo/-/blob/branch/path/file
+    // → https://gitlab.com/user/repo/-/raw/branch/path/file
+    else if (url.indexOf("gitlab.com") >= 0 && url.indexOf("/-/blob/") >= 0) {
+        url.replace("/-/blob/", "/-/raw/");
+        ESP_LOGI(TAG, "Converted GitLab URL");
+    }
+    // --- Gitee (Chinese GitHub) ---
+    // https://gitee.com/user/repo/blob/branch/path/file
+    // → https://gitee.com/user/repo/raw/branch/path/file
+    else if (url.indexOf("gitee.com") >= 0 && url.indexOf("/blob/") >= 0) {
+        url.replace("/blob/", "/raw/");
+        ESP_LOGI(TAG, "Converted Gitee URL");
+    }
+    // --- Bitbucket ---
+    // https://bitbucket.org/user/repo/src/branch/path/file
+    // → https://bitbucket.org/user/repo/raw/branch/path/file
+    else if (url.indexOf("bitbucket.org") >= 0 && url.indexOf("/src/") >= 0) {
+        url.replace("/src/", "/raw/");
+        ESP_LOGI(TAG, "Converted Bitbucket URL");
+    }
+    // Nếu đã là raw URL hoặc URL lạ → giữ nguyên
+    else {
+        ESP_LOGD(TAG, "URL unchanged (already raw or unknown format)");
+    }
+
+    return url;
+}
+
 // Đọc file text. Nếu file không có HOẶC file rỗng -> Dùng Default
 static esp_err_t _read_file(const char* path, char* buffer, size_t size, const char* default_val) {
-    bool has_valid_data = false; // Cờ kiểm tra dữ liệu hợp lệ
-    
-    if (SD.exists(path)) {
-        ESP_LOGI(TAG, "Reading file: %s", path);
-        File file = SD.open(path, FILE_READ);
-        if (file) {
-            if (file.size() > 0) { // Chỉ đọc nếu file có dung lượng > 0
-                String s = file.readStringUntil('\n');
-                s.trim(); // Xóa khoảng trắng, xuống dòng thừa
-                if (s.length() > 0) { // Chỉ chấp nhận nếu chuỗi không rỗng
-                    strncpy(buffer, s.c_str(), size - 1);
-                    buffer[size - 1] = '\0';
-                    has_valid_data = true;
-                    ESP_LOGI(TAG, " -> Data loaded: %s", buffer);
-                }
-            }
-            file.close();
-        }
-    } else {
-        ESP_LOGW(TAG, "File %s not found.", path);
-    }
-    
-    // QUAN TRỌNG: Nếu không có file HOẶC file đọc ra rỗng -> Dùng Default
-    if (!has_valid_data) {
-        ESP_LOGW(TAG, "Using DEFAULT for %s", path);
-        strncpy(buffer, default_val, size - 1);
-        buffer[size - 1] = '\0';
-    }
-    return ESP_OK;
+    // Dùng file_utils để đọc với fallback tự động
+    return fu_file_read_buf(path, buffer, size, default_val);
 }
 
 // Ghi file text (Tự tạo thư mục /config nếu thiếu)
 static esp_err_t _write_file(const char* path, const char* value) {
-    if (!SD.exists("/config")) SD.mkdir("/config");
-    if (SD.exists(path)) SD.remove(path); // Xóa cũ
-
-    File file = SD.open(path, FILE_WRITE);
-    if (file) {
-        file.print(value);
-        file.close();
+    // fu_file_write tự động tạo parent dir và xóa file cũ
+    esp_err_t err = fu_file_write(path, value);
+    if (err == ESP_OK) {
         ESP_LOGI(TAG, "Saved: %s -> %s", path, value);
     } else {
         ESP_LOGE(TAG, "Save Failed: %s", path);
     }
-    return ESP_OK;
+    return err;
 }
 

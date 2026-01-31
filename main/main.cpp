@@ -57,36 +57,169 @@ static uint8_t buf[BUF_LEN] = {0};
 // 4. INTERNAL HELPER FUNCTIONS (HÀM XỬ LÝ RIÊNG BIỆT)
 // ============================================================
 
+// ============================================================
+// MONITOR MODE - Hiển thị Log từ Target lên OLED
+// ============================================================
+
+#define LOG_LINES 7          // Số dòng log hiển thị (SH1106G 64px / 9px per line)
+#define LOG_LINE_WIDTH 21    // Ký tự tối đa mỗi dòng (128px / 6px per char)
+
+// Buffer lưu các dòng log để hiển thị
+static char logBuffer[LOG_LINES][LOG_LINE_WIDTH + 1];
+static int logWriteIndex = 0;  // Dòng tiếp theo sẽ ghi
+
+// Buffer tích lũy dữ liệu UART (để ghép các chunk thành dòng hoàn chỉnh)
+static char uartLineBuffer[256];
+static int uartLinePos = 0;
+
 /**
- * @brief Chế độ Monitor: Xem log từ Target qua UART
+ * @brief Khởi tạo log buffer
+ */
+static void log_buffer_init() {
+    for (int i = 0; i < LOG_LINES; i++) {
+        logBuffer[i][0] = '\0';
+    }
+    logWriteIndex = 0;
+    uartLinePos = 0;
+    uartLineBuffer[0] = '\0';
+}
+
+/**
+ * @brief Thêm một dòng log vào buffer (cuộn lên nếu đầy)
+ */
+static void log_buffer_add_line(const char* line) {
+    // Copy dòng mới vào buffer (cắt nếu quá dài)
+    strncpy(logBuffer[logWriteIndex], line, LOG_LINE_WIDTH);
+    logBuffer[logWriteIndex][LOG_LINE_WIDTH] = '\0';
+
+    // Di chuyển index (vòng tròn)
+    logWriteIndex = (logWriteIndex + 1) % LOG_LINES;
+}
+
+/**
+ * @brief Xử lý dữ liệu UART, tách thành từng dòng
+ */
+static void log_process_uart_data(const char* data, int len) {
+    for (int i = 0; i < len; i++) {
+        char c = data[i];
+
+        if (c == '\n' || c == '\r') {
+            // Kết thúc dòng -> thêm vào log buffer
+            if (uartLinePos > 0) {
+                uartLineBuffer[uartLinePos] = '\0';
+                log_buffer_add_line(uartLineBuffer);
+                uartLinePos = 0;
+            }
+        } else if (uartLinePos < (int)sizeof(uartLineBuffer) - 1) {
+            // Thêm ký tự vào buffer dòng hiện tại
+            uartLineBuffer[uartLinePos++] = c;
+        }
+    }
+}
+
+/**
+ * @brief Vẽ màn hình Monitor với log scrolling
+ */
+static void draw_monitor_log_screen(bool hasActivity) {
+    display.clearDisplay();
+    display.setTextSize(1);
+    display.setTextColor(SH110X_WHITE);
+
+    // Header: MONITOR + status indicator
+    display.setCursor(0, 0);
+    if (hasActivity) {
+        display.setTextColor(SH110X_BLACK, SH110X_WHITE);
+        display.print(" MONITOR ");
+        display.setTextColor(SH110X_WHITE);
+        display.println(" [RX]");
+    } else {
+        display.println("MONITOR [OK]=Exit");
+    }
+
+    // Đường kẻ ngang
+    display.drawLine(0, 9, SCREEN_WIDTH, 9, SH110X_WHITE);
+
+    // Hiển thị các dòng log (từ cũ đến mới)
+    int yPos = 11;
+    for (int i = 0; i < LOG_LINES - 1; i++) {  // -1 vì header chiếm 1 dòng
+        // Tính index thực tế (bắt đầu từ dòng cũ nhất)
+        int idx = (logWriteIndex + i) % LOG_LINES;
+
+        display.setCursor(0, yPos);
+        display.println(logBuffer[idx]);
+        yPos += 9;  // 8px text + 1px spacing
+    }
+
+    display.display();
+}
+
+/**
+ * @brief Chế độ Monitor: Hiển thị log từ Target lên OLED
  */
 static void run_monitor_mode() {
     ESP_LOGI(TAG, ">>> START MONITOR MODE");
-    oled_show_message("Starting Monitor", "Check Logs...");
+    oled_show_message("Starting Monitor", "Waiting for data...");
     vTaskDelay(pdMS_TO_TICKS(500));
 
     flasher_init();
     uart_flush_input(UART_NUM_1);
     uart_set_baudrate(UART_NUM_1, 115200);
 
-    oled_show_message("Monitor Mode", "Press OK to Exit");
+    // Khởi tạo log buffer
+    log_buffer_init();
+
+    // Thêm dòng hướng dẫn ban đầu
+    log_buffer_add_line("Waiting for Target...");
+    log_buffer_add_line("Baudrate: 115200");
+    log_buffer_add_line("--------------------");
+
+    bool hasActivity = false;
+    unsigned long lastActivityTime = 0;
+    unsigned long lastDisplayUpdate = 0;
+    const unsigned long DISPLAY_UPDATE_INTERVAL = 100;
+    const unsigned long ACTIVITY_TIMEOUT = 1000;
+
+    // Vẽ màn hình ban đầu
+    draw_monitor_log_screen(false);
 
     while (1) {
         // Kiểm tra nút thoát
         if (digitalRead(BTN_OK) == LOW) {
             ESP_LOGI(TAG, ">>> EXIT MONITOR");
             oled_show_message("Exiting...", "");
-            vTaskDelay(pdMS_TO_TICKS(1000));
+            vTaskDelay(pdMS_TO_TICKS(500));
             break;
         }
-        
-        // Đọc UART từ Target và in ra Log
+
+        // Đọc UART từ Target
         int rxBytes = uart_read_bytes(UART_NUM_1, buf, BUF_LEN - 1, 20 / portTICK_PERIOD_MS);
         if (rxBytes > 0) {
-            buf[rxBytes] = 0; // Null terminate
+            buf[rxBytes] = 0;
+
+            // Log ra serial (để debug trên PC nếu cần)
             ESP_LOGI("TARGET", "%s", buf);
+
+            // Xử lý và thêm vào log buffer để hiển thị OLED
+            log_process_uart_data((char*)buf, rxBytes);
+
+            hasActivity = true;
+            lastActivityTime = millis();
         }
-        vTaskDelay(10); // Yield
+
+        // Cập nhật màn hình định kỳ
+        unsigned long now = millis();
+        if (now - lastDisplayUpdate >= DISPLAY_UPDATE_INTERVAL) {
+            lastDisplayUpdate = now;
+
+            // Kiểm tra timeout activity
+            if (now - lastActivityTime > ACTIVITY_TIMEOUT) {
+                hasActivity = false;
+            }
+
+            draw_monitor_log_screen(hasActivity);
+        }
+
+        vTaskDelay(10);
     }
 }
 
@@ -144,6 +277,164 @@ static void run_sync_process() {
     wifi_config_stop();
 }
 
+// ============================================================
+// TOOLS MENU - Menu ẩn (UP+DOWN 3s)
+// ============================================================
+
+#define TOOLS_SYNC    0
+#define TOOLS_MONITOR 1
+#define TOOLS_ERASE   2
+#define TOOLS_SCAN    3
+#define TOOLS_BACK    4
+
+static const char* toolsMenuItems[] = {
+    "1. Sync Firmware",
+    "2. Monitor/Test",
+    "3. Erase Chip",
+    "4. Scan Boot",
+    "5. [Back]"
+};
+static const int toolsMenuLen = 5;
+
+/**
+ * @brief Hiển thị và xử lý Tools Menu (với scrolling)
+ * @return Tool đã chọn (TOOLS_xxx) hoặc -1 nếu back/cancel
+ */
+static int run_tools_menu() {
+    ESP_LOGI(TAG, ">>> OPEN TOOLS MENU");
+
+    int currentTool = 0;
+    int topIndex = 0;  // Item đầu tiên hiển thị
+    const int maxVisible = 6;  // Số dòng tối đa (trừ header)
+
+    unsigned long lastDebounce = 0;
+    unsigned long holdStartTime = 0;
+    bool isHolding = false;
+    const unsigned long debounceDelay = 200;
+    const unsigned long fastScrollDelay = 80;
+    const unsigned long holdThreshold = 500;
+
+    // Vẽ menu với scrolling
+    auto drawToolsMenu = [&]() {
+        display.clearDisplay();
+        display.setTextSize(1);
+        display.setTextColor(SH110X_WHITE);
+
+        // Header (fixed)
+        display.fillRect(0, 0, SCREEN_WIDTH, 10, SH110X_WHITE);
+        display.setTextColor(SH110X_BLACK, SH110X_WHITE);
+        display.setCursor(30, 1);
+        display.println("TOOLS MENU");
+        display.setTextColor(SH110X_WHITE);
+
+        // Menu items (scrollable)
+        for (int i = 0; i < maxVisible; i++) {
+            int itemIndex = topIndex + i;
+            if (itemIndex >= toolsMenuLen) break;
+
+            int yPos = 12 + i * 9;  // Bắt đầu sau header
+
+            if (itemIndex == currentTool) {
+                display.fillRect(0, yPos - 1, SCREEN_WIDTH, 9, SH110X_WHITE);
+                display.setTextColor(SH110X_BLACK, SH110X_WHITE);
+            } else {
+                display.setTextColor(SH110X_WHITE, SH110X_BLACK);
+            }
+            display.setCursor(4, yPos);
+            display.println(toolsMenuItems[itemIndex]);
+        }
+
+        // Position indicator (nếu có scroll)
+        if (toolsMenuLen > maxVisible) {
+            char posStr[12];
+            snprintf(posStr, sizeof(posStr), "%d/%d", currentTool + 1, toolsMenuLen);
+            int textWidth = strlen(posStr) * 6;
+            int xPos = SCREEN_WIDTH - textWidth - 2;
+            int yPos = SCREEN_HEIGHT - 8;
+            display.fillRect(xPos - 2, yPos, textWidth + 4, 8, SH110X_BLACK);
+            display.setTextColor(SH110X_WHITE);
+            display.setCursor(xPos, yPos);
+            display.print(posStr);
+        }
+
+        display.display();
+    };
+
+    drawToolsMenu();
+
+    while (1) {
+        bool btnUp = (digitalRead(BTN_UP) == LOW);
+        bool btnDown = (digitalRead(BTN_DOWN) == LOW);
+        bool btnOk = (digitalRead(BTN_OK) == LOW);
+
+        // Hold detection cho fast scroll
+        if (btnUp || btnDown) {
+            if (!isHolding) {
+                holdStartTime = millis();
+                isHolding = true;
+            }
+        } else {
+            isHolding = false;
+            holdStartTime = 0;
+        }
+
+        // Tính delay
+        unsigned long currentDelay = debounceDelay;
+        if (isHolding && (millis() - holdStartTime > holdThreshold)) {
+            currentDelay = fastScrollDelay;
+        }
+
+        if (millis() - lastDebounce < currentDelay) {
+            vTaskDelay(10);
+            continue;
+        }
+
+        bool menuChanged = false;
+
+        if (btnUp) {
+            currentTool--;
+            if (currentTool < 0) {
+                currentTool = toolsMenuLen - 1;
+                topIndex = toolsMenuLen - maxVisible;
+                if (topIndex < 0) topIndex = 0;
+            }
+            if (currentTool < topIndex) {
+                topIndex = currentTool;
+            }
+            menuChanged = true;
+        }
+        else if (btnDown) {
+            currentTool++;
+            if (currentTool >= toolsMenuLen) {
+                currentTool = 0;
+                topIndex = 0;
+            }
+            if (currentTool >= (topIndex + maxVisible)) {
+                topIndex = currentTool - maxVisible + 1;
+            }
+            menuChanged = true;
+        }
+        else if (btnOk) {
+            ESP_LOGI(TAG, "Tools selected: %d", currentTool);
+
+            // Chờ thả nút OK
+            while (digitalRead(BTN_OK) == LOW) {
+                vTaskDelay(10);
+            }
+            vTaskDelay(pdMS_TO_TICKS(100));
+
+            return currentTool;
+        }
+
+        if (menuChanged) {
+            drawToolsMenu();
+            lastDebounce = millis();
+        }
+
+        vTaskDelay(10);
+    }
+}
+
 /**
  * @brief Chế độ Xóa Chip Target
  */
@@ -156,6 +447,29 @@ static void run_chip_erase() {
         oled_show_message("SUCCESS!", "Chip Erased.");
     } else {
         oled_show_message("Error", "Erase Failed!");
+    }
+    vTaskDelay(pdMS_TO_TICKS(2000));
+}
+
+/**
+ * @brief Chế độ Scan Boot - Quét và lưu combo kết nối
+ */
+static void run_scan_boot() {
+    ESP_LOGI(TAG, ">>> SCAN BOOT MODE");
+    oled_show_message("Scan Boot", "Scanning...");
+    vTaskDelay(pdMS_TO_TICKS(500));
+
+    flasher_init();
+
+    // Gọi hàm scan và lưu combo working
+    int combo_index = flasher_scan_and_save_combo();
+
+    if (combo_index >= 0) {
+        char msg[24];
+        snprintf(msg, sizeof(msg), "Saved Combo #%d", combo_index);
+        oled_show_message("SUCCESS!", msg);
+    } else {
+        oled_show_message("FAILED!", "No combo found");
     }
     vTaskDelay(pdMS_TO_TICKS(2000));
 }
@@ -218,12 +532,19 @@ void setup() {
     int menuLen = 0;
     const char** dispItems = sd_get_menu_display_items(menuLen);
     const char** idItems = sd_get_menu_id_items();
-    
+
+    // [FIX] Menu giờ luôn có ít nhất 3 mục (Monitor, SyncFW, Erase Chip)
+    // Chỉ log warning thay vì crash
     if (menuLen == 0) {
-        oled_show_message("Error", "Menu Empty!");
-        for(;;);
+        ESP_LOGW(TAG, "Menu Empty - this should not happen!");
+        oled_show_message("Warning", "No Menu Items");
+        vTaskDelay(pdMS_TO_TICKS(2000));
+        // Thử load lại thay vì treo máy
+        sd_load_metadata();
+        dispItems = sd_get_menu_display_items(menuLen);
+        idItems = sd_get_menu_id_items();
     }
-    
+
     menu_init(display, dispItems, idItems, menuLen);
     ESP_LOGI(TAG, "Ready!");
 }
@@ -232,34 +553,63 @@ void loop() {
     // [1] Lắng nghe Menu
     int selectedIndex = menu_update();
 
-    // [2] Nếu có chọn (Index >= 0) -> XỬ LÝ
+    // ============================================================
+    // [2] XỬ LÝ GESTURE: UP+DOWN 3s -> Tools Menu
+    // ============================================================
+    if (selectedIndex == MENU_TOOLS_GESTURE) {
+        int tool = run_tools_menu();
+
+        switch (tool) {
+            case TOOLS_SYNC:
+                vTaskDelay(pdMS_TO_TICKS(300));
+                run_sync_process();
+                host_system_restart();
+                break;
+
+            case TOOLS_MONITOR:
+                run_monitor_mode();
+                menu_redisplay();  // Quay lại menu chính
+                break;
+
+            case TOOLS_ERASE:
+                run_chip_erase();
+                menu_redisplay();
+                break;
+
+            case TOOLS_SCAN:
+                run_scan_boot();
+                menu_redisplay();
+                break;
+
+            case TOOLS_BACK:
+            default:
+                menu_redisplay();  // Quay lại menu chính
+                break;
+        }
+        return;
+    }
+
+    // ============================================================
+    // [3] XỬ LÝ CHỌN FIRMWARE (Index >= 0)
+    // ============================================================
     if (selectedIndex >= 0) {
         const char* fw_id_char = menu_get_id(selectedIndex);
         std::string fw_id(fw_id_char ? fw_id_char : "");
 
-        ESP_LOGI(TAG, "Selected: %s", fw_id.c_str());
+        ESP_LOGI(TAG, "Selected FW: %s", fw_id.c_str());
 
-        if (fw_id.empty()) return;
-
-        // --- BỘ ĐIỀU PHỐI (DISPATCHER) ---
-        
-        if (fw_id == "Monitor") {
-            run_monitor_mode();
-        }
-        else if (fw_id == "SyncFW" || fw_id == "SYNC_CMD") {
-            vTaskDelay(pdMS_TO_TICKS(300));
-            run_sync_process();
-        }
-        else if (fw_id == "NULL" || fw_id == "Erase" || fw_id == "ERASE_CMD") {
-            run_chip_erase();
-        }
-        else {
-            // Mặc định: Nếu không phải lệnh hệ thống -> Là lệnh nạp FW
-            run_flash_fw(fw_id);
+        // Kiểm tra trường hợp menu rỗng
+        if (fw_id.empty() || fw_id == "NO_FW") {
+            oled_show_message("No Firmware", "Please Sync First");
+            vTaskDelay(pdMS_TO_TICKS(2000));
+            menu_redisplay();
+            return;
         }
 
-        // [3] Sau khi xử lý xong bất kỳ tác vụ nào -> Reset lại Menu/Hệ thống
-        // Để đảm bảo RAM sạch sẽ và Menu cập nhật mới nhất
+        // --- NẠP FIRMWARE ---
+        run_flash_fw(fw_id);
+
+        // Sau khi nạp xong -> Reset để refresh menu
         host_system_restart();
     }
 

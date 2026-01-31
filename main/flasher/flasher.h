@@ -65,4 +65,25 @@ const char* flasher_get_pending_fw_id(void);
  */
 void flasher_start_new_session(const char* fw_id);
 
+// ============================================================
+// SCAN BOOT API - Quét và lưu combo kết nối
+// ============================================================
+
+/**
+ * @brief Quét tất cả 12 combo reset và lưu combo working vào SD.
+ * @return Index của combo thành công (0-11), hoặc -1 nếu thất bại.
+ */
+int flasher_scan_and_save_combo(void);
+
+/**
+ * @brief Load combo đã lưu từ SD card.
+ * @return Index của combo đã lưu (0-11), hoặc -1 nếu chưa có.
+ */
+int flasher_load_saved_combo(void);
+
+/**
+ * @brief Xóa combo đã lưu (reset về brute-force mặc định).
+ */
+void flasher_clear_saved_combo(void);
+
 #endif // __FLASHER_H__
