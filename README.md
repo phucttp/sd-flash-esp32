@@ -111,8 +111,6 @@ Tool **FlashPorter** giúp chuẩn bị thẻ SD **chỉ trong vài cú click**.
 
 ### 🖥️ Giao diện FlashPorter:
 
-📌 **[Xem UI Mockup tương tác (HTML)]( https://htmlpreview.github.io/?https://github.com/phucttp/sd-flash-esp32/blob/main/toolAddFirmware/ui-mockup.html)** - Mở file HTML để xem giao diện mô phỏng chi tiết.
-
 **Workflow chính:**
 ```
 ┌─────────────┐      ┌─────────────┐      ┌─────────────┐
@@ -136,8 +134,6 @@ firmware_library/    SD Card (FAT32)    GitHub Repository
 ---
 
 ## 🎮 Giao diện OLED Tabs UI
-
-📌 **[Xem UI Mockup tương tác (HTML)](https://htmlpreview.github.io/?https://github.com/phucttp/sd-flash-esp32/blob/main/landing-page/index.html)** - Mô phỏng giao diện trên web
 
 ### Cấu trúc Tab:
 ```
