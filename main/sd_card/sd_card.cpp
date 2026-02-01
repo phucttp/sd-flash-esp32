@@ -1,26 +1,39 @@
+// ============================================================
+// INCLUDES
+// ============================================================
 #include "esp_log.h"
 #include "sd_card.h"
 #include "ArduinoJson.h"
 #include <SD.h>
-#include <vector> // Cần cho mảng động
-#include <map>    // Vẫn dùng map cho get_firmware_path
+#include <vector>
+#include <map>
 
-//Khai báo TAG cho module sd_card
+// ============================================================
+// BIẾN TOÀN CỤC
+// ============================================================
 static const char *TAG = "SD_CARD";
 static const char *TAG1 = "SD_METADATA";
-const char *METADATA_FILE_PATH = "/index.txt";// đường dẫn cố định đến file metadata trên thẻ SD
-bool g_is_sd_mounted = false; //Khai báo trạng thái mount thẻ SD
+const char *METADATA_FILE_PATH = "/index.txt";
+bool g_is_sd_mounted = false;
 
-//Bản đồ lưu trữ metadata firmware
+// Bản đồ lưu trữ metadata firmware
 std::map<std::string, firmware_metadata_t> g_firmware_map;
 
-// (MỚI) Các vector tĩnh để LƯU TRỮ mảng menu (tốn RAM nhưng dễ code)
+// Vector tĩnh để lưu trữ mảng menu
 static std::vector<std::string> g_displayStrings;
 static std::vector<std::string> g_idStrings;
 static std::vector<const char*> g_menuDisplayItemsPtrs;
 static std::vector<const char*> g_menuFirmwareIDsPtrs;
 
-//Khởi tạo giao tiêp thẻ SD
+// ============================================================
+// HÀM CÔNG KHAI
+// ============================================================
+
+/**
+ * @brief Khởi tạo giao tiếp SD card
+ * @param cs_pin Chân CS của SPI
+ * @return ESP_OK nếu thành công
+ */
 esp_err_t sd_mount(int cs_pin) {
     if (!SD.begin(cs_pin, SPI, 40000000)) { // Thử 40MHz
         ESP_LOGW(TAG, "Failed to mount at 40MHz, trying 20MHz...");
@@ -36,16 +49,20 @@ esp_err_t sd_mount(int cs_pin) {
     return ESP_OK;
 }
 
-//Giải phóng tài nguyên
+/**
+ * @brief Giải phóng tài nguyên SD card
+ */
 esp_err_t sd_unmount() {
     SD.end();
     ESP_LOGI(TAG, "SD Unmounted");
     return ESP_OK;
 }
 
-//Đọc metadata của thẻ SD
-esp_err_t sd_load_metadata(){
-    //1. Kiểm tra thẻ SD đã được mount chưa
+/**
+ * @brief Đọc metadata firmware từ index.txt trên SD card
+ */
+esp_err_t sd_load_metadata() {
+    // Kiểm tra SD đã mount chưa
     if (!g_is_sd_mounted) {
         ESP_LOGE(TAG1, "SD Card not mounted");
         return ESP_FAIL;
@@ -106,7 +123,8 @@ esp_err_t sd_load_metadata(){
                 .path_bootloader = firmware_obj["path_bootloader"] | "",
                 .md5_bootloader = firmware_obj["md5_bootloader"] | "",
                 .path_partition = firmware_obj["path_partition"] | "",
-                .md5_partition = firmware_obj["md5_partition"] | ""
+                .md5_partition = firmware_obj["md5_partition"] | "",
+                .encrypted = firmware_obj["encrypted"] | false
             };
             g_firmware_map[fw_id] = metadata;
             // Đồng thời tạo menu
@@ -119,9 +137,7 @@ esp_err_t sd_load_metadata(){
     }
 
 build_menu_pointers:
-    // [V1] Menu chính CHỈ chứa firmware, không có special items
-    // Special items (Monitor, Sync, Erase) được ẩn trong Tools Menu
-    // Truy cập bằng gesture: Giữ UP+DOWN 3 giây
+    // Tạo mảng con trỏ cho menu UI
     {
         // Tạo mảng con trỏ từ firmware list
         for (const auto& s : g_displayStrings) {
@@ -144,35 +160,51 @@ build_menu_pointers:
     return ESP_OK;
 }
 
-//Path firmware theo fw_id
-esp_err_t sd_get_firmware_path(const std::string& fw_id, firmware_metadata_t& out_metadata){
-    //Kiểm tra thẻ SD đã được mount chưa
+/**
+ * @brief Lấy metadata của firmware theo fw_id
+ * @param fw_id ID của firmware cần tìm
+ * @param out_metadata Output metadata
+ * @return ESP_OK nếu tìm thấy
+ */
+esp_err_t sd_get_firmware_path(const std::string& fw_id, firmware_metadata_t& out_metadata) {
+    // Kiểm tra SD đã mount chưa
     if (!g_is_sd_mounted) {
         ESP_LOGE(TAG1, "SD Card not mounted");
         return ESP_FAIL;
     }
 
-    //Tìm kiếm fw_id trong bản đồ metadata
+    // Tìm kiếm fw_id trong bản đồ metadata
     auto it = g_firmware_map.find(fw_id);
     if (it == g_firmware_map.end()) {
         ESP_LOGE(TAG1, "Firmware ID %s not found in metadata", fw_id.c_str());
         return ESP_ERR_NOT_FOUND;
     }
 
-    //Lấy path firmware
+    // Lấy path firmware
     out_metadata = it->second;
     ESP_LOGI(TAG1, "Firmware ID %s found: Path=%s, Version=%s",
              fw_id.c_str(), out_metadata.path.c_str(), out_metadata.version.c_str());
     return ESP_OK;
 }
 
-// --- (MỚI) VIẾT 2 HÀM LẤY MENU ---
-// 2 hàm này chỉ đơn giản là trả về con trỏ của 2 mảng static ở trên
+// ============================================================
+// HÀM LẤY MENU
+// ============================================================
+
+/**
+ * @brief Lấy danh sách hiển thị menu firmware
+ * @param out_count Số lượng item
+ * @return Mảng con trỏ đến tên hiển thị
+ */
 const char** sd_get_menu_display_items(int& out_count) {
     out_count = g_menuDisplayItemsPtrs.size();
     return g_menuDisplayItemsPtrs.data();
 }
 
+/**
+ * @brief Lấy danh sách fw_id tương ứng với menu
+ * @return Mảng con trỏ đến fw_id
+ */
 const char** sd_get_menu_id_items() {
     return g_menuFirmwareIDsPtrs.data();
 }

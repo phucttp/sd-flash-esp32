@@ -1,8 +1,11 @@
 /**
  * @file file_utils.cpp
- * @brief Implementation of centralized file operations
+ * @brief Triển khai các thao tác file tập trung
  */
 
+// ============================================================
+// INCLUDES
+// ============================================================
 #include "file_utils.h"
 #include "FS.h"
 #include "SD.h"
@@ -15,11 +18,17 @@ static const char* TAG = "FILE_UTILS";
 // FILE OPERATIONS
 // ============================================================
 
+/**
+ * @brief Kiểm tra file có tồn tại không
+ */
 bool fu_file_exists(const char* path) {
     std::string normalized = fu_normalize_path(path);
     return SD.exists(normalized.c_str());
 }
 
+/**
+ * @brief Đọc toàn bộ nội dung file vào string
+ */
 esp_err_t fu_file_read(const char* path, std::string& out_content) {
     std::string normalized = fu_normalize_path(path);
     out_content.clear();
@@ -45,6 +54,9 @@ esp_err_t fu_file_read(const char* path, std::string& out_content) {
     return ESP_OK;
 }
 
+/**
+ * @brief Đọc file vào buffer với giá trị mặc định
+ */
 esp_err_t fu_file_read_buf(const char* path, char* buffer, size_t buffer_size, const char* default_value) {
     std::string normalized = fu_normalize_path(path);
     bool has_valid_data = false;
@@ -75,10 +87,13 @@ esp_err_t fu_file_read_buf(const char* path, char* buffer, size_t buffer_size, c
     return ESP_OK;
 }
 
+/**
+ * @brief Ghi nội dung vào file (tự tạo thư mục cha nếu thiếu)
+ */
 esp_err_t fu_file_write(const char* path, const char* content) {
     std::string normalized = fu_normalize_path(path);
 
-    // Ensure parent directory exists
+    // Đảm bảo thư mục cha tồn tại
     std::string parent = fu_get_parent_dir(normalized.c_str());
     if (!parent.empty()) {
         fu_dir_create(parent.c_str());

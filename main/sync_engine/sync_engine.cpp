@@ -1,6 +1,8 @@
 #include "sync_engine.h"
 
-// --- 1. INCLUDE CÁC MODULE VỆ TINH ---
+// ============================================================
+// INCLUDES
+// ============================================================
 #include <Arduino.h>
 #include <SD.h>
 #include <ArduinoJson.h>
@@ -28,16 +30,19 @@ static const char* TAG = "SYNC_ENGINE";
 // HÀM PHỤ TRỢ
 // ============================================================
 
-// Helper: Tạo URL tải về
+/**
+ * @brief Tạo URL đầy đủ từ base URL và relative path
+ */
 String build_download_url(String baseUrl, String relPath) {
     int lastSlash = baseUrl.lastIndexOf('/');
     String rootUrl = (lastSlash > 0) ? baseUrl.substring(0, lastSlash + 1) : baseUrl + "/";
     return rootUrl + relPath;
 }
 
-// Helper: Cập nhật Index (Xóa cũ -> Đổi tên Mới -> Chính)
-// Helper: Cập nhật Index (Đọc file tạm -> Sửa đuôi .enc thành .bin -> Ghi file chính)
-// Helper: Cập nhật Index (Đọc file tạm -> Sửa đuôi .enc thành .bin -> THÊM DẤU / -> Ghi file chính)
+/**
+ * @brief Cập nhật file index (đọc tạm -> thêm "/" vào path -> ghi file chính)
+ * @return true nếu thành công
+ */
 bool update_index_file() {
     ESP_LOGI(TAG, "Converting index paths (.enc -> .bin) & Adding '/'...");
 
@@ -63,21 +68,17 @@ bool update_index_file() {
     JsonArray root = doc.as<JsonArray>();
     for (JsonObject obj : root) {
         
-        // Lambda sửa đường dẫn: Đổi đuôi & Thêm dấu /
+        // Lambda sửa đường dẫn: Thêm dấu / (giữ nguyên .enc)
         auto fix_path = [](JsonObject& o, const char* key) {
             if (o.containsKey(key)) {
                 String path = o[key].as<String>();
-                
-                // a. Đổi đuôi .enc -> .bin
-                if (path.endsWith(".enc")) {
-                    path.replace(".enc", ".bin");
-                }
-                
-                // b. [FIX] Thêm dấu / vào đầu nếu thiếu (Quan trọng!)
+
+                // [FIX] Thêm dấu / vào đầu nếu thiếu (Quan trọng!)
+                // NOTE: Giữ nguyên đuôi .enc - không đổi sang .bin
                 if (path.length() > 0 && path.charAt(0) != '/') {
                     path = "/" + path;
                 }
-                
+
                 o[key] = path; // Ghi đè lại vào JSON object
             }
         };
@@ -86,6 +87,9 @@ bool update_index_file() {
         fix_path(obj, "path");
         fix_path(obj, "path_bootloader");
         fix_path(obj, "path_partition");
+
+        // [NEW] Đánh dấu firmware này là encrypted (vì file trên SD là .enc)
+        obj["encrypted"] = true;
         
         // Debug nhẹ để kiểm tra
         // const char* id = obj["fw_id"];
@@ -117,8 +121,13 @@ bool update_index_file() {
 }
 
 // ============================================================
-// HÀM CHÍNH: SYNC ENGINE
+// HÀM CHÍNH
 // ============================================================
+
+/**
+ * @brief Chạy sync engine - đồng bộ firmware từ server về SD card
+ * @param force_clean Xóa sạch firmware cũ trước khi sync
+ */
 void sync_engine_run(bool force_clean) {
     ESP_LOGI(TAG, ">>> START SYNC ENGINE <<<");
     // [MỚI] Nếu yêu cầu Xóa sạch (Reset gốc)
@@ -264,28 +273,26 @@ void sync_engine_run(bool force_clean) {
         }
 
         // --- HÀM TẢI (LAMBDA) ---
+        // [MỚI] Giữ nguyên file .enc trên thẻ SD, giải mã khi flash
         auto download_item = [&](String url_rel, const char* item_name) {
             if (url_rel.length() < 3) return;
-            
+
             // 1. URL tải: Giữ nguyên .enc để tải từ Server
             String dlUrl = build_download_url(baseUrl, url_rel);
-            
-            // 2. Path lưu: Ban đầu lấy từ JSON (đang là .enc)
+
+            // 2. Path lưu: Giữ nguyên .enc (KHÔNG đổi sang .bin)
             // Thêm dấu "/" vào đầu nếu thiếu
             String savePath = (url_rel[0] == '/') ? url_rel : "/" + url_rel;
-            
-            // [QUAN TRỌNG] Đổi đuôi .enc -> .bin
-            // Vì file lưu xuống thẻ là file đã giải mã (binary)
-            if (savePath.endsWith(".enc")) {
-                savePath.replace(".enc", ".bin");
-            }
+
+            // [MỚI] KHÔNG đổi đuôi - giữ nguyên .enc
+            // File sẽ được giải mã khi flash, không phải khi sync
 
             ui.showMessage("DL...", item_name);
-            
-            // 3. Gọi hàm tải:
+
+            // 3. Gọi hàm tải THÔ (không giải mã):
             // - Tải từ dlUrl (.enc)
-            // - Lưu vào savePath (.bin)
-            if (ota_download_file_encrypted(dlUrl.c_str(), savePath.c_str(), key, iv)) {
+            // - Lưu vào savePath (.enc) - giữ nguyên mã hóa
+            if (ota_download_file_raw(dlUrl.c_str(), savePath.c_str())) {
                 data_changed = true;
             } else {
                 ESP_LOGE(TAG, "[%s] Failed DL %s", id.c_str(), item_name);

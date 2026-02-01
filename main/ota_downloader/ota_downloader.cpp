@@ -1,15 +1,11 @@
 #include "ota_downloader.h"
 
 // ============================================================
-// 1. INCLUDE ARDUINO & SD TRƯỚC (QUAN TRỌNG: Tránh lỗi xung đột)
+// INCLUDES
 // ============================================================
 #include <Arduino.h>
-#include <SD.h> 
+#include <SD.h>
 #include <FS.h>
-
-// ============================================================
-// 2. INCLUDE ESP-IDF SAU
-// ============================================================
 #include "esp_http_client.h"
 #include "esp_log.h"
 #include "esp_crt_bundle.h"
@@ -19,15 +15,21 @@
 
 extern OledUI ui;
 
+// ============================================================
+// BIẾN TOÀN CỤC
+// ============================================================
 static const char* TAG = "OTA_DL";
 
-#define MAX_HTTP_RECV_BUFFER 1024 
-#define DL_BUFFER_SIZE 1024 
+#define MAX_HTTP_RECV_BUFFER 1024
+#define DL_BUFFER_SIZE 1024
 
 // ============================================================
-// 3. HÀM HỖ TRỢ
+// HÀM HỖ TRỢ
 // ============================================================
-// Helper: Thêm tham số ngẫu nhiên để phá Cache
+
+/**
+ * @brief Thêm tham số ngẫu nhiên vào URL để tránh cache
+ */
 String add_cache_buster(const char* original_url) {
     String url = String(original_url);
     long random_val = esp_random(); // Lấy số ngẫu nhiên phần cứng
@@ -42,8 +44,15 @@ String add_cache_buster(const char* original_url) {
 }
 
 // ============================================================
-// HÀM 1: TẢI FILE TEXT (INDEX/JSON)
+// HÀM CÔNG KHAI
 // ============================================================
+
+/**
+ * @brief Tải file index (JSON) từ server
+ * @param url URL của file index
+ * @param save_path Đường dẫn lưu file trên SD (NULL = không lưu)
+ * @return Nội dung JSON dạng string
+ */
 std::string ota_download_index(const char* url, const char* save_path) {
     // [FIX] Tạo URL mới có đuôi chống cache
     String freshUrl = add_cache_buster(url);
@@ -121,9 +130,14 @@ std::string ota_download_index(const char* url, const char* save_path) {
     return payload;
 }
 
-// ============================================================
-// HÀM 2: TẢI & GIẢI MÃ FILE
-// ============================================================
+/**
+ * @brief Tải file mã hóa từ server và giải mã AES-128-CBC
+ * @param url URL file mã hóa
+ * @param save_path Đường dẫn lưu file đã giải mã
+ * @param key Key AES 16 bytes
+ * @param iv IV AES 16 bytes
+ * @return true nếu thành công
+ */
 bool ota_download_file_encrypted(const char* url, const char* save_path, const char* key, const char* iv) {
     // [FIX] Tạo URL mới có đuôi chống cache
     String freshUrl = add_cache_buster(url);
@@ -153,9 +167,9 @@ bool ota_download_file_encrypted(const char* url, const char* save_path, const c
     // Mở kết nối
     esp_err_t err = esp_http_client_open(client, 0);
     if (err == ESP_OK) {
-        int status_code = esp_http_client_fetch_headers(client);
-        status_code = esp_http_client_get_status_code(client);
-        
+        int content_length = esp_http_client_fetch_headers(client);
+        int status_code = esp_http_client_get_status_code(client);
+
         if (status_code == 200) {
 
             // --- [MỚI] LOGIC TỰ TẠO THƯ MỤC ---
@@ -213,15 +227,24 @@ bool ota_download_file_encrypted(const char* url, const char* save_path, const c
                                 file.write((uint8_t*)buffer_out, blocks * 16);
                                 total_written += (blocks * 16);
                             }
-                           // --- [LOGIC MỚI] HIỂN THỊ TỐI GIẢN (Mỗi 20KB cập nhật 1 lần) ---
-                            int current_kb = total_written / 1024;
-                            
-                            if (current_kb - last_kb >= 50) { // Thay đổi >= 50KB mới vẽ lại
-                                String msg = "Size: " + String(current_kb) + " KB";
-                                ui.showMessage("Downloading...", msg.c_str());
-                                
-                                last_kb = current_kb; // Lưu mốc mới
-                                ESP_LOGI(TAG, "Downloaded %d KB", current_kb); // Log nhẹ
+                           // --- HIỂN THỊ PROGRESS BAR ---
+                            if (content_length > 0) {
+                                int percent = (total_written * 100) / content_length;
+                                if (percent != last_kb) {  // Dùng last_kb làm last_percent
+                                    last_kb = percent;
+                                    ui.showProgress("Downloading...", percent);
+                                    if (percent % 10 == 0) {
+                                        ESP_LOGI(TAG, "Downloaded %d%%", percent);
+                                    }
+                                }
+                            } else {
+                                // Fallback nếu không biết tổng size
+                                int current_kb = total_written / 1024;
+                                if (current_kb - last_kb >= 50) {
+                                    last_kb = current_kb;
+                                    String msg = String(current_kb) + " KB";
+                                    ui.showMessage("Downloading...", msg.c_str());
+                                }
                             }
                             // -------------------------------------------------------------
                         } 
@@ -265,6 +288,135 @@ bool ota_download_file_encrypted(const char* url, const char* save_path, const c
     esp_http_client_cleanup(client);
 
     // Nếu thất bại thì xóa file rác
+    if (!success && SD.exists(save_path)) {
+        SD.remove(save_path);
+        ESP_LOGW(TAG, "Deleted incomplete file");
+    }
+
+    return success;
+}
+
+/**
+ * @brief Tải file thô từ server (không giải mã)
+ * @param url URL file
+ * @param save_path Đường dẫn lưu file
+ * @return true nếu thành công
+ */
+bool ota_download_file_raw(const char* url, const char* save_path) {
+    // [FIX] Tạo URL mới có đuôi chống cache
+    String freshUrl = add_cache_buster(url);
+
+    ESP_LOGI(TAG, "Start RAW Download: %s -> %s", freshUrl.c_str(), save_path);
+
+    esp_http_client_config_t config = {};
+    config.url = freshUrl.c_str();
+    config.method = HTTP_METHOD_GET;
+    config.timeout_ms = 15000;
+    config.disable_auto_redirect = false;
+    config.crt_bundle_attach = esp_crt_bundle_attach;
+
+    esp_http_client_handle_t client = esp_http_client_init(&config);
+    if (!client) {
+        ESP_LOGE(TAG, "Init HTTP failed");
+        return false;
+    }
+
+    bool success = false;
+
+    // Mở kết nối
+    esp_err_t err = esp_http_client_open(client, 0);
+    if (err == ESP_OK) {
+        int content_length = esp_http_client_fetch_headers(client);
+        int status_code = esp_http_client_get_status_code(client);
+
+        if (status_code == 200) {
+            // --- TỰ TẠO THƯ MỤC ---
+            char *pathStr = strdup(save_path);
+            if (pathStr) {
+                char *ptr = strrchr(pathStr, '/');
+                if (ptr) {
+                    *ptr = 0;
+                    if (strlen(pathStr) > 0 && !SD.exists(pathStr)) {
+                        ESP_LOGW(TAG, "Creating missing dir: %s", pathStr);
+                        SD.mkdir(pathStr);
+                    }
+                }
+                free(pathStr);
+            }
+
+            // Chuẩn bị file
+            if (SD.exists(save_path)) SD.remove(save_path);
+            File file = SD.open(save_path, FILE_WRITE);
+
+            if (file) {
+                // Cấp phát bộ nhớ
+                char *buffer = (char*)malloc(DL_BUFFER_SIZE);
+
+                if (buffer) {
+                    int total_written = 0;
+                    int last_kb = 0;
+
+                    // Vòng lặp xử lý - KHÔNG GIẢI MÃ
+                    while (1) {
+                        int read_len = esp_http_client_read(client, buffer, DL_BUFFER_SIZE);
+                        if (read_len > 0) {
+                            // Ghi trực tiếp (không giải mã)
+                            file.write((uint8_t*)buffer, read_len);
+                            total_written += read_len;
+
+                            // Hiển thị progress bar
+                            if (content_length > 0) {
+                                int percent = (total_written * 100) / content_length;
+                                if (percent != last_kb) {  // Dùng last_kb làm last_percent
+                                    last_kb = percent;
+                                    ui.showProgress("Downloading...", percent);
+                                    if (percent % 10 == 0) {
+                                        ESP_LOGI(TAG, "Downloaded %d%%", percent);
+                                    }
+                                }
+                            } else {
+                                // Fallback nếu không biết size
+                                int current_kb = total_written / 1024;
+                                if (current_kb - last_kb >= 50) {
+                                    last_kb = current_kb;
+                                    ui.showMessage("Downloading...", (String(current_kb) + " KB").c_str());
+                                }
+                            }
+                        }
+                        else if (read_len == 0) {
+                            if (esp_http_client_is_complete_data_received(client)) {
+                                ESP_LOGI(TAG, "RAW Download Complete. Size: %d", total_written);
+                                success = true;
+                            } else {
+                                ESP_LOGE(TAG, "Connection closed unexpectedly");
+                            }
+                            break;
+                        }
+                        else {
+                            ESP_LOGE(TAG, "Read error");
+                            break;
+                        }
+                    }
+                } else {
+                    ESP_LOGE(TAG, "Malloc failed");
+                }
+
+                if (buffer) free(buffer);
+                file.close();
+            } else {
+                ESP_LOGE(TAG, "Cannot open file to write: %s", save_path);
+            }
+        } else {
+            ESP_LOGE(TAG, "HTTP Error: %d", status_code);
+        }
+        esp_http_client_close(client);
+    } else {
+        ESP_LOGE(TAG, "Connect failed: %s", esp_err_to_name(err));
+    }
+
+    esp_http_client_cleanup(client);
+
+    // Xóa file rác nếu thất bại
     if (!success && SD.exists(save_path)) {
         SD.remove(save_path);
         ESP_LOGW(TAG, "Deleted incomplete file");

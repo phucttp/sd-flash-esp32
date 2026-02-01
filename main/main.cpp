@@ -323,13 +323,15 @@ static void run_flash_fw(const char* fw_id) {
         statusProgress = 100;
         statusText = "Done";
         ui.showMessage("Done!", "Flash Complete");
+        vTaskDelay(pdMS_TO_TICKS(1500));
+        // Reset host để giải phóng bộ nhớ sau khi flash
+        host_system_restart();
     } else {
         statusText = "Error";
         ui.showMessage("Error", "Flash Failed!");
+        isFlashing = false;
+        vTaskDelay(pdMS_TO_TICKS(2000));
     }
-
-    isFlashing = false;
-    vTaskDelay(pdMS_TO_TICKS(2000));
 }
 
 // ============================================================

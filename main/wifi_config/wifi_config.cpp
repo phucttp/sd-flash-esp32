@@ -1,42 +1,65 @@
 #include "wifi_config.h"
 
-// --- THƯ VIỆN CẦN THIẾT ---
-#include <WiFiManager.h> 
+// ============================================================
+// INCLUDES
+// ============================================================
+#include <WiFiManager.h>
 #include <SD.h>
 #include <FS.h>
 #include "esp_log.h"
 #include "esp_err.h"
 #include "esp_system.h"
+#include "nvs_flash.h"
+#include "nvs.h"
 
-// --- MODULE KHÁC TRONG DỰ ÁN ---
 #include "oled_ui.h"
 #include "../sd_card/sd_card.h"
-#include "../file_utils/file_utils.h"  // Centralized file operations
+#include "../file_utils/file_utils.h"
 
 extern OledUI ui;
 
-// --- BIẾN TOÀN CỤC NỘI BỘ (STATIC) ---
-static const char *TAG = "WIFI_CFG"; // Tag log cho module này
-static bool shouldSaveConfig = false; // Cờ để biết có cần lưu config không
+// ============================================================
+// BIẾN TOÀN CỤC
+// ============================================================
+static const char *TAG = "WIFI_CFG";
+static bool shouldSaveConfig = false;
+
+// NVS namespace (Key/IV lưu trong ESP32 flash, KHÔNG phải SD card)
+#define NVS_NAMESPACE "flasher_cfg"
+#define NVS_KEY_AES   "aes_key"
+#define NVS_KEY_IV    "aes_iv"
 
 // ============================================================
-// 1. KHAI BÁO HÀM NỘI BỘ (INTERNAL PROTOTYPES)
+// KHAI BÁO HÀM NỘI BỘ
 // ============================================================
 static void _save_config_callback();
 static esp_err_t _read_file(const char* path, char* buffer, size_t size, const char* default_val);
 static esp_err_t _write_file(const char* path, const char* value);
-static String _normalize_git_url(const char* input_url);  // [NEW] Forward declaration
+static String _normalize_git_url(const char* input_url);
+
+// NVS helpers
+static esp_err_t _nvs_read_string(const char* key, char* out, size_t max_len, const char* default_val);
+static esp_err_t _nvs_write_string(const char* key, const char* value);
 
 // ============================================================
-// 2. HÀM CÔNG KHAI (PUBLIC FUNCTIONS)
+// HÀM CÔNG KHAI
 // ============================================================
 
-// Hàm lấy toàn bộ thông tin cấu hình ra ngoài (để module Download sử dụng)
+/**
+ * @brief Lấy thông tin cấu hình (URL từ SD, Key/IV từ NVS)
+ */
 void wifi_config_get_params(char* out_url, char* out_key, char* out_iv) {
+    // URL vẫn lưu trên SD (không nhạy cảm)
     _read_file(CONFIG_FILE_URL, out_url, 256, DEFAULT_URL);
-    _read_file(CONFIG_FILE_KEY, out_key, 33, DEFAULT_KEY);
-    _read_file(CONFIG_FILE_IV,  out_iv, 33, DEFAULT_IV);
+
+    // Key/IV lưu trong NVS (bảo mật)
+    _nvs_read_string(NVS_KEY_AES, out_key, 33, DEFAULT_KEY);
+    _nvs_read_string(NVS_KEY_IV,  out_iv,  33, DEFAULT_IV);
 }
+
+/**
+ * @brief Kết nối WiFi (auto-connect hoặc portal)
+ */
 bool wifi_config_connect() {
     WiFiManager wm;
     wm.setConfigPortalTimeout(180); 
@@ -44,7 +67,9 @@ bool wifi_config_connect() {
     return wm.autoConnect("Universal-Flasher-Config");
 }
 
-// Hàm Setup chính: Hiện 3 ô nhập liệu
+/**
+ * @brief Mở portal cấu hình (URL, AES Key, IV)
+ */
 void wifi_config_force_portal() {
     ESP_LOGI(TAG, ">>> OPEN SETUP PORTAL");
     ui.showMessage("Setup Mode", "Connect Wifi...");
@@ -96,10 +121,12 @@ void wifi_config_force_portal() {
             ESP_LOGI(TAG, "Original URL: %s", new_url);
             ESP_LOGI(TAG, "Normalized URL: %s", normalized_url.c_str());
 
-            // Lưu xuống 3 file riêng biệt
-            _write_file(CONFIG_FILE_URL, normalized_url.c_str());
-            _write_file(CONFIG_FILE_KEY, new_key);
-            _write_file(CONFIG_FILE_IV,  new_iv);
+            // [SECURITY] URL lưu trên SD, Key/IV lưu trong NVS (ESP32 flash)
+            _write_file(CONFIG_FILE_URL, normalized_url.c_str());  // SD card (public)
+            _nvs_write_string(NVS_KEY_AES, new_key);               // NVS (secure)
+            _nvs_write_string(NVS_KEY_IV,  new_iv);                // NVS (secure)
+
+            ESP_LOGI(TAG, "Key/IV saved to NVS (not SD card)");
 
             ui.showMessage("Setup", "Saved & Reboot");
             delay(2000);
@@ -110,18 +137,21 @@ void wifi_config_force_portal() {
     wifi_config_stop();
 }
 
+/**
+ * @brief Ngắt kết nối WiFi và tắt radio
+ */
 void wifi_config_stop() {
     ESP_LOGI(TAG, ">>> Ngat ket noi Wifi...");
-    WiFi.disconnect(true); // Ngắt kết nối và xóa cấu hình
-    WiFi.mode(WIFI_OFF);         // Tắt Radio WiFi để tiết kiệm pin
+    WiFi.disconnect(true);
+    WiFi.mode(WIFI_OFF);
     ESP_LOGI(TAG, "Wifi stopped.");
 }
 
 // ============================================================
-// 3. HÀM NỘI BỘ (INTERNAL IMPLEMENTATION)
+// HÀM NỘI BỘ
 // ============================================================
 
-// Callback báo hiệu người dùng bấm nút Save trên Web
+// Callback khi user bấm Save trên web portal
 static void _save_config_callback() {
     ESP_LOGI(TAG, "Callback: User da thay doi cau hinh!");
     shouldSaveConfig = true;
@@ -184,15 +214,75 @@ static esp_err_t _read_file(const char* path, char* buffer, size_t size, const c
     return fu_file_read_buf(path, buffer, size, default_val);
 }
 
-// Ghi file text (Tự tạo thư mục /config nếu thiếu)
+// Ghi file text
 static esp_err_t _write_file(const char* path, const char* value) {
-    // fu_file_write tự động tạo parent dir và xóa file cũ
     esp_err_t err = fu_file_write(path, value);
     if (err == ESP_OK) {
         ESP_LOGI(TAG, "Saved: %s -> %s", path, value);
     } else {
         ESP_LOGE(TAG, "Save Failed: %s", path);
     }
+    return err;
+}
+
+// ============================================================
+// NVS HELPERS - Lưu Key/IV an toàn trong flash ESP32
+// ============================================================
+
+/**
+ * @brief Đọc chuỗi từ NVS, fallback về default nếu không có
+ */
+static esp_err_t _nvs_read_string(const char* key, char* out, size_t max_len, const char* default_val) {
+    nvs_handle_t handle;
+    esp_err_t err = nvs_open(NVS_NAMESPACE, NVS_READONLY, &handle);
+
+    if (err != ESP_OK) {
+        // NVS namespace doesn't exist yet, use default
+        ESP_LOGW(TAG, "NVS namespace not found, using default for '%s'", key);
+        strncpy(out, default_val, max_len - 1);
+        out[max_len - 1] = '\0';
+        return ESP_ERR_NVS_NOT_FOUND;
+    }
+
+    size_t required_size = max_len;
+    err = nvs_get_str(handle, key, out, &required_size);
+
+    if (err != ESP_OK) {
+        // Key not found, use default
+        ESP_LOGW(TAG, "NVS key '%s' not found, using default", key);
+        strncpy(out, default_val, max_len - 1);
+        out[max_len - 1] = '\0';
+    } else {
+        ESP_LOGI(TAG, "NVS loaded '%s' (%d chars)", key, strlen(out));
+    }
+
+    nvs_close(handle);
+    return err;
+}
+
+/**
+ * @brief Ghi chuỗi vào NVS
+ */
+static esp_err_t _nvs_write_string(const char* key, const char* value) {
+    nvs_handle_t handle;
+    esp_err_t err = nvs_open(NVS_NAMESPACE, NVS_READWRITE, &handle);
+
+    if (err != ESP_OK) {
+        ESP_LOGE(TAG, "Failed to open NVS: %s", esp_err_to_name(err));
+        return err;
+    }
+
+    err = nvs_set_str(handle, key, value);
+    if (err != ESP_OK) {
+        ESP_LOGE(TAG, "Failed to write NVS key '%s': %s", key, esp_err_to_name(err));
+    } else {
+        err = nvs_commit(handle);
+        if (err == ESP_OK) {
+            ESP_LOGI(TAG, "NVS saved '%s' (secure storage)", key);
+        }
+    }
+
+    nvs_close(handle);
     return err;
 }
 

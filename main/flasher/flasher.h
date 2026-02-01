@@ -34,6 +34,17 @@ esp_err_t flasher_begin_session(const std::string& fw_id);
 esp_err_t flasher_write_segment(const std::string& file_path, uint32_t offset, const std::string& md5 = "");
 
 /**
+ * @brief Write an encrypted segment to target flash with real-time decryption.
+ * @param file_path Path to .enc file on SD card
+ * @param offset Flash offset address
+ * @param md5 Expected MD5 hash of decrypted data (optional)
+ * @return ESP_OK on success
+ *
+ * @note Reads AES key/IV from /config/aes_key.txt and /config/aes_iv.txt
+ */
+esp_err_t flasher_write_segment_encrypted(const std::string& file_path, uint32_t offset, const std::string& md5 = "");
+
+/**
  * @brief Xóa toàn bộ flash của chip Target.
  */
 esp_err_t flasher_chip_erase(void);

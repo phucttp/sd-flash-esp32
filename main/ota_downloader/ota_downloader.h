@@ -18,4 +18,14 @@ std::string ota_download_index(const char* url, const char* save_path = NULL);
  */
 bool ota_download_file_encrypted(const char* url, const char* save_path, const char* key, const char* iv);
 
+/**
+ * @brief Tải file và lưu trực tiếp (KHÔNG giải mã).
+ * Dùng cho chế độ giữ file .enc trên thẻ SD, giải mã khi flash.
+ * @param url Đường dẫn tải file (.enc)
+ * @param save_path Đường dẫn lưu file trên thẻ nhớ (giữ nguyên .enc)
+ * @return true Nếu thành công
+ * @return false Nếu lỗi
+ */
+bool ota_download_file_raw(const char* url, const char* save_path);
+
 #endif // OTA_DOWNLOADER_H

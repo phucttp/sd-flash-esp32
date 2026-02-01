@@ -3,14 +3,25 @@
  * @brief Triển khai logic parse JSON sử dụng thư viện ArduinoJson.
  */
 
+// ============================================================
+// INCLUDES
+// ============================================================
 #include "metadata_parser.h"
 #include <ArduinoJson.h>
 #include "esp_log.h"
 
-// Tag để lọc log trong Terminal
 static const char* TAG = "JSON_PARSER";
 
-// Hàm chính: Parse JSON -> Map
+// ============================================================
+// HÀM CÔNG KHAI
+// ============================================================
+
+/**
+ * @brief Parse chuỗi JSON thành FirmwareMap
+ * @param json_content Nội dung JSON
+ * @param out_map Output map chứa metadata
+ * @return true nếu parse thành công
+ */
 bool metadata_parse_json(const String& json_content, FirmwareMap& out_map) {
     ESP_LOGI(TAG, ">>> Bắt đầu phân tích JSON (Kích thước: %d bytes)...", json_content.length());
 
@@ -75,6 +86,9 @@ bool metadata_parse_json(const String& json_content, FirmwareMap& out_map) {
         // --- [D] LẤY THÔNG TIN PARTITION TABLE (Tùy chọn) ---
         meta.path_partition  = obj["path_partition"]  | "";
         meta.md5_partition   = obj["md5_partition"]   | "";
+
+        // --- [E] LẤY THÔNG TIN MÃ HÓA (Tùy chọn) ---
+        meta.encrypted = obj["encrypted"] | false;  // Default: false for backward compat
 
         // 5. NẠP VÀO MAP
         // -------------------------------------------------------------------

@@ -8,14 +8,18 @@
 #include <Arduino.h>
 
 // Định nghĩa đường dẫn file cấu hình
-#define CONFIG_FILE_URL  "/config/url.txt"
-#define CONFIG_FILE_KEY  "/config/aes_key.txt"
-#define CONFIG_FILE_IV   "/config/aes_iv.txt"
+#define CONFIG_FILE_URL  "/config/url.txt"  // URL lưu trên SD (không nhạy cảm)
 
-// Giá trị mặc định (Nếu thẻ nhớ chưa có)
+// [SECURITY] Key/IV KHÔNG còn lưu trên SD card!
+// Chúng được lưu trong NVS (ESP32 internal flash)
+// → Lấy thẻ nhớ không thể giải mã firmware
+// #define CONFIG_FILE_KEY  "/config/aes_key.txt"  // DEPRECATED - now in NVS
+// #define CONFIG_FILE_IV   "/config/aes_iv.txt"   // DEPRECATED - now in NVS
+
+// Giá trị mặc định (Nếu chưa cấu hình)
 #define DEFAULT_URL "https://raw.githubusercontent.com/DEFAULT/REPO/main/fw.enc"
-#define DEFAULT_KEY "1234567890123456" // 16 ký tự
-#define DEFAULT_IV  "0000000000000000" // 16 ký tự
+#define DEFAULT_KEY "1234567890123456" // 16 ký tự (stored in NVS)
+#define DEFAULT_IV  "0000000000000000" // 16 ký tự (stored in NVS)
 
 /**
  * @brief Kết nối Wifi (AutoConnect) và lấy URL Firmware

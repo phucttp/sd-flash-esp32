@@ -12,6 +12,7 @@ typedef struct {
     std::string md5_bootloader;
     std::string path_partition;
     std::string md5_partition;
+    bool encrypted = false;  // true if files are AES-128-CBC encrypted (.enc)
 } firmware_metadata_t;
 
 // Định nghĩa luôn kiểu Map cho gọn code

@@ -11,6 +11,7 @@
 // 1. STANDARD & ESP-IDF LIBRARIES
 // ============================================================
 #include "flasher.h" // Định nghĩa các hằng số và cấu trúc của module flasher
+#include "flasher_crypto.h" // AES decryption for encrypted firmware
 
 #include <inttypes.h> // Hỗ trợ định dạng PRIx32
 #include <string.h>
@@ -47,25 +48,6 @@ static const char *TAG = "FLASHER";
 static int g_saved_combo = -1;
 static bool g_combo_loaded = false;
 
-// ============================================================
-// TIMING PROFILES - Cho các loại chip/mạch khác nhau
-// ============================================================
-typedef struct {
-	uint32_t reset_hold_ms;   // Thời gian giữ EN=LOW
-	uint32_t boot_hold_ms;    // Thời gian chờ sau khi thả EN (IO0 vẫn LOW)
-	const char* name;
-} timing_profile_t;
-
-static const timing_profile_t TIMING_PROFILES[] = {
-	{  50,  50, "ULTRA_FAST" },     // Rất nhanh
-	{ 100, 100, "FAST" },           // Nhanh
-	{ 100, 150, "NORMAL" },         // Chuẩn
-	{ 150, 200, "MEDIUM" },         // Trung bình
-	{ 150, 300, "SLOW" },           // Chậm, boot_hold dài hơn
-	{  80, 120, "SHORT" },          // Reset ngắn
-};
-#define NUM_PROFILES (sizeof(TIMING_PROFILES) / sizeof(TIMING_PROFILES[0]))
-
 /**
  * @brief Khởi tạo phần cứng của HOST (ESP32-C3) để giao tiếp với TARGET.
  * Hàm này cài đặt các chân UART (TX/RX) và các chân điều khiển
@@ -83,7 +65,6 @@ const loader_esp32_config_t config = {
 };
 
 // Khai báo hàm
-static esp_err_t reset_sequence_with_profile(const loader_esp32_config_t *config, const timing_profile_t *profile);
 static esp_err_t try_connect(void);
 
 // Flag để tránh init UART nhiều lần
@@ -175,10 +156,13 @@ esp_err_t flasher_write_segment(const std::string& file_path, uint32_t offset, c
 		// Tính toán và hiển thị tiến trình nạp
 		uint32_t progress = (uint32_t)((bytes_written * 100) / total_size);
 
-		if (progress % 5 == 0) {
+		// Cập nhật progress bar (mỗi 2% để giảm flicker)
+		static uint32_t last_progress = 0;
+		if (progress != last_progress && progress % 10 == 0) {
+			last_progress = progress;
 			ESP_LOGI(TAG, "Progress: %" PRIu32 "%%", progress);
-			// Cập nhật thông báo lên màn hình OLED
-			ui.showMessage(file_path.c_str(), (String("Progress: ") + String(progress) + String("%")).c_str());
+			// Hiển thị progress bar thay vì text
+			ui.showProgress(file_path.c_str(), (int)progress);
 		}
 	}
 
@@ -211,6 +195,130 @@ esp_err_t flasher_write_segment(const std::string& file_path, uint32_t offset, c
 }
 
 /**
+ * @brief Ghi một phân vùng MÃ HÓA của firmware lên chip Target.
+ * @param file_path Đường dẫn file .enc trên thẻ nhớ SD.
+ * @param offset Địa chỉ flash bắt đầu ghi.
+ * @param md5 Chuỗi MD5 (32 ký tự) để xác thực sau khi ghi.
+ * @return ESP_OK nếu ghi và xác thực thành công.
+ */
+esp_err_t flasher_write_segment_encrypted(const std::string& file_path, uint32_t offset, const std::string& md5)
+{
+	ESP_LOGI(TAG, "==== Writing ENCRYPTED segment ====");
+	ESP_LOGI(TAG, "File: %s | Offset: 0x%08" PRIx32, file_path.c_str(), offset);
+
+	// --- MỞ FILE MÃ HÓA ---
+	File fwFile = SD.open(file_path.c_str(), FILE_READ);
+	if (!fwFile) {
+		ESP_LOGE(TAG, "Failed to open encrypted file: %s", file_path.c_str());
+		return ESP_ERR_NOT_FOUND;
+	}
+
+	size_t total_size = fwFile.size();
+	if (total_size == 0) {
+		ESP_LOGE(TAG, "Encrypted file is empty: %s", file_path.c_str());
+		fwFile.close();
+		return ESP_FAIL;
+	}
+
+	ESP_LOGI(TAG, "Encrypted file size: %zu bytes", total_size);
+
+	// --- KHỞI TẠO CRYPTO ---
+	flasher_crypto_ctx_t crypto = {0};
+	if (flasher_crypto_init(&crypto) != ESP_OK) {
+		ESP_LOGE(TAG, "Failed to initialize crypto context");
+		fwFile.close();
+		return ESP_FAIL;
+	}
+
+	// --- BẮT ĐẦU GHI FLASH ---
+	// Gửi lệnh báo cho target biết sắp ghi phân vùng
+	// Lưu ý: total_size là kích thước file mã hóa, có thể lớn hơn kích thước thật do padding
+	esp_loader_error_t err = esp_loader_flash_start(offset, total_size, BUFFER_SIZE);
+	if (err != ESP_LOADER_SUCCESS) {
+		ESP_LOGE(TAG, "Failed to start flash for encrypted segment. err=%d", err);
+		flasher_crypto_cleanup(&crypto);
+		fwFile.close();
+		return ESP_FAIL;
+	}
+
+	// Cấp phát bộ đệm kép (encrypted input, decrypted output)
+	uint8_t* buffer_enc = (uint8_t*) malloc(BUFFER_SIZE);
+	uint8_t* buffer_dec = (uint8_t*) malloc(BUFFER_SIZE);
+	if (!buffer_enc || !buffer_dec) {
+		ESP_LOGE(TAG, "Failed to allocate buffers!");
+		if (buffer_enc) free(buffer_enc);
+		if (buffer_dec) free(buffer_dec);
+		flasher_crypto_cleanup(&crypto);
+		fwFile.close();
+		return ESP_ERR_NO_MEM;
+	}
+
+	size_t bytes_written = 0;
+	size_t bytes_read = 0;
+
+	// Đọc từng khối dữ liệu mã hóa, giải mã và ghi vào flash của Target
+	while ((bytes_read = fwFile.read(buffer_enc, BUFFER_SIZE)) > 0) {
+		// Giải mã chunk
+		size_t dec_len = 0;
+		if (flasher_crypto_decrypt(&crypto, buffer_enc, bytes_read, buffer_dec, &dec_len) != ESP_OK) {
+			ESP_LOGE(TAG, "Decrypt error at offset %zu", bytes_written);
+			break;
+		}
+
+		if (dec_len > 0) {
+			// Ghi khối dữ liệu đã giải mã vào flash
+			err = esp_loader_flash_write(buffer_dec, dec_len);
+			if (err != ESP_LOADER_SUCCESS) {
+				ESP_LOGE(TAG, "Write error at offset %zu (err=%d)", bytes_written, err);
+				break;
+			}
+			bytes_written += dec_len;
+		}
+
+		// Tính toán và hiển thị tiến trình nạp
+		uint32_t progress = (uint32_t)((bytes_written * 100) / total_size);
+
+		// Cập nhật progress bar (mỗi 2% để giảm flicker)
+		static uint32_t last_enc_progress = 0;
+		if (progress != last_enc_progress && progress % 10 == 0) {
+			last_enc_progress = progress;
+			ESP_LOGI(TAG, "Decrypt+Flash: %" PRIu32 "%%", progress);
+			// Hiển thị progress bar với icon khóa
+			String title = String("") + file_path.c_str();
+			ui.showProgress(title.c_str(), (int)progress);
+		}
+	}
+
+	// Dọn dẹp
+	free(buffer_enc);
+	free(buffer_dec);
+	flasher_crypto_cleanup(&crypto);
+	fwFile.close();
+
+	ESP_LOGI(TAG, "Encrypted segment written %zu bytes OK", bytes_written);
+
+	// --- KIỂM TRA MD5 (NẾU CÓ) ---
+	// Lưu ý: MD5 phải là hash của dữ liệu đã giải mã (plaintext)
+	if (md5.length() == 32) {
+		char md5_ascii[33];
+		strncpy(md5_ascii, md5.c_str(), 32);
+		md5_ascii[32] = '\0';
+
+		err = esp_loader_flash_verify_known_md5(offset, bytes_written, (const uint8_t*) md5_ascii);
+		if (err != ESP_LOADER_SUCCESS) {
+			ESP_LOGE(TAG, "MD5 check failed for encrypted segment!");
+			return ESP_FAIL;
+		}
+		ESP_LOGI(TAG, "MD5 verified OK for encrypted segment!");
+	} else {
+		ESP_LOGW(TAG, "No valid MD5 provided, skipping verification.");
+	}
+
+	ESP_LOGI(TAG, "Encrypted segment at 0x%08" PRIx32 " written successfully.", offset);
+	return ESP_OK;
+}
+
+/**
  * @brief Bắt đầu toàn bộ phiên nạp firmware: kết nối, nạp 3 phân vùng, và reset.
  * @param fw_id ID của firmware (dùng để tìm metadata file).
  * @return ESP_OK nếu toàn bộ quá trình thành công.
@@ -238,7 +346,7 @@ esp_err_t flasher_begin_session(const std::string& fw_id)
 	}
 
 	// --- BƯỚC 3: BOOST BAUDRATE ---
-	uint32_t new_baud = 921600;
+	uint32_t new_baud = 921600; // Tăng tốc lên 921600bps
 	// Gửi lệnh thay đổi baudrate đến target
 	esp_loader_error_t err_baud = esp_loader_change_transmission_rate(new_baud);
 	if (err_baud == ESP_LOADER_SUCCESS) {
@@ -251,18 +359,38 @@ esp_err_t flasher_begin_session(const std::string& fw_id)
 
 
 	// --- BƯỚC 4: GHI TỪNG PHÂN VÙNG THEO THỨ TỰ ---
+	// Chọn hàm flash dựa trên flag encrypted
+	if (metadata.encrypted) {
+		ESP_LOGI(TAG, ">>> ENCRYPTED FLASH MODE <<<");
+		ui.showMessage("Flash Mode", "ENCRYPTED");
+		vTaskDelay(pdMS_TO_TICKS(500));
 
-	// 4a. Nạp bootloader (Offset: 0x1000)
-	ret = flasher_write_segment(metadata.path_bootloader, ESP_BOOTLOADER_ADDR, metadata.md5_bootloader);
-	if (ret != ESP_OK) return ret;
+		// 4a. Nạp bootloader mã hóa (Offset: 0x1000)
+		ret = flasher_write_segment_encrypted(metadata.path_bootloader, ESP_BOOTLOADER_ADDR, metadata.md5_bootloader);
+		if (ret != ESP_OK) return ret;
 
-	// 4b. Nạp partition table (Offset: 0x8000)
-	ret = flasher_write_segment(metadata.path_partition, ESP_PARTITION_ADDR, metadata.md5_partition);
-	if (ret != ESP_OK) return ret;
+		// 4b. Nạp partition table mã hóa (Offset: 0x8000)
+		ret = flasher_write_segment_encrypted(metadata.path_partition, ESP_PARTITION_ADDR, metadata.md5_partition);
+		if (ret != ESP_OK) return ret;
 
-	// 4c. Nạp firmware chính (Offset: 0x10000)
-	ret = flasher_write_segment(metadata.path, ESP_APPLICATION_ADDR, metadata.md5);
-	if (ret != ESP_OK) return ret;
+		// 4c. Nạp firmware chính mã hóa (Offset: 0x10000)
+		ret = flasher_write_segment_encrypted(metadata.path, ESP_APPLICATION_ADDR, metadata.md5);
+		if (ret != ESP_OK) return ret;
+	} else {
+		ESP_LOGI(TAG, ">>> PLAIN FLASH MODE <<<");
+
+		// 4a. Nạp bootloader (Offset: 0x1000)
+		ret = flasher_write_segment(metadata.path_bootloader, ESP_BOOTLOADER_ADDR, metadata.md5_bootloader);
+		if (ret != ESP_OK) return ret;
+
+		// 4b. Nạp partition table (Offset: 0x8000)
+		ret = flasher_write_segment(metadata.path_partition, ESP_PARTITION_ADDR, metadata.md5_partition);
+		if (ret != ESP_OK) return ret;
+
+		// 4c. Nạp firmware chính (Offset: 0x10000)
+		ret = flasher_write_segment(metadata.path, ESP_APPLICATION_ADDR, metadata.md5);
+		if (ret != ESP_OK) return ret;
+	}
 
 	// --- BƯỚC 5: RESET TARGET VỀ CHẾ ĐỘ THƯỜNG ---
 	esp_loader_reset_target();
@@ -272,36 +400,10 @@ esp_err_t flasher_begin_session(const std::string& fw_id)
 	ESP_LOGI(TAG, "Target restarted in normal mode.");
 	ESP_LOGI(TAG, "Full firmware update completed successfully!");
 	// sd_unmount(); // Giải phóng thẻ SD sau khi nạp xong
-
+	host_system_restart(); // Khởi động lại host để giải phóng bộ nhớ
 	return ESP_OK;
 }
 
-/**
- * @brief Thực hiện reset sequence với timing profile cụ thể (OLD - direct GPIO)
- * @param config Cấu hình chân GPIO
- * @param profile Timing profile
- * @return ESP_OK nếu thành công
- */
-// static esp_err_t reset_sequence_with_profile(const loader_esp32_config_t *config, const timing_profile_t *profile)
-// {
-// 	// Cấu hình các chân điều khiển (EN và GPIO0) là OUTPUT
-// 	gpio_set_direction((gpio_num_t)config->gpio0_trigger_pin, GPIO_MODE_OUTPUT);
-// 	gpio_set_direction((gpio_num_t)config->reset_trigger_pin, GPIO_MODE_OUTPUT);
-
-// 	ESP_LOGI(TAG, "Reset [%s]: hold=%lums, boot=%lums",
-// 	         profile->name, profile->reset_hold_ms, profile->boot_hold_ms);
-
-// 	// 1. Kéo GPIO0 xuống LOW (chuẩn bị vào download mode)
-// 	gpio_set_level((gpio_num_t)config->gpio0_trigger_pin, 0);
-// 	gpio_set_level((gpio_num_t)config->reset_trigger_pin, 1);
-// 	vTaskDelay(pdMS_TO_TICKS(profile->reset_hold_ms));
-
-// 	gpio_set_level((gpio_num_t)config->gpio0_trigger_pin, 1);
-// 	gpio_set_level((gpio_num_t)config->reset_trigger_pin, 0);
-// 	vTaskDelay(pdMS_TO_TICKS(profile->boot_hold_ms));
-
-// 	return ESP_OK;
-// }
 
 /**
  * @brief Reset sequence kiểu esptool - brute force thử tất cả logic combinations
@@ -330,23 +432,6 @@ static void do_reset_sequence(const loader_esp32_config_t *config, int reset_inv
 
 	// Step 4: Release GPIO0
 	gpio_set_level((gpio_num_t)config->gpio0_trigger_pin, boot_idle);
-}
-
-/**
- * @brief Reset sequence với timing profile - thử combination được chỉ định
- */
-static esp_err_t reset_sequence_with_profile(const loader_esp32_config_t *config, const timing_profile_t *profile)
-{
-	gpio_set_direction((gpio_num_t)config->gpio0_trigger_pin, GPIO_MODE_OUTPUT);
-	gpio_set_direction((gpio_num_t)config->reset_trigger_pin, GPIO_MODE_OUTPUT);
-
-	ESP_LOGI(TAG, "Reset [%s]: hold=%lums, boot=%lums",
-	         profile->name, profile->reset_hold_ms, profile->boot_hold_ms);
-
-	// Dùng combination mặc định (cả hai transistor/inverted)
-	do_reset_sequence(config, 1, 1, profile->reset_hold_ms, profile->boot_hold_ms);
-
-	return ESP_OK;
 }
 
 /**
@@ -466,6 +551,8 @@ esp_err_t flasher_chip_erase() {
 	// 3. Reset target lại để target chạy lại app (hoặc chỉ chạy bootloader nếu chưa có app)
 	esp_loader_reset_target();
 
+	// 4. Khởi động lại host để giải phóng bộ nhớ
+	host_system_restart();
 	return ESP_OK;
 }
 
