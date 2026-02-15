@@ -6,6 +6,7 @@
 typedef struct {
     std::string device_type;
     std::string version;
+    std::string description;  // Mô tả chi tiết firmware (hiển thị trên OLED Status tab)
     std::string path;
     std::string md5;
     std::string path_bootloader;

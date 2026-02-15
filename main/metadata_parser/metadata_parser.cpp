@@ -74,6 +74,7 @@ bool metadata_parse_json(const String& json_content, FirmwareMap& out_map) {
         // giúp chương trình không bị crash hoặc null pointer.
         meta.device_type = obj["device_type"] | "Unknown_Device";
         meta.version     = obj["version"]     | "0.0.0";
+        meta.description = obj["description"] | "";  // Mô tả chi tiết (hiện ở Status tab)
 
         // --- [B] LẤY THÔNG TIN APP (FIRMWARE CHÍNH) ---
         meta.path = obj["path"] | ""; // Đường dẫn file .bin

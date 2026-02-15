@@ -5,9 +5,9 @@
  * Ngay: 2025 (Refactored with OledUI Tabs)
  *
  * UI: Tabs-based voi OledUI library
- * - Tab 0: FW (Firmware list)
+ * - Tab 0: FW (Firmware list -> OK to flash)
  * - Tab 1: Tools (Sync, Monitor, Erase, Scan)
- * - Tab 2: Status (Real-time info)
+ * - Tab 2: Desc (FW list -> scroll to view description, no flash)
  * - Tab 3: Info (Version, Author, etc.)
  */
 
@@ -18,7 +18,6 @@
 // 1. ESP-IDF & SYSTEM HEADERS
 // ============================================================
 #include "esp_log.h"
-#include "driver/uart.h"
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 
@@ -27,18 +26,14 @@
 // ============================================================
 #include "firmware_types.h"
 #include "sd_card/sd_card.h"
-#include "flasher/flasher.h"
+#include "flasher/flasher_common.h"    // host_system_restart(), shared defines
 #include "oled_ui.h"                    // OledUI Library
-#include "wifi_config/wifi_config.h"
-#include "ota_downloader/ota_downloader.h"
-#include "metadata_parser/metadata_parser.h"
-#include "sync_engine/sync_engine.h"
+#include "app_actions/app_actions.h"   // High-level actions API
 
 // ============================================================
 // 3. CONSTANTS & GLOBALS
 // ============================================================
 static const char *TAG = "MAIN_APP";
-bool force_delete = false;
 
 #define SD_CS_PIN   GPIO_NUM_7
 #define SDA_PIN     GPIO_NUM_8
@@ -47,7 +42,6 @@ bool force_delete = false;
 #define BTN_DOWN    GPIO_NUM_10
 #define BTN_OK      GPIO_NUM_20
 #define OLED_ADDR   0x3C
-#define BUF_LEN     128
 
 // OLED Display
 Adafruit_SH1106G display(128, 64, &Wire, -1);
@@ -55,18 +49,15 @@ Adafruit_SH1106G display(128, 64, &Wire, -1);
 // OledUI Instance
 OledUI ui;
 
-// Buffer
-static uint8_t buf[BUF_LEN] = {0};
-
 // ============================================================
 // TAB CONFIGURATION
 // ============================================================
 #define TAB_FW      0
 #define TAB_TOOLS   1
-#define TAB_STATUS  2
+#define TAB_DESC    2
 #define TAB_INFO    3
 
-const char* tabNames[] = {"FW", "Tools", "Status", "Info"};
+const char* tabNames[] = {"FW", "Tools", "Desc", "Info"};
 const int TAB_COUNT = 4;
 
 // Firmware items (loaded from SD)
@@ -79,260 +70,70 @@ const char* toolsItems[] = {
     "1. Sync Firmware",
     "2. Config WiFi/URL",
     "3. Monitor/Test",
-    "4. Erase Chip",
-    "5. Scan Boot"
+    "4. Erase Chip (ESP)",
+    "5. Scan Boot",
+    "6. Erase Chip (SWD)"
 };
-const int TOOLS_COUNT = 5;
+const int TOOLS_COUNT = 6;
 
 // Tab item counts
-int tabItemCounts[4] = {0, 5, 0, 0};  // FW:dynamic, Tools:5, Status:0, Info:0
-
-// Status data (real-time)
-volatile int statusProgress = 0;
-volatile const char* statusText = "Ready";
-volatile bool isFlashing = false;
+int tabItemCounts[4] = {0, 6, 0, 0};  // FW:dynamic, Tools:6, Desc:dynamic, Info:0
 
 // ============================================================
-// MONITOR MODE
+// UI CALLBACKS CHO APP_ACTIONS
 // ============================================================
-#define LOG_LINES 7
-#define LOG_LINE_WIDTH 21
 
-static char logBuffer[LOG_LINES][LOG_LINE_WIDTH + 1];
-static int logWriteIndex = 0;
-static char uartLineBuffer[256];
-static int uartLinePos = 0;
-
-static void log_buffer_init() {
-    for (int i = 0; i < LOG_LINES; i++) {
-        logBuffer[i][0] = '\0';
-    }
-    logWriteIndex = 0;
-    uartLinePos = 0;
-    uartLineBuffer[0] = '\0';
-}
-
-static void log_buffer_add_line(const char* line) {
-    strncpy(logBuffer[logWriteIndex], line, LOG_LINE_WIDTH);
-    logBuffer[logWriteIndex][LOG_LINE_WIDTH] = '\0';
-    logWriteIndex = (logWriteIndex + 1) % LOG_LINES;
-}
-
-static void log_process_uart_data(const char* data, int len) {
-    for (int i = 0; i < len; i++) {
-        char c = data[i];
-        if (c == '\n' || c == '\r') {
-            if (uartLinePos > 0) {
-                uartLineBuffer[uartLinePos] = '\0';
-                log_buffer_add_line(uartLineBuffer);
-                uartLinePos = 0;
-            }
-        } else if (uartLinePos < (int)sizeof(uartLineBuffer) - 1) {
-            uartLineBuffer[uartLinePos++] = c;
-        }
-    }
-}
-
-static void draw_monitor_log_screen(bool hasActivity) {
+// Callback ve man hinh monitor
+static void ui_monitor_draw_cb(char log_buffer[APP_ACTIONS_LOG_LINES][APP_ACTIONS_LOG_LINE_WIDTH + 1],
+                                int log_write_index, bool has_activity) {
     display.clearDisplay();
     display.setTextSize(1);
     display.setTextColor(SH110X_WHITE);
 
     display.setCursor(0, 0);
-    if (hasActivity) {
+    if (has_activity) {
         display.setTextColor(SH110X_BLACK, SH110X_WHITE);
         display.print(" MONITOR ");
         display.setTextColor(SH110X_WHITE);
         display.println(" [RX]");
     } else {
         display.println("MONITOR [OK]=Exit");
+        
     }
 
     display.drawLine(0, 9, 128, 9, SH110X_WHITE);
 
     int yPos = 11;
-    for (int i = 0; i < LOG_LINES - 1; i++) {
-        int idx = (logWriteIndex + i) % LOG_LINES;
+    for (int i = 0; i < APP_ACTIONS_LOG_LINES - 1; i++) {
+        int idx = (log_write_index + i) % APP_ACTIONS_LOG_LINES;
         display.setCursor(0, yPos);
-        display.println(logBuffer[idx]);
+        display.println(log_buffer[idx]);
         yPos += 9;
     }
 
     display.display();
 }
 
-static void run_monitor_mode() {
-    ESP_LOGI(TAG, ">>> START MONITOR MODE");
-    ui.showMessage("Starting Monitor", "Waiting for data...");
-    vTaskDelay(pdMS_TO_TICKS(500));
-
-    flasher_init();
-    uart_flush_input(UART_NUM_1);
-    uart_set_baudrate(UART_NUM_1, 115200);
-
-    log_buffer_init();
-    log_buffer_add_line("Waiting for Target...");
-    log_buffer_add_line("Baudrate: 115200");
-    log_buffer_add_line("--------------------");
-
-    bool hasActivity = false;
-    unsigned long lastActivityTime = 0;
-    unsigned long lastDisplayUpdate = 0;
-
-    draw_monitor_log_screen(false);
-
-    while (1) {
-        if (digitalRead(BTN_OK) == LOW) {
-            ESP_LOGI(TAG, ">>> EXIT MONITOR");
-            ui.showMessage("Exiting...", "");
-            vTaskDelay(pdMS_TO_TICKS(500));
-            break;
-        }
-
-        int rxBytes = uart_read_bytes(UART_NUM_1, buf, BUF_LEN - 1, 20 / portTICK_PERIOD_MS);
-        if (rxBytes > 0) {
-            buf[rxBytes] = 0;
-            ESP_LOGI("TARGET", "%s", buf);
-            log_process_uart_data((char*)buf, rxBytes);
-            hasActivity = true;
-            lastActivityTime = millis();
-        }
-
-        unsigned long now = millis();
-        if (now - lastDisplayUpdate >= 100) {
-            lastDisplayUpdate = now;
-            if (now - lastActivityTime > 1000) {
-                hasActivity = false;
-            }
-            draw_monitor_log_screen(hasActivity);
-        }
-
-        vTaskDelay(10);
-    }
+// Callback progress
+static void ui_progress_cb(const char* text, int percent) {
+    ui.showProgress(text, percent);
 }
 
-// ============================================================
-// SYNC PROCESS
-// ============================================================
-static void run_sync_process() {
-    ESP_LOGI(TAG, ">>> START SYNC PROCESS");
-
-    if (!ui.dialogConfirm("Sync FW?", "Connect to WiFi?")) {
-        return;
-    }
-
-    ui.showMessage("Connecting...", "Please wait");
-
-    if (wifi_config_connect()) {
-        ESP_LOGI(TAG, "WiFi Connected. Starting Sync Engine...");
-        sync_engine_run(force_delete);
-        vTaskDelay(2000);
-    }
-
-    wifi_config_stop();
+// Callback confirm dialog
+static bool ui_confirm_cb(const char* title, const char* msg) {
+    return ui.dialogConfirm(title, msg);
 }
 
-// ============================================================
-// CHIP ERASE
-// ============================================================
-static void run_chip_erase() {
-    ESP_LOGW(TAG, ">>> ERASE TARGET CHIP");
-
-    if (!ui.dialogConfirm("Erase Chip?", "All data will be lost!")) {
-        return;
-    }
-
-    ui.showProgress("Erasing chip...", 0);
-    flasher_init();
-
-    for (int i = 0; i <= 50; i += 10) {
-        ui.showProgress("Erasing chip...", i);
-        vTaskDelay(pdMS_TO_TICKS(100));
-    }
-
-    if (flasher_chip_erase() == ESP_OK) {
-        ui.showProgress("Erasing chip...", 100);
-        vTaskDelay(pdMS_TO_TICKS(500));
-        ui.showMessage("SUCCESS!", "Chip Erased.");
-    } else {
-        ui.showMessage("Error", "Erase Failed!");
-    }
-    vTaskDelay(pdMS_TO_TICKS(2000));
+// Callback message
+static void ui_message_cb(const char* title, const char* msg) {
+    ui.showMessage(title, msg);
 }
 
-// ============================================================
-// SCAN BOOT
-// ============================================================
-static void run_scan_boot() {
-    ESP_LOGI(TAG, ">>> SCAN BOOT MODE");
-
-    for (int i = 0; i < 30; i++) {
-        ui.showSpinner("Scanning combos...", i);
-        vTaskDelay(pdMS_TO_TICKS(100));
-    }
-
-    flasher_init();
-    int combo_index = flasher_scan_and_save_combo();
-
-    if (combo_index >= 0) {
-        char msg[24];
-        snprintf(msg, sizeof(msg), "Saved Combo #%d", combo_index);
-        ui.showMessage("SUCCESS!", msg);
-    } else {
-        ui.showMessage("FAILED!", "No combo found");
-    }
-    vTaskDelay(pdMS_TO_TICKS(2000));
+// Callback spinner
+static void ui_spinner_cb(const char* text, int frame) {
+    ui.showSpinner(text, frame);
 }
 
-// ============================================================
-// FLASH FIRMWARE
-// ============================================================
-static void run_flash_fw(const char* fw_id) {
-    ESP_LOGI(TAG, ">>> FLASH FW: %s", fw_id);
-
-    char msg[32];
-    snprintf(msg, sizeof(msg), "Flash %s?", fw_id);
-
-    if (!ui.dialogConfirm("Confirm", msg)) {
-        return;
-    }
-
-    isFlashing = true;
-    statusText = "Connecting...";
-    statusProgress = 0;
-
-    if (sd_mount(SD_CS_PIN) != ESP_OK) {
-        ui.showMessage("Error", "SD Card Lost!");
-        vTaskDelay(2000);
-        isFlashing = false;
-        return;
-    }
-
-    flasher_init();
-
-    // Update status
-    statusText = "Flashing...";
-    for (int i = 0; i <= 30; i += 5) {
-        statusProgress = i;
-        ui.showProgress("Connecting...", i);
-        vTaskDelay(pdMS_TO_TICKS(50));
-    }
-
-    std::string fw_id_str(fw_id);
-    if (flasher_begin_session(fw_id_str) == ESP_OK) {
-        statusProgress = 100;
-        statusText = "Done";
-        ui.showMessage("Done!", "Flash Complete");
-        vTaskDelay(pdMS_TO_TICKS(1500));
-        // Reset host để giải phóng bộ nhớ sau khi flash
-        host_system_restart();
-    } else {
-        statusText = "Error";
-        ui.showMessage("Error", "Flash Failed!");
-        isFlashing = false;
-        vTaskDelay(pdMS_TO_TICKS(2000));
-    }
-}
 
 // ============================================================
 // TAB DRAW CALLBACK
@@ -341,14 +142,13 @@ void drawTabContent(int tab, int itemIdx, int yStart) {
     int maxVisible = (ui.tabsGetHeaderHeight() > 0) ? 5 : 6;
 
     switch (tab) {
-        case TAB_FW:  // Firmware list
+        case TAB_FW:  // Firmware list - OK to flash
             if (fwCount > 0 && fwDisplayItems) {
                 ui.drawList(fwDisplayItems, fwCount, itemIdx, yStart, maxVisible);
-                // ui.drawHint("OK:Flash UP+DN:Tab");
+                // ui.drawHint("OK:Flash");
             } else {
                 ui.drawText("No Firmware", 4, yStart);
                 ui.drawText("Please Sync first", 4, yStart + 12);
-                // ui.drawHint("UP+DN:Tab");
             }
             break;
 
@@ -357,21 +157,59 @@ void drawTabContent(int tab, int itemIdx, int yStart) {
             // ui.drawHint("OK:Run UP+DN:Tab");
             break;
 
-        case TAB_STATUS:  // Status (real-time)
-            ui.drawText("System Status:", 4, yStart);
-            ui.drawKeyValue("State", (char*)statusText, yStart + 12);
-            ui.drawProgressBar(statusProgress, yStart + 26, 10);
-
-            char pct[8];
-            snprintf(pct, sizeof(pct), "%d%%", statusProgress);
-            ui.drawTextCenter(pct, yStart + 40);
-
-            if (isFlashing) {
-                ui.drawHint("Flashing in progress");
-            } else {
-                // ui.drawHint("UP+DN:Tab OK:Exit");
+        case TAB_DESC: { // Description tab - scroll to view info, no flash
+            if (fwCount == 0 || !fwIdItems) {
+                ui.drawText("No Firmware", 4, yStart);
+                ui.drawText("Please Sync first", 4, yStart + 12);
+                break;
             }
+
+            // Get current FW metadata
+            const char* fw_id = fwIdItems[itemIdx];
+            auto it = g_firmware_map.find(fw_id);
+
+            if (it == g_firmware_map.end()) {
+                ui.drawText("FW not found", 4, yStart);
+                break;
+            }
+
+            firmware_metadata_t& meta = it->second;
+
+            // Line 1: Highlighted FW name (inverted style)
+            char header[22];
+            snprintf(header, sizeof(header), "%d.%s v%s",
+                     itemIdx + 1, meta.device_type.c_str(), meta.version.c_str());
+
+            // Draw inverted header bar
+            display.fillRect(0, yStart, 128, 10, SH110X_WHITE);
+            display.setTextColor(SH110X_BLACK);
+            display.setCursor(2, yStart + 1);
+            display.print(header);
+            display.setTextColor(SH110X_WHITE);
+
+            // Line separator
+            display.drawLine(0, yStart + 11, 128, yStart + 11, SH110X_WHITE);
+
+            // Lines 2-5: Description (lazy load từ SD - không lưu RAM)
+            int descY = yStart + 14;
+            String descStr = sd_get_description(fw_id);
+            if (descStr.length() > 0) {
+                const char* desc = descStr.c_str();
+                int len = descStr.length();
+                char line[22];
+
+                for (int i = 0; i < 4 && (i * 21) < len; i++) {
+                    snprintf(line, sizeof(line), "%.*s", 21, desc + (i * 21));
+                    ui.drawText(line, 0, descY + (i * 10));
+                }
+            } else {
+                ui.drawText("(No description)", 4, descY);
+            }
+
+            // Hint - different from TAB_FW
+            // ui.drawHint("UP/DN:Browse");
             break;
+        }
 
         case TAB_INFO:  // Info
             ui.drawKeyValue("Version", "1.0.0", yStart);
@@ -390,35 +228,38 @@ void handleTabSelection(int tab, int itemIdx) {
     switch (tab) {
         case TAB_FW:
             if (fwCount > 0 && fwIdItems && itemIdx < fwCount) {
-                run_flash_fw(fwIdItems[itemIdx]);
+                action_flash_firmware(fwIdItems[itemIdx]);
             }
             break;
 
         case TAB_TOOLS:
             switch (itemIdx) {
                 case 0:  // Sync
-                    run_sync_process();
+                    action_sync_firmware();
                     host_system_restart();
                     break;
                 case 1:  // Config WiFi/URL
-                    wifi_config_force_portal();
+                    action_config_wifi();
                     host_system_restart();
                     break;
                 case 2:  // Monitor
-                    run_monitor_mode();
+                    action_monitor();
                     break;
                 case 3:  // Erase
-                    run_chip_erase();
+                    action_erase_chip();
                     break;
                 case 4:  // Scan
-                    run_scan_boot();
+                    action_scan_boot();
+                    break;
+                case 5:  // SWD Erase
+                    action_erase_chip_swd();
                     break;
             }
             break;
 
-        case TAB_STATUS:
+        case TAB_DESC:
         case TAB_INFO:
-            // No action for these tabs
+            // Khong co hanh dong cho cac tab nay (chi xem thong tin)
             break;
     }
 }
@@ -430,60 +271,23 @@ void runTabsUI() {
     // Update item counts
     tabItemCounts[TAB_FW] = fwCount;
     tabItemCounts[TAB_TOOLS] = TOOLS_COUNT;
-    tabItemCounts[TAB_STATUS] = 0;
+    tabItemCounts[TAB_DESC] = fwCount;  // Same list as TAB_FW but for viewing description
     tabItemCounts[TAB_INFO] = 0;
 
     // Create tabs
     ui.tabsCreate(tabNames, TAB_COUNT, tabItemCounts);
     ui.tabsSetHeaderStyle(UI_HEADER_SINGLE);
     ui.tabsSetHeaderMode(UI_HEADER_ALWAYS);
+    // ui.tabsSetHeaderTimeout(2000);
     ui.tabsSetDrawCallback(drawTabContent);
 
-    bool running = true;
-    bool needRedraw = true;
+    // Blocking loop - tu handle header animation
+    ui.tabsRun();
 
-    while (running) {
-        int result = ui.tabsUpdate();
-
-        if (result == UI_TAB_SWITCHED || result == UI_ITEM_CHANGED) {
-            needRedraw = true;
-        }
-        else if (result == UI_EXIT) {
-            // Handle selection based on current tab
-            int currentTab = ui.tabsGetCurrent();
-            int itemIdx = ui.tabsGetItemIndex();
-
-            // For Status and Info tabs, OK means exit
-            if (currentTab == TAB_STATUS || currentTab == TAB_INFO) {
-                // Just continue, don't exit the whole UI
-                needRedraw = true;
-            } else {
-                // For FW and Tools, handle selection
-                handleTabSelection(currentTab, itemIdx);
-                needRedraw = true;
-            }
-        }
-
-        // Redraw if needed
-        if (needRedraw) {
-            display.clearDisplay();
-
-            int headerH = ui.tabsGetHeaderHeight();
-            if (headerH > 0) {
-                ui.tabsDraw();
-            }
-
-            int yStart = 4 + headerH;
-            int currentTab = ui.tabsGetCurrent();
-            int itemIdx = ui.tabsGetItemIndex();
-            drawTabContent(currentTab, itemIdx, yStart);
-
-            display.display();
-            needRedraw = false;
-        }
-
-        vTaskDelay(pdMS_TO_TICKS(10));
-    }
+    // Khi OK duoc nhan, xu ly theo tab hien tai
+    int tab = ui.tabsGetCurrent();
+    int item = ui.tabsGetItemIndex();
+    handleTabSelection(tab, item);
 }
 
 // ============================================================
@@ -491,6 +295,7 @@ void runTabsUI() {
 // ============================================================
 void setup() {
     esp_log_level_set("*", ESP_LOG_INFO);
+    esp_log_level_set("gpio", ESP_LOG_WARN);
     ESP_LOGI(TAG, "--- SYSTEM START ---");
 
     // Init I2C & OLED
@@ -520,6 +325,20 @@ void setup() {
     if (fwCount == 0) {
         ESP_LOGW(TAG, "No firmware found on SD");
     }
+
+    // Init App Actions - 1 config gon gang
+    app_actions_config_t actions_cfg = {
+        .sd_cs_pin = SD_CS_PIN,
+        .btn_ok_pin = BTN_OK,
+        .btn_up_pin = BTN_UP,
+        .btn_down_pin = BTN_DOWN,
+        .on_progress = ui_progress_cb,
+        .on_confirm = ui_confirm_cb,
+        .on_message = ui_message_cb,
+        .on_spinner = ui_spinner_cb,
+        .on_monitor_draw = ui_monitor_draw_cb
+    };
+    app_actions_init(&actions_cfg);
 
     // Splash screen
     ui.showMessage("FlashPorter", "Universal Flasher");

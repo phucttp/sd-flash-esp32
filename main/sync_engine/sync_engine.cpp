@@ -41,10 +41,11 @@ String build_download_url(String baseUrl, String relPath) {
 
 /**
  * @brief Cập nhật file index (đọc tạm -> thêm "/" vào path -> ghi file chính)
+ * @note Không convert .enc -> .bin nữa, giữ nguyên .enc trên SD
  * @return true nếu thành công
  */
 bool update_index_file() {
-    ESP_LOGI(TAG, "Converting index paths (.enc -> .bin) & Adding '/'...");
+    ESP_LOGI(TAG, "Updating index paths (adding '/' prefix)...");
 
     // 1. Mở file tạm
     File fileTmp = SD.open(FILE_IDX_TMP, FILE_READ);
@@ -68,18 +69,19 @@ bool update_index_file() {
     JsonArray root = doc.as<JsonArray>();
     for (JsonObject obj : root) {
         
-        // Lambda sửa đường dẫn: Thêm dấu / (giữ nguyên .enc)
+        // Lambda sửa đường dẫn: Chỉ thêm dấu / vào đầu (giữ nguyên .enc)
+        // [OLD] Trước đây convert .enc -> .bin ở đây, giờ KHÔNG làm nữa
         auto fix_path = [](JsonObject& o, const char* key) {
             if (o.containsKey(key)) {
                 String path = o[key].as<String>();
 
-                // [FIX] Thêm dấu / vào đầu nếu thiếu (Quan trọng!)
-                // NOTE: Giữ nguyên đuôi .enc - không đổi sang .bin
+                // Chỉ thêm dấu / vào đầu nếu thiếu
+                // Giữ nguyên đuôi .enc - giải mã khi flash, không phải khi sync
                 if (path.length() > 0 && path.charAt(0) != '/') {
                     path = "/" + path;
                 }
 
-                o[key] = path; // Ghi đè lại vào JSON object
+                o[key] = path;
             }
         };
 
@@ -225,15 +227,16 @@ void sync_engine_run(bool force_clean) {
         
         // --- [FIX] HÀM KIỂM TRA FILE THÔNG MINH ---
         // Input: path từ server (vd: phuc01/FW.enc)
-        // Logic: Đổi .enc -> .bin, Thêm / -> Check SD
+        // Logic: Giữ nguyên .enc (vì file trên SD cũng là .enc), Thêm / -> Check SD
         auto is_file_missing = [](String path) -> bool {
             if (path.length() == 0) return false; // Không có path thì ko tính là missing
 
-            // 1. Đổi đuôi .enc thành .bin (Vì trên thẻ lưu là .bin)
-            if (path.endsWith(".enc")) path.replace(".enc", ".bin");
+            // [FIX] KHÔNG đổi .enc -> .bin vì file trên SD giờ lưu là .enc
+            // Chỉ cần thêm / vào đầu nếu thiếu
+            String checkPath = (path[0] == '/') ? path : "/" + path;
 
-            // 2. Kiểm tra file có tồn tại không (fu_file_exists tự normalize path)
-            return !fu_file_exists(path.c_str());
+            // Kiểm tra file có tồn tại không
+            return !fu_file_exists(checkPath.c_str());
         };
 
         // --- LOGIC SO SÁNH ---
@@ -314,41 +317,43 @@ void sync_engine_run(bool force_clean) {
     }
     for (const auto& id : to_delete) {
         firmware_metadata_t meta = local_map[id];
-        ESP_LOGI(TAG, "Removing obsolete firmware: %s", id.c_str());
+        ESP_LOGW(TAG, "Removing obsolete firmware: %s", id.c_str());
 
-        // [FIX] Xóa đủ 3 file: app, bootloader, partition
+        // Xóa file theo path từ local index
         if (!meta.path.empty()) {
+            ESP_LOGI(TAG, "  Delete: %s", meta.path.c_str());
             fu_file_delete(meta.path.c_str());
         }
         if (!meta.path_bootloader.empty()) {
+            ESP_LOGI(TAG, "  Delete: %s", meta.path_bootloader.c_str());
             fu_file_delete(meta.path_bootloader.c_str());
         }
         if (!meta.path_partition.empty()) {
+            ESP_LOGI(TAG, "  Delete: %s", meta.path_partition.c_str());
             fu_file_delete(meta.path_partition.c_str());
         }
 
         // Xóa folder cha (nếu empty)
         std::string parent = fu_get_parent_dir(meta.path.c_str());
         if (!parent.empty()) {
+            ESP_LOGI(TAG, "  Delete folder: %s", parent.c_str());
             fu_dir_delete(parent.c_str());
         }
 
         data_changed = true;
     }
 
-    // 6. KẾT THÚC
-    if (data_changed) {
-        // Cập nhật bằng cách đổi tên file tạm -> /index.txt
-        if (update_index_file()) {
-            sd_load_metadata(); // Reload RAM
-            ui.showMessage("Sync Done", "Updated!");
+    // 6. KẾT THÚC - LUÔN cập nhật index.txt từ server (source of truth)
+    // Dù không tải file mới, metadata (device_type, version, order...) vẫn cần sync
+    if (update_index_file()) {
+        sd_load_metadata(); // Reload RAM
+        if (data_changed) {
+            ui.showMessage("Sync Done", "Files Updated!");
         } else {
-            ui.showMessage("Sync Error", "Save Fail");
+            ui.showMessage("Sync Done", "Up-to-date");
         }
     } else {
-        fu_file_delete(FILE_IDX_TMP); // Xóa file tạm vì không dùng
-        ESP_LOGI(TAG, "System Up-to-date.");
-        ui.showMessage("Sync Done", "Up-to-date");
+        ui.showMessage("Sync Error", "Save Fail");
     }
     
     vTaskDelay(2000);

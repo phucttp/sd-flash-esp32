@@ -208,3 +208,47 @@ const char** sd_get_menu_display_items(int& out_count) {
 const char** sd_get_menu_id_items() {
     return g_menuFirmwareIDsPtrs.data();
 }
+
+// ============================================================
+// HÀM LẤY DESCRIPTION (LAZY LOAD)
+// ============================================================
+
+/**
+ * @brief Đọc description của firmware từ file index.txt (không lưu RAM)
+ * @param fw_id ID của firmware cần lấy description
+ * @return String chứa description, rỗng nếu không tìm thấy
+ */
+String sd_get_description(const char* fw_id) {
+    if (!g_is_sd_mounted || !fw_id) return "";
+
+    File f = SD.open(METADATA_FILE_PATH, FILE_READ);
+    if (!f) {
+        ESP_LOGW(TAG1, "Cannot open index file for description");
+        return "";
+    }
+
+    // Buffer nhỏ, chỉ đủ parse 1 lần
+    DynamicJsonDocument doc(8 * 1024);
+    DeserializationError err = deserializeJson(doc, f);
+    f.close();
+
+    if (err) {
+        ESP_LOGE(TAG1, "JSON parse error: %s", err.c_str());
+        return "";
+    }
+
+    // Tìm firmware theo fw_id
+    for (JsonObject obj : doc.as<JsonArray>()) {
+        const char* id = obj["fw_id"];
+        if (id && strcmp(id, fw_id) == 0) {
+            // Ưu tiên root level, fallback sang cloud_source
+            const char* desc = obj["description"];
+            if (!desc || strlen(desc) == 0) {
+                desc = obj["cloud_source"]["description"];
+            }
+            return desc ? String(desc) : "";
+        }
+    }
+
+    return "";
+}

@@ -1,21 +1,21 @@
+/**
+ * @file flasher_esp.h
+ * @brief ESP32 UART flasher engine using esp-serial-flasher library.
+ * @details Handles flashing ESP32 targets via UART (bootloader, partition, app).
+ */
 
-#ifndef __FLASHER_H__
-#define __FLASHER_H__
+#ifndef __FLASHER_ESP_H__
+#define __FLASHER_ESP_H__
 
-#include "../sd_card/sd_card.h" // Phải include để dùng struct kia
+#include "flasher_common.h"
+#include "../sd_card/sd_card.h"
 #include <string>
 
-// === CÁC ĐỊA CHỈ NẠP CHUẨN CỦA ESP32 ===
-// (Đây là các giá trị mặc định của esptool)
-
-#define ESP_BOOTLOADER_ADDR 0x1000   // Địa chỉ nạp Bootloader
-#define ESP_PARTITION_ADDR  0x8000   // Địa chỉ nạp Bảng phân vùng
-#define ESP_APPLICATION_ADDR 0x10000 // Địa chỉ nạp App (app0)
-#define BUFFER_SIZE 4096            // Kích thước buffer đọc/ghi (4KB)
-#define FLASH_UART_TX_PIN      GPIO_NUM_0   // TX từ ESP Host → RX Target
-#define FLASH_UART_RX_PIN      GPIO_NUM_1   // RX từ ESP Host ← TX Target
-#define FLASH_RESET_PIN        GPIO_NUM_2   // Điều khiển RESET của Target
-#define FLASH_BOOT_PIN         GPIO_NUM_3   // Điều khiển GPIO0 của Target (BOOT mode)
+// === ĐỊA CHỈ NẠP CHUẨN CỦA ESP32 ===
+// (Giá trị mặc định của esptool)
+#define ESP_BOOTLOADER_ADDR  0x1000   // Địa chỉ nạp Bootloader
+#define ESP_PARTITION_ADDR   0x8000   // Địa chỉ nạp Bảng phân vùng
+#define ESP_APPLICATION_ADDR 0x10000  // Địa chỉ nạp App (app0)
 
 /**
  * @brief Khởi tạo phần cứng (UART, GPIO) cho module flasher.
@@ -48,11 +48,6 @@ esp_err_t flasher_write_segment_encrypted(const std::string& file_path, uint32_t
  * @brief Xóa toàn bộ flash của chip Target.
  */
 esp_err_t flasher_chip_erase(void);
-
-/**
- * @brief Hiển thị thông báo và khởi động lại ESP32 Host.
- */
-void host_system_restart();
 
 // ============================================================
 // AUTO-RETRY API - Quản lý phiên nạp với retry tự động
@@ -97,4 +92,4 @@ int flasher_load_saved_combo(void);
  */
 void flasher_clear_saved_combo(void);
 
-#endif // __FLASHER_H__
+#endif // __FLASHER_ESP_H__

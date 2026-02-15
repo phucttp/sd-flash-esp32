@@ -1,17 +1,16 @@
 /**
- * @file flasher.cpp
- * @brief Triển khai các chức năng nạp firmware cho chip ESP32 Target.
- * @details File này xử lý giao tiếp cấp thấp qua UART, sử dụng thư viện esp_loader
- * để thực hiện các thao tác: kết nối (handshake), xóa chip, nạp phân vùng
- * và xác thực dữ liệu (MD5).
+ * @file flasher_esp.cpp
+ * @brief ESP32 UART flasher engine implementation.
+ * @details Giao tiếp cấp thấp qua UART, sử dụng thư viện esp_loader
+ * để thực hiện: kết nối (handshake), xóa chip, nạp phân vùng, xác thực MD5.
  * @author TTP27
  */
 
 // ============================================================
 // 1. STANDARD & ESP-IDF LIBRARIES
 // ============================================================
-#include "flasher.h" // Định nghĩa các hằng số và cấu trúc của module flasher
-#include "flasher_crypto.h" // AES decryption for encrypted firmware
+#include "flasher_esp.h" // ESP32 UART flasher definitions
+#include "flasher_esp_crypto.h" // AES decryption for encrypted firmware
 
 #include <inttypes.h> // Hỗ trợ định dạng PRIx32
 #include <string.h>
@@ -123,7 +122,7 @@ esp_err_t flasher_write_segment(const std::string& file_path, uint32_t offset, c
 
 	// --- BẮT ĐẦU GHI FLASH ---
 	// Gửi lệnh báo cho target biết sắp ghi phân vùng tại offset, kích thước total_size, và kích thước buffer
-	esp_loader_error_t err = esp_loader_flash_start(offset, total_size, BUFFER_SIZE);
+	esp_loader_error_t err = esp_loader_flash_start(offset, total_size, FLASHER_BUFFER_SIZE);
 	if (err != ESP_LOADER_SUCCESS) {
 		ESP_LOGE(TAG, "Failed to start flash for segment. err=%d", err);
 		fwFile.close();
@@ -131,7 +130,7 @@ esp_err_t flasher_write_segment(const std::string& file_path, uint32_t offset, c
 	}
 
 	// Cấp phát bộ đệm để đọc dữ liệu từ SD và truyền qua UART
-	uint8_t* buffer = (uint8_t*) malloc(BUFFER_SIZE);
+	uint8_t* buffer = (uint8_t*) malloc(FLASHER_BUFFER_SIZE);
 	if (!buffer) {
 		ESP_LOGE(TAG, "Failed to allocate buffer!");
 		fwFile.close();
@@ -142,7 +141,7 @@ esp_err_t flasher_write_segment(const std::string& file_path, uint32_t offset, c
 	size_t bytes_read = 0;
 
 	// Đọc từng khối dữ liệu từ file và ghi vào flash của Target
-	while ((bytes_read = fwFile.read(buffer, BUFFER_SIZE)) > 0) {
+	while ((bytes_read = fwFile.read(buffer, FLASHER_BUFFER_SIZE)) > 0) {
 		// Ghi khối dữ liệu vào flash
 		err = esp_loader_flash_write(buffer, bytes_read);
 		if (err != ESP_LOADER_SUCCESS) {
@@ -233,7 +232,7 @@ esp_err_t flasher_write_segment_encrypted(const std::string& file_path, uint32_t
 	// --- BẮT ĐẦU GHI FLASH ---
 	// Gửi lệnh báo cho target biết sắp ghi phân vùng
 	// Lưu ý: total_size là kích thước file mã hóa, có thể lớn hơn kích thước thật do padding
-	esp_loader_error_t err = esp_loader_flash_start(offset, total_size, BUFFER_SIZE);
+	esp_loader_error_t err = esp_loader_flash_start(offset, total_size, FLASHER_BUFFER_SIZE);
 	if (err != ESP_LOADER_SUCCESS) {
 		ESP_LOGE(TAG, "Failed to start flash for encrypted segment. err=%d", err);
 		flasher_crypto_cleanup(&crypto);
@@ -242,8 +241,8 @@ esp_err_t flasher_write_segment_encrypted(const std::string& file_path, uint32_t
 	}
 
 	// Cấp phát bộ đệm kép (encrypted input, decrypted output)
-	uint8_t* buffer_enc = (uint8_t*) malloc(BUFFER_SIZE);
-	uint8_t* buffer_dec = (uint8_t*) malloc(BUFFER_SIZE);
+	uint8_t* buffer_enc = (uint8_t*) malloc(FLASHER_BUFFER_SIZE);
+	uint8_t* buffer_dec = (uint8_t*) malloc(FLASHER_BUFFER_SIZE);
 	if (!buffer_enc || !buffer_dec) {
 		ESP_LOGE(TAG, "Failed to allocate buffers!");
 		if (buffer_enc) free(buffer_enc);
@@ -257,7 +256,7 @@ esp_err_t flasher_write_segment_encrypted(const std::string& file_path, uint32_t
 	size_t bytes_read = 0;
 
 	// Đọc từng khối dữ liệu mã hóa, giải mã và ghi vào flash của Target
-	while ((bytes_read = fwFile.read(buffer_enc, BUFFER_SIZE)) > 0) {
+	while ((bytes_read = fwFile.read(buffer_enc, FLASHER_BUFFER_SIZE)) > 0) {
 		// Giải mã chunk
 		size_t dec_len = 0;
 		if (flasher_crypto_decrypt(&crypto, buffer_enc, bytes_read, buffer_dec, &dec_len) != ESP_OK) {
@@ -554,23 +553,6 @@ esp_err_t flasher_chip_erase() {
 	// 4. Khởi động lại host để giải phóng bộ nhớ
 	host_system_restart();
 	return ESP_OK;
-}
-
-/**
- * @brief Hiển thị thông báo và khởi động lại ESP32 Host.
- */
-void host_system_restart() {
-	ESP_LOGI(TAG, "Dang khoi dong lai he thong...");
-
-	// Hiệu ứng dấu chấm động: Restarting. -> Restarting.. -> Restarting...
-	for (int i = 1; i <= 3; i++) {
-		std::string dots(i, '.'); // Tạo chuỗi chứa i dấu chấm
-		ui.showMessage("Restarting", dots.c_str());
-		vTaskDelay(pdMS_TO_TICKS(200));
-	}
-
-	// Gọi hàm khởi động lại hệ thống ESP-IDF
-	esp_restart();
 }
 
 // ============================================================

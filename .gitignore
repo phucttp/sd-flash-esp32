@@ -69,3 +69,9 @@ prompt.md
 
 # Gemini CLI settings (symlink to .claude/.mcp.json)
 .gemini/settings.json
+
+# FlashPorter secrets - NEVER commit these!
+toolAddFirmware/tool_setting.json
+toolAddFirmware/FlashPorter_Public/settings.json
+toolAddFirmware/FlashPorter_Public/credentials.json
+toolAddFirmware/_release_for_git/

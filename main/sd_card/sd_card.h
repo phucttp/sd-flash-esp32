@@ -108,3 +108,10 @@ const char** sd_get_menu_display_items(int& out_count);
  * @return Con trỏ tới mảng (const char**).
  */
 const char** sd_get_menu_id_items();
+
+/**
+ * @brief Đọc description của firmware từ file (lazy load, không lưu RAM)
+ * @param fw_id ID của firmware cần lấy description
+ * @return String chứa description, rỗng nếu không tìm thấy
+ */
+String sd_get_description(const char* fw_id);

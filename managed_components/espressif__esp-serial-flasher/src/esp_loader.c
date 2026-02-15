@@ -44,7 +44,7 @@ static target_chip_t s_target = ESP_UNKNOWN_CHIP;
 
 #ifndef SERIAL_FLASHER_INTERFACE_SPI
 #define DEFAULT_FLASH_SIZE 2 * 1024 * 1024
-// #define DEFAULT_FLASH_SIZE 8 * 1024 * 1024
+
 static uint32_t s_flash_write_size = 0;
 static uint32_t s_target_flash_size = 0;
 #endif
