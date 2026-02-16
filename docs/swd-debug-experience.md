@@ -22,6 +22,15 @@
 12. [Format string -Werror=format](#12-format-string--werrorformat)
 13. [Sticky SWD errors truoc verify](#13-sticky-swd-errors-truoc-verify)
 14. [dap_read/write_block luon return true](#14-dap_readwrite_block-luon-return-true)
+15. [FLASH_SR error bits khong duoc clear](#15-flash_sr-error-bits-khong-duoc-clear)
+16. [~~dap_read_block tra ve zeros~~ DA SUA SAI](#16-dap_read_block-tra-ve-zeros-tren-esp32-c3-da-sua-sai)
+17. [dap_write_block bi loi tren ESP32-C3](#17-dap_write_block-cung-bi-loi-tren-esp32-c3-write-zeros)
+18. [3x blind write retry khoa flash controller](#18-3x-blind-write-retry-khoa-flash-controller)
+19. [CSW AddrInc + flash_busy() ghi vao FLASH_CR](#19-csw-addrinc--flash_busy-ghi-vao-flash_cr)
+20. [SPRMOD bit 31 bat PCROP thay vi tat WRP](#20-sprmod-bit-31-bat-pcrop-thay-vi-tat-wrp)
+21. [dap_write_word mat du lieu ~1/1000 words](#21-dap_write_word-mat-du-lieu-11000-words)
+22. [5V cap nguon STM32 - SWD voltage mismatch](#22-5v-cap-nguon-stm32---swd-voltage-mismatch)
+23. [SD.seek(0) khong hoat dong sau EOF](#23-sdseek0-khong-hoat-dong-sau-eof)
 
 ---
 
@@ -370,27 +379,15 @@ for (uint32_t i = sec_start; i <= sec_end; i++) {
 
 ---
 
-## 16. dap_read_block Tra Ve Zeros Tren ESP32-C3
+## 16. ~~dap_read_block Tra Ve Zeros Tren ESP32-C3~~ [DA SUA SAI]
 
-**Muc do**: HIGH
-**Trieu chung**: `dap_read_block` (ID_DAP_TRANSFER_BLOCK) tra ve 0x00 tai mot so offset, nhung `dap_read_word` (ID_DAP_TRANSFER) doc cung dia chi tra ve data dung.
-**Nguyen nhan**: Chua ro 100%. Co the lien quan den cach ESP32-C3 xu ly SWD bit-bang voi auto-increment block transfer. Interrupt interference hoac timing issue trong `dap_swd_transfer_block`.
+> **[CAP NHAT]**: Gia thuyet SAI. `dap_read_block` HOAT DONG TOT cho doc.
+> Zeros luc do la do sticky SWD errors (#13) hoac RDP Level 1 chan reads (#2).
+> Sau khi fix sticky errors bang `dap_target_prepare()`, `dap_read_block` doc dung 100%.
+> Hien tai dang dung `dap_read_block` cho on-the-fly verify trong `flasher_swd_flash_firmware()` — reliable.
 
-**Cach confirm**: Them diagnostic reads:
-1. Doc flash bang `dap_read_word()` sau programming → data DUNG
-2. Doc flash bang `dap_read_block()` (trong verifyFlash) → data = 0x00
-→ Chung minh flash chua data dung, loi nam o CACH DOC
-
-**Cach fix**: Thay `dap_read_block` bang `dap_read_word` trong `verifyFlash()`:
-```cpp
-// Dung dap_read_word (single SWD transfer per word) thay vi
-// dap_read_block (ID_DAP_TRANSFER_BLOCK auto-increment)
-uint32_t flash_word = dap_read_word(word_addr);
-```
-
-**Trade-off**: Cham hon (~2-3x) nhung DUNG. Moi word can 2 SWD transfers (TAR + DRW) thay vi 1 transfer cho 6 words.
-
-**File**: `components/Adafruit_DAP/Adafruit_DAP_STM32.cpp` - `verifyFlash()`
+**Gia thuyet cu (SAI)**: dap_read_block khong dung duoc tren ESP32-C3
+**Thuc te**: dap_read_block hoat dong tot, van de nam o sticky errors chua duoc clear truoc khi doc
 
 ---
 
@@ -423,10 +420,174 @@ for (uint32_t i = 0; i < words; i++) {
 
 **Trade-off**: Cham hon nhung DUNG. Moi word can 2 SWD transfers (TAR + DRW).
 
-**KET LUAN LON**: Tren ESP32-C3, ID_DAP_TRANSFER_BLOCK khong dung duoc cho CA READ LAN WRITE.
-Chi dung ID_DAP_TRANSFER (single word) - cham nhung reliable 100%.
+**KET LUAN** ~~(cu - SAI MOT PHAN)~~: ~~ID_DAP_TRANSFER_BLOCK khong dung cho ca read lan write.~~
+
+> **[CAP NHAT]**: Block READS hoat dong tot (dap_read_block reliable cho verify).
+> Chi block WRITES la co van de — dap_write_word (single word) mat ~1/1000 words.
+> Flow hien tai: programBlock dung dap_write_word (ghi) + dap_read_block (verify).
 
 **File**: `components/Adafruit_DAP/Adafruit_DAP_STM32.cpp` - `programBlock()`
+
+---
+
+## 18. 3x Blind Write Retry Khoa Flash Controller
+
+**Muc do**: CRITICAL - lam RDP disable KHONG BAO GIO thanh cong
+**Trieu chung**: Gui blind write sequence 3 lan lien tiep de tang do tin cay. Nhung IDCODE giu 0x2ba01477 suot 15 giay cho → mass erase KHONG BAT DAU. Truoc do gui 1 lan thi IDCODE ve 0x00000000 (mass erase chay).
+**Nguyen nhan**: Flash controller KEY registers la state machine TUAN TU: KEY1 roi KEY2. Neu KEY2 cua lan thu N bi drop im lang (SWD ~0.1% fail), controller DUNG o trang thai "cho KEY2". KEY1 cua lan N+1 den → controller hieu la KEY2 SAI → KHOA VINH VIEN cho den khi reset chip.
+
+```
+Lan 1: KEY1 ✓ → KEY2 ✗ (drop!)  → controller: "dang cho KEY2..."
+Lan 2: KEY1 den → controller hieu la KEY2 SAI → LOCK!
+        KEY2 den → da lock, bo qua
+        OPTKEY1, OPTKEY2, OPTCR → cung bo qua vi flash chua unlock
+```
+
+**Cach fix**: Gui SYSRESETREQ + delay(50) + halt_core() GIUA moi lan thu:
+```cpp
+for (int bw = 1; bw <= 3; bw++) {
+    if (bw > 1) {
+        dap.dap_write_word(AIRCR, 0x05FA0004);  // SYSRESETREQ
+        delay(50);
+        halt_core();  // DHCSR + DEMCR
+    }
+    // Flash unlock
+    dap.dap_write_word(FLASH_KEYR, 0x45670123);
+    dap.dap_write_word(FLASH_KEYR, 0xCDEF89AB);
+    // Option unlock
+    dap.dap_write_word(FLASH_OPTKEYR, 0x08192A3B);
+    dap.dap_write_word(FLASH_OPTKEYR, 0x4C5D6E7F);
+    // Trigger
+    dap.dap_write_word(FLASH_OPTCR, 0x0FFFAAEE);
+}
+```
+
+**Bai hoc**: BAT KY thanh ghi nao yeu cau KEY TUAN TU (KEY1→KEY2), KHONG DUOC retry truc tiep. Phai reset state machine truoc khi thu lai. Ap dung cho: FLASH_KEYR, FLASH_OPTKEYR, va cac MCU khac co co che tuong tu.
+
+**File**: `main/flasher/flasher_swd.cpp` - `flasher_swd_rdp_disable_trigger()`
+
+---
+
+## 19. CSW AddrInc + flash_busy() Ghi Vao FLASH_CR
+
+**Muc do**: CRITICAL - flash ghi duoc ~44 words roi dung
+**Trieu chung**: Flash ghi OK duoc ~176 bytes (44 words), sau do FLASH_CR = 0x80000000 (LOCK bit), FLASH_SR = PGSERR+PGPERR, phan con lai flash = 0xFF.
+**Nguyen nhan**: CSW = 0x23000052 co AddrInc=single (bit 5:4=01). Khi `flash_busy()` doc FLASH_SR (0x40023C0C), TAR tu dong tang len FLASH_CR (0x40023C10). Neu DRW write tiep theo glitch (TAR khong duoc cap nhat dung), data ghi vao FLASH_CR thay vi flash → set LOCK bit.
+
+```
+Quy trinh BINH THUONG:
+  1. TAR = flash_addr → DRW = data  (ghi vao flash)
+  2. TAR = FLASH_SR  → DRW = read   (doc BSY)  ← TAR tang thanh FLASH_CR!
+  3. TAR = flash_addr+4 → DRW = data (ghi tiep)
+
+Khi glitch o buoc 3 (TAR khong cap nhat):
+  3. TAR van = FLASH_CR → DRW = data → GHI VAO FLASH_CR → LOCK!
+```
+
+**Cach fix**: XOA `flash_busy()` khoi vong lap ghi trong `programBlock()`. SWD bit-bang cham (~144μs/word) >> flash write time (~16μs). BSY dam bao da clear truoc khi word tiep theo den. Khong can poll.
+
+**Bai hoc**: Khi CSW co AddrInc, MOI doc/ghi AP deu tang TAR. Pha tron doc thanh ghi voi ghi flash NGUY HIEM. Giu nguyen chi ghi (writes-only) trong inner loop.
+
+**File**: `components/Adafruit_DAP/Adafruit_DAP_STM32.cpp` - `programBlock()`
+
+---
+
+## 20. SPRMOD Bit 31 Bat PCROP Thay Vi Tat WRP
+
+**Muc do**: HIGH - chip bi khoa PCROP, can mass erase de mo
+**Trieu chung**: Sau RDP disable, chip o Level 0 nhung flash van khong ghi duoc. OPTCR co bit 31 = 1.
+**Nguyen nhan**: Khi set nWRP (bits 27:16) de tat write protection, dung mask `0xFFFF << 16` thay vi `0x0FFF << 16`. Bit 31 la SPRMOD:
+- SPRMOD=0: WRP mode (binh thuong, nWRP=1 = khong bao ve)
+- SPRMOD=1: PCROP mode (bao ve doc code, KHONG THE TAT bang cach binh thuong)
+
+```
+// SAI (bat PCROP):
+optcr |= (0xFFFF << 16);  // bit 31 = 1 = SPRMOD = PCROP!
+
+// DUNG (chi set nWRP, giu SPRMOD=0):
+optcr = 0x0FFFAAEE;  // Hardcode: SPRMOD=0, nWRP=0x0FFF, RDP=0xAA, OPTSTRT=1
+```
+
+**Bai hoc**: KHONG BAO GIO doc OPTCR roi modify khi o RDP1 (doc tra ve 0x00000000). Dung gia tri HARDCODE `0x0FFFAAEE` (factory default + RDP=0xAA + OPTSTRT).
+
+**File**: `main/flasher/flasher_swd.cpp` - `flasher_swd_rdp_disable_trigger()`
+
+---
+
+## 21. dap_write_word Mat Du Lieu ~1/1000 Words
+
+**Muc do**: HIGH - flash bi sai du lieu ngau nhien
+**Trieu chung**: Sau khi ghi 18KB firmware (72 chunks x 256B), ~3 chunks co 1-2 words sai. Vi tri sai NGAU NHIEN, khong co pattern. Moi lan flash khac nhau.
+**Nguyen nhan**: `dap_write_word()` ghi TAR + DRW, LUON return true (khong kiem tra SWD ACK). Tren ESP32-C3 bit-bang SWD, ~0.1% words bi drop im lang do timing jitter hoac interrupt interference.
+
+**Cach fix**: On-the-fly verify BAT BUOC:
+```cpp
+#define CHUNK_SIZE 256
+#define CHUNK_RETRIES 3
+
+for (moi 256B chunk) {
+    for (int retry = 0; retry < CHUNK_RETRIES; retry++) {
+        dap.programBlock(addr, data, CHUNK_SIZE);   // Ghi (dap_write_word ben trong)
+        vTaskDelay(1);                              // Cho flash settle + WDT feed
+        dap.dap_read_block(addr, verify, CHUNK_SIZE); // Doc lai (block read OK)
+        if (memcmp(data, verify, CHUNK_SIZE) == 0) break;  // OK!
+        // Sai → retry chunk (programBlock tu unlock flash + set PG)
+    }
+}
+```
+
+**Thong ke thuc te**: ~3/72 chunks can 1 retry. Chua gap chunk nao fail 3 retries.
+
+**Bai hoc**: Tren ESP32-C3 bit-bang SWD, KHONG TIN dap_write_word 100%. Phai verify sau moi chunk nho. 256B la kich thuoc tot (du nho de retry nhanh, du lon de khong qua cham).
+
+**File**: `main/flasher/flasher_swd.cpp` - `flasher_swd_flash_firmware()`
+
+---
+
+## 22. 5V Cap Nguon STM32 - SWD Voltage Mismatch
+
+**Muc do**: HIGH - SWD giao tiep hoan toan fail
+**Trieu chung**: ESP32-C3 dev board co chan 5V (tu USB) va 3.3V (sau LDO). Dung chan 5V cap cho STM32 target → chip chay (firmware execute OK) nhung SWD connect/flash KHONG BAO GIO thanh cong.
+**Nguyen nhan**: Logic level mismatch:
+- ESP32-C3 output HIGH = 3.3V
+- STM32 chay 5V can VIH = 0.7 × 5V = 3.5V → 3.3V KHONG DU HIGH
+- STM32 SWDIO output = 5V → dua nguoc vao GPIO ESP32-C3 (max 3.6V) → CO THE HU GPIO
+
+```
+ESP32-C3 (3.3V) ──SWDIO──> STM32 (5V)
+   3.3V output    →    Can 3.5V VIH   → KHONG DAT
+
+STM32 (5V) ──SWDIO──> ESP32-C3 (3.3V)
+   5.0V output    →    Max 3.6V       → QUA TAI, HU GPIO!
+```
+
+**Cach fix**: Doi day nguon tu chan 5V sang chan 3.3V cua ESP32-C3 dev board.
+
+**Bai hoc**: Khi giao tiep giua 2 MCU, PHAI CUNG MUC DIEN AP. ESP32-C3 la 3.3V → target cung phai 3.3V. Neu can 5V, dung level shifter.
+
+---
+
+## 23. SD.seek(0) Khong Hoat Dong Sau EOF
+
+**Muc do**: MEDIUM - doc file SD bi thieu du lieu
+**Trieu chung**: Doc file firmware tu SD, sau khi doc het EOF, goi `SD.seek(0)` de doc lai tu dau → seek tra ve true nhung read tra ve 0 bytes.
+**Nguyen nhan**: Arduino ESP32 SD library (dua tren SDFS/VFS) co bug: sau khi doc den EOF, internal file pointer khong reset dung khi seek(0).
+
+**Cach fix**: Dong file roi mo lai thay vi seek:
+```cpp
+// SAI (khong hoat dong):
+fwFile.seek(0);
+fwFile.read(buf, size);  // → 0 bytes!
+
+// DUNG:
+fwFile.close();
+fwFile = SD.open(path, FILE_READ);
+fwFile.read(buf, size);  // → OK
+```
+
+**Giai phap tot hon**: Doc TOAN BO file vao RAM mot lan, dong file, roi thao tac tren RAM buffer. Day cung la cach hien tai trong `flasher_swd_flash_firmware()` — vua fix bug nay vua tranh SPI interference voi SWD.
+
+**File**: `main/flasher/flasher_swd.cpp` - `flasher_swd_flash_firmware()` STEP 1
 
 ---
 
@@ -460,21 +621,31 @@ FLASH_SR sticky errors -------> dap_read_block zeros
 
 ## Checklist Khi Port Adafruit_DAP Len ESP32
 
-- [ ] Xoa `noInterrupts()` / `interrupts()`
-- [ ] Disable `LED_BUILTIN` neu xung dot I2C
-- [ ] Them `PIN_INPUT_ENABLE()` cho SWDIO (TMS_in + CONNECT_SWD)
-- [ ] Guard tat ca nRESET operations voi `if (pin >= 0)`
-- [ ] Giam buffer sizes (verifyFlash: 256B, dap_read_block: 64B)
-- [ ] Thay `Serial.println()` bang `ESP_LOGE()`
-- [ ] Fix `dap_read/write_block` return false on error
-- [ ] Chon GPIO KHONG PHAI FSPI default (tranh GPIO2,4,5,6,7,10)
-- [ ] Dung `PRIx32`/`PRIu32` cho uint32_t (ESP-IDF -Werror=format)
-- [ ] Them `dap_target_prepare()` truoc verify (clear sticky errors)
-- [ ] Re-halt core sau SYSRESETREQ trong `select()`
-- [ ] Doi 10s cho RDP mass erase (khong 200ms)
-- [ ] Clear FLASH_SR error bits truoc moi flash operation
-- [ ] Them delay(1) sau STRT bit trong sector erase loop
-- [ ] Dung dap_read_word thay dap_read_block trong verifyFlash (block reads loi tren ESP32-C3)
+### Library Fixes
+- [ ] Xoa `noInterrupts()` / `interrupts()` (#3)
+- [ ] Disable `LED_BUILTIN` neu xung dot I2C (#4)
+- [ ] Them `PIN_INPUT_ENABLE()` cho SWDIO (TMS_in + CONNECT_SWD) (#5)
+- [ ] Guard tat ca nRESET operations voi `if (pin >= 0)` (#6)
+- [ ] Giam buffer sizes (verifyFlash: 256B, dap_read_block: 64B) (#7, #8)
+- [ ] Thay `Serial.println()` bang `ESP_LOGE()` (#11)
+- [ ] Fix `dap_read/write_block` return false on error (#14)
+- [ ] Re-halt core sau SYSRESETREQ trong `select()` (#9)
+- [ ] Clear FLASH_SR error bits truoc moi flash operation (#15)
+- [ ] XOA flash_busy() khoi programBlock inner loop (#19)
+- [ ] Them delay(1) sau STRT bit trong sector erase loop (#15)
+
+### Application Code
+- [ ] Chon GPIO KHONG PHAI FSPI default (tranh GPIO2,4,5,6,7,10) (#1)
+- [ ] Dung `PRIx32`/`PRIu32` cho uint32_t (#12)
+- [ ] Them `dap_target_prepare()` truoc verify (clear sticky errors) (#13)
+- [ ] Doi 10-15s cho RDP mass erase (khong 200ms) (#10)
+- [ ] SYSRESETREQ giua moi lan retry blind write KEY sequence (#18)
+- [ ] Dung hardcode OPTCR = 0x0FFFAAEE, KHONG doc-modify (#20)
+- [ ] On-the-fly verify BAT BUOC sau moi 256B chunk (#21)
+- [ ] Buffer toan bo FW vao RAM, dong SD truoc khi flash (#23)
+
+### Phan Cung
+- [ ] Cap nguon target CUNG MUC 3.3V voi ESP32-C3 (#22)
 
 ---
 
@@ -491,3 +662,7 @@ GPIO6 = SD CLK     (FSPI CLK default)
 GPIO7 = SD MOSI    (FSPI MOSI default)
 nRESET = -1        (khong noi, dung nut reset vat ly)
 ```
+
+---
+
+> **Cap nhat**: 2026-02-16 | Tong cong 23 bugs (1 gia thuyet sai da danh dau)
