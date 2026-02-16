@@ -149,10 +149,13 @@ bool Adafruit_DAP_STM32::select(uint32_t *found_id) {
 
   dap_target_prepare();
 
-  // Stop the core
+  // Stop the core, reset, re-halt (need delay for AHB bus ready)
   dap_write_word(DHCSR, 0xa05f0003);
   dap_write_word(DEMCR, 0x00000001);
   dap_write_word(AIRCR, 0x05fa0004);
+
+  delay(15);  // Wait for SYSRESETREQ to complete
+  dap_write_word(DHCSR, 0xa05f0003);  // Re-halt core after reset
 
   target_device.flash_size = (dap_read_word(STM32_FLASHSIZE) >> 16) * 1024;
 

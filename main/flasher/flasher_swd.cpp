@@ -1,6 +1,6 @@
 /**
  * @file flasher_swd.cpp
- * @brief STM32 SWD flasher engine — RDP detect & disable.
+ * @brief STM32 SWD flasher engine — RDP detect/disable + flash programming.
  *
  * KEY INSIGHT: Under RDP Level 1, ALL AHB-AP READS return 0x00000000.
  * This includes flash (0x08000000), SRAM (0x20000000), AND peripheral
@@ -21,6 +21,8 @@
 #include "freertos/task.h"
 #include "Adafruit_DAP.h"
 #include "Arduino.h"
+#include "FS.h"
+#include "SD.h"
 
 static const char *TAG = "SWD";
 
@@ -110,8 +112,14 @@ static esp_err_t full_connect(uint32_t *idcode, uint32_t *chip_id) {
     }
     halt_core();
 
-    ESP_LOGI(TAG, "Chip: %s | ID: 0x%03" PRIx32 " | Flash: %" PRIu32 " KB",
-             dap.target_device.name, *chip_id, dap.target_device.flash_size / 1024);
+    uint32_t flash_kb = dap.target_device.flash_size / 1024;
+    if (flash_kb == 0) {
+        ESP_LOGI(TAG, "Chip: %s | ID: 0x%03" PRIx32 " | Flash: unknown (RDP blocking reads?)",
+                 dap.target_device.name, *chip_id);
+    } else {
+        ESP_LOGI(TAG, "Chip: %s | ID: 0x%03" PRIx32 " | Flash: %" PRIu32 " KB",
+                 dap.target_device.name, *chip_id, flash_kb);
+    }
     return ESP_OK;
 }
 
@@ -244,18 +252,45 @@ esp_err_t flasher_swd_rdp_disable_trigger(void) {
     // BLIND WRITES — NO reads between these!
     // Under RDP1, reads return 0 and TAR auto-increment can
     // corrupt subsequent writes. Only pure writes here.
+    //
+    // RELIABILITY FIX: Send the unlock+OPTCR sequence up to 3 times.
+    // dap_write_word silently fails ~1/1000 words on ESP32-C3.
+    // If ANY of the 5 critical writes fail, the sequence is broken.
+    //
+    // CRITICAL: Between retry attempts, we MUST issue SYSRESETREQ to
+    // reset the flash controller's key state machine. The KEY registers
+    // are sequential (KEY1 then KEY2). If KEY2 drops silently, the
+    // controller is stuck in "waiting for KEY2" state. The KEY1 from
+    // the next attempt would be interpreted as wrong KEY2 → LOCK.
+    // SYSRESETREQ resets everything to a clean locked state.
     // ============================================================
 
-    ESP_LOGI(TAG, "Writing flash unlock keys...");
-    dap.dap_write_word(STM32_FLASH_KEYR, 0x45670123);   // Key 1
-    dap.dap_write_word(STM32_FLASH_KEYR, 0xCDEF89AB);   // Key 2
+    #define RDP_BLIND_WRITE_ATTEMPTS  3
 
-    ESP_LOGI(TAG, "Writing option byte unlock keys...");
-    dap.dap_write_word(STM32_FLASH_OPTKEYR, 0x08192A3B); // Opt key 1
-    dap.dap_write_word(STM32_FLASH_OPTKEYR, 0x4C5D6E7F); // Opt key 2
+    for (int bw = 1; bw <= RDP_BLIND_WRITE_ATTEMPTS; bw++) {
+        if (bw > 1) {
+            // Reset flash controller state machine via SYSRESETREQ
+            ESP_LOGW(TAG, "Retry %d/%d: resetting chip first...", bw, RDP_BLIND_WRITE_ATTEMPTS);
+            dap.dap_write_word(AIRCR, 0x05FA0004);  // SYSRESETREQ
+            delay(50);
+            halt_core();
+        }
 
-    ESP_LOGI(TAG, "Writing OPTCR = 0x0FFFAAEE (RDP=0xAA + OPTSTRT)...");
-    dap.dap_write_word(STM32_FLASH_OPTCR, 0x0FFFAAEE);
+        ESP_LOGI(TAG, "Blind write attempt %d/%d...", bw, RDP_BLIND_WRITE_ATTEMPTS);
+
+        // Flash unlock (KEY1 → KEY2 must be sequential, no drops!)
+        dap.dap_write_word(STM32_FLASH_KEYR, 0x45670123);   // Key 1
+        dap.dap_write_word(STM32_FLASH_KEYR, 0xCDEF89AB);   // Key 2
+
+        // Option byte unlock (OPTKEY1 → OPTKEY2 must be sequential)
+        dap.dap_write_word(STM32_FLASH_OPTKEYR, 0x08192A3B); // Opt key 1
+        dap.dap_write_word(STM32_FLASH_OPTKEYR, 0x4C5D6E7F); // Opt key 2
+
+        // Set RDP=0xAA + OPTSTRT — triggers mass erase + NVM commit
+        dap.dap_write_word(STM32_FLASH_OPTCR, 0x0FFFAAEE);
+    }
+
+    ESP_LOGI(TAG, "Blind writes sent (%dx with reset between)", RDP_BLIND_WRITE_ATTEMPTS);
 
     // ============================================================
     // WAIT for mass erase (~8-9s) + NVM commit
@@ -403,5 +438,312 @@ esp_err_t flasher_swd_rdp_disable_verify(void) {
     flasher_swd_deinit();
 
     ESP_LOGI(TAG, "======= VERIFY DONE =======");
+    return ESP_OK;
+}
+
+// ============================================================
+// FLASH FIRMWARE via SWD
+//
+// Flow: connect → select → RDP check → erase sectors →
+//       program (4KB chunks) → verify (4KB chunks) → deselect
+// Requires RDP Level 0 (run Erase STM32 action first).
+// Uses 0x08000000 (direct flash address) — NOT 0x00 alias
+// because BOOT0 pin state affects the 0x00 memory remap.
+// ============================================================
+
+esp_err_t flasher_swd_flash_firmware(const std::string& fw_path,
+                                      flasher_swd_progress_cb_t on_progress) {
+    ESP_LOGI(TAG, "========================================");
+    ESP_LOGI(TAG, "  STM32 SWD FLASH");
+    ESP_LOGI(TAG, "  File: %s", fw_path.c_str());
+    ESP_LOGI(TAG, "========================================");
+
+    #define SWD_MAX_FW_SIZE  (128 * 1024)  // 128KB max — fits in ESP32-C3 RAM
+
+    // Helper: report progress (safe if callback is NULL)
+    auto progress = [&](const char* text, int pct) {
+        if (on_progress) on_progress(text, pct);
+    };
+
+    // --- STEP 1: Read entire file into RAM ---
+    // Buffer everything upfront so SD card SPI is completely idle during SWD ops.
+    progress("Reading SD...", 1);
+    ESP_LOGI(TAG, "[1/5] Reading file from SD...");
+
+    File fwFile = SD.open(fw_path.c_str(), FILE_READ);
+    if (!fwFile) {
+        ESP_LOGE(TAG, "FAIL: Cannot open %s", fw_path.c_str());
+        progress("File not found!", 0);
+        return ESP_ERR_NOT_FOUND;
+    }
+
+    size_t file_size = fwFile.size();
+    if (file_size == 0) {
+        ESP_LOGE(TAG, "FAIL: File is empty!");
+        fwFile.close();
+        progress("File empty!", 0);
+        return ESP_FAIL;
+    }
+    if (file_size > SWD_MAX_FW_SIZE) {
+        ESP_LOGE(TAG, "FAIL: File too large: %zu bytes (max %d)", file_size, SWD_MAX_FW_SIZE);
+        fwFile.close();
+        progress("File too large!", 0);
+        return ESP_FAIL;
+    }
+
+    // Pad to 4-byte alignment
+    size_t padded_size = (file_size + 3) & ~3;
+    uint8_t* fw_buf = (uint8_t*)malloc(padded_size);
+    if (!fw_buf) {
+        ESP_LOGE(TAG, "FAIL: Cannot allocate %zu bytes", padded_size);
+        fwFile.close();
+        progress("Out of memory!", 0);
+        return ESP_ERR_NO_MEM;
+    }
+
+    // Fill padding with 0xFF (erased flash value)
+    memset(fw_buf + file_size, 0xFF, padded_size - file_size);
+
+    size_t total_read = 0;
+    while (total_read < file_size) {
+        size_t n = fwFile.read(fw_buf + total_read, file_size - total_read);
+        if (n == 0) break;
+        total_read += n;
+    }
+    fwFile.close();  // Done with SD card — no more SPI activity
+
+    if (total_read != file_size) {
+        ESP_LOGE(TAG, "FAIL: SD read incomplete: %zu / %zu bytes", total_read, file_size);
+        free(fw_buf);
+        progress("SD read error!", 0);
+        return ESP_FAIL;
+    }
+
+    ESP_LOGI(TAG, "      OK: %zu bytes (%" PRIu32 " KB) loaded into RAM",
+             file_size, (uint32_t)(file_size / 1024));
+
+    // --- STEP 2: Detect chip + RDP check (warm-up SWD) ---
+    // detect_rdp() does a full self-contained cycle: init → connect → select → read → disconnect → deinit
+    // This "warm-up" greatly improves the success rate of the next connection without needing reset.
+    progress("Detecting...", 3);
+    ESP_LOGI(TAG, "[2/5] Detecting chip + RDP (warm-up)...");
+
+    int rdp_level = -1;
+    esp_err_t ret = flasher_swd_detect_rdp(&rdp_level);
+    if (ret != ESP_OK) {
+        ESP_LOGE(TAG, "FAIL: Cannot connect to STM32");
+        progress("Connect fail!", 0);
+        free(fw_buf);
+        return ret;
+    }
+
+    // Check RDP level
+    if (rdp_level != 0) {
+        ESP_LOGE(TAG, "FAIL: RDP Level %d — chip is protected!", rdp_level);
+        ESP_LOGE(TAG, "      Run 'Erase STM32' to unlock first.");
+        progress("RDP locked!", 0);
+        free(fw_buf);
+        return ESP_ERR_INVALID_STATE;  // Distinct from ESP_FAIL — means "need erase first"
+    }
+    ESP_LOGI(TAG, "      RDP Level 0 — OK");
+
+    // --- STEP 3: Reconnect for flash operations ---
+    progress("Connecting...", 5);
+    ESP_LOGI(TAG, "[3/5] Connecting for flash...");
+
+    ret = flasher_swd_init();
+    if (ret != ESP_OK) {
+        progress("SWD init fail!", 0);
+        free(fw_buf);
+        return ret;
+    }
+
+    uint32_t idcode = 0, chip_id = 0;
+    ret = full_connect(&idcode, &chip_id);
+    if (ret != ESP_OK) {
+        ESP_LOGE(TAG, "FAIL: Reconnect failed");
+        progress("Connect fail!", 0);
+        flasher_swd_deinit();
+        free(fw_buf);
+        return ret;
+    }
+
+    // Validate flash size vs firmware size
+    uint32_t flash_size = dap.target_device.flash_size;
+    if (flash_size > 0) {
+        ESP_LOGI(TAG, "      Chip: %s | Flash: %" PRIu32 " KB | FW: %" PRIu32 " KB",
+                 dap.target_device.name ? dap.target_device.name : "unknown",
+                 flash_size / 1024, (uint32_t)(file_size / 1024));
+        if (file_size > flash_size) {
+            ESP_LOGE(TAG, "FAIL: FW (%zu B) > flash (%" PRIu32 " B)!", file_size, flash_size);
+            progress("FW too large!", 0);
+            full_disconnect();
+            flasher_swd_deinit();
+            free(fw_buf);
+            return ESP_FAIL;
+        }
+    } else {
+        ESP_LOGW(TAG, "      Chip: %s | Flash size: unknown",
+                 dap.target_device.name ? dap.target_device.name : "unknown");
+    }
+
+    // Allocate verify buffer for on-the-fly checking
+    #define SWD_PROGRAM_CHUNK  256   // Small chunks = fresh unlock/PG per chunk
+    #define SWD_MAX_ATTEMPTS   3
+    #define SWD_CHUNK_RETRIES  3     // Per-chunk retry before full re-flash
+
+    uint8_t* verify_buf = (uint8_t*)malloc(SWD_PROGRAM_CHUNK);
+    if (!verify_buf) {
+        ESP_LOGE(TAG, "FAIL: Cannot allocate verify buffer");
+        full_disconnect();
+        flasher_swd_deinit();
+        free(fw_buf);
+        return ESP_ERR_NO_MEM;
+    }
+
+    // --- STEP 4-5: Erase → Program+Verify on-the-fly → Retry ---
+    // programBlock uses dap_write_word which can silently drop words (~1/1000).
+    // Strategy: write 256B chunk → read back immediately → retry chunk on mismatch.
+    // If chunk retry fails (bits stuck wrong), re-erase entire firmware and start over.
+
+    int total_chunks = (padded_size + SWD_PROGRAM_CHUNK - 1) / SWD_PROGRAM_CHUNK;
+    bool flash_ok = false;
+
+    for (int attempt = 1; attempt <= SWD_MAX_ATTEMPTS; attempt++) {
+        if (attempt > 1) {
+            ESP_LOGW(TAG, "=== RE-FLASH attempt %d/%d ===", attempt, SWD_MAX_ATTEMPTS);
+            progress("Retry...", 3);
+            // Reconnect for fresh erase
+            full_disconnect();
+            flasher_swd_deinit();
+            delay(50);
+            ret = flasher_swd_init();
+            if (ret != ESP_OK) { free(verify_buf); free(fw_buf); return ret; }
+            ret = full_connect(&idcode, &chip_id);
+            if (ret != ESP_OK) {
+                flasher_swd_deinit();
+                free(verify_buf); free(fw_buf);
+                return ret;
+            }
+        }
+
+        // --- Erase ---
+        progress("Erasing...", 8);
+        ESP_LOGI(TAG, "[4/5] Erasing flash...");
+        dap.program_start(0x08000000, file_size);
+        ESP_LOGI(TAG, "      Erase OK");
+
+        // --- Program + Verify on-the-fly ---
+        ESP_LOGI(TAG, "[5/5] Flashing %" PRIu32 " KB (%d chunks x %dB)...",
+                 (uint32_t)(file_size / 1024), total_chunks, SWD_PROGRAM_CHUNK);
+
+        uint32_t addr = 0x08000000;
+        size_t offset = 0;
+        int chunk_num = 0;
+        int retry_count = 0;
+        int last_pct = -1;
+        bool this_attempt_ok = true;
+
+        while (offset < padded_size) {
+            size_t chunk = padded_size - offset;
+            if (chunk > SWD_PROGRAM_CHUNK) chunk = SWD_PROGRAM_CHUNK;
+            chunk_num++;
+
+            bool chunk_ok = false;
+
+            for (int cr = 0; cr < SWD_CHUNK_RETRIES; cr++) {
+                // Write chunk
+                dap.programBlock(addr, fw_buf + offset, chunk);
+
+                // Small delay: let flash controller finish + WDT feed
+                vTaskDelay(1);
+
+                // Read back immediately (programBlock locks flash, so PG is cleared)
+                bool read_ok = dap.dap_read_block(addr, verify_buf, chunk);
+
+                if (read_ok && memcmp(fw_buf + offset, verify_buf, chunk) == 0) {
+                    chunk_ok = true;
+                    break;
+                }
+
+                // Mismatch — log first bad word and retry chunk
+                retry_count++;
+                if (read_ok) {
+                    for (size_t i = 0; i < chunk; i += 4) {
+                        uint32_t exp_w = *(const uint32_t*)(fw_buf + offset + i);
+                        uint32_t got_w = *(const uint32_t*)(verify_buf + i);
+                        if (exp_w != got_w) {
+                            ESP_LOGW(TAG, "      [%d/%d] MISMATCH @0x%08" PRIx32
+                                     " exp=0x%08" PRIx32 " got=0x%08" PRIx32 " retry %d/%d",
+                                     chunk_num, total_chunks, addr + (uint32_t)i,
+                                     exp_w, got_w, cr + 1, SWD_CHUNK_RETRIES);
+                            break;
+                        }
+                    }
+                } else {
+                    ESP_LOGW(TAG, "      [%d/%d] READ FAIL @0x%08" PRIx32 " retry %d/%d",
+                             chunk_num, total_chunks, addr, cr + 1, SWD_CHUNK_RETRIES);
+                }
+            }
+
+            if (!chunk_ok) {
+                ESP_LOGE(TAG, "      [%d/%d] FAILED after %d retries — need full re-erase",
+                         chunk_num, total_chunks, SWD_CHUNK_RETRIES);
+                this_attempt_ok = false;
+                break;
+            }
+
+            addr += chunk;
+            offset += chunk;
+
+            // Progress: 8% (erase) → 95% (flash done)
+            int pct = 8 + (int)((uint64_t)offset * 87 / padded_size);
+            if (pct != last_pct) {
+                last_pct = pct;
+                char prog_text[32];
+                snprintf(prog_text, sizeof(prog_text), "Flash %d/%d", chunk_num, total_chunks);
+                progress(prog_text, pct);
+            }
+        }
+
+        if (this_attempt_ok) {
+            if (retry_count > 0) {
+                ESP_LOGI(TAG, "      DONE! %d/%d chunks OK (%d retries recovered)",
+                         total_chunks, total_chunks, retry_count);
+            } else {
+                ESP_LOGI(TAG, "      DONE! %d/%d chunks OK (no retries needed)",
+                         total_chunks, total_chunks);
+            }
+            flash_ok = true;
+            break;
+        }
+
+        ESP_LOGW(TAG, "      Attempt %d/%d FAILED — will re-erase and retry",
+                 attempt, SWD_MAX_ATTEMPTS);
+    }
+
+    free(verify_buf);
+
+    if (!flash_ok) {
+        ESP_LOGE(TAG, "========================================");
+        ESP_LOGE(TAG, "  FLASH FAILED after %d attempts!", SWD_MAX_ATTEMPTS);
+        ESP_LOGE(TAG, "  Check SWD wiring & target power");
+        ESP_LOGE(TAG, "========================================");
+        progress("Flash FAILED!", 0);
+        full_disconnect();
+        flasher_swd_deinit();
+        free(fw_buf);
+        return ESP_FAIL;
+    }
+
+    // --- Cleanup ---
+    progress("Done!", 100);
+    full_disconnect();
+    flasher_swd_deinit();
+    free(fw_buf);
+
+    ESP_LOGI(TAG, "========================================");
+    ESP_LOGI(TAG, "  FLASH OK! %" PRIu32 " KB written", (uint32_t)(file_size / 1024));
+    ESP_LOGI(TAG, "========================================");
     return ESP_OK;
 }

@@ -37,4 +37,21 @@ esp_err_t flasher_swd_rdp_disable_trigger(void);
  */
 esp_err_t flasher_swd_rdp_disable_verify(void);
 
+// ============================================================
+// FLASH PROGRAMMING
+// ============================================================
+
+typedef void (*flasher_swd_progress_cb_t)(const char* text, int percent);
+
+/**
+ * @brief Flash firmware to STM32 via SWD.
+ * Self-contained: init → connect → select → RDP check → erase → program → verify → deinit.
+ * Requires RDP Level 0 (run Erase STM32 action first if protected).
+ * @param fw_path  Path to binary file on SD card (e.g. "/FW_STM32/app.bin").
+ * @param on_progress  Optional progress callback (text, 0-100).
+ * @return ESP_OK if flash + verify succeeded.
+ */
+esp_err_t flasher_swd_flash_firmware(const std::string& fw_path,
+                                      flasher_swd_progress_cb_t on_progress);
+
 #endif // __FLASHER_SWD_H__

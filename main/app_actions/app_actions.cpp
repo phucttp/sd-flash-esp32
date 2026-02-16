@@ -377,18 +377,20 @@ esp_err_t action_flash_firmware(const char* fw_id) {
 
     if (is_stm32) {
         ESP_LOGI(TAG, ">>> STM32 detected, using SWD engine");
-        SHOW_MESSAGE("SWD Mode", metadata.device_type.c_str());
+        SHOW_MESSAGE("SWD Flash", metadata.device_type.c_str());
         vTaskDelay(pdMS_TO_TICKS(500));
 
-        // Test: detect RDP level first
-        int rdp_level = -1;
-        ret = flasher_swd_detect_rdp(&rdp_level);
-        if (ret != ESP_OK) {
-            ESP_LOGE(TAG, "SWD detect RDP failed");
-        } else {
-            ESP_LOGI(TAG, "RDP Level = %d", rdp_level);
-            // TODO: full SWD flash flow pending redesign
-            ret = ESP_ERR_NOT_SUPPORTED;
+        ret = flasher_swd_flash_firmware(metadata.path,
+            [](const char* text, int pct) {
+                if (s_config.on_progress) s_config.on_progress(text, pct);
+            });
+
+        // Handle RDP-locked chip: tell user to erase first
+        if (ret == ESP_ERR_INVALID_STATE) {
+            SHOW_MESSAGE("RDP Locked!", "Erase STM32 first");
+            s_is_busy = false;
+            vTaskDelay(pdMS_TO_TICKS(3000));
+            return ret;
         }
     } else {
         ESP_LOGI(TAG, ">>> ESP32 detected, using UART engine");
