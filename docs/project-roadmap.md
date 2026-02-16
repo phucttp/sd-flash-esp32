@@ -2,9 +2,9 @@
 
 ## Trạng Thái Hiện Tại
 
-**Phiên bản:** 1.0.1
-**Trạng thái:** MVP sẵn sàng sử dụng
-**Cập nhật:** 2026-01-30
+**Phiên bản:** 1.2.0
+**Trạng thái:** MVP + STM32 SWD flash hoạt động
+**Cập nhật:** 2026-02-16
 
 ---
 
@@ -121,6 +121,57 @@ const uint32_t timings[3][2] = {{100, 50}, {100, 100}, {200, 200}};
 - [x] Implement `try_all_reset_combinations()` - brute force 12 tổ hợp GPIO
 - [x] Thêm animation kết nối (spinner + đếm số lần thử)
 - [x] Test với DevKitC, NodeMCU, ESP32-C3, module trần
+
+---
+
+## ✅ STM32 SWD Flash Programming (v1.2.0)
+
+**Trạng thái:** HOÀN THÀNH
+**Độ ưu tiên:** QUAN TRỌNG
+**Hoàn thành:** 2026-02-16
+
+### Tính năng
+
+Nạp firmware STM32 (F4 family) qua giao thức SWD, không cần ST-Link hay USB.
+ESP32-C3 bit-bang SWD trực tiếp qua GPIO (SWDIO=GPIO0, SWCLK=GPIO3).
+
+### Chức năng đã implement
+
+- [x] SWD connect + chip detect (IDCODE, DBGMCU, flash size)
+- [x] RDP Level detect (Level 0/1/2)
+- [x] RDP Level 1 → Level 0 disable (blind writes + mass erase)
+- [x] RDP disable verify + rescue erase (zombie state handling)
+- [x] Flash firmware: erase sectors → program 256B chunks → on-the-fly verify
+- [x] Retry strategy: 3 retries/chunk + 3 full re-flash attempts
+- [x] RAM buffering: read entire FW from SD → close SD → flash (no SPI interference)
+- [x] OLED progress: "Flash X/Y" chunk count + percentage
+- [x] RDP-locked OLED message: "Erase STM32 first"
+- [x] detect_rdp() warm-up before flash (improves SWD connection without reset)
+- [x] Adafruit_DAP_STM32 select() fix: delay + re-halt after SYSRESETREQ
+
+### Bugs phát hiện và sửa
+
+- [x] **3x blind write retry corruption**: KEY state machine lock khi KEY2 drop
+  - Fix: SYSRESETREQ between retry attempts
+- [x] **GPIO2/FSPIQ conflict**: SPI MISO pin corruption during SWD
+  - Fix: SWDIO moved to GPIO0
+- [x] **CSW AddrInc → FLASH_CR LOCK**: flash_busy() reads corrupt TAR
+  - Fix: Remove flash_busy() from programBlock inner loop
+- [x] **SPRMOD bit 31**: 0xFFFF<<16 enables PCROP instead of disabling WRP
+  - Fix: Use hardcoded 0x0FFFAAEE
+
+### Thư viện sử dụng
+
+- `Adafruit_DAP` (modified for ESP32-C3 compatibility)
+- `Adafruit_BusIO` (I2C/SPI abstraction)
+
+### Hạn chế
+
+- Chỉ hỗ trợ STM32F4 family (tested: STM32F411)
+- Max firmware size: 128KB (RAM buffer limit trên ESP32-C3)
+- RDP disable cần power cycle (rút điện) — STM32F4 không có OBL_LAUNCH
+- dap_write_word silent fail ~0.1% — on-the-fly verify bắt buộc
+- PHẢI dùng nguồn 3.3V cho STM32 (5V gây lỗi SWD voltage mismatch)
 
 ---
 
@@ -268,7 +319,8 @@ Mở rộng hỗ trợ nhiều loại MCU, không chỉ ESP32.
 | Họ MCU | Giao thức | Độ khó | Trạng thái |
 |--------|-----------|--------|------------|
 | ESP32/C3/S3/S2 | UART ROM bootloader | ✅ Xong | v1.0 |
-| STM32F0/F1/F4 | UART bootloader | Trung bình | v2.0 |
+| STM32F4 | SWD (bit-bang) | ✅ Xong | v1.2 |
+| STM32F0/F1 | SWD (bit-bang) | Trung bình | v2.0 |
 | STM32G0/G4 | UART bootloader | Trung bình | v2.0 |
 | ATmega328/2560 | STK500v1 (ISP) | Trung bình | v2.1 |
 | ATtiny (UPDI) | Giao thức UPDI | Trung bình | v2.1 |
@@ -405,6 +457,15 @@ Mở rộng hỗ trợ nhiều loại MCU, không chỉ ESP32.
 ---
 
 ## Lịch Sử Thay Đổi
+
+### v1.2.0 (2026-02-16) - STM32 SWD Flash Programming
+- Nạp firmware STM32F4 qua SWD bit-bang (GPIO0/GPIO3)
+- RDP detect (Level 0/1/2) + RDP disable (blind writes)
+- Flash: erase → program 256B chunks → on-the-fly verify + retry
+- Adafruit_DAP library port cho ESP32-C3 (noInterrupts→portENTER_CRITICAL)
+- Fix 3x blind write retry: SYSRESETREQ giữa các lần thử
+- OLED progress + RDP-locked message
+- app_actions wired cho cả ESP32 (UART) và STM32 (SWD)
 
 ### v1.0.1 (2026-01-30) - Software Brute-Force
 - Kết nối universal với brute-force 12 tổ hợp GPIO

@@ -7,13 +7,19 @@ ESP_MUL/Muti/
 ├── build/                      # ESP-IDF build output (generated)
 ├── components/                 # External components
 │   ├── Adafruit_BusIO/        # I2C/SPI abstraction library
+│   ├── Adafruit_DAP/          # SWD/JTAG debug probe (modified for ESP32-C3)
 │   ├── Adafruit_GFX/          # Graphics core library
 │   ├── Adafruit_SSD1306/      # OLED display driver
 │   └── WiFiManager/           # WiFi configuration portal
 ├── main/                       # Application source code
-│   ├── flasher/               # UART flash logic
-│   │   ├── flasher.cpp
-│   │   └── flasher.h
+│   ├── app_actions/           # Action dispatcher (flash, erase, etc.)
+│   │   └── app_actions.cpp
+│   ├── flasher/               # Flash engines (UART + SWD)
+│   │   ├── flasher.cpp        # ESP32 UART flasher
+│   │   ├── flasher.h
+│   │   ├── flasher_common.h   # Shared pin definitions
+│   │   ├── flasher_swd.cpp    # STM32 SWD flasher (~742 lines)
+│   │   └── flasher_swd.h
 │   ├── metadata_parser/       # JSON parsing module
 │   │   ├── metadata_parser.cpp
 │   │   └── metadata_parser.h
@@ -77,7 +83,7 @@ ESP_MUL/Muti/
 - `force_delete` - Flag for force clean sync
 - `buf[BUF_LEN]` - UART read buffer
 
-### Flasher Module (`main/flasher/`)
+### ESP32 UART Flasher (`main/flasher/flasher.cpp`)
 **Purpose:** Low-level UART flashing via esp-serial-flasher
 **API:**
 ```cpp
@@ -99,6 +105,36 @@ void host_system_restart();                         // Restart host ESP32
 - Partition Table: 0x8000
 - Application: 0x10000
 - Buffer Size: 4096 bytes
+
+### STM32 SWD Flasher (`main/flasher/flasher_swd.cpp`)
+**Purpose:** STM32F4 flash programming via SWD bit-bang (Adafruit_DAP)
+**API:**
+```cpp
+esp_err_t flasher_swd_init();                       // Init SWD GPIO pins
+esp_err_t flasher_swd_deinit();                     // Release SWD pins
+esp_err_t flasher_swd_detect_rdp(int *rdp_level);   // Detect RDP level (0/1/2)
+esp_err_t flasher_swd_rdp_disable_trigger();         // Blind-write RDP disable
+esp_err_t flasher_swd_rdp_disable_verify();          // Verify after power cycle
+esp_err_t flasher_swd_flash_firmware(path, cb);      // Full flash + verify
+```
+
+**Hardware Configuration:**
+- SWDIO: GPIO 0 → Target SWDIO
+- SWCLK: GPIO 3 → Target SWCLK
+- nRESET: -1 (not connected)
+
+**Flash Strategy:**
+- RAM buffer entire FW (max 128KB) → close SD → flash
+- 256B sub-chunks with on-the-fly verify + retry
+- RDP blind write: 3x attempts with SYSRESETREQ between
+- Returns ESP_ERR_INVALID_STATE if chip RDP-locked
+
+### App Actions (`main/app_actions/app_actions.cpp`)
+**Purpose:** High-level action dispatcher for flash/erase operations
+**Key Logic:**
+- Detects STM32 vs ESP32 target from firmware metadata device_type
+- Routes to SWD engine (STM32) or UART engine (ESP32)
+- Handles ESP_ERR_INVALID_STATE → OLED "Erase STM32 first"
 
 ### SD Card Module (`main/sd_card/`)
 **Purpose:** SD card management and metadata storage
