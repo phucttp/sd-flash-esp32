@@ -164,6 +164,12 @@ def apply_theme(root: tk.Tk):
         foreground=Colors.TEXT
     )
 
+    style.configure("Section.TLabel",
+        background=Colors.BG_CARD,
+        foreground=Colors.PRIMARY,
+        font=(Fonts.FAMILY, 11, "bold")
+    )
+
     # ==================== LABELFRAME ====================
     style.configure("TLabelframe",
         background=Colors.BG_CARD,
@@ -176,38 +182,139 @@ def apply_theme(root: tk.Tk):
     style.configure("TLabelframe.Label",
         background=Colors.BG_CARD,
         foreground=Colors.PRIMARY,
-        font=Fonts.heading()
+        font=(Fonts.FAMILY, 12, "bold")
     )
 
     # ==================== BUTTONS ====================
-    # Primary button (cyan gradient feel)
+
+    # Default button (dark, subtle border)
+    style.configure("TButton",
+        background=Colors.BG_BUTTON,
+        foreground=Colors.TEXT,
+        font=Fonts.normal(),
+        padding=(12, 6),
+        borderwidth=1,
+        bordercolor=Colors.BORDER_LIGHT,
+        relief="flat"
+    )
+    style.map("TButton",
+        background=[
+            ("disabled", Colors.BG_DARK),
+            ("active", Colors.BG_CARD_HOVER),
+            ("pressed", Colors.BG_CARD)
+        ],
+        foreground=[
+            ("disabled", Colors.TEXT_MUTED),
+            ("active", Colors.PRIMARY)
+        ]
+    )
+
+    # Primary button (cyan)
     style.configure("Primary.TButton",
         background=Colors.PRIMARY,
         foreground=Colors.TEXT_DARK,
         font=Fonts.bold(),
-        padding=(20, 10),
+        padding=(16, 8),
         borderwidth=0
     )
     style.map("Primary.TButton",
         background=[
+            ("disabled", Colors.PRIMARY_DARK),
             ("active", Colors.PRIMARY_LIGHT),
             ("pressed", Colors.PRIMARY_DARK)
         ],
         foreground=[
+            ("disabled", Colors.BG_CARD),
             ("active", Colors.TEXT_DARK),
             ("pressed", Colors.TEXT_DARK)
         ]
     )
 
-    # Secondary button (outline style)
+    # Secondary button (outlined)
     style.configure("Secondary.TButton",
         background=Colors.BG_BUTTON,
-        foreground=Colors.TEXT,
+        foreground=Colors.PRIMARY,
         font=Fonts.normal(),
-        padding=(16, 8),
-        borderwidth=1
+        padding=(14, 7),
+        borderwidth=1,
+        bordercolor=Colors.PRIMARY_DARK
     )
     style.map("Secondary.TButton",
+        background=[
+            ("disabled", Colors.BG_DARK),
+            ("active", Colors.BG_CARD_HOVER),
+            ("pressed", Colors.BG_CARD)
+        ],
+        foreground=[
+            ("disabled", Colors.TEXT_MUTED),
+            ("active", Colors.PRIMARY_LIGHT)
+        ]
+    )
+
+    # Success button (green)
+    style.configure("Success.TButton",
+        background=Colors.SUCCESS,
+        foreground=Colors.TEXT_DARK,
+        font=Fonts.bold(),
+        padding=(16, 8),
+        borderwidth=0
+    )
+    style.map("Success.TButton",
+        background=[
+            ("disabled", "#006644"),
+            ("active", "#33FF99"),
+            ("pressed", "#00CC66")
+        ],
+        foreground=[
+            ("disabled", Colors.BG_CARD)
+        ]
+    )
+
+    # Accent button (orange)
+    style.configure("Accent.TButton",
+        background=Colors.ACCENT,
+        foreground="#FFFFFF",
+        font=Fonts.bold(),
+        padding=(16, 8),
+        borderwidth=0
+    )
+    style.map("Accent.TButton",
+        background=[
+            ("disabled", "#994422"),
+            ("active", Colors.ACCENT_LIGHT),
+            ("pressed", "#E55A2B")
+        ]
+    )
+
+    # Danger button (red)
+    style.configure("Danger.TButton",
+        background=Colors.ERROR,
+        foreground="#FFFFFF",
+        font=Fonts.bold(),
+        padding=(14, 7),
+        borderwidth=0
+    )
+    style.map("Danger.TButton",
+        background=[
+            ("disabled", "#992233"),
+            ("active", "#FF6B7A"),
+            ("pressed", "#E53E4D")
+        ],
+        foreground=[
+            ("disabled", Colors.BG_CARD)
+        ]
+    )
+
+    # Small icon button (for ↻, ✕, 📋 etc.)
+    style.configure("Icon.TButton",
+        background=Colors.BG_BUTTON,
+        foreground=Colors.TEXT_MUTED,
+        font=(Fonts.FAMILY, 9),
+        padding=(4, 3),
+        borderwidth=1,
+        bordercolor=Colors.BORDER
+    )
+    style.map("Icon.TButton",
         background=[
             ("active", Colors.BG_CARD_HOVER),
             ("pressed", Colors.BG_CARD)
@@ -217,49 +324,22 @@ def apply_theme(root: tk.Tk):
         ]
     )
 
-    # Accent button (orange)
-    style.configure("Accent.TButton",
-        background=Colors.ACCENT,
-        foreground=Colors.TEXT,
-        font=Fonts.bold(),
-        padding=(20, 10),
-        borderwidth=0
-    )
-    style.map("Accent.TButton",
-        background=[
-            ("active", Colors.ACCENT_LIGHT),
-            ("pressed", "#E55A2B")
-        ]
-    )
-
-    # Danger button (red)
-    style.configure("Danger.TButton",
-        background=Colors.ERROR,
-        foreground=Colors.TEXT,
-        font=Fonts.bold(),
-        padding=(16, 8),
-        borderwidth=0
-    )
-    style.map("Danger.TButton",
-        background=[
-            ("active", "#FF6B7A"),
-            ("pressed", "#E53E4D")
-        ]
-    )
-
-    # Default button
-    style.configure("TButton",
+    # Small danger icon button (for ✕ remove etc.)
+    style.configure("IconDanger.TButton",
         background=Colors.BG_BUTTON,
-        foreground=Colors.TEXT,
-        font=Fonts.normal(),
-        padding=(12, 6),
+        foreground=Colors.ERROR,
+        font=(Fonts.FAMILY, 9),
+        padding=(4, 3),
         borderwidth=1,
-        relief="flat"
+        bordercolor=Colors.BORDER
     )
-    style.map("TButton",
+    style.map("IconDanger.TButton",
         background=[
-            ("active", Colors.BG_CARD_HOVER),
+            ("active", "#3A2030"),
             ("pressed", Colors.BG_CARD)
+        ],
+        foreground=[
+            ("active", "#FF6B7A")
         ]
     )
 
@@ -315,15 +395,16 @@ def apply_theme(root: tk.Tk):
     style.configure("TNotebook",
         background=Colors.BG_DARK,
         borderwidth=0,
-        tabmargins=(0, 0, 0, 0)
+        tabmargins=(2, 4, 2, 0)
     )
 
     style.configure("TNotebook.Tab",
         background=Colors.BG_CARD,
         foreground=Colors.TEXT_MUTED,
-        padding=(20, 12),
-        font=Fonts.normal(),
-        borderwidth=0
+        padding=(20, 10),
+        font=(Fonts.FAMILY, Fonts.SIZE_NORMAL, "bold"),
+        borderwidth=0,
+        focuscolor=Colors.BG_DARK
     )
     style.map("TNotebook.Tab",
         background=[
@@ -334,10 +415,22 @@ def apply_theme(root: tk.Tk):
             ("selected", Colors.PRIMARY),
             ("active", Colors.TEXT)
         ],
-        expand=[
-            ("selected", (0, 0, 0, 2))
+        padding=[
+            ("selected", (20, 10, 20, 12))
         ]
     )
+
+    # Notebook tab area border (cyan line under selected tab)
+    style.layout("TNotebook", [
+        ("TNotebook.client", {"sticky": "nswe"})
+    ])
+    style.layout("TNotebook.Tab", [
+        ("Notebook.tab", {"sticky": "nswe", "children": [
+            ("Notebook.padding", {"side": "top", "sticky": "nswe", "children": [
+                ("Notebook.label", {"side": "top", "sticky": ""})
+            ]})
+        ]})
+    ])
 
     # ==================== TREEVIEW ====================
     style.configure("Treeview",
@@ -345,15 +438,16 @@ def apply_theme(root: tk.Tk):
         foreground=Colors.TEXT,
         fieldbackground=Colors.BG_CARD,
         bordercolor=Colors.BORDER,
-        font=Fonts.normal(),
+        font=(Fonts.FAMILY, Fonts.SIZE_SMALL),
         rowheight=28
     )
     style.configure("Treeview.Heading",
         background=Colors.BG_BUTTON,
-        foreground=Colors.TEXT_MUTED,
-        font=Fonts.bold(),
+        foreground=Colors.PRIMARY,
+        font=(Fonts.FAMILY, Fonts.SIZE_SMALL, "bold"),
         borderwidth=0,
-        relief="flat"
+        relief="flat",
+        padding=(8, 4)
     )
     style.map("Treeview",
         background=[
@@ -366,6 +460,9 @@ def apply_theme(root: tk.Tk):
     style.map("Treeview.Heading",
         background=[
             ("active", Colors.BG_CARD_HOVER)
+        ],
+        foreground=[
+            ("active", Colors.PRIMARY_LIGHT)
         ]
     )
 

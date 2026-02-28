@@ -84,5 +84,6 @@
     "fstream": "cpp",
     "iomanip": "cpp",
     "sstream": "cpp"
-  }
+  },
+  "idf.currentSetup": "C:/Espressif/frameworks/esp-idf-v5.1.6/"
 }

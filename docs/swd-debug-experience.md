@@ -31,6 +31,7 @@
 21. [dap_write_word mat du lieu ~1/1000 words](#21-dap_write_word-mat-du-lieu-11000-words)
 22. [5V cap nguon STM32 - SWD voltage mismatch](#22-5v-cap-nguon-stm32---swd-voltage-mismatch)
 23. [SD.seek(0) khong hoat dong sau EOF](#23-sdseek0-khong-hoat-dong-sau-eof)
+24. [static Adafruit_DAP_STM32 chiem RAM vinh vien](#24-static-adafruit_dap_stm32-chiem-ram-vinh-vien)
 
 ---
 
@@ -591,6 +592,57 @@ fwFile.read(buf, size);  // → OK
 
 ---
 
+## 24. Static Adafruit_DAP_STM32 Chiem RAM Vinh Vien
+
+**Muc do**: LOW (hien tai) / HIGH (neu can toi uu RAM)
+**Trieu chung**: RAM bi chiem vinh vien boi object `dap` du khong dang dung SWD.
+**Nguyen nhan**: Khai bao `static Adafruit_DAP_STM32 dap;` o file scope trong `flasher_swd.cpp`.
+
+**Ban chat van de:**
+- Day la mot object instance (thuc the) nam thuong truc trong RAM (.bss segment).
+- Vi la `static` file-scope, no duoc cap phat ngay khi chip khoi dong va KHONG BAO GIO duoc giai phong.
+- Du ban dang o menu OLED, dang nap ESP32 qua UART, hay dang nghi... thi cuc `dap` nay van chiem RAM.
+- Bao gom tat ca bien noi bo, buffer dem, state machine cua class Adafruit_DAP_STM32.
+
+**Heu qua RAM:**
+```
+static Adafruit_DAP_STM32 dap;
+// → Sizeof(Adafruit_DAP_STM32) bytes chiem vinh vien
+// Neu class nay ~2KB → Mat 2KB RAM vinh vien
+// Tren ESP32-C3 (400KB SRAM) → ~0.5% RAM mat khong can thiet
+// Anh huong lon hon khi can malloc() cho FW buffer (streaming mode)
+```
+
+**So sanh 2 cach:**
+```cpp
+// HIEN TAI: Static — don gian, khong leak, nhung chiem RAM vinh vien
+static Adafruit_DAP_STM32 dap;
+
+// THAY THE: Dynamic — chi cap phat khi can, giai phong khi xong
+static Adafruit_DAP_STM32* dap = nullptr;
+
+esp_err_t flasher_swd_init() {
+    if (!dap) dap = new Adafruit_DAP_STM32();
+    // ...
+}
+
+esp_err_t flasher_swd_deinit() {
+    delete dap;
+    dap = nullptr;
+    // ...
+}
+```
+
+**Trade-off:**
+- Static: Don gian, an toan (khong leak), zero overhead. Phu hop khi RAM du.
+- Dynamic: Tiet kiem RAM, nhung can can than: moi cho dung `dap.` phai doi thanh `dap->`, phai check nullptr, risk memory leak neu quyen goi deinit().
+
+**Ket luan**: Giu static neu RAM con du. Chi doi sang dynamic khi streaming mode (FW lon) bi thieu RAM vi malloc(32KB) fail. Luc do 2KB tra lai tu `dap` co the la su khac biet giua thanh cong va that bai.
+
+**File**: `main/flasher/flasher_swd.cpp` dong 48
+
+---
+
 ## Tong Ket Thu Tu Debug
 
 ```
@@ -665,4 +717,4 @@ nRESET = -1        (khong noi, dung nut reset vat ly)
 
 ---
 
-> **Cap nhat**: 2026-02-16 | Tong cong 23 bugs (1 gia thuyet sai da danh dau)
+> **Cap nhat**: 2026-02-16 | Tong cong 24 bugs (1 gia thuyet sai da danh dau)

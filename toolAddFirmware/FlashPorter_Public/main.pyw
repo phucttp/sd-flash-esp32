@@ -17,6 +17,7 @@ Version: 2.0.0
 import os
 import sys
 import json
+import threading
 import tkinter as tk
 from tkinter import ttk, filedialog, messagebox, scrolledtext
 from typing import Optional
@@ -37,6 +38,7 @@ from modules.git_sync import GitManager
 from modules.oled_preview import OLEDPreviewFrame
 from modules.utils import safe_name, FileNames
 from modules.theme import Colors, Fonts, apply_theme, GradientFrame, StatusBadge
+from modules.net_flash import NodeClient, discover_nodes
 
 # Constants
 APP_TITLE = "FlashPorter Public Edition v2.0"
@@ -246,6 +248,13 @@ class MainApp(tk.Tk):
         self.git_url_var = tk.StringVar(value=self.settings.get("git_url", ""))
         self.lib_path_var = tk.StringVar(value=self.settings.get("lib_path", self.lib.lib_root))
 
+        # NetFlash state — per-card (keyed by host)
+        self._nf_cards = {}       # {host: {state + widget refs}}
+        self._nf_canvas = None    # scrollable canvas ref
+        self._nf_cards_frame = None
+        self._nf_global_fw_ids = []   # [{id, display}, ...] shared for Flash All
+        self._nf_global_combo = None  # global FW combobox widget
+
         # Add firmware variables
         self.add_fw_id_var = tk.StringVar()
         self.add_device_type_var = tk.StringVar()
@@ -269,13 +278,13 @@ class MainApp(tk.Tk):
     def _on_login_success(self):
         """Called after successful login."""
         self.title(f"{APP_TITLE} - {self.auth.get_username()}")
-        self.geometry("1000x700")
+        self.geometry("1100x750")
         self.deiconify()  # Show main window after login
 
         # Center window
         self.update_idletasks()
-        x = (self.winfo_screenwidth() - 1000) // 2
-        y = (self.winfo_screenheight() - 700) // 2
+        x = (self.winfo_screenwidth() - 1100) // 2
+        y = (self.winfo_screenheight() - 750) // 2
         self.geometry(f"+{x}+{y}")
 
         # Check Git
@@ -303,7 +312,7 @@ class MainApp(tk.Tk):
 
         # Tab 1: Add Firmware
         frm_add = ttk.Frame(nb)
-        nb.add(frm_add, text="  Add Firmware  ")
+        nb.add(frm_add, text="  + Add Firmware  ")
         self._build_add_tab(frm_add)
 
         # Tab 2: Library & SD Card
@@ -316,13 +325,18 @@ class MainApp(tk.Tk):
         nb.add(frm_settings, text="  Settings  ")
         self._build_settings_tab(frm_settings)
 
+        # Tab 4: NetFlash
+        frm_netflash = ttk.Frame(nb)
+        nb.add(frm_netflash, text="  NetFlash  ")
+        self._build_netflash_tab(frm_netflash)
+
         # Log area with dark theme
         log_frame = ttk.Frame(self)
         log_frame.pack(fill=tk.BOTH, expand=False, padx=8, pady=(0, 8))
 
         log_header = ttk.Frame(log_frame)
-        log_header.pack(fill=tk.X)
-        ttk.Label(log_header, text="Log", style="Heading.TLabel").pack(side=tk.LEFT)
+        log_header.pack(fill=tk.X, pady=(2, 0))
+        ttk.Label(log_header, text="Log", style="Title.TLabel").pack(side=tk.LEFT)
 
         self.log = scrolledtext.ScrolledText(
             log_frame,
@@ -354,22 +368,22 @@ class MainApp(tk.Tk):
         grp_info.columnconfigure(1, weight=1)
 
         # FW ID
-        ttk.Label(grp_info, text="Firmware ID:", style="Heading.TLabel").grid(row=0, column=0, sticky="w", pady=8)
+        ttk.Label(grp_info, text="Firmware ID:").grid(row=0, column=0, sticky="w", pady=8)
         self.combo_id = ttk.Combobox(grp_info, textvariable=self.add_fw_id_var, values=ids_hint)
         self.combo_id.grid(row=0, column=1, padx=10, sticky="ew")
         self.combo_id.bind("<<ComboboxSelected>>", self._on_id_selected)
 
         # Device Type
-        ttk.Label(grp_info, text="Device Type:").grid(row=1, column=0, sticky="w", pady=5)
+        ttk.Label(grp_info, text="Device Type:").grid(row=1, column=0, sticky="w", pady=8)
         self.combo_type = ttk.Combobox(grp_info, textvariable=self.add_device_type_var, values=types_hint)
         self.combo_type.grid(row=1, column=1, padx=10, sticky="ew")
 
         # Version
-        ttk.Label(grp_info, text="Version:").grid(row=2, column=0, sticky="w", pady=5)
+        ttk.Label(grp_info, text="Version:").grid(row=2, column=0, sticky="w", pady=8)
         ttk.Entry(grp_info, textvariable=self.add_version_var).grid(row=2, column=1, padx=10, sticky="ew")
 
         # Description (shown on OLED Status tab)
-        ttk.Label(grp_info, text="Description:").grid(row=3, column=0, sticky="w", pady=5)
+        ttk.Label(grp_info, text="Description:").grid(row=3, column=0, sticky="w", pady=8)
         ttk.Entry(grp_info, textvariable=self.add_description_var).grid(row=3, column=1, padx=10, sticky="ew")
 
         # Group 2: Files
@@ -382,7 +396,7 @@ class MainApp(tk.Tk):
             lbl.grid(row=row, column=0, sticky="w", pady=5)
             ent = ttk.Entry(grp_files, textvariable=var, state="readonly")
             ent.grid(row=row, column=1, padx=10, sticky="ew")
-            btn = ttk.Button(grp_files, text="Browse...", command=cmd)
+            btn = ttk.Button(grp_files, text="Browse...", style="Secondary.TButton", command=cmd)
             btn.grid(row=row, column=2)
             return lbl, ent, btn
 
@@ -421,36 +435,60 @@ class MainApp(tk.Tk):
         # ========== LEFT: Firmware Treeview ==========
         left = ttk.LabelFrame(frm, text="Firmware Library", padding=5)
         left.grid(row=0, column=0, sticky="nsew", padx=(0, 5))
-        left.rowconfigure(0, weight=1)
+        left.rowconfigure(1, weight=1)
         left.columnconfigure(0, weight=1)
+
+        # Search bar
+        self._fw_search_var = tk.StringVar()
+        self._fw_search_entry = ttk.Entry(left, textvariable=self._fw_search_var,
+                                           font=Fonts.mono_small())
+        self._fw_search_entry.grid(row=0, column=0, columnspan=2, sticky="ew",
+                                    pady=(0, 5))
+        self._fw_search_entry.insert(0, "Search firmware...")
+        self._fw_search_entry.configure(foreground="gray")
+
+        def _search_focus_in(e):
+            if self._fw_search_var.get() == "Search firmware...":
+                self._fw_search_entry.delete(0, tk.END)
+                self._fw_search_entry.configure(foreground="")
+        def _search_focus_out(e):
+            if not self._fw_search_var.get():
+                self._fw_search_entry.insert(0, "Search firmware...")
+                self._fw_search_entry.configure(foreground="gray")
+
+        self._fw_search_entry.bind("<FocusIn>", _search_focus_in)
+        self._fw_search_entry.bind("<FocusOut>", _search_focus_out)
+        self._fw_search_var.trace_add("write",
+            lambda *_: self._filter_fw_tree(self._fw_search_var.get()))
 
         # Treeview with columns
         columns = ("device", "version")
-        self.fw_tree = ttk.Treeview(left, columns=columns, show="tree headings", selectmode="extended")
+        self.fw_tree = ttk.Treeview(left, columns=columns, show="tree headings",
+                                     selectmode="extended")
         self.fw_tree.heading("#0", text="Firmware ID")
         self.fw_tree.heading("device", text="Device")
         self.fw_tree.heading("version", text="Version")
         self.fw_tree.column("#0", width=100)
         self.fw_tree.column("device", width=80)
         self.fw_tree.column("version", width=60)
-        self.fw_tree.grid(row=0, column=0, sticky="nsew")
+        self.fw_tree.grid(row=1, column=0, sticky="nsew")
         self.fw_tree.bind("<<TreeviewSelect>>", self._on_fw_select)
 
         # Scrollbar for treeview
         tree_scroll = ttk.Scrollbar(left, orient="vertical", command=self.fw_tree.yview)
-        tree_scroll.grid(row=0, column=1, sticky="ns")
+        tree_scroll.grid(row=1, column=1, sticky="ns")
         self.fw_tree.configure(yscrollcommand=tree_scroll.set)
 
         # Buttons under tree
         btn_tree = ttk.Frame(left)
-        btn_tree.grid(row=1, column=0, columnspan=2, sticky="ew", pady=(5, 0))
+        btn_tree.grid(row=2, column=0, columnspan=2, sticky="ew", pady=(5, 0))
         btn_tree.columnconfigure(0, weight=1)
         btn_tree.columnconfigure(1, weight=1)
 
         ttk.Button(btn_tree, text="Delete", style="Danger.TButton",
-                   command=self._delete_firmware).grid(row=0, column=0, sticky="ew", padx=(0, 2))
-        ttk.Button(btn_tree, text="Refresh",
-                   command=self._refresh_firmware_list).grid(row=0, column=1, sticky="ew", padx=(2, 0))
+                   command=self._delete_firmware).grid(row=0, column=0, sticky="ew", padx=(0, 3))
+        ttk.Button(btn_tree, text="Refresh", style="Secondary.TButton",
+                   command=self._refresh_firmware_list).grid(row=0, column=1, sticky="ew", padx=(3, 0))
 
         # ========== MIDDLE: OLED Preview + Actions ==========
         mid = ttk.Frame(frm)
@@ -475,21 +513,22 @@ class MainApp(tk.Tk):
         sd_frame.grid(row=0, column=1, sticky="ew", pady=2)
         sd_frame.columnconfigure(0, weight=1)
         ttk.Entry(sd_frame, textvariable=self.sd_path_var, width=15).grid(row=0, column=0, sticky="ew")
-        ttk.Button(sd_frame, text="...", width=3, command=self._choose_sd_path).grid(row=0, column=1)
+        ttk.Button(sd_frame, text="...", width=3, style="Icon.TButton",
+                   command=self._choose_sd_path).grid(row=0, column=1, padx=(2, 0))
 
         # Row 1-2: Copy buttons
-        ttk.Button(grp_act, text="Copy Plain", width=BTN_W,
-                   command=self._copy_to_sd_plain).grid(row=1, column=0, sticky="ew", padx=2, pady=2)
-        ttk.Button(grp_act, text="Copy Encrypted", width=BTN_W,
-                   command=self._copy_to_sd_enc).grid(row=1, column=1, sticky="ew", padx=2, pady=2)
+        ttk.Button(grp_act, text="Copy Plain", width=BTN_W, style="Success.TButton",
+                   command=self._copy_to_sd_plain).grid(row=1, column=0, sticky="ew", padx=2, pady=3)
+        ttk.Button(grp_act, text="Copy Encrypted", width=BTN_W, style="Accent.TButton",
+                   command=self._copy_to_sd_enc).grid(row=1, column=1, sticky="ew", padx=2, pady=3)
 
         # Row 3: Git sync (single button)
         ttk.Button(grp_act, text="SYNC TO GIT", width=BTN_W*2, style="Primary.TButton",
-                   command=self._sync_to_git).grid(row=2, column=0, columnspan=2, sticky="ew", padx=2, pady=2)
+                   command=self._sync_to_git).grid(row=2, column=0, columnspan=2, sticky="ew", padx=2, pady=3)
 
         # Row 4: Remove
         ttk.Button(grp_act, text="Remove from SD", style="Danger.TButton",
-                   command=self._remove_from_sd).grid(row=3, column=0, columnspan=2, sticky="ew", padx=2, pady=2)
+                   command=self._remove_from_sd).grid(row=3, column=0, columnspan=2, sticky="ew", padx=2, pady=3)
 
         # SD Card Contents (compact)
         grp_sd = ttk.LabelFrame(mid, text="SD Card", padding=5)
@@ -497,7 +536,8 @@ class MainApp(tk.Tk):
         grp_sd.rowconfigure(1, weight=1)
         grp_sd.columnconfigure(0, weight=1)
 
-        ttk.Button(grp_sd, text="Load SD", command=self._load_sd_card).grid(row=0, column=0, sticky="ew")
+        ttk.Button(grp_sd, text="Load SD", style="Secondary.TButton",
+                   command=self._load_sd_card).grid(row=0, column=0, sticky="ew")
         self.sd_listbox = tk.Listbox(
             grp_sd,
             height=5,
@@ -513,27 +553,166 @@ class MainApp(tk.Tk):
         self.sd_listbox.grid(row=1, column=0, sticky="nsew", pady=(5, 0))
         self.sd_listbox.bind("<<ListboxSelect>>", self._on_sd_select)
 
-        # ========== RIGHT: Details ==========
-        right = ttk.LabelFrame(frm, text="Details", padding=5)
+        # Flash History (compact)
+        grp_hist = ttk.LabelFrame(mid, text="Flash History", padding=5)
+        grp_hist.grid(row=3, column=0, sticky="nsew", pady=(0, 5))
+        grp_hist.rowconfigure(0, weight=1)
+        grp_hist.columnconfigure(0, weight=1)
+
+        self._hist_listbox = tk.Listbox(
+            grp_hist,
+            height=4,
+            font=Fonts.mono_small(),
+            bg=Colors.BG_CARD,
+            fg=Colors.TEXT,
+            selectbackground=Colors.PRIMARY,
+            selectforeground=Colors.TEXT_DARK,
+            highlightthickness=0,
+            borderwidth=0,
+            relief="flat"
+        )
+        self._hist_listbox.grid(row=0, column=0, sticky="nsew")
+        self._hist_listbox.bind("<<ListboxSelect>>", self._on_hist_select)
+
+        # Load history on startup
+        self._flash_history = self._history_load()
+        self._history_refresh_listbox()
+
+        # ========== RIGHT: Firmware Details ==========
+        right = ttk.LabelFrame(frm, text="Firmware Details", padding=10)
         right.grid(row=0, column=2, sticky="nsew", padx=(5, 0))
         right.rowconfigure(0, weight=1)
         right.columnconfigure(0, weight=1)
 
-        self.detail_text = scrolledtext.ScrolledText(
-            right,
-            font=Fonts.mono_small(),
-            wrap=tk.WORD,
-            bg=Colors.BG_CARD,
-            fg=Colors.TEXT,
-            insertbackground=Colors.TEXT,
-            selectbackground=Colors.PRIMARY,
-            selectforeground=Colors.TEXT_DARK,
-            relief="flat",
-            borderwidth=0,
-            padx=8,
-            pady=8
-        )
-        self.detail_text.grid(row=0, column=0, sticky="nsew")
+        # Scrollable detail panel
+        det_canvas = tk.Canvas(right, bg=Colors.BG_CARD, highlightthickness=0,
+                               borderwidth=0)
+        det_canvas.grid(row=0, column=0, sticky="nsew")
+        det_vscroll = ttk.Scrollbar(right, orient="vertical", command=det_canvas.yview)
+        det_vscroll.grid(row=0, column=1, sticky="ns")
+        det_canvas.configure(yscrollcommand=det_vscroll.set)
+
+        self._det_frame = tk.Frame(det_canvas, bg=Colors.BG_CARD)
+        self._det_canvas_win = det_canvas.create_window((0, 0), window=self._det_frame,
+                                                         anchor="nw")
+        self._det_canvas = det_canvas
+
+        def _det_configure(e):
+            det_canvas.configure(scrollregion=det_canvas.bbox("all"))
+        self._det_frame.bind("<Configure>", _det_configure)
+        det_canvas.bind("<Configure>",
+                        lambda e: det_canvas.itemconfig(self._det_canvas_win, width=e.width))
+        # Mousewheel
+        det_canvas.bind("<Enter>",
+                        lambda e: det_canvas.bind_all("<MouseWheel>",
+                                                       lambda ev: det_canvas.yview_scroll(
+                                                           int(-1*(ev.delta/120)), "units")))
+        det_canvas.bind("<Leave>", lambda e: det_canvas.unbind_all("<MouseWheel>"))
+
+        df = self._det_frame
+        df.columnconfigure(0, weight=0)
+        df.columnconfigure(1, weight=1)
+
+        # Row 0: Device name (large bold heading)
+        self._det_name_var = tk.StringVar(value="")
+        tk.Label(df, textvariable=self._det_name_var, bg=Colors.BG_CARD,
+                 fg=Colors.TEXT, font=(Fonts.FAMILY, 16, "bold"),
+                 anchor="w").grid(row=0, column=0, columnspan=2, sticky="ew",
+                                  padx=8, pady=(8, 4))
+
+        # Row 1: Badges — [version] [device type]
+        badge_row = tk.Frame(df, bg=Colors.BG_CARD)
+        badge_row.grid(row=1, column=0, columnspan=2, sticky="w", padx=8, pady=(0, 8))
+
+        self._det_ver_badge = StatusBadge(badge_row, text="", status="info")
+        self._det_ver_badge.pack(side=tk.LEFT, padx=(0, 6))
+
+        self._det_type_var = tk.StringVar(value="")
+        tk.Label(badge_row, textvariable=self._det_type_var, bg=Colors.BG_CARD,
+                 fg=Colors.TEXT_MUTED, font=Fonts.normal()).pack(side=tk.LEFT)
+
+        # Row 2: Description label
+        tk.Label(df, text="Description", bg=Colors.BG_CARD, fg=Colors.PRIMARY,
+                 font=Fonts.bold(), anchor="w").grid(
+            row=2, column=0, columnspan=2, sticky="w", padx=8, pady=(4, 2))
+
+        # Row 3: Description card
+        desc_card = tk.Frame(df, bg=Colors.BG_DARK, padx=12, pady=8)
+        desc_card.grid(row=3, column=0, columnspan=2, sticky="ew", padx=8, pady=(0, 8))
+
+        self._det_desc_var = tk.StringVar(value="")
+        tk.Label(desc_card, textvariable=self._det_desc_var, bg=Colors.BG_DARK,
+                 fg=Colors.TEXT, font=Fonts.normal(), anchor="w",
+                 wraplength=220, justify="left").pack(fill=tk.X)
+
+        # Row 4: Separator
+        tk.Frame(df, height=1, bg=Colors.BORDER).grid(
+            row=4, column=0, columnspan=2, sticky="ew", padx=8, pady=4)
+
+        # Row 5-10: Info grid (label: value)
+        info_fields = [
+            ("ID:", "_det_id_var"),
+            ("Local File Path", "_det_path_label"),
+            ("Size", "_det_size_var"),
+            ("Date Added", "_det_date_var"),
+            ("MD5", "_det_md5_var"),
+        ]
+
+        self._det_id_var = tk.StringVar(value="")
+        self._det_path_var = tk.StringVar(value="")
+        self._det_size_var = tk.StringVar(value="")
+        self._det_date_var = tk.StringVar(value="")
+        self._det_md5_var = tk.StringVar(value="")
+
+        r = 5
+        # ID
+        tk.Label(df, text="ID:", bg=Colors.BG_CARD, fg=Colors.TEXT_MUTED,
+                 font=Fonts.small(), anchor="w").grid(row=r, column=0, sticky="w", padx=(8, 4))
+        tk.Label(df, textvariable=self._det_id_var, bg=Colors.BG_CARD,
+                 fg=Colors.TEXT, font=Fonts.mono_small(), anchor="w").grid(
+            row=r, column=1, sticky="ew", padx=(0, 8))
+
+        # Local File Path (with copy button)
+        r += 1
+        tk.Label(df, text="Local File Path", bg=Colors.BG_CARD, fg=Colors.TEXT_MUTED,
+                 font=Fonts.small(), anchor="w").grid(
+            row=r, column=0, columnspan=2, sticky="w", padx=8, pady=(8, 2))
+        r += 1
+        path_row = tk.Frame(df, bg=Colors.BG_CARD)
+        path_row.grid(row=r, column=0, columnspan=2, sticky="ew", padx=8)
+        path_row.columnconfigure(0, weight=1)
+        tk.Label(path_row, textvariable=self._det_path_var, bg=Colors.BG_DARK,
+                 fg=Colors.TEXT, font=Fonts.mono_small(), anchor="w",
+                 padx=6, pady=4).grid(row=0, column=0, sticky="ew")
+        ttk.Button(path_row, text="\U0001f4cb", width=3, style="Icon.TButton",
+                   command=self._copy_det_path).grid(row=0, column=1, padx=(4, 0))
+
+        # Size + Date on same row
+        r += 1
+        size_date_row = tk.Frame(df, bg=Colors.BG_CARD)
+        size_date_row.grid(row=r, column=0, columnspan=2, sticky="ew",
+                           padx=8, pady=(8, 0))
+        size_date_row.columnconfigure(0, weight=1)
+        size_date_row.columnconfigure(1, weight=1)
+
+        tk.Label(size_date_row, text="Size", bg=Colors.BG_CARD, fg=Colors.TEXT_MUTED,
+                 font=Fonts.small(), anchor="w").grid(row=0, column=0, sticky="w")
+        tk.Label(size_date_row, text="Date Added", bg=Colors.BG_CARD, fg=Colors.TEXT_MUTED,
+                 font=Fonts.small(), anchor="w").grid(row=0, column=1, sticky="w")
+        tk.Label(size_date_row, textvariable=self._det_size_var, bg=Colors.BG_CARD,
+                 fg=Colors.TEXT, font=Fonts.bold(), anchor="w").grid(row=1, column=0, sticky="w")
+        tk.Label(size_date_row, textvariable=self._det_date_var, bg=Colors.BG_CARD,
+                 fg=Colors.TEXT, font=Fonts.bold(), anchor="w").grid(row=1, column=1, sticky="w")
+
+        # MD5
+        r += 1
+        tk.Label(df, text="MD5", bg=Colors.BG_CARD, fg=Colors.TEXT_MUTED,
+                 font=Fonts.small(), anchor="w").grid(
+            row=r, column=0, columnspan=2, sticky="w", padx=8, pady=(8, 2))
+        r += 1
+        tk.Label(df, textvariable=self._det_md5_var, bg=Colors.BG_CARD,
+                 fg=Colors.TEXT, font=Fonts.mono_small(), anchor="w").grid(
+            row=r, column=0, columnspan=2, sticky="ew", padx=8, pady=(0, 8))
 
         # Keep compatibility with old listbox-based code
         self.fw_listbox = self.fw_tree  # Alias for compatibility
@@ -548,21 +727,23 @@ class MainApp(tk.Tk):
         grp_lib.pack(fill=tk.X, pady=(0, 15))
         grp_lib.columnconfigure(1, weight=1)
 
-        ttk.Label(grp_lib, text="Library Path:").grid(row=0, column=0, sticky="w", pady=5)
+        ttk.Label(grp_lib, text="Library Path:").grid(row=0, column=0, sticky="w", pady=8)
         ttk.Entry(grp_lib, textvariable=self.lib_path_var, font=Fonts.mono_small()).grid(row=0, column=1, padx=10, sticky="ew")
-        ttk.Button(grp_lib, text="...", width=3, command=self._choose_lib_path).grid(row=0, column=2)
+        ttk.Button(grp_lib, text="...", width=3, style="Icon.TButton",
+                   command=self._choose_lib_path).grid(row=0, column=2)
 
-        ttk.Label(grp_lib, text="(Restart app after changing)", foreground="gray").grid(row=1, column=1, sticky="w", padx=10)
+        ttk.Label(grp_lib, text="(Restart app after changing)",
+                  style="Muted.TLabel").grid(row=1, column=1, sticky="w", padx=10)
 
         # Encryption Settings
         grp_enc = ttk.LabelFrame(frm, text="Encryption Settings (AES-128-CBC)", padding=15)
         grp_enc.pack(fill=tk.X, pady=(0, 15))
         grp_enc.columnconfigure(1, weight=1)
 
-        ttk.Label(grp_enc, text="AES Key (16 chars):").grid(row=0, column=0, sticky="w", pady=5)
+        ttk.Label(grp_enc, text="AES Key (16 chars):").grid(row=0, column=0, sticky="w", pady=8)
         ttk.Entry(grp_enc, textvariable=self.enc_key, font=Fonts.mono()).grid(row=0, column=1, padx=10, sticky="ew")
 
-        ttk.Label(grp_enc, text="AES IV (16 chars):").grid(row=1, column=0, sticky="w", pady=5)
+        ttk.Label(grp_enc, text="AES IV (16 chars):").grid(row=1, column=0, sticky="w", pady=8)
         ttk.Entry(grp_enc, textvariable=self.enc_iv, font=Fonts.mono()).grid(row=1, column=1, padx=10, sticky="ew")
 
         # Git Settings
@@ -570,7 +751,7 @@ class MainApp(tk.Tk):
         grp_git.pack(fill=tk.X, pady=(0, 15))
         grp_git.columnconfigure(1, weight=1)
 
-        ttk.Label(grp_git, text="Repository URL:").grid(row=0, column=0, sticky="w", pady=5)
+        ttk.Label(grp_git, text="Repository URL:").grid(row=0, column=0, sticky="w", pady=8)
         ttk.Entry(grp_git, textvariable=self.git_url_var, font=Fonts.mono()).grid(row=0, column=1, padx=10, sticky="ew")
 
         # Account Settings
@@ -578,10 +759,720 @@ class MainApp(tk.Tk):
         grp_acc.pack(fill=tk.X, pady=(0, 15))
 
         ttk.Label(grp_acc, text=f"Logged in as: {self.auth.get_username()}").pack(anchor="w")
-        ttk.Button(grp_acc, text="Change Password", command=self._change_password).pack(anchor="w", pady=5)
+        ttk.Button(grp_acc, text="Change Password", style="Secondary.TButton",
+                   command=self._change_password).pack(anchor="w", pady=5)
 
         # Save button
         ttk.Button(frm, text="SAVE SETTINGS", style="Primary.TButton", command=self._save_settings).pack(pady=20)
+
+    # ==================== NetFlash Tab ====================
+
+    def _build_netflash_tab(self, parent):
+        """Build NetFlash multi-node management tab."""
+        frm = ttk.Frame(parent, padding=10)
+        frm.pack(fill=tk.BOTH, expand=True)
+        frm.columnconfigure(0, weight=1)
+        frm.rowconfigure(2, weight=1)
+
+        # ===== TOP TOOLBAR =====
+        toolbar = ttk.Frame(frm)
+        toolbar.grid(row=0, column=0, sticky="ew", pady=(0, 6))
+        toolbar.columnconfigure(1, weight=1)
+
+        ttk.Label(toolbar, text="Node:").grid(row=0, column=0, padx=(0, 4))
+        self._nf_host_var = tk.StringVar(value="192.168.0.xxx")
+        self._nf_host_entry = ttk.Entry(
+            toolbar, textvariable=self._nf_host_var, width=22, font=Fonts.mono_small()
+        )
+        self._nf_host_entry.grid(row=0, column=1, sticky="ew", padx=(0, 4))
+        self._nf_host_entry.bind("<Return>", lambda e: self._nf_add_node())
+
+        ttk.Button(toolbar, text="Add", width=5, style="Success.TButton",
+                   command=self._nf_add_node).grid(row=0, column=2, padx=(0, 6))
+
+        ttk.Separator(toolbar, orient="vertical").grid(row=0, column=3, sticky="ns", padx=6)
+
+        self._nf_discover_btn = ttk.Button(
+            toolbar, text="Discover", style="Primary.TButton",
+            command=self._nf_discover
+        )
+        self._nf_discover_btn.grid(row=0, column=4, padx=(0, 4))
+
+        ttk.Button(toolbar, text="Ping All", style="Secondary.TButton",
+                   command=self._nf_refresh_all).grid(row=0, column=5)
+
+        # ===== FLASH ALL BAR =====
+        fa_bar = tk.Frame(frm, bg=Colors.BG_CARD, padx=10, pady=6)
+        fa_bar.grid(row=1, column=0, sticky="ew", pady=(0, 6))
+        fa_bar.columnconfigure(1, weight=1)
+
+        tk.Label(fa_bar, text="Flash All:", bg=Colors.BG_CARD,
+                 fg=Colors.PRIMARY, font=(Fonts.FAMILY, 11, "bold")).grid(row=0, column=0, padx=(0, 8))
+
+        self._nf_global_combo = ttk.Combobox(fa_bar, state="readonly", font=Fonts.mono_small())
+        self._nf_global_combo.grid(row=0, column=1, sticky="ew")
+        self._nf_global_combo.set("(load FW from any node first)")
+
+        ttk.Button(fa_bar, text="↻", width=3, style="Icon.TButton",
+                   command=self._nf_refresh_global_fw).grid(row=0, column=2, padx=(4, 6))
+
+        self._nf_flash_all_btn = ttk.Button(
+            fa_bar, text="⚡ Flash All Online", style="Primary.TButton",
+            command=self._nf_flash_all
+        )
+        self._nf_flash_all_btn.grid(row=0, column=3, padx=(0, 8))
+
+        # Online counter label
+        self._nf_counter_var = tk.StringVar(value="0 / 0 online")
+        tk.Label(fa_bar, textvariable=self._nf_counter_var, bg=Colors.BG_CARD,
+                 fg=Colors.SUCCESS, font=Fonts.bold()).grid(row=0, column=4)
+
+        # ===== SCROLLABLE CARDS AREA =====
+        card_container = ttk.Frame(frm)
+        card_container.grid(row=2, column=0, sticky="nsew")
+        card_container.columnconfigure(0, weight=1)
+        card_container.rowconfigure(0, weight=1)
+
+        self._nf_canvas = tk.Canvas(
+            card_container, bg=Colors.BG_DARK, highlightthickness=0, borderwidth=0
+        )
+        self._nf_canvas.grid(row=0, column=0, sticky="nsew")
+
+        vscroll = ttk.Scrollbar(card_container, orient="vertical",
+                                command=self._nf_canvas.yview)
+        vscroll.grid(row=0, column=1, sticky="ns")
+        self._nf_canvas.configure(yscrollcommand=vscroll.set)
+
+        self._nf_cards_frame = tk.Frame(self._nf_canvas, bg=Colors.BG_DARK)
+        self._nf_canvas_window = self._nf_canvas.create_window(
+            (0, 0), window=self._nf_cards_frame, anchor="nw"
+        )
+
+        # Keep cards frame in sync + reflow on resize
+        self._nf_cards_frame.bind(
+            "<Configure>",
+            lambda e: self._nf_canvas.configure(scrollregion=self._nf_canvas.bbox("all"))
+        )
+        self._nf_canvas.bind("<Configure>", self._nf_on_canvas_configure)
+
+        # Mousewheel
+        self._nf_canvas.bind(
+            "<Enter>",
+            lambda e: self._nf_canvas.bind_all("<MouseWheel>", self._nf_on_mousewheel)
+        )
+        self._nf_canvas.bind(
+            "<Leave>",
+            lambda e: self._nf_canvas.unbind_all("<MouseWheel>")
+        )
+
+        # Placeholder when no nodes
+        self._nf_empty_label = tk.Label(
+            self._nf_cards_frame,
+            text="No nodes yet.  Add an IP above or click  🔍 Discover.",
+            fg=Colors.TEXT_MUTED, bg=Colors.BG_DARK
+        )
+        self._nf_empty_label.grid(row=0, column=0, columnspan=5, pady=40)
+
+        # Load saved nodes
+        saved_hosts = self.settings.get("net_nodes", [])
+        for host in saved_hosts:
+            self._nf_add_card(host, ping=True)
+
+    NF_CARD_MIN_W = 195   # narrow portrait cards (~6-7 per row at 1340px)
+
+    def _nf_on_mousewheel(self, event):
+        if self._nf_canvas:
+            self._nf_canvas.yview_scroll(int(-1 * (event.delta / 120)), "units")
+
+    def _nf_on_canvas_configure(self, event):
+        self._nf_canvas.itemconfig(self._nf_canvas_window, width=event.width)
+        self._nf_reflow_cards()
+
+    def _nf_reflow_cards(self):
+        if not self._nf_cards:
+            return
+        canvas_w = self._nf_canvas.winfo_width()
+        if canvas_w < 20:
+            canvas_w = 1300
+        num_cols = max(1, canvas_w // self.NF_CARD_MIN_W)
+
+        hosts = list(self._nf_cards.keys())
+        for i, host in enumerate(hosts):
+            r, c = divmod(i, num_cols)
+            self._nf_cards[host]["card_frame"].grid(
+                row=r, column=c, padx=3, pady=3, sticky="nsew")
+
+        for c in range(num_cols):
+            self._nf_cards_frame.columnconfigure(c, weight=1, uniform="nfcard")
+        for c in range(num_cols, num_cols + 10):
+            self._nf_cards_frame.columnconfigure(c, weight=0, uniform="")
+
+    def _nf_update_counter(self):
+        """Update the 'N / M online' counter label."""
+        total = len(self._nf_cards)
+        online = sum(1 for c in self._nf_cards.values() if c.get("online"))
+        self._nf_counter_var.set(f"{online} / {total} online")
+
+    def _nf_blink_dot(self, host: str):
+        """Blink the green dot for an online card."""
+        if host not in self._nf_cards:
+            return
+        card = self._nf_cards[host]
+        if not card.get("online"):
+            return
+        dot = card.get("dot_lbl")
+        if not dot or not dot.winfo_exists():
+            return
+        cur = dot.cget("fg")
+        nxt = Colors.BG_CARD if cur == Colors.SUCCESS else Colors.SUCCESS
+        dot.configure(fg=nxt)
+        card["_blink_id"] = self.after(700, lambda: self._nf_blink_dot(host))
+
+    def _nf_stop_blink(self, card: dict):
+        bid = card.pop("_blink_id", None)
+        if bid:
+            self.after_cancel(bid)
+
+    def _nf_set_card_online(self, card: dict, online: bool):
+        """Apply online/offline visual to a card."""
+        cf = card["card_frame"]
+        if online:
+            cf.configure(highlightbackground=Colors.SUCCESS, highlightthickness=2)
+            card["dot_lbl"].configure(fg=Colors.SUCCESS)
+            card["flash_btn"].config(state="normal")
+            card["reboot_btn"].config(state="normal")
+            card["fw_combo"].config(state="readonly")
+        else:
+            self._nf_stop_blink(card)
+            cf.configure(highlightbackground=Colors.BORDER, highlightthickness=1)
+            card["dot_lbl"].configure(fg=Colors.ERROR)
+            card["flash_btn"].config(state="disabled")
+            card["reboot_btn"].config(state="disabled")
+            card["fw_combo"].config(state="disabled")
+
+    # --- Card management ---
+
+    def _nf_add_card(self, host: str, ping: bool = False):
+        """Create a narrow portrait card and add to the grid."""
+        if not host or host in self._nf_cards:
+            return
+
+        self._nf_empty_label.grid_forget()
+
+        # ── Card frame with border (glow when online) ──
+        card_frame = tk.Frame(self._nf_cards_frame, bg=Colors.BG_CARD,
+                              highlightbackground=Colors.BORDER,
+                              highlightthickness=1)
+
+        # ── Content ──
+        ct = tk.Frame(card_frame, bg=Colors.BG_CARD, padx=8, pady=6)
+        ct.pack(fill=tk.BOTH, expand=True)
+        ct.columnconfigure(1, weight=1)
+
+        # Row 0: ● dot + title
+        dot_lbl = tk.Label(ct, text="●", bg=Colors.BG_CARD,
+                           fg=Colors.TEXT_MUTED, font=(Fonts.FAMILY, 10))
+        dot_lbl.grid(row=0, column=0, sticky="w", padx=(0, 4))
+
+        title_var = tk.StringVar(value=host)
+        tk.Label(ct, textvariable=title_var, bg=Colors.BG_CARD,
+                 fg=Colors.TEXT, font=(Fonts.FAMILY, 10, "bold"),
+                 anchor="w").grid(row=0, column=1, sticky="ew")
+
+        # Row 0 right: [↺][✕]
+        btn_box = tk.Frame(ct, bg=Colors.BG_CARD)
+        btn_box.grid(row=0, column=2, sticky="ne")
+        ping_btn = ttk.Button(btn_box, text="↺", width=2, style="Icon.TButton",
+                              command=lambda h=host: self._nf_ping_card(h))
+        ping_btn.pack(side=tk.LEFT, padx=(0, 2))
+        ttk.Button(btn_box, text="✕", width=2, style="IconDanger.TButton",
+                   command=lambda h=host: self._nf_remove_card(h)).pack(side=tk.LEFT)
+
+        # Row 1: detail line (IP + uptime)
+        detail_var = tk.StringVar(value="...")
+        tk.Label(ct, textvariable=detail_var, bg=Colors.BG_CARD,
+                 fg=Colors.TEXT_MUTED, font=(Fonts.MONO, 9), anchor="w").grid(
+            row=1, column=0, columnspan=3, sticky="ew", pady=(2, 0))
+
+        # Separator
+        tk.Frame(ct, height=1, bg=Colors.BORDER).grid(
+            row=2, column=0, columnspan=3, sticky="ew", pady=4)
+
+        # Row 3: FW combo + ↻
+        fw_row = tk.Frame(ct, bg=Colors.BG_CARD)
+        fw_row.grid(row=3, column=0, columnspan=3, sticky="ew")
+        fw_row.columnconfigure(0, weight=1)
+
+        fw_combo = ttk.Combobox(fw_row, state="disabled", font=(Fonts.MONO, 9))
+        fw_combo.grid(row=0, column=0, sticky="ew")
+        fw_combo.set("—")
+        ttk.Button(fw_row, text="↻", width=2, style="Icon.TButton",
+                   command=lambda h=host: self._nf_load_fw_list_card(h)).grid(
+            row=0, column=1, padx=(2, 0))
+
+        # Row 4: progress bar
+        progress = ttk.Progressbar(ct, mode="determinate", maximum=100)
+        progress.grid(row=4, column=0, columnspan=3, sticky="ew", pady=(5, 0))
+
+        # Row 5: status text
+        flash_status_var = tk.StringVar(value="")
+        status_lbl = tk.Label(ct, textvariable=flash_status_var, bg=Colors.BG_CARD,
+                              fg=Colors.TEXT_MUTED, font=(Fonts.MONO, 9), anchor="w")
+        status_lbl.grid(row=5, column=0, columnspan=3, sticky="ew", pady=(2, 0))
+
+        # Row 6-7: action buttons stacked vertically
+        flash_btn = ttk.Button(ct, text="⚡ Flash", style="Primary.TButton",
+                               state="disabled",
+                               command=lambda h=host: self._nf_flash_card(h))
+        flash_btn.grid(row=6, column=0, columnspan=3, sticky="ew", pady=(5, 2))
+
+        reboot_btn = ttk.Button(ct, text="Reboot", style="Danger.TButton",
+                                state="disabled",
+                                command=lambda h=host: self._nf_reboot_card(h))
+        reboot_btn.grid(row=7, column=0, columnspan=3, sticky="ew")
+
+        # Mousewheel
+        for w in (card_frame, ct, btn_box, fw_row):
+            w.bind("<MouseWheel>", self._nf_on_mousewheel)
+
+        # Store state
+        self._nf_cards[host] = {
+            "host": host,
+            "online": None,
+            "info": None,
+            "fw_list": [],
+            "polling": False,
+            "poll_client": None,
+            "poll_errors": 0,
+            "card_frame": card_frame,
+            "dot_lbl": dot_lbl,
+            "title_var": title_var,
+            "detail_var": detail_var,
+            "fw_combo": fw_combo,
+            "progress": progress,
+            "pct_var": tk.StringVar(value=""),
+            "flash_status_var": flash_status_var,
+            "flash_btn": flash_btn,
+            "reboot_btn": reboot_btn,
+            "ping_btn": ping_btn,
+            "status_lbl": status_lbl,
+        }
+
+        self._nf_reflow_cards()
+        self._nf_update_counter()
+        if ping:
+            self._nf_ping_card(host)
+
+    def _nf_remove_card(self, host: str):
+        if host not in self._nf_cards:
+            return
+        card = self._nf_cards[host]
+        card["polling"] = False
+        self._nf_stop_blink(card)
+        card["card_frame"].destroy()
+        del self._nf_cards[host]
+
+        if not self._nf_cards:
+            self._nf_empty_label.grid(row=0, column=0, columnspan=5, pady=40)
+        else:
+            self._nf_reflow_cards()
+        self._nf_update_counter()
+        self._nf_save_nodes()
+
+    def _nf_save_nodes(self):
+        """Persist node list to settings.json."""
+        self.settings["net_nodes"] = list(self._nf_cards.keys())
+        try:
+            with open(CONFIG_FILE, "w") as f:
+                json.dump(self.settings, f, indent=2)
+        except Exception:
+            pass
+
+    def _nf_add_node(self):
+        host = self._nf_host_var.get().strip()
+        if not host or host == "192.168.0.xxx":
+            return
+        if host in self._nf_cards:
+            self._nf_cards[host]["flash_status_var"].set("Already in list")
+            return
+        self._nf_add_card(host, ping=True)
+        self._nf_save_nodes()
+
+    def _nf_discover(self):
+        """Discover FlashPorter nodes on LAN via ARP scan."""
+        self._nf_discover_btn.config(state="disabled", text="Scanning...")
+
+        def do_discover():
+            try:
+                ips = discover_nodes(timeout=3.0)
+                self.after(0, lambda: self._nf_on_discover_done(ips, None))
+            except Exception as e:
+                self.after(0, lambda: self._nf_on_discover_done([], str(e)))
+
+        threading.Thread(target=do_discover, daemon=True).start()
+
+    def _nf_on_discover_done(self, ips: list, error: Optional[str]):
+        self._nf_discover_btn.config(state="normal", text="🔍 Discover")
+        added = 0
+        for ip in ips:
+            if ip not in self._nf_cards:
+                self._nf_add_card(ip, ping=True)
+                added += 1
+        if added:
+            self._nf_save_nodes()
+
+    def _nf_refresh_all(self):
+        """Ping all nodes."""
+        for host in list(self._nf_cards.keys()):
+            self._nf_ping_card(host)
+
+    def _nf_refresh_global_fw(self):
+        """Reload global FW list from first online node."""
+        host = next((h for h, c in self._nf_cards.items() if c.get("online")), None)
+        if not host:
+            if self._nf_global_combo:
+                self._nf_global_combo.set("(no online node found)")
+            return
+        self._nf_global_fw_ids = []
+        if self._nf_global_combo:
+            self._nf_global_combo.set("Loading...")
+        self._nf_load_fw_list_card(host)
+
+    def _nf_flash_all(self):
+        """Flash all online nodes simultaneously with the globally selected FW."""
+        sel_idx = self._nf_global_combo.current() if self._nf_global_combo else -1
+        if sel_idx < 0 or sel_idx >= len(self._nf_global_fw_ids):
+            messagebox.showinfo("Flash All", "Select a firmware in the Flash All bar first.\n"
+                                             "(click ↻ to load the list from a node)")
+            return
+
+        fw = self._nf_global_fw_ids[sel_idx]
+        fw_id = fw.get("id", "")
+        fw_display = fw.get("display", fw_id)
+
+        online_hosts = [h for h, c in self._nf_cards.items() if c.get("online")]
+        if not online_hosts:
+            messagebox.showinfo("Flash All", "No online nodes to flash.")
+            return
+
+        if not messagebox.askyesno(
+            "Flash All",
+            f"Flash  '{fw_display}'\n→ {len(online_hosts)} node(s) simultaneously\n\n"
+            f"Nodes reboot automatically after flash."
+        ):
+            return
+
+        for host in online_hosts:
+            self._nf_do_flash(host, fw_id, fw_display)
+
+    # --- Ping ---
+
+    def _nf_ping_card(self, host: str):
+        """Ping a node — yellow border + disable ping btn while working."""
+        if host not in self._nf_cards:
+            return
+        card = self._nf_cards[host]
+        self._nf_stop_blink(card)
+        card["card_frame"].configure(highlightbackground=Colors.WARNING, highlightthickness=2)
+        card["dot_lbl"].configure(fg=Colors.WARNING)
+        card["detail_var"].set("Pinging...")
+        card["flash_status_var"].set("")
+        card["ping_btn"].config(state="disabled")
+        client = NodeClient(host)
+
+        def do_ping():
+            try:
+                info = client.ping()
+                self.after(0, lambda: self._nf_on_ping_done(host, info, None))
+            except Exception as e:
+                self.after(0, lambda: self._nf_on_ping_done(host, None, str(e)))
+
+        threading.Thread(target=do_ping, daemon=True).start()
+
+    def _nf_on_ping_done(self, host: str, info: Optional[dict], error: Optional[str]):
+        if host not in self._nf_cards:
+            return
+        card = self._nf_cards[host]
+        card["online"] = (info is not None)
+        card["info"] = info
+        card["ping_btn"].config(state="normal")
+
+        if info:
+            self._nf_set_card_online(card, True)
+            self._nf_blink_dot(host)
+
+            node_id = info.get("id", host)
+            card["title_var"].set(node_id if node_id != host else host)
+
+            uptime_s = int(info.get("uptime", 0))
+            h, rem = divmod(uptime_s, 3600)
+            m, s = divmod(rem, 60)
+            if h > 0:
+                up_str = f"{h}h{m}m"
+            elif m > 0:
+                up_str = f"{m}m{s}s"
+            else:
+                up_str = f"{s}s"
+
+            ip = info.get("ip", host)
+            card["detail_var"].set(f"{ip} • up {up_str}")
+            card["flash_status_var"].set("Ready")
+
+            if not card["fw_list"]:
+                self._nf_load_fw_list_card(host)
+        else:
+            self._nf_set_card_online(card, False)
+            card["title_var"].set(host)
+            card["detail_var"].set("Offline")
+            card["flash_status_var"].set(error or "timeout")
+
+        self._nf_update_counter()
+
+    # --- Firmware list ---
+
+    def _nf_load_fw_list_card(self, host: str):
+        if host not in self._nf_cards:
+            return
+        card = self._nf_cards[host]
+        if not card["online"]:
+            card["flash_status_var"].set("Node offline — ping first")
+            return
+        card["flash_status_var"].set("Loading firmware list...")
+        client = NodeClient(host)
+
+        def do_load():
+            try:
+                fw_list = client.get_fw_list()
+                self.after(0, lambda: self._nf_on_fw_list_done(host, fw_list, None))
+            except Exception as e:
+                self.after(0, lambda: self._nf_on_fw_list_done(host, None, str(e)))
+
+        threading.Thread(target=do_load, daemon=True).start()
+
+    def _nf_on_fw_list_done(self, host: str, fw_list: Optional[list], error: Optional[str]):
+        if host not in self._nf_cards:
+            return
+        card = self._nf_cards[host]
+        if error:
+            card["flash_status_var"].set(f"FW list error: {error}")
+            return
+        card["fw_list"] = fw_list or []
+        values = [fw.get("display", fw.get("id", "?")) for fw in card["fw_list"]]
+        card["fw_combo"]["values"] = values
+        if values:
+            card["fw_combo"].current(0)
+            card["flash_status_var"].set(f"{len(values)} firmware(s) available")
+        else:
+            card["fw_combo"].set("(no firmware on node)")
+            card["flash_status_var"].set("No firmware found on node")
+
+        # Populate global combo if still empty
+        if values and self._nf_global_combo and not self._nf_global_fw_ids:
+            self._nf_global_fw_ids = card["fw_list"]
+            self._nf_global_combo["values"] = values
+            self._nf_global_combo.current(0)
+
+    # --- Flash ---
+
+    def _nf_flash_card(self, host: str):
+        """Flash a single card — reads from card's own FW combo."""
+        if host not in self._nf_cards:
+            return
+        card = self._nf_cards[host]
+
+        sel_idx = card["fw_combo"].current()
+        if sel_idx < 0 or sel_idx >= len(card["fw_list"]):
+            messagebox.showinfo("Info", "Select a firmware from the dropdown first\n(click ↻ to load list)")
+            return
+
+        fw = card["fw_list"][sel_idx]
+        fw_id = fw.get("id", "")
+        fw_display = fw.get("display", fw_id)
+
+        if not messagebox.askyesno(
+            "Confirm Flash",
+            f"Flash  '{fw_display}'\n→ node: {host}\n\nNode reboots automatically after flash."
+        ):
+            return
+
+        self._nf_do_flash(host, fw_id, fw_display)
+
+    def _nf_do_flash(self, host: str, fw_id: str, fw_display: str):
+        """Start flash on a card (no confirm dialog — caller handles confirm)."""
+        if host not in self._nf_cards:
+            return
+        card = self._nf_cards[host]
+        if not card.get("online"):
+            card["flash_status_var"].set("Node offline — cannot flash")
+            return
+
+        card["flash_status_var"].set("Sending flash command...")
+        card["card_frame"].configure(
+            highlightbackground=Colors.PRIMARY, highlightthickness=2)
+        status_lbl = card.get("status_lbl")
+        if status_lbl:
+            status_lbl.configure(fg=Colors.PRIMARY)
+        card["flash_btn"].config(state="disabled")
+        card["reboot_btn"].config(state="disabled")
+        card["poll_errors"] = 0
+        card["progress"]["value"] = 0
+        card["pct_var"].set("")
+
+        client = NodeClient(host)
+        card["poll_client"] = client
+
+        def do_flash():
+            try:
+                result = client.flash(fw_id)
+                self.after(0, lambda: self._nf_on_flash_accepted(host, result, client, None))
+            except Exception as e:
+                self.after(0, lambda: self._nf_on_flash_accepted(host, None, client, str(e)))
+
+        threading.Thread(target=do_flash, daemon=True).start()
+
+    def _nf_on_flash_accepted(self, host: str, result: Optional[dict],
+                               client: "NodeClient", error: Optional[str]):
+        if host not in self._nf_cards:
+            return
+        card = self._nf_cards[host]
+
+        def re_enable():
+            card["flash_btn"].config(state="normal")
+            card["reboot_btn"].config(state="normal")
+
+        if error:
+            card["flash_status_var"].set(f"Flash error: {error}")
+            re_enable()
+            return
+        if result and result.get("accepted"):
+            card["flash_status_var"].set("Flash accepted — monitoring progress...")
+            card["polling"] = True
+            self.after(1000, lambda: self._nf_poll_tick_card(host))
+        elif result and "error" in result:
+            card["flash_status_var"].set(f"Rejected: {result['error']}")
+            re_enable()
+        else:
+            card["flash_status_var"].set("Unknown response from node")
+            re_enable()
+
+    # --- Status polling ---
+
+    def _nf_poll_tick_card(self, host: str):
+        """Poll /api/status for one node card."""
+        if host not in self._nf_cards:
+            return
+        card = self._nf_cards[host]
+        if not card["polling"]:
+            return
+        client = card["poll_client"]
+        if not client:
+            return
+
+        def do_poll():
+            try:
+                status = client.get_status()
+                self.after(0, lambda: self._nf_on_status(host, status, None))
+            except Exception as e:
+                self.after(0, lambda: self._nf_on_status(host, None, str(e)))
+
+        threading.Thread(target=do_poll, daemon=True).start()
+
+    def _nf_on_status(self, host: str, status: Optional[dict], error: Optional[str]):
+        MAX_POLL_ERRORS = 4
+        if host not in self._nf_cards:
+            return
+        card = self._nf_cards[host]
+        if not card["polling"]:
+            return
+
+        def re_enable():
+            card["flash_btn"].config(state="normal")
+            card["reboot_btn"].config(state="normal")
+            card["polling"] = False
+            card["poll_errors"] = 0
+
+        if error:
+            card["poll_errors"] += 1
+            if card["poll_errors"] < MAX_POLL_ERRORS:
+                card["flash_status_var"].set(
+                    f"Node slow ({card['poll_errors']}/{MAX_POLL_ERRORS}), retrying..."
+                )
+                self.after(2000, lambda: self._nf_poll_tick_card(host))
+            else:
+                card["progress"]["value"] = 100
+                card["pct_var"].set("100%")
+                card["flash_status_var"].set("Node unreachable")
+                card["card_frame"].configure(
+                    highlightbackground=Colors.WARNING, highlightthickness=2)
+                status_lbl = card.get("status_lbl")
+                if status_lbl:
+                    status_lbl.configure(fg=Colors.WARNING)
+                re_enable()
+                self.after(5000, lambda: self._nf_ping_card(host))
+            return
+
+        # Success — reset error counter
+        card["poll_errors"] = 0
+        busy = status.get("busy", False)
+        progress = int(status.get("progress", 0))
+        st_text = status.get("status", "")
+
+        card["progress"]["value"] = progress
+        card["pct_var"].set(f"{progress}%")
+        if st_text:
+            card["flash_status_var"].set(f"[{progress}%] {st_text}")
+        else:
+            card["flash_status_var"].set(f"{progress}%")
+
+        if busy:
+            self.after(1000, lambda: self._nf_poll_tick_card(host))
+        else:
+            status_lbl = card.get("status_lbl")
+            if st_text == "Done":
+                card["flash_status_var"].set("FLASH OK")
+                card["card_frame"].configure(
+                    highlightbackground=Colors.SUCCESS, highlightthickness=3)
+                if status_lbl:
+                    status_lbl.configure(fg=Colors.SUCCESS)
+                self._nf_stop_blink(card)
+            elif st_text == "Error":
+                card["flash_status_var"].set("FLASH FAILED")
+                card["card_frame"].configure(
+                    highlightbackground=Colors.ERROR, highlightthickness=3)
+                if status_lbl:
+                    status_lbl.configure(fg=Colors.ERROR)
+            else:
+                card["flash_status_var"].set(f"Finished: {st_text}")
+            re_enable()
+            # Reset visual after 8s, then re-ping
+            def _reset_visual():
+                if host in self._nf_cards:
+                    if status_lbl and status_lbl.winfo_exists():
+                        status_lbl.configure(fg=Colors.TEXT_MUTED)
+                    self._nf_ping_card(host)
+            self.after(8000, _reset_visual)
+
+    # --- Reboot ---
+
+    def _nf_reboot_card(self, host: str):
+        if host not in self._nf_cards:
+            return
+        if not messagebox.askyesno("Reboot", f"Reboot node '{host}'?"):
+            return
+        card = self._nf_cards[host]
+        client = NodeClient(host)
+
+        def do_reboot():
+            try:
+                client.reboot()
+            except Exception:
+                pass  # node reboots immediately — disconnect expected
+            self.after(0, lambda: card["flash_status_var"].set("Rebooting..."))
+            self.after(0, lambda: self._nf_stop_blink(card))
+            self.after(0, lambda: card["card_frame"].configure(
+                highlightbackground=Colors.TEXT_MUTED))
+
+        threading.Thread(target=do_reboot, daemon=True).start()
 
     # ==================== Helper Methods ====================
 
@@ -836,32 +1727,42 @@ class MainApp(tk.Tk):
             self.combo_type['values'] = types
 
     def _on_oled_order_apply(self, new_order: list):
-        """Apply new firmware order from OLED preview."""
-        # Get fw_ids in new order
+        """Apply new firmware order — rewrite index.txt on SD card immediately."""
         fw_ids = self.oled_preview.get_fw_ids()
 
-        # Save order to settings (display names come from metadata now)
-        oled_config = {
-            "order": fw_ids
-        }
-
-        # Save to settings file
-        self.settings["oled_config"] = oled_config
+        # 1. Save order to settings (for future copies)
+        self.settings["oled_config"] = {"order": fw_ids}
         try:
             with open(CONFIG_FILE, "w") as f:
                 json.dump(self.settings, f, indent=2, ensure_ascii=False)
-            self._log(f"OLED order saved: {len(fw_ids)} items")
-        except Exception as e:
-            self._log(f"Error saving OLED config: {e}")
+        except Exception:
+            pass
 
-        # Refresh treeview to show updated order
+        # 2. Rewrite index.txt on SD card NOW
+        sd_path = self.sd_path_var.get()
+        sd_updated = False
+        if sd_path and self.sd.set_path(sd_path):
+            success, _ = self.sd.load_index()
+            if success and self.sd.index_data:
+                self.sd.reorder_index(fw_ids)
+                self.sd.save_index()
+                sd_updated = True
+                self._log(f"SD index.txt rewritten: {[i.get('fw_id','?') for i in self.sd.index_data]}")
+                self._load_sd_card()
+
+        # 3. Refresh UI
         self._refresh_firmware_list()
 
-        messagebox.showinfo("Applied",
-            f"Order saved!\n\n"
-            f"Items: {len(fw_ids)}\n"
-            f"This order will be used when exporting to SD card."
-        )
+        if sd_updated:
+            messagebox.showinfo("Applied",
+                f"Order updated!\n\n"
+                f"index.txt on SD card rewritten.\n"
+                f"OLED will show new order after reboot.")
+        else:
+            messagebox.showinfo("Applied",
+                f"Order saved to settings.\n\n"
+                f"Set SD card path and Load SD first\n"
+                f"to update index.txt on the card.")
 
     def _on_oled_rename(self, fw_id: str, device_type: str, version: str):
         """Update firmware metadata when renamed from OLED preview."""
@@ -878,8 +1779,48 @@ class MainApp(tk.Tk):
             self._log(f"Error renaming {fw_id}: {msg}")
             messagebox.showerror("Error", f"Failed to update metadata:\n{msg}")
 
+    def _det_clear(self):
+        """Reset all detail panel fields."""
+        self._det_name_var.set("")
+        self._det_ver_badge.set_text("")
+        self._det_ver_badge.set_status("muted")
+        self._det_type_var.set("")
+        self._det_desc_var.set("")
+        self._det_id_var.set("")
+        self._det_path_var.set("")
+        self._det_size_var.set("")
+        self._det_date_var.set("")
+        self._det_md5_var.set("")
+
+    def _copy_det_path(self):
+        """Copy firmware path to clipboard."""
+        path = self._det_path_var.get()
+        if path:
+            self.clipboard_clear()
+            self.clipboard_append(path)
+
+    def _filter_fw_tree(self, query: str):
+        """Filter treeview items by search query."""
+        if query == "Search firmware..." or not query.strip():
+            self._refresh_firmware_list()
+            return
+        q = query.lower()
+        for group in list(self.fw_tree.get_children()):
+            children = list(self.fw_tree.get_children(group))
+            visible = 0
+            for child in children:
+                vals = self.fw_tree.item(child, "values")
+                text = self.fw_tree.item(child, "text")
+                match = q in text.lower() or any(q in str(v).lower() for v in vals)
+                if match:
+                    visible += 1
+                else:
+                    self.fw_tree.detach(child)
+            if visible == 0:
+                self.fw_tree.detach(group)
+
     def _on_fw_select(self, event=None):
-        """Show firmware details when selected in treeview."""
+        """Show firmware details in structured panel."""
         if not hasattr(self, 'fw_tree'):
             return
 
@@ -887,20 +1828,40 @@ class MainApp(tk.Tk):
         if not selection:
             return
 
-        # Get selected item (skip group headers)
         fw_id = selection[0]
-        if fw_id.startswith("I"):  # Group header IDs start with I
+        if fw_id.startswith("I"):
             return
 
         fw = self.lib.get_firmware(fw_id)
+        if not fw:
+            self._det_clear()
+            return
 
-        self.detail_text.delete("1.0", tk.END)
-        if fw:
-            self.detail_text.insert(tk.END, f"Firmware: {fw_id}\n")
-            self.detail_text.insert(tk.END, f"Device: {fw.get('device_type', '')}\n")
-            self.detail_text.insert(tk.END, f"Version: {fw.get('version', '')}\n")
-            self.detail_text.insert(tk.END, f"Path: {fw.get('_path', '')}\n\n")
-            self.detail_text.insert(tk.END, json.dumps(fw, indent=2, ensure_ascii=False, default=str))
+        device = fw.get('device_type', '')
+        version = fw.get('version', '')
+        self._det_name_var.set(f"{device} {version}".strip())
+        self._det_ver_badge.set_text(version)
+        self._det_ver_badge.set_status("info")
+        self._det_type_var.set(f"Device: {device}")
+        self._det_desc_var.set(fw.get('description', '') or 'No description')
+        self._det_id_var.set(fw.get('fw_id', fw_id))
+        self._det_path_var.set(fw.get('_path', ''))
+        self._det_md5_var.set(fw.get('md5', ''))
+
+        fw_dir = fw.get('_path', '')
+        fw_bin = os.path.join(fw_dir, 'FW.bin') if fw_dir else ''
+        if fw_bin and os.path.exists(fw_bin):
+            size_b = os.path.getsize(fw_bin)
+            if size_b >= 1024 * 1024:
+                self._det_size_var.set(f"{size_b / 1024 / 1024:.1f} MB")
+            else:
+                self._det_size_var.set(f"{size_b / 1024:.0f} KB")
+            from datetime import datetime
+            mtime = os.path.getmtime(fw_bin)
+            self._det_date_var.set(datetime.fromtimestamp(mtime).strftime("%d/%m/%Y"))
+        else:
+            self._det_size_var.set("\u2014")
+            self._det_date_var.set("\u2014")
 
     def _get_selected_fw_ids(self) -> list:
         """Get selected firmware IDs from treeview (excluding group headers)."""
@@ -954,7 +1915,7 @@ class MainApp(tk.Tk):
             self.sd_listbox.insert(tk.END, fw_id)
 
     def _on_sd_select(self, event=None):
-        """Show SD firmware details."""
+        """Show SD firmware details in structured panel."""
         sel = self.sd_listbox.curselection()
         if not sel:
             return
@@ -962,10 +1923,105 @@ class MainApp(tk.Tk):
         fw_id = self.sd_listbox.get(sel[0])
         meta = self.sd.get_firmware_meta(fw_id)
 
-        self.detail_text.delete("1.0", tk.END)
-        if meta:
-            self.detail_text.insert(tk.END, f"SD Card Firmware: {fw_id}\n\n")
-            self.detail_text.insert(tk.END, json.dumps(meta, indent=2, ensure_ascii=False))
+        if not meta:
+            self._det_clear()
+            return
+
+        device = meta.get('device_type', '')
+        version = meta.get('version', '')
+        self._det_name_var.set(f"{device} {version}".strip() or fw_id)
+        self._det_ver_badge.set_text(version)
+        self._det_ver_badge.set_status("info")
+        self._det_type_var.set(f"Device: {device}" if device else "SD Card")
+        self._det_desc_var.set(meta.get('description', '') or 'SD Card firmware')
+        self._det_id_var.set(fw_id)
+        self._det_path_var.set(f"{self.sd_path_var.get()}/{fw_id}")
+        self._det_md5_var.set(meta.get('md5', ''))
+        self._det_size_var.set("\u2014")
+        self._det_date_var.set("\u2014")
+
+    # ==================== Flash History ====================
+
+    HISTORY_FILE = os.path.join(APP_DIR, "flash_history.json")
+    HISTORY_MAX = 50
+
+    def _history_load(self) -> list:
+        """Load flash history from local JSON file."""
+        if os.path.exists(self.HISTORY_FILE):
+            try:
+                with open(self.HISTORY_FILE, "r", encoding="utf-8") as f:
+                    data = json.load(f)
+                if isinstance(data, list):
+                    return data
+            except Exception:
+                pass
+        return []
+
+    def _history_save(self):
+        """Save flash history to local JSON file."""
+        try:
+            with open(self.HISTORY_FILE, "w", encoding="utf-8") as f:
+                json.dump(self._flash_history[-self.HISTORY_MAX:], f, indent=2)
+        except Exception:
+            pass
+
+    def _history_add(self, fw_id: str, fw: dict, sd_path: str, mode: str):
+        """Add an entry to flash history."""
+        from datetime import datetime
+        entry = {
+            "fw_id": fw_id,
+            "device_type": fw.get("device_type", ""),
+            "version": fw.get("version", ""),
+            "sd_path": sd_path,
+            "mode": mode,
+            "time": datetime.now().strftime("%Y-%m-%d %H:%M")
+        }
+        self._flash_history.append(entry)
+        self._history_save()
+        self._history_refresh_listbox()
+
+    def _history_refresh_listbox(self):
+        """Refresh the history listbox (most recent first)."""
+        self._hist_listbox.delete(0, tk.END)
+        for entry in reversed(self._flash_history):
+            device = entry.get("device_type", "?")
+            version = entry.get("version", "?")
+            mode = entry.get("mode", "?")
+            fw_id = entry.get("fw_id", "?")
+            tag = "P" if mode == "plain" else "E"
+            line = f"[{tag}] {fw_id}  {device} v{version}"
+            self._hist_listbox.insert(tk.END, line)
+
+    def _on_hist_select(self, event=None):
+        """Show history entry details in the detail panel."""
+        sel = self._hist_listbox.curselection()
+        if not sel:
+            return
+        idx = len(self._flash_history) - 1 - sel[0]
+        if idx < 0 or idx >= len(self._flash_history):
+            return
+        entry = self._flash_history[idx]
+
+        device = entry.get("device_type", "")
+        version = entry.get("version", "")
+        mode = "Plain" if entry.get("mode") == "plain" else "Encrypted"
+        self._det_name_var.set(f"{device} {version}".strip())
+        self._det_ver_badge.set_text(version)
+        self._det_ver_badge.set_status("success" if mode == "Plain" else "warning")
+        self._det_type_var.set(f"Device: {device}" if device else "")
+        self._det_desc_var.set(f"Copied as {mode}")
+        self._det_id_var.set(entry.get("fw_id", ""))
+        self._det_path_var.set(entry.get("sd_path", ""))
+        self._det_md5_var.set("")
+        self._det_size_var.set(mode)
+        self._det_date_var.set(entry.get("time", ""))
+
+    def _sd_save_ordered(self):
+        """Apply OLED order to SD index, then save."""
+        oled_order = self.settings.get("oled_config", {}).get("order", [])
+        if oled_order:
+            self.sd.reorder_index(oled_order)
+        self._sd_save_ordered()
 
     def _get_encryptor(self) -> Optional[FWEncryptor]:
         """Get encryptor with validation."""
@@ -1013,9 +2069,10 @@ class MainApp(tk.Tk):
             )
             if success:
                 count += 1
+                self._history_add(fw_id, fw, self.sd_path_var.get(), "plain")
             self._log(msg)
 
-        self.sd.save_index()
+        self._sd_save_ordered()
         self._load_sd_card()
         messagebox.showinfo("Done", f"Copied {count} firmware(s) to SD card")
 
@@ -1050,9 +2107,10 @@ class MainApp(tk.Tk):
             )
             if success:
                 count += 1
+                self._history_add(fw_id, fw, self.sd_path_var.get(), "encrypted")
             self._log(msg)
 
-        self.sd.save_index()
+        self._sd_save_ordered()
         self._load_sd_card()
         messagebox.showinfo("Done", f"Copied {count} firmware(s) to SD card (encrypted)")
 
@@ -1071,7 +2129,7 @@ class MainApp(tk.Tk):
         self._log(msg)
 
         if success:
-            self.sd.save_index()
+            self._sd_save_ordered()
             self._load_sd_card()
 
     def _sync_to_git(self):
@@ -1119,6 +2177,22 @@ class MainApp(tk.Tk):
                 exported.append(result)
 
         if exported:
+            # Apply OLED order to git index (same as SD card)
+            oled_order = self.settings.get("oled_config", {}).get("order", [])
+            if oled_order:
+                id_to_meta = {m.get("fw_id"): m for m in exported}
+                ordered = []
+                seen = set()
+                for fid in oled_order:
+                    if fid in id_to_meta and fid not in seen:
+                        ordered.append(id_to_meta[fid])
+                        seen.add(fid)
+                for m in exported:
+                    fid = m.get("fw_id", "")
+                    if fid not in seen:
+                        ordered.append(m)
+                        seen.add(fid)
+                exported = ordered
             self.git.update_index(exported)
             self._log(f"Exported {len(exported)} firmware(s)")
 

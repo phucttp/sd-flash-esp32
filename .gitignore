@@ -1,77 +1,46 @@
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+# ESP-IDF build artifacts
+build/
+sdkconfig.old
 
-# dependencies
-/node_modules
-/.pnp
-.pnp.*
-.yarn/*
-!.yarn/patches
-!.yarn/plugins
-!.yarn/releases
-!.yarn/versions
+# IDE
+.vscode/c_cpp_properties.json
 
-# testing
-/coverage
-
-# next.js
-/.next/
-/out/
-
-# production
-/build
-
-# misc
+# OS
 .DS_Store
-*.pem
+Thumbs.db
+nul
 
-# debug
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-.pnpm-debug.log*
-
-# package manager
-package-lock.json
-yarn.lock
-pnpm-lock.yaml
-
-# semantic-release
-.nyc_output
-
-# env files (can opt-in for committing if needed)
-.env*
-!.env.example
-
-# vercel
-.vercel
-
-# typescript
-*.tsbuildinfo
-next-env.d.ts
-
-# flutter
-.dart_tool
-build
-GoogleService-Info.plist
-
+# Claude Code / AI tools
+.claude/
+.opencode/
+.gemini/
+.serena/
+tmpclaude-*
 repomix-output.xml
-.serena/cache
-plans/**/*
-!plans/templates/*
-screenshots/*
-docs/screenshots/*
-docs/journals/*
-docs/research/*
-logs.txt
-test-ck
-__pycache__
+.repomixignore
 prompt.md
+logs.txt
+cookies.txt
 
-# Gemini CLI settings (symlink to .claude/.mcp.json)
-.gemini/settings.json
+# Python
+__pycache__/
+*.pyc
+*.pyo
 
-# FlashPorter secrets - NEVER commit these!
+# FlashPorter secrets - NEVER commit
 toolAddFirmware/tool_setting.json
 toolAddFirmware/FlashPorter_Public/settings.json
 toolAddFirmware/FlashPorter_Public/credentials.json
 toolAddFirmware/_release_for_git/
+
+# FlashPorter build/binary artifacts
+toolAddFirmware/dist2/
+toolAddFirmware/FW.bin
+toolAddFirmware/FW.enc
+toolAddFirmware/nul
+FlashPorter.exe
+
+# Misc
+*.pem
+.env*
+!.env.example

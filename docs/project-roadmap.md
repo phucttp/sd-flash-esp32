@@ -182,10 +182,10 @@ ESP32-C3 bit-bang SWD trực tiếp qua GPIO (SWDIO=GPIO0, SWCLK=GPIO3).
 
 #### Sửa lỗi & Cải tiến
 - [ ] Thêm watchdog timer phát hiện treo máy
-- [ ] Logic retry nạp firmware (3 lần thử)
+- [ ] Chi tiết hóa error message khi nạp thất bại (phân biệt: handshake timeout, erase failed, write failed, verify mismatch)
 - [ ] Phát hiện pin yếu (nếu dùng pin)
 - [ ] Cải thiện thông báo lỗi (phản hồi OLED chi tiết hơn)
-- [ ] Animation thanh tiến trình (không chỉ phần trăm)
+- [x] Animation thanh tiến trình (không chỉ phần trăm)
 
 #### Trải nghiệm người dùng
 - [ ] Màn hình khởi động với thông tin phiên bản
@@ -214,6 +214,18 @@ ESP32-C3 bit-bang SWD trực tiếp qua GPIO (SWDIO=GPIO0, SWCLK=GPIO3).
 - [ ] Chế độ nạp hàng loạt (nạp nhiều target tuần tự)
 - [ ] Địa chỉ flash tùy chỉnh (không chỉ 0x1000/0x8000/0x10000)
 - [ ] Hỗ trợ phân vùng bổ sung (NVS, SPIFFS, v.v.)
+
+#### STM32 Production & Security
+- [ ] **RDP Auto-Lock sau khi flash:** Tự động khóa STM32 về RDP Level 1 sau khi nạp firmware thành công
+  - Modify OPTCR: RDP byte 0xAA → 0x00
+  - Full unlock sequence (FLASH_KEYR + FLASH_OPTKEYR)
+  - Write modified OPTCR với OPTSTRT bit
+  - Wait 50ms cho option byte programming
+  - Reset required cho shadow register reload
+  - Use case: Dây chuyền sản xuất, bảo vệ firmware sau khi triển khai
+- [ ] STM32F1xx SWD support (flash controller registers khác F4)
+- [ ] Backup flash content trước khi nạp (rollback cho STM32)
+- [ ] Mass production mode: nạp + auto-lock + verify loop
 
 #### Log & Chẩn đoán
 - [ ] Ghi log vào thẻ SD (log lỗi lưu trữ)

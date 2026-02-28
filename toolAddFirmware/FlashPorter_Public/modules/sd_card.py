@@ -104,6 +104,27 @@ class SDCardManager:
                 return item
         return None
 
+    def reorder_index(self, ordered_ids: List[str]):
+        """
+        Reorder index_data to match ordered_ids.
+        Items in ordered_ids come first (in that order),
+        remaining items are appended at the end.
+        """
+        id_to_item = {item.get("fw_id"): item for item in self.index_data}
+        new_data = []
+        seen = set()
+        for fid in ordered_ids:
+            if fid in id_to_item and fid not in seen:
+                new_data.append(id_to_item[fid])
+                seen.add(fid)
+        # Append any remaining items not in ordered_ids
+        for item in self.index_data:
+            fid = item.get("fw_id", "")
+            if fid not in seen:
+                new_data.append(item)
+                seen.add(fid)
+        self.index_data = new_data
+
     @staticmethod
     def _is_stm32(meta: Dict[str, Any]) -> bool:
         """Check if firmware targets STM32 based on device_type."""
