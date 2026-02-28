@@ -1,3 +1,14 @@
+/**
+ * @file wifi_config.cpp
+ * @brief Cấu hình WiFi và quản lý tập trung các tham số kết nối — URL git, AES key/IV.
+ *
+ * Chức năng chính:
+ *   - Khởi động WiFiManager để cấu hình SSID/password qua captive portal nếu chưa có
+ *   - Đọc URL git repository từ file cấu hình trên SD card (/git_url.txt)
+ *   - Lưu và đọc AES key + IV từ NVS (ESP32 internal flash) — không lưu trên SD card
+ *   - Cung cấp hàm getter tập trung cho các tham số: URL, key, IV
+ */
+
 #include "wifi_config.h"
 
 // ============================================================

@@ -1,4 +1,14 @@
-// menu.cpp
+/**
+ * @file menu.cpp
+ * @brief Điều khiển hiển thị menu trên màn hình OLED SH1106G.
+ *
+ * Chức năng chính:
+ *   - Khởi tạo màn hình OLED và trạng thái menu ban đầu
+ *   - Hiển thị danh sách item có đánh dấu lựa chọn và con trỏ cuộn
+ *   - Xử lý điều hướng (lên/xuống/chọn) và cập nhật màn hình tương ứng
+ *   - Hỗ trợ cả chế độ menu thường và danh sách firmware (fw_ids)
+ */
+
 #include "menu.h"
 
 // --- CÁC BIẾN NỘI BỘ (STATIC) ---

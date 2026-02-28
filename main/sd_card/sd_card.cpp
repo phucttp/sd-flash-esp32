@@ -1,3 +1,15 @@
+/**
+ * @file sd_card.cpp
+ * @brief Quản lý SD card — đọc/ghi metadata firmware, index, cấu hình và lịch sử nạp.
+ *
+ * Chức năng chính:
+ *   - Khởi tạo và quản lý kết nối SD card qua SPI
+ *   - Đọc và ghi file index.txt (danh sách firmware, thứ tự = thứ tự hiển thị trên OLED)
+ *   - Load metadata từng firmware: device_type, version, description, md5, path
+ *   - Lưu và nạp lịch sử nạp firmware (/flash_history.txt, tối đa 10 mục)
+ *   - Cung cấp dữ liệu cho màn hình OLED: tên hiển thị, mô tả, danh sách ID
+ */
+
 // ============================================================
 // INCLUDES
 // ============================================================
@@ -24,6 +36,15 @@ static std::vector<std::string> g_displayStrings;
 static std::vector<std::string> g_idStrings;
 static std::vector<const char*> g_menuDisplayItemsPtrs;
 static std::vector<const char*> g_menuFirmwareIDsPtrs;
+
+// Vector tĩnh cho flash history
+static std::vector<std::string> g_histIdStrings;
+static std::vector<std::string> g_histDisplayStrings;
+static std::vector<const char*> g_histIdPtrs;
+static std::vector<const char*> g_histDisplayPtrs;
+
+static const char* HISTORY_FILE_PATH = "/history.txt";
+static const int   HISTORY_MAX_ENTRIES = 10;
 
 // ============================================================
 // HÀM CÔNG KHAI
@@ -251,4 +272,98 @@ String sd_get_description(const char* fw_id) {
     }
 
     return "";
+}
+
+// ============================================================
+// FLASH HISTORY
+// ============================================================
+
+void sd_history_add(const char* fw_id) {
+    if (!g_is_sd_mounted || !fw_id || strlen(fw_id) == 0) return;
+
+    // Đọc entries hiện có
+    std::vector<std::string> entries;
+    File f = SD.open(HISTORY_FILE_PATH, FILE_READ);
+    if (f) {
+        while (f.available()) {
+            String line = f.readStringUntil('\n');
+            line.trim();
+            if (line.length() > 0) entries.push_back(line.c_str());
+        }
+        f.close();
+    }
+
+    // Append entry mới
+    entries.push_back(fw_id);
+
+    // Giữ tối đa HISTORY_MAX_ENTRIES (trim cũ nhất)
+    if ((int)entries.size() > HISTORY_MAX_ENTRIES) {
+        entries.erase(entries.begin(),
+                      entries.begin() + (entries.size() - HISTORY_MAX_ENTRIES));
+    }
+
+    // Ghi lại file
+    SD.remove(HISTORY_FILE_PATH);
+    f = SD.open(HISTORY_FILE_PATH, FILE_WRITE);
+    if (f) {
+        for (auto& e : entries) f.println(e.c_str());
+        f.close();
+        ESP_LOGI(TAG, "History: added '%s' (%d entries)", fw_id, (int)entries.size());
+    } else {
+        ESP_LOGE(TAG, "History: cannot write %s", HISTORY_FILE_PATH);
+    }
+}
+
+void sd_history_load() {
+    g_histIdStrings.clear();
+    g_histDisplayStrings.clear();
+    g_histIdPtrs.clear();
+    g_histDisplayPtrs.clear();
+
+    if (!g_is_sd_mounted) return;
+
+    // Đọc tất cả entries từ file
+    std::vector<std::string> entries;
+    File f = SD.open(HISTORY_FILE_PATH, FILE_READ);
+    if (f) {
+        while (f.available()) {
+            String line = f.readStringUntil('\n');
+            line.trim();
+            if (line.length() > 0) entries.push_back(line.c_str());
+        }
+        f.close();
+    }
+
+    if (entries.empty()) return;
+
+    // Build display strings, most recent (cuối file) = #1
+    int count = (int)entries.size();
+    for (int i = 0; i < count; i++) {
+        const std::string& fw_id = entries[count - 1 - i];  // Đảo ngược: mới nhất trước
+        g_histIdStrings.push_back(fw_id);
+
+        char disp[24];
+        auto it = g_firmware_map.find(fw_id);
+        if (it != g_firmware_map.end()) {
+            snprintf(disp, sizeof(disp), "#%d %s v%s",
+                     i + 1, it->second.device_type.c_str(), it->second.version.c_str());
+        } else {
+            snprintf(disp, sizeof(disp), "#%d %s", i + 1, fw_id.c_str());
+        }
+        g_histDisplayStrings.push_back(disp);
+    }
+
+    for (auto& s : g_histIdStrings)     g_histIdPtrs.push_back(s.c_str());
+    for (auto& s : g_histDisplayStrings) g_histDisplayPtrs.push_back(s.c_str());
+
+    ESP_LOGI(TAG, "History loaded: %d entries", count);
+}
+
+const char** sd_history_get_display(int& out_count) {
+    out_count = (int)g_histDisplayPtrs.size();
+    return out_count > 0 ? g_histDisplayPtrs.data() : nullptr;
+}
+
+const char** sd_history_get_ids() {
+    return g_histIdPtrs.empty() ? nullptr : g_histIdPtrs.data();
 }

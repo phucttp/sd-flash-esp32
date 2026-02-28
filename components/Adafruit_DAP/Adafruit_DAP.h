@@ -269,6 +269,7 @@ private:
 
 #include "Adafruit_DAP_SAM.h"
 #include "Adafruit_DAP_STM32.h"
+#include "Adafruit_DAP_STM32F1.h"
 #include "Adafruit_DAP_nRF5x.h"
 
 #endif

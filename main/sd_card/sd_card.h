@@ -115,3 +115,32 @@ const char** sd_get_menu_id_items();
  * @return String chứa description, rỗng nếu không tìm thấy
  */
 String sd_get_description(const char* fw_id);
+
+// ============================================================
+// FLASH HISTORY
+// ============================================================
+
+/**
+ * @brief Ghi fw_id vào cuối history file. Giữ tối đa 10 entries.
+ * Gọi sau mỗi lần flash thành công, trước khi restart.
+ */
+void sd_history_add(const char* fw_id);
+
+/**
+ * @brief Đọc history file vào bộ nhớ, xây dựng display strings "#N DevType vVer".
+ * Phải gọi SAU sd_load_metadata() vì cần g_firmware_map để lookup tên.
+ */
+void sd_history_load();
+
+/**
+ * @brief Lấy mảng display strings cho History tab (most recent first).
+ * @param out_count Số entries.
+ * @return Con trỏ tới mảng "#1 STM32 v1.2.3", ...
+ */
+const char** sd_history_get_display(int& out_count);
+
+/**
+ * @brief Lấy mảng fw_id tương ứng với history display items.
+ * @return Con trỏ tới mảng fw_id strings.
+ */
+const char** sd_history_get_ids();

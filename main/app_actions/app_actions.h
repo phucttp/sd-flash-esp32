@@ -101,6 +101,28 @@ esp_err_t action_flash_firmware(const char* fw_id);
  */
 esp_err_t action_erase_chip_swd(void);
 
+/**
+ * @brief Bat/tat che do NetFlash.
+ *        OFF->ON: ket noi WiFi + luu trang thai.
+ *        ON->OFF: ngat WiFi + xoa trang thai.
+ * @return ESP_OK neu thanh cong
+ */
+esp_err_t action_toggle_netflash(void);
+
+/**
+ * @brief Lay trang thai NetFlash hien tai.
+ * @return true neu NetFlash dang bat
+ */
+bool action_netflash_is_enabled(void);
+
+/**
+ * @brief Nap firmware headless (khong OLED, khong WiFi stop) - dung cho remote HTTP flash.
+ *        Cap nhat s_progress + s_status_text de HTTP client co the poll.
+ * @param fw_id ID firmware tu metadata SD card
+ * @return ESP_OK neu thanh cong, ESP_ERR_INVALID_STATE neu dang busy
+ */
+esp_err_t action_remote_flash_firmware(const char* fw_id);
+
 // ============================================================
 // STATUS API
 // ============================================================

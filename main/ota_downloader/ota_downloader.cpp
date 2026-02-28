@@ -1,3 +1,14 @@
+/**
+ * @file ota_downloader.cpp
+ * @brief Tải file firmware từ URL HTTP/HTTPS về SD card trong quá trình đồng bộ.
+ *
+ * Chức năng chính:
+ *   - Tải file từ URL có hỗ trợ HTTPS (sử dụng ESP certificate bundle tích hợp)
+ *   - Thêm cache-buster ngẫu nhiên vào URL để tránh nhận file cũ từ CDN hoặc proxy
+ *   - Ghi dữ liệu theo từng block 1KB trực tiếp xuống SD card (không đệm toàn bộ vào RAM)
+ *   - Hiển thị tiến trình tải lên màn hình OLED theo phần trăm
+ */
+
 #include "ota_downloader.h"
 
 // ============================================================

@@ -3,6 +3,7 @@ idf_component_register(
         "dap.cpp"
         "Adafruit_DAP.cpp"
         "Adafruit_DAP_STM32.cpp"
+        "Adafruit_DAP_STM32F1.cpp"
         "Adafruit_DAP_SAM.cpp"
     INCLUDE_DIRS
         "."

@@ -1,6 +1,12 @@
 /**
  * @file file_utils.cpp
- * @brief Triển khai các thao tác file tập trung
+ * @brief Các thao tác file tập trung trên SD card — đọc, ghi, kiểm tra tồn tại.
+ *
+ * Chức năng chính:
+ *   - Đọc nội dung file văn bản từ SD card vào buffer hoặc String
+ *   - Ghi chuỗi ký tự vào file (tạo mới hoặc ghi đè)
+ *   - Kiểm tra sự tồn tại của file/thư mục
+ *   - Tập trung xử lý lỗi I/O để tránh lặp lại logic kiểm tra ở các module khác
  */
 
 // ============================================================

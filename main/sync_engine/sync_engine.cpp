@@ -1,3 +1,15 @@
+/**
+ * @file sync_engine.cpp
+ * @brief Đồng bộ firmware từ git repository về SD card.
+ *
+ * Chức năng chính:
+ *   - Tải file index.txt từ git repo, so sánh với index hiện có trên SD card
+ *   - Xác định danh sách firmware mới hoặc thay đổi cần tải về (dựa trên MD5)
+ *   - Gọi ota_downloader để tải từng file firmware (.bin hoặc .enc) xuống SD card
+ *   - Cập nhật index.txt trên SD card sau khi đồng bộ xong
+ *   - Hiển thị tiến trình từng bước lên màn hình OLED
+ */
+
 #include "sync_engine.h"
 
 // ============================================================

@@ -1,6 +1,12 @@
 /**
  * @file flasher_esp_crypto.cpp
- * @brief AES-128-CBC decryption for ESP32 encrypted firmware flashing.
+ * @brief Giải mã AES-128-CBC cho firmware ESP32 mã hóa trong quá trình nạp.
+ *
+ * Chức năng chính:
+ *   - Khởi tạo context giải mã: đọc key và IV từ cấu hình WiFi (wifi_config)
+ *   - Giải mã từng block 1KB của file .enc trong bộ nhớ trước khi truyền qua UART
+ *   - Loại bỏ PKCS7 padding sau khi giải mã để khôi phục binary gốc
+ *   - Key và IV được lưu trong NVS (không nằm trên SD card)
  */
 
 #include "flasher_esp_crypto.h"

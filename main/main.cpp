@@ -1,14 +1,17 @@
-/*
- * Ten Du An: ESP32 Host Flasher
- * Mo ta: Firmware quan ly nap code da nang (Offline SD + Online Git Sync)
- * Tac gia: TTP27
- * Ngay: 2025 (Refactored with OledUI Tabs)
+/**
+ * @file main.cpp
+ * @brief Điểm khởi động firmware ESP MultiFlasher — khởi tạo hệ thống và vòng lặp giao diện chính.
  *
- * UI: Tabs-based voi OledUI library
- * - Tab 0: FW (Firmware list -> OK to flash)
- * - Tab 1: Tools (Sync, Monitor, Erase, Scan)
- * - Tab 2: Desc (FW list -> scroll to view description, no flash)
- * - Tab 3: Info (Version, Author, etc.)
+ * Chức năng chính:
+ *   - Khởi tạo SD card, màn hình OLED, WiFi và các module flasher khi boot
+ *   - Điều phối giao diện dạng tab qua thư viện OledUI:
+ *       Tab 0 (FW)    — danh sách firmware, chọn để nạp ngay
+ *       Tab 1 (Tools) — đồng bộ git, monitor UART, xóa chip, quét thiết bị
+ *       Tab 2 (Desc)  — xem mô tả firmware, chọn để nạp
+ *       Tab 3 (Hist)  — lịch sử các lần nạp gần nhất
+ *       Tab 4 (Info)  — thông tin phiên bản, tác giả
+ *   - Lưu và khôi phục trạng thái giao diện (tab + item đang chọn) qua ui_state
+ *   - Định nghĩa callback cho từng hành động người dùng trên UI
  */
 
 #include "Arduino.h"
@@ -29,6 +32,9 @@
 #include "flasher/flasher_common.h"    // host_system_restart(), shared defines
 #include "oled_ui.h"                    // OledUI Library
 #include "app_actions/app_actions.h"   // High-level actions API
+#include "ui_state/ui_state.h"         // UI state persistence
+#include "wifi_config/wifi_config.h"   // wifi_config_connect() for NetFlash auto-reconnect
+#include "net_server/net_server.h"     // HTTP API server + mDNS for NetFlash
 
 // ============================================================
 // 3. CONSTANTS & GLOBALS
@@ -55,29 +61,37 @@ OledUI ui;
 #define TAB_FW      0
 #define TAB_TOOLS   1
 #define TAB_DESC    2
-#define TAB_INFO    3
+#define TAB_HIST    3
+#define TAB_INFO    4
 
-const char* tabNames[] = {"FW", "Tools", "Desc", "Info"};
-const int TAB_COUNT = 4;
+const char* tabNames[] = {"FW", "Tools", "Desc", "Hist", "Info"};
+const int TAB_COUNT = 5;
 
 // Firmware items (loaded from SD)
 const char** fwDisplayItems = nullptr;
 const char** fwIdItems = nullptr;
 int fwCount = 0;
 
+// History items (loaded from SD after metadata)
+const char** histDisplayItems = nullptr;
+const char** histIdItems = nullptr;
+int histCount = 0;
+
 // Tools items
+static char s_netflash_label[22] = "7. NetFlash: OFF";
 const char* toolsItems[] = {
     "1. Sync Firmware",
     "2. Config WiFi/URL",
     "3. Monitor/Test",
     "4. Erase Chip (ESP)",
     "5. Scan Boot",
-    "6. Erase Chip (SWD)"
+    "6. Erase Chip (SWD)",
+    s_netflash_label
 };
-const int TOOLS_COUNT = 6;
+const int TOOLS_COUNT = 7;
 
 // Tab item counts
-int tabItemCounts[4] = {0, 6, 0, 0};  // FW:dynamic, Tools:6, Desc:dynamic, Info:0
+int tabItemCounts[5] = {0, 7, 0, 0, 0};  // FW:dynamic, Tools:7, Desc:dynamic, Hist:dynamic, Info:0
 
 // ============================================================
 // UI CALLBACKS CHO APP_ACTIONS
@@ -157,7 +171,7 @@ void drawTabContent(int tab, int itemIdx, int yStart) {
             // ui.drawHint("OK:Run UP+DN:Tab");
             break;
 
-        case TAB_DESC: { // Description tab - scroll to view info, no flash
+        case TAB_DESC: { // Description tab - OK to flash (same firmware list as FW tab)
             if (fwCount == 0 || !fwIdItems) {
                 ui.drawText("No Firmware", 4, yStart);
                 ui.drawText("Please Sync first", 4, yStart + 12);
@@ -211,10 +225,19 @@ void drawTabContent(int tab, int itemIdx, int yStart) {
             break;
         }
 
+        case TAB_HIST:  // Flash history — #N DevType vVer, most recent first
+            if (histCount > 0 && histDisplayItems) {
+                ui.drawList(histDisplayItems, histCount, itemIdx, yStart, maxVisible);
+            } else {
+                ui.drawText("No history yet", 4, yStart);
+                ui.drawText("Flash to start", 4, yStart + 12);
+            }
+            break;
+
         case TAB_INFO:  // Info
-            ui.drawKeyValue("Version", "1.0.0", yStart);
+            ui.drawKeyValue("Version", "1.1.0", yStart);
             ui.drawKeyValue("Author", "TTP27", yStart + 12);
-            ui.drawKeyValue("Build", "250131", yStart + 24);
+            ui.drawKeyValue("Build", "260216", yStart + 24);
             ui.drawKeyValue("Chip", "ESP32-C3", yStart + 36);
             // ui.drawHint("UP+DN:Tab OK:Exit");
             break;
@@ -225,41 +248,102 @@ void drawTabContent(int tab, int itemIdx, int yStart) {
 // HANDLE TAB SELECTION
 // ============================================================
 void handleTabSelection(int tab, int itemIdx) {
+    // Helper: Save UI state + restart with animation
+    // State save + animation được xử lý trong host_system_restart() (flasher_common.cpp)
+    auto saveAndRestart = [&](const char* item_id) {
+        host_system_restart(tab, item_id);  // Save state, show animation, restart
+    };
+
     switch (tab) {
         case TAB_FW:
             if (fwCount > 0 && fwIdItems && itemIdx < fwCount) {
-                action_flash_firmware(fwIdItems[itemIdx]);
+                const char* fw_id = fwIdItems[itemIdx];
+                esp_err_t ret = action_flash_firmware(fw_id);
+                if (ret == ESP_OK) {
+                    sd_history_add(fw_id);
+                    saveAndRestart(fw_id);
+                }
             }
             break;
 
         case TAB_TOOLS:
             switch (itemIdx) {
-                case 0:  // Sync
-                    action_sync_firmware();
-                    host_system_restart();
+                case 0: {  // Sync
+                    esp_err_t ret = action_sync_firmware();
+                    if (ret == ESP_OK) {
+                        saveAndRestart("0");
+                    }
                     break;
-                case 1:  // Config WiFi/URL
-                    action_config_wifi();
-                    host_system_restart();
+                }
+                case 1: {  // Config WiFi/URL
+                    esp_err_t ret = action_config_wifi();
+                    if (ret == ESP_OK) {
+                        saveAndRestart("1");
+                    }
                     break;
+                }
                 case 2:  // Monitor
                     action_monitor();
+                    saveAndRestart("2");
                     break;
-                case 3:  // Erase
-                    action_erase_chip();
+
+                case 3: {  // Erase Chip (ESP)
+                    esp_err_t ret = action_erase_chip();
+                    if (ret == ESP_OK) {
+                        saveAndRestart("3");
+                    }
                     break;
-                case 4:  // Scan
+                }
+                case 4:  // Scan Boot
                     action_scan_boot();
+                    saveAndRestart("4");
                     break;
-                case 5:  // SWD Erase
-                    action_erase_chip_swd();
+
+                case 5: {  // Erase Chip (SWD)
+                    esp_err_t ret = action_erase_chip_swd();
+                    if (ret == ESP_OK) {
+                        saveAndRestart("5");
+                    }
                     break;
+                }
+                case 6: {  // NetFlash toggle
+                    action_toggle_netflash();
+                    snprintf(s_netflash_label, sizeof(s_netflash_label),
+                             "7. NetFlash: %s", action_netflash_is_enabled() ? "ON " : "OFF");
+                    // Start or stop HTTP server along with WiFi state
+                    if (action_netflash_is_enabled()) {
+                        net_server_start();
+                    } else {
+                        net_server_stop();
+                    }
+                    break;
+                }
             }
             break;
 
         case TAB_DESC:
+            if (fwCount > 0 && fwIdItems && itemIdx < fwCount) {
+                const char* fw_id = fwIdItems[itemIdx];
+                esp_err_t ret = action_flash_firmware(fw_id);
+                if (ret == ESP_OK) {
+                    sd_history_add(fw_id);
+                    saveAndRestart(fw_id);
+                }
+            }
+            break;
+
+        case TAB_HIST:
+            if (histCount > 0 && histIdItems && itemIdx < histCount) {
+                const char* fw_id = histIdItems[itemIdx];
+                esp_err_t ret = action_flash_firmware(fw_id);
+                if (ret == ESP_OK) {
+                    sd_history_add(fw_id);
+                    saveAndRestart(fw_id);
+                }
+            }
+            break;
+
         case TAB_INFO:
-            // Khong co hanh dong cho cac tab nay (chi xem thong tin)
             break;
     }
 }
@@ -269,10 +353,11 @@ void handleTabSelection(int tab, int itemIdx) {
 // ============================================================
 void runTabsUI() {
     // Update item counts
-    tabItemCounts[TAB_FW] = fwCount;
+    tabItemCounts[TAB_FW]    = fwCount;
     tabItemCounts[TAB_TOOLS] = TOOLS_COUNT;
-    tabItemCounts[TAB_DESC] = fwCount;  // Same list as TAB_FW but for viewing description
-    tabItemCounts[TAB_INFO] = 0;
+    tabItemCounts[TAB_DESC]  = fwCount;
+    tabItemCounts[TAB_HIST]  = histCount;
+    tabItemCounts[TAB_INFO]  = 0;
 
     // Create tabs
     ui.tabsCreate(tabNames, TAB_COUNT, tabItemCounts);
@@ -280,6 +365,78 @@ void runTabsUI() {
     ui.tabsSetHeaderMode(UI_HEADER_ALWAYS);
     // ui.tabsSetHeaderTimeout(2000);
     ui.tabsSetDrawCallback(drawTabContent);
+
+    // --- RESTORE UI STATE (sau khi restart) ---
+    // Nếu có state file → restore tab + item, xóa file sau đó
+    ESP_LOGI(TAG, "Checking for UI state...");
+
+    if (!ui_state_exists()) {
+        ESP_LOGI(TAG, "No state file found - starting fresh");
+    } else {
+        ESP_LOGI(TAG, "State file exists - attempting restore");
+
+        int saved_tab = -1;
+        char saved_item[UI_STATE_ITEM_ID_MAX_LEN];
+        esp_err_t load_ret = ui_state_load(&saved_tab, saved_item, sizeof(saved_item));
+
+        if (load_ret == ESP_OK) {
+            ESP_LOGI(TAG, "✓ State loaded: tab=%d, item=%s", saved_tab, saved_item);
+
+            // Set tab BEFORE calling tabsRun
+            ui.tabsSetCurrent(saved_tab);
+            ESP_LOGI(TAG, "✓ Tab set to %d", saved_tab);
+
+            // Set item index (tìm item ID trong list)
+            if (saved_tab == TAB_FW || saved_tab == TAB_DESC) {
+                // FW/Desc tabs: tìm item theo fw_id
+                bool found = false;
+                for (int i = 0; i < fwCount; i++) {
+                    if (fwIdItems && strcmp(fwIdItems[i], saved_item) == 0) {
+                        ui.tabsSetItemIndex(i);
+                        ESP_LOGI(TAG, "✓ FW item restored: %s (index %d)", saved_item, i);
+                        found = true;
+                        break;
+                    }
+                }
+                if (!found) {
+                    ESP_LOGW(TAG, "✗ FW item '%s' not found in list", saved_item);
+                }
+            } else if (saved_tab == TAB_HIST) {
+                // History tab: tìm fw_id trong histIdItems
+                bool found = false;
+                for (int i = 0; i < histCount; i++) {
+                    if (histIdItems && strcmp(histIdItems[i], saved_item) == 0) {
+                        ui.tabsSetItemIndex(i);
+                        ESP_LOGI(TAG, "✓ Hist item restored: %s (index %d)", saved_item, i);
+                        found = true;
+                        break;
+                    }
+                }
+                if (!found) {
+                    ESP_LOGW(TAG, "✗ Hist item '%s' not found", saved_item);
+                }
+            } else if (saved_tab == TAB_TOOLS) {
+                // Tools tab: item_id là số (0-5)
+                int tool_idx = atoi(saved_item);
+                if (tool_idx >= 0 && tool_idx < TOOLS_COUNT) {
+                    ui.tabsSetItemIndex(tool_idx);
+                    ESP_LOGI(TAG, "✓ Tools item restored: %d", tool_idx);
+                } else {
+                    ESP_LOGW(TAG, "✗ Invalid tool index: %d", tool_idx);
+                }
+            }
+
+            // Xóa state file (one-time restore)
+            ui_state_clear();
+            ESP_LOGI(TAG, "✓ State file cleared");
+        } else {
+            ESP_LOGE(TAG, "✗ State load failed: %d", load_ret);
+        }
+    }
+
+    // Log final state before entering UI loop
+    ESP_LOGI(TAG, "=== Starting UI with tab=%d, item=%d ===",
+             ui.tabsGetCurrent(), ui.tabsGetItemIndex());
 
     // Blocking loop - tu handle header animation
     ui.tabsRun();
@@ -326,6 +483,12 @@ void setup() {
         ESP_LOGW(TAG, "No firmware found on SD");
     }
 
+    // Load flash history (phải sau sd_load_metadata vì cần g_firmware_map)
+    sd_history_load();
+    histDisplayItems = sd_history_get_display(histCount);
+    histIdItems = sd_history_get_ids();
+    ESP_LOGI(TAG, "Flash history: %d entries", histCount);
+
     // Init App Actions - 1 config gon gang
     app_actions_config_t actions_cfg = {
         .sd_cs_pin = SD_CS_PIN,
@@ -340,9 +503,18 @@ void setup() {
     };
     app_actions_init(&actions_cfg);
 
+    // Sync netflash label + reconnect WiFi if NetFlash was ON before restart
+    if (action_netflash_is_enabled()) {
+        snprintf(s_netflash_label, sizeof(s_netflash_label), "7. NetFlash: ON ");
+        ui.showMessage("NetFlash", "Connecting WiFi...");
+        if (wifi_config_connect()) {
+            net_server_start();
+        }
+    }
+
     // Splash screen
     ui.showMessage("FlashPorter", "Universal Flasher");
-    vTaskDelay(pdMS_TO_TICKS(1500));
+    vTaskDelay(pdMS_TO_TICKS(700));
 
     ESP_LOGI(TAG, "Ready! FW count: %d", fwCount);
 }

@@ -1,6 +1,11 @@
 /**
  * @file metadata_parser.cpp
- * @brief Triển khai logic parse JSON sử dụng thư viện ArduinoJson.
+ * @brief Parse JSON metadata firmware từ file index.txt trên SD card.
+ *
+ * Chức năng chính:
+ *   - Đọc và parse cấu trúc JSON của index.txt bằng thư viện ArduinoJson
+ *   - Trích xuất thông tin từng firmware: fw_id, device_type, version, path, md5, description
+ *   - Cung cấp cấu trúc FirmwareInfo đồng nhất cho các module khác sử dụng
  */
 
 // ============================================================

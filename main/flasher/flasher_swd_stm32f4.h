@@ -1,16 +1,16 @@
 /**
- * @file flasher_swd.h
+ * @file flasher_swd_stm32f4.h
  * @brief STM32 SWD flasher engine using Adafruit_DAP library.
  */
 
-#ifndef __FLASHER_SWD_H__
-#define __FLASHER_SWD_H__
+#ifndef __FLASHER_SWD_STM32F4_H__
+#define __FLASHER_SWD_STM32F4_H__
 
 #include "flasher_common.h"
 #include <string>
 
-esp_err_t flasher_swd_init(void);
-esp_err_t flasher_swd_deinit(void);
+esp_err_t flasher_swd_stm32f4_init(void);
+esp_err_t flasher_swd_stm32f4_deinit(void);
 
 /**
  * @brief Detect STM32 RDP protection level via SWD.
@@ -18,7 +18,7 @@ esp_err_t flasher_swd_deinit(void);
  * @param[out] rdp_level  Returns RDP level (0, 1, or 2). NULL = don't care.
  * @return ESP_OK if detection succeeded.
  */
-esp_err_t flasher_swd_detect_rdp(int *rdp_level);
+esp_err_t flasher_swd_stm32f4_detect_rdp(int *rdp_level);
 
 /**
  * @brief PHASE 1: Trigger RDP disable (Level 1 → Level 0).
@@ -27,7 +27,7 @@ esp_err_t flasher_swd_detect_rdp(int *rdp_level);
  * Caller MUST wait ~12s then ask user to press RESET, then call verify.
  * @return ESP_OK if OPTCR write succeeded and mass erase started.
  */
-esp_err_t flasher_swd_rdp_disable_trigger(void);
+esp_err_t flasher_swd_stm32f4_rdp_disable_trigger(void);
 
 /**
  * @brief PHASE 2: Verify RDP is now Level 0 after reset.
@@ -35,13 +35,13 @@ esp_err_t flasher_swd_rdp_disable_trigger(void);
  * Call this AFTER user pressed RESET on STM32.
  * @return ESP_OK if RDP Level 0 confirmed.
  */
-esp_err_t flasher_swd_rdp_disable_verify(void);
+esp_err_t flasher_swd_stm32f4_rdp_disable_verify(void);
 
 // ============================================================
 // FLASH PROGRAMMING
 // ============================================================
 
-typedef void (*flasher_swd_progress_cb_t)(const char* text, int percent);
+typedef void (*flasher_swd_stm32f4_progress_cb_t)(const char* text, int percent);
 
 /**
  * @brief Flash firmware to STM32 via SWD.
@@ -51,7 +51,7 @@ typedef void (*flasher_swd_progress_cb_t)(const char* text, int percent);
  * @param on_progress  Optional progress callback (text, 0-100).
  * @return ESP_OK if flash + verify succeeded.
  */
-esp_err_t flasher_swd_flash_firmware(const std::string& fw_path,
-                                      flasher_swd_progress_cb_t on_progress);
+esp_err_t flasher_swd_stm32f4_flash_firmware(const std::string& fw_path,
+                                      flasher_swd_stm32f4_progress_cb_t on_progress);
 
-#endif // __FLASHER_SWD_H__
+#endif // __FLASHER_SWD_STM32F4_H__

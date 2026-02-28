@@ -1,9 +1,13 @@
 /**
  * @file flasher_esp.cpp
- * @brief ESP32 UART flasher engine implementation.
- * @details Giao tiếp cấp thấp qua UART, sử dụng thư viện esp_loader
- * để thực hiện: kết nối (handshake), xóa chip, nạp phân vùng, xác thực MD5.
- * @author TTP27
+ * @brief Engine nạp firmware cho mục tiêu ESP32 qua giao tiếp UART.
+ *
+ * Chức năng chính:
+ *   - Thiết lập kết nối với bootloader ROM của ESP32 target (handshake qua esp_loader)
+ *   - Hỗ trợ nạp cả firmware thường (.bin) và firmware mã hóa (.enc) — giải mã AES trước khi nạp
+ *   - Nạp tuần tự 3 phân vùng: bootloader, partition table, application
+ *   - Xác thực từng phân vùng sau nạp bằng MD5 checksum
+ *   - Hỗ trợ xóa toàn bộ chip (chip erase) độc lập với quá trình nạp
  */
 
 // ============================================================
@@ -398,8 +402,10 @@ esp_err_t flasher_begin_session(const std::string& fw_id)
 
 	ESP_LOGI(TAG, "Target restarted in normal mode.");
 	ESP_LOGI(TAG, "Full firmware update completed successfully!");
-	// sd_unmount(); // Giải phóng thẻ SD sau khi nạp xong
-	host_system_restart(); // Khởi động lại host để giải phóng bộ nhớ
+
+	// NOTE: Không gọi host_system_restart() ở đây nữa
+	// Để action_flash_firmware() return ESP_OK về handleTabSelection()
+	// handleTabSelection() sẽ gọi host_system_restart(tab, item_id) với state save
 	return ESP_OK;
 }
 
@@ -550,8 +556,9 @@ esp_err_t flasher_chip_erase() {
 	// 3. Reset target lại để target chạy lại app (hoặc chỉ chạy bootloader nếu chưa có app)
 	esp_loader_reset_target();
 
-	// 4. Khởi động lại host để giải phóng bộ nhớ
-	host_system_restart();
+	// NOTE: Không gọi host_system_restart() ở đây nữa
+	// Để action_erase_chip() return ESP_OK về handleTabSelection()
+	// handleTabSelection() sẽ gọi host_system_restart(tab, item_id) với state save
 	return ESP_OK;
 }
 

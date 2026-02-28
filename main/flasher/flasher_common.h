@@ -63,8 +63,21 @@ flasher_mode_t flasher_get_current_mode(void);
 // ============================================================
 
 /**
- * @brief Hiển thị thông báo và khởi động lại ESP32 Host.
+ * @brief Lưu UI state và khởi động lại ESP32 Host với animation
+ * @param tab Current tab index (0-3: FW/Tools/Desc/Info)
+ * @param item_id Current item ID (firmware ID như "F103" hoặc tool index như "0")
  */
-void host_system_restart(void);
+void host_system_restart(int tab, const char* item_id);
+
+/**
+ * @brief Probe SWD IDCODE to determine target chip family.
+ * Quick connect → read DP IDCODE → disconnect. No chip-specific ops.
+ * @return IDCODE (0x1BA01477 = Cortex-M3/F1, 0x2BA01477 = Cortex-M4/F4), 0 on fail.
+ */
+uint32_t swd_probe_idcode(void);
+
+// Well-known SWD IDCODE values
+#define SWD_IDCODE_CORTEX_M3    0x1BA01477   // STM32F1xx
+#define SWD_IDCODE_CORTEX_M4    0x2BA01477   // STM32F4xx
 
 #endif // __FLASHER_COMMON_H__

@@ -4,18 +4,21 @@ set(srcs "main.cpp"
          "flasher/flasher_common.cpp"
          "flasher/flasher_esp.cpp"
          "flasher/flasher_esp_crypto.cpp"
-         "flasher/flasher_swd.cpp"
+         "flasher/flasher_swd_stm32f4.cpp"
+         "flasher/flasher_swd_stm32f1.cpp"
          "wifi_config/wifi_config.cpp"
          "ota_downloader/ota_downloader.cpp"
          "metadata_parser/metadata_parser.cpp"
          "sync_engine/sync_engine.cpp"
          "file_utils/file_utils.cpp"
          "app_actions/app_actions.cpp"
+         "ui_state/ui_state.cpp"
+         "net_server/net_server.cpp"
          )
 
 idf_component_register(SRCS ${srcs}
                        INCLUDE_DIRS ${include_dirs}
-                       REQUIRES espressif__arduino-esp32 Adafruit_DAP Adafruit_GFX Adafruit_SH110X OledUI WiFiManager esp_http_client mbedtls nvs_flash)
+                       REQUIRES espressif__arduino-esp32 Adafruit_DAP Adafruit_GFX Adafruit_SH110X OledUI WiFiManager esp_http_client mbedtls nvs_flash mdns esp_http_server esp_netif)
 
 
 # ⚠️ Thêm dòng này ngay sau idf_component_register

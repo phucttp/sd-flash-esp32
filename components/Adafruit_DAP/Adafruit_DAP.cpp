@@ -437,10 +437,24 @@ uint32_t Adafruit_DAP::dap_read_word(uint32_t addr) {
 }
 
 //-----------------------------------------------------------------------------
+// WARNING: dap_write_word() ALWAYS returns true — it ignores SWD ACK failures!
+//
+// On ESP32-C3 bit-bang SWD, ~1/1000 words fail silently:
+//   - dap_write_reg(TAR) or dap_write_reg(DRW) may drop bits due to GPIO timing
+//   - The SWD target sends FAULT/WAIT ACK but this layer never checks it
+//   - The caller gets "true" regardless — write appears successful
+//
+// CONSEQUENCE: Never trust programBlock() alone for flash programming!
+// REQUIRED: After every write chunk, read back + memcmp to verify.
+//           Use dap_read_block() for read-back (more reliable than dap_read_word).
+//
+// This applies to ALL chip families (STM32F4, STM32F1, nRF52, etc.)
+// See flasher_swd.cpp for the verified implementation pattern:
+//   programBlock(chunk) → vTaskDelay(1ms) → dap_read_block() → memcmp() → retry
 bool Adafruit_DAP::dap_write_word(uint32_t addr, uint32_t data) {
   dap_write_reg(SWD_AP_TAR, addr);
   dap_write_reg(SWD_AP_DRW, data);
-  return true;
+  return true; // Always true — SWD ACK errors are silently ignored (see warning above)
 }
 
 //-----------------------------------------------------------------------------
