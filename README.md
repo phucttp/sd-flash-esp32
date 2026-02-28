@@ -1,390 +1,110 @@
-# 🚀 ESP32 Multi-Flasher (FlashPorter)
+# ESP MultiFlasher
 
-**ESP32 Multi-Flasher** biến một bo **ESP32 (Host)** thành một thiết bị **nạp firmware di động**, **không cần máy tính**.
-Hỗ trợ hai chế độ hoạt động: **Offline (từ thẻ SD)** và **Online (đồng bộ qua WiFi)**.
+ESP32-C3 portable firmware flasher. Flash ESP32 (UART) and STM32 (SWD) targets from SD card, no PC required.
 
----
+## Supported Targets
 
-## 🌟 Tính năng
+| Target | Interface | Protocol |
+|--------|-----------|----------|
+| ESP32 (all variants) | UART | esp-serial-flasher |
+| STM32F1 (Cortex-M3) | SWD | FPEC half-word programming |
+| STM32F4 (Cortex-M4) | SWD | Flash CR sector programming |
 
-### 📱 Giao diện Tabs-Based UI
-- **OLED SH1106G (128x64):** Giao diện tab hiện đại, dễ điều khiển
-- **4 Tab chính:** FW (Firmware) | Tools | Status | Info
-- **Điều hướng thông minh:** UP+DOWN đồng thời để chuyển tab, riêng lẻ để chọn item
-- **OledUI Library:** Thư viện UI tùy chỉnh hỗ trợ menu, dialog, progress bar, spinner
+Auto-detection via SWD IDCODE: `0x1BA01477` = Cortex-M3 (F1), `0x2BA01477` = Cortex-M4 (F4).
 
-### 📦 Chế độ Offline (SD Card)
-- **Nạp từ Thẻ SD:** Đọc danh sách firmware động từ file `index.txt` (định dạng JSON)
-- **Flash Nhanh:** Sử dụng thư viện `espressif/esp-serial-flasher` để nạp qua UART tốc độ cao
-- **Xác thực MD5:** Kiểm tra tính toàn vẹn firmware sau khi nạp (tùy chọn)
-- **Điều khiển 3 nút:** UP, DOWN, OK với debounce để điều hướng
-- **Monitor UART:** Xem log từ Target sau khi nạp xong
-- **Chip Erase:** Xóa toàn bộ flash của Target
+## Hardware
 
-### 🌐 Chế độ Online (WiFi Sync)
-- **Auto-Sync:** Tải firmware từ GitHub/remote server qua WiFi
-- **Mã hóa AES-128-CBC:** Tải file mã hóa `.enc` và giải mã tự động
-- **Đồng bộ thông minh:** So sánh index local vs remote, chỉ tải file thay đổi
-- **WiFi Portal:** Cấu hình WiFi và server URL qua captive portal (WiFiManager)
-- **Force Clean:** Nhấn giữ 3s để xóa tất cả firmware local và đồng bộ lại
+**Host:** ESP32-C3 (RISC-V), ESP-IDF v5.1.6 + Arduino component
 
-### 🎮 Phản hồi Trực quan
-- Hiển thị trạng thái (Booting, Flashing, Progress %, Success, Error) trên OLED
-- Log chi tiết qua UART Serial (115200 baud)
-- Tự động khởi động lại sau mỗi thao tác để giải phóng RAM
+### Pin Connections
 
----
+| Function | GPIO | Notes |
+|----------|------|-------|
+| OLED SDA | 8 | I2C, SH1106G 128x64, addr 0x3C |
+| OLED SCL | 9 | |
+| SD Card CS | 7 | SPI, FAT32 |
+| Button UP | 21 | Active low |
+| Button DOWN | 10 | Active low |
+| Button OK | 20 | Active low |
 
-## 🛠️ Phần cứng Yêu cầu
+### Target Wiring — ESP32 (UART)
 
-### 1️⃣ Host (Thiết bị Nạp)
+| Host GPIO | Target Pin | Function |
+|-----------|------------|----------|
+| 0 (TX) | RXD0 | Firmware data |
+| 1 (RX) | TXD0 | Response |
+| 2 | EN/RESET | Reset control |
+| 3 | GPIO0/BOOT | Boot mode |
 
-**Vi điều khiển:** ESP32-C3 (primary target, có thể dùng ESP32-S3)
-**Framework:** ESP-IDF v5.1.6 + Arduino component
+### Target Wiring — STM32 (SWD)
 
-#### Kết nối phần cứng:
+| Host GPIO | Target Pin | Function |
+|-----------|------------|----------|
+| 0 | SWDIO | SWD data |
+| 3 | SWCLK | SWD clock |
+| 3.3V | VCC | Power target from 3.3V only |
+| GND | GND | Common ground |
 
-| Thiết bị | Chân GPIO | Ghi chú |
-|----------|-----------|---------|
-| **OLED SH1106G** | SDA → GPIO 8 | I2C Address: 0x3C |
-|  | SCL → GPIO 9 | **128x64 pixels** |
-| **Thẻ SD** | CS → GPIO 7 | SPI mode, FAT filesystem |
-| **Nút UP** | GPIO 21 | Pull-up, nhấn → GND |
-| **Nút DOWN** | GPIO 10 | Pull-up, nhấn → GND |
-| **Nút OK** | GPIO 20 | Pull-up, nhấn → GND |
+> **Warning:** Never power STM32 from 5V — causes SWD level mismatch and potential GPIO damage.
 
-### 2️⃣ Target (Thiết bị được Nạp)
+## Features
 
-ESP32 bất kỳ cần nạp firmware.
+- **OLED Tab UI:** 5 tabs — FW, Tools, Desc, History, Info
+- **SD Card firmware library:** JSON metadata (`index.txt`), auto-discovery
+- **WiFi Sync:** Download encrypted firmware from cloud, AES-128-CBC
+- **NetFlash:** Remote flash via HTTP API over WiFi
+- **RDP auto-erase:** Detects STM32 read protection, confirms with user, auto-erases before flashing
+- **Serial Monitor:** Real-time UART log viewer on OLED
+- **Flash History:** Tracks last 10 flash operations
 
-### 3️⃣ Kết nối Host ↔ Target
-
-| Host GPIO | Target Pin | Chức năng |
-|-----------|------------|-----------|
-| GPIO 0 (TX) | RXD0 | Gửi dữ liệu firmware |
-| GPIO 1 (RX) | TXD0 | Nhận phản hồi/log |
-| GPIO 2 | EN/RESET | Reset Target |
-| GPIO 3 | GPIO0/BOOT | Đưa vào chế độ nạp |
-
----
-
-## ⚙️ Cách Hoạt động
-
-### Offline Mode (Nạp từ SD)
-1. **Khởi động:** ESP32 khởi động OLED và mount thẻ SD
-2. **Đọc Metadata:** Mở file `/index.txt` trên thẻ SD (JSON format)
-3. **Xây dựng Menu:** Hiển thị danh sách firmware + lệnh hệ thống (Monitor, Sync, Erase, Exit)
-4. **Chọn Firmware:** Cuộn bằng UP/DOWN, nhấn OK để chọn
-5. **Vào Chế độ Nạp:** Điều khiển EN và BOOT của Target
-6. **Nạp Firmware:** Ghi bootloader (0x1000), partition (0x8000), app (0x10000) vào Target
-7. **Xác thực:** Kiểm tra MD5 nếu có trong metadata
-8. **Hoàn tất:** Reset Target, hiển thị "✅ Success", khởi động lại Host
-
-### Online Mode (Đồng bộ WiFi)
-1. **Chọn "Sync":** Từ menu chính
-2. **Xác nhận:** UP=Chạy, DOWN=Cấu hình WiFi, OK=Hủy
-3. **Kết nối WiFi:** Tự động hoặc qua captive portal
-4. **Tải Index:** Download `/index.txt` từ remote server
-5. **So sánh:** Kiểm tra version/MD5 với file local
-6. **Tải Firmware:** Download file `.enc` mới, giải mã AES-128-CBC, lưu vào SD
-7. **Cập nhật:** Ghi đè `/index.txt` local
-8. **Hoàn tất:** Ngắt WiFi, khởi động lại
-
----
-
-## 💻 FlashPorter: Trợ thủ Đắc lực (PC Tool)
-
-Không cần chỉnh file JSON thủ công!
-Tool **FlashPorter** giúp chuẩn bị thẻ SD **chỉ trong vài cú click**.
-
-### ⚡ Chức năng:
-- 📁 Quản lý thư viện firmware (Bootloader, Partition, App)
-- 🔐 Tự động tính MD5 hash
-- 💾 Xuất ra thẻ SD với cấu trúc chuẩn và file `index.txt`
-
-### 🧠 Cách dùng:
-1. Mở **FlashPorter.exe**
-2. Nhập tên firmware (VD: `ESP32-C3_V1.0`)
-3. Chọn file `.bin` (Bootloader, Partition, App)
-4. Nhấn **Export to SD Card** → Chọn ổ đĩa thẻ nhớ
-5. Tool tự động tạo cấu trúc và file `index.txt`
-
-### 🖥️ Giao diện FlashPorter:
-
-**Workflow chính:**
-```
-┌─────────────┐      ┌─────────────┐      ┌─────────────┐
-│   Tab 1:    │      │   Tab 2:    │      │   Tab 2:    │
-│  Thêm FW    │ ───► │  Copy SD    │ ───► │ Push Cloud  │
-│  (Local)    │      │  (Offline)  │      │  (Online)   │
-└─────────────┘      └─────────────┘      └─────────────┘
-      │                    │                    │
-      ▼                    ▼                    ▼
-firmware_library/    SD Card (FAT32)    GitHub Repository
-└── fw_id/           └── fw_id/         └── fw_id/
-    ├── FW.bin           ├── FW.bin         ├── FW.enc
-    ├── BOTL.bin         ├── BOTL.bin       ├── BOTL.enc
-    └── PART.bin         └── PART.bin       └── PART.enc
-```
-
-**Tab 1 - Thêm Firmware:** Nhập thông tin (ID, Device Type, Version) + chọn 3 file .bin → Lưu vào thư viện local.
-
-**Tab 2 - Quản lý & Sync:** Copy ra SD Card (plain) hoặc mã hóa AES-128-CBC + push lên GitHub
-
----
-
-## 🎮 Giao diện OLED Tabs UI
-
-### Cấu trúc Tab:
-```
-┌──────────────────────────────────┐
-│  [FW]  Tools  Status  Info      │  ◄── Tab bar (UP+DOWN đổi tab)
-├──────────────────────────────────┤
-│                                  │
-│   ► ESP32_C3_V1                  │  ◄── Nội dung tab
-│     ESP32_S3_V2                  │      (UP/DOWN chọn item)
-│     ESP32_RELAY                  │
-│                                  │
-│                                  │
-│──────────────────────────────────│
-│  OK:Flash                        │  ◄── Hint bar
-└──────────────────────────────────┘
-```
-
-### Chi tiết các Tab:
-
-| Tab | Chức năng | Items |
-|-----|-----------|-------|
-| **FW** | Danh sách firmware từ SD | Dynamic (từ index.txt) |
-| **Tools** | Công cụ hệ thống | Sync, Config WiFi/URL, Monitor, Erase, Scan Boot |
-| **Status** | Trạng thái real-time | Progress bar, State text |
-| **Info** | Thông tin hệ thống | Version, Author, Build, Chip |
-
-### Điều khiển:
-```
-┌─────────────────────────────────────────────────────┐
-│                                                     │
-│   [UP] + [DOWN] cùng lúc  →  Chuyển Tab (trái/phải)│
-│                                                     │
-│   [UP] riêng lẻ           →  Di chuyển lên         │
-│   [DOWN] riêng lẻ         →  Di chuyển xuống       │
-│   [OK]                    →  Chọn/Xác nhận         │
-│                                                     │
-└─────────────────────────────────────────────────────┘
-```
-
----
-
-## 📂 Cấu trúc Thẻ SD
+## SD Card Structure
 
 ```
 SD_ROOT/
-├── index.txt              # File quản lý chính (JSON)
-├── config/                # Cấu hình WiFi Sync (tùy chọn)
-│   ├── url.txt           # URL remote server
-│   ├── aes_key.txt       # AES key (16 bytes)
-│   └── aes_iv.txt        # AES IV (16 bytes)
-├── FW_C3_V1/             # Thư mục firmware 1 (8.3 format)
-│   ├── boot.bin          # Bootloader
-│   ├── part.bin          # Partition table
-│   └── app.bin           # Application
-└── FW_S3_V2/             # Thư mục firmware 2
-    ├── boot.bin
-    ├── part.bin
-    └── app.bin
+├── index.txt           # Firmware metadata (JSON)
+├── config/
+│   ├── url.txt         # Remote server URL
+│   ├── aes_key.txt     # AES-128 key (16 bytes)
+│   └── aes_iv.txt      # AES-128 IV (16 bytes)
+└── FW_ID/
+    ├── FW.bin          # Main firmware (STM32) or app.bin (ESP32)
+    ├── boot.bin        # Bootloader (ESP32 only)
+    └── part.bin        # Partition table (ESP32 only)
 ```
 
-**⚠️ Lưu ý:** Tên thư mục/file phải tuân thủ **8.3 format** (FAT filesystem):
-- Tên folder: tối đa 8 ký tự
-- Tên file: tối đa 8 ký tự + 3 ký tự đuôi (.bin, .txt, .enc)
+## Build
 
-### Ví dụ file `index.txt`:
-
-```json
-{
-  "FW_C3_V1": {
-    "device_type": "ESP32-C3",
-    "version": "1.0.0",
-    "path": "/FW_C3_V1/app.bin",
-    "md5": "abc123...",
-    "path_bootloader": "/FW_C3_V1/boot.bin",
-    "md5_bootloader": "def456...",
-    "path_partition": "/FW_C3_V1/part.bin",
-    "md5_partition": "789ghi..."
-  },
-  "FW_S3_V2": {
-    "device_type": "ESP32-S3",
-    "version": "2.0.1",
-    "path": "/FW_S3_V2/app.bin",
-    "md5": "xyz789...",
-    "path_bootloader": "/FW_S3_V2/boot.bin",
-    "md5_bootloader": "uvw012...",
-    "path_partition": "/FW_S3_V2/part.bin",
-    "md5_partition": "rst345..."
-  }
-}
-```
-
----
-
-## 🔧 Build và Flash
-
-### Yêu cầu:
-- ESP-IDF v5.1.6 trở lên
-- Python 3.8+
-- CMake, Ninja
-
-### Các bước:
+Requires ESP-IDF v5.1.6+.
 
 ```bash
-# 1. Clone repository
-git clone https://github.com/YOUR_REPO/ESP32_MultiFlasher.git
-cd ESP32_MultiFlasher
-
-# 2. Cấu hình IDF environment
 . $IDF_PATH/export.sh
-
-# 3. Set target (ESP32-C3)
 idf.py set-target esp32c3
-
-# 4. Build
 idf.py build
-
-# 5. Flash vào ESP32 Host
-idf.py -p COM3 flash monitor  # Windows
-# hoặc
-idf.py -p /dev/ttyUSB0 flash monitor  # Linux/Mac
+idf.py -p COM3 flash monitor
 ```
 
-### Địa chỉ nạp (cho Host):
-- Bootloader: `0x0`
-- Partition: `0x8000`
-- App: `0x10000`
+## FlashPorter (PC Tool)
 
----
+Python/Tkinter tool to manage firmware library and prepare SD cards.
 
-## 🎯 Sử dụng
-
-### Khởi động lần đầu:
-1. Chuẩn bị thẻ SD bằng **FlashPorter** (`toolAddFirmware/dist/FlashPorter.exe`)
-2. Lắp thẻ SD vào Host ESP32
-3. Kết nối OLED, buttons theo sơ đồ
-4. Cấp nguồn → OLED hiển thị "Booting..."
-5. Menu hiển thị danh sách firmware
-
-### FlashPorter Tool (PC):
-Tool Python/Tkinter để chuẩn bị thẻ SD:
 ```bash
-cd toolAddFirmware
-pip install pycryptodome
-python FlashPorter.py
-# Hoặc chạy trực tiếp: dist/FlashPorter.exe (Windows)
+cd toolAddFirmware/FlashPorter_Public
+pip install -r requirements.txt
+python main.pyw
 ```
-**Tính năng:**
-- Thêm firmware mới (FW.bin, BOTL.bin, PART.bin)
-- Copy ra thẻ SD (với PKCS7 padding)
-- Mã hóa AES-128-CBC và push lên GitHub
 
-### Nạp Firmware (Tab FW):
-1. Mở tab **FW** (UP+DOWN nếu cần chuyển tab)
-2. Cuộn UP/DOWN để chọn firmware
-3. Nhấn OK → Xác nhận dialog
-4. Đợi "Flashing..." → "Done!"
-5. Hệ thống tự động restart
+Features: add firmware, export to SD, encrypt + push to cloud, NetFlash remote flashing.
 
-### Đồng bộ WiFi (Tab Tools → Sync):
-1. Chuyển sang tab **Tools** (UP+DOWN)
-2. Chọn "1. Sync Firmware" → OK
-3. Xác nhận dialog → Kết nối WiFi
-4. Đợi tải và giải mã firmware
-5. Hệ thống restart, tab FW cập nhật
+## Dependencies
 
-### Cấu hình WiFi/URL (Tab Tools → Config):
-1. Tab **Tools** → "2. Config WiFi/URL" → OK
-2. Captive Portal khởi động
-3. Kết nối WiFi "FlashPorter_Config" từ điện thoại
-4. Cấu hình WiFi SSID/Password và Server URL
-5. Lưu → Hệ thống restart
+- `espressif/esp-serial-flasher` — UART flash protocol
+- `espressif/arduino-esp32` — Arduino framework on ESP-IDF
+- `bblanchon/ArduinoJson` — JSON parsing
+- `Adafruit_SH110X` / `Adafruit_GFX` — OLED driver
+- `Adafruit_DAP` (modified) — SWD protocol for STM32
+- `WiFiManager` — WiFi captive portal
+- `mbedtls` — AES encryption
 
-### Monitor Target (Tab Tools → Monitor):
-1. Tab **Tools** → "3. Monitor/Test" → OK
-2. Xem log real-time trên OLED (7 dòng cuối)
-3. Nhấn OK để thoát
+## License
 
-### Chip Erase (Tab Tools → Erase):
-1. Tab **Tools** → "4. Erase Chip" → OK
-2. Xác nhận dialog → Đợi "Erasing..." → "SUCCESS!"
-
----
-
-## 📚 Tài liệu kỹ thuật
-
-Xem thêm trong thư mục `docs/`:
-- **project-overview-pdr.md** - Yêu cầu sản phẩm chi tiết
-- **codebase-summary.md** - Tóm tắt cấu trúc code
-- **code-standards.md** - Quy chuẩn lập trình
-- **system-architecture.md** - Kiến trúc hệ thống
-- **project-roadmap.md** - Lộ trình phát triển
-
----
-
-## 🔌 Thư viện Dependencies
-
-**ESP-IDF Components:**
-- `espressif/esp-serial-flasher` - Low-level UART flash protocol
-- `espressif/arduino-esp32` - Arduino framework
-- `bblanchon/ArduinoJson` - JSON parsing
-- `mbedtls` - AES encryption
-
-**Custom Components:**
-- `OledUI` - Thư viện UI tùy chỉnh (Tabs, Menu, Dialog, Progress)
-
-**Arduino Libraries (via component):**
-- `Adafruit_SH110X` - OLED SH1106G display driver
-- `Adafruit_GFX` - Graphics library
-- `WiFiManager` - WiFi configuration portal
-
----
-
-## 📊 Giới hạn kỹ thuật
-
-- **RAM:** Hệ thống restart sau mỗi thao tác để giải phóng bộ nhớ
-- **SD Card:** Chỉ hỗ trợ FAT filesystem (8.3 filename format)
-- **WiFi:** Chỉ hỗ trợ 2.4GHz (không hỗ trợ 5GHz)
-- **AES Key/IV:** Phải đúng 16 bytes
-- **Firmware size:** Giới hạn bởi dung lượng thẻ SD và tốc độ download
-
----
-
-## 🐛 Troubleshooting
-
-**OLED SH1106G không hiển thị:**
-- Kiểm tra kết nối I2C (SDA: GPIO8, SCL: GPIO9)
-- Xác nhận địa chỉ I2C là 0x3C
-- Kiểm tra nguồn 3.3V
-- Màn hình phải là SH1106G 128x64 (không phải SSD1306)
-
-**Thẻ SD mount thất bại:**
-- Kiểm tra định dạng FAT32
-- Thử thẻ SD khác (Class 10 trở lên)
-- Kiểm tra kết nối SPI
-
-**Nạp firmware thất bại:**
-- Kiểm tra kết nối UART Host-Target
-- Xác nhận Target ở chế độ flash (GPIO0 pulled down)
-- Kiểm tra file .bin không bị lỗi
-
-**WiFi không kết nối:**
-- Đảm bảo mạng 2.4GHz (không phải 5GHz)
-- Thử reset WiFi config (nút DOWN khi chọn Sync)
-- Kiểm tra file `/config/url.txt`
-
----
-
-## 🤝 Đóng góp
-
-Fork → Branch → Commit → Pull Request
-
----
-
-**MIT License** | **TTP27** (2025) | **v1.1.0** (31/01/2026) - Tabs UI Update
+MIT License — TTP27 (2025-2026)
