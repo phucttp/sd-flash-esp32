@@ -2,7 +2,7 @@
 
 > **Phiên bản:** 1.0 — 2026-02-28
 > **Tham chiếu:** `docs/stm32f4-swd-engine-spec.md` (cấu trúc tương đương cho F4)
-> **Tài liệu gốc:** `docs/F1_ma.txt`, `docs/stm_cpp.txt`, `docs/stm_h.txt`
+
 
 Tài liệu này mô tả chi tiết các địa chỉ thanh ghi, cờ điều khiển, luồng logic và các bẫy phần cứng để giao tiếp với bộ điều khiển Flash (FPEC — Flash Program/Erase Controller) của STM32F1 thông qua giao thức SWD.
 
@@ -287,8 +287,8 @@ Với mỗi Page bị firmware phủ:
 
 1. Mở khóa Flash (KEY1 + KEY2 → `FLASH_KEYR`). Kiểm tra `LOCK` = 0.
 2. Clear sticky errors: ghi `0x34` vào `FLASH_SR`.
-3. Ghi **địa chỉ page** vào `FLASH_AR` (`0x40022014`).
-4. Ghi `FLASH_CR` = `PER` (bit 1).
+3. Ghi `FLASH_CR` = `PER` (bit 1) — phải set PER **trước** khi ghi AR.
+4. Ghi **địa chỉ page** vào `FLASH_AR` (`0x40022014`).
 5. Ghi `FLASH_CR` = `PER | STRT` (bit 1 + bit 6).
 6. ⏳ Chờ `BSY` = 0.
 7. Kiểm tra `FLASH_SR`: nếu `WRPRTERR` (bit 4) = 1 → page bị write-protect → lỗi.

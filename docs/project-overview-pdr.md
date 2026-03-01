@@ -17,7 +17,7 @@ Enables in-field firmware updates with OLED tab-based menu control, online WiFi 
 ## Key Features
 
 ### Offline Mode (SD Card Based)
-- **Tabs UI:** Interactive SH1106G OLED display (128x64) with 3-button control, 4 tabs
+- **Tabs UI:** Interactive SH1106G OLED display (128x64) with 3-button control, 5 tabs (FW, Tools, Desc, Hist, Info)
 - **Firmware Library:** JSON-indexed firmware catalog on SD card (index.txt)
 - **ESP32 UART Flash:** Uses `espressif/esp-serial-flasher` for high-speed UART flashing
 - **STM32 SWD Flash:** Uses Adafruit_DAP bit-bang SWD with on-the-fly verify + retry
@@ -241,8 +241,9 @@ App actions call these callbacks without knowing the display hardware.
 - Bit-bang SWD on GPIO0 (SWDIO) + GPIO3 (SWCLK) — no hardware SWD peripheral
 - GPIO0 chosen to avoid FSPIQ conflict (GPIO2 is FSPI default MISO)
 - ~1/1000 word write failure rate → on-the-fly verify mandatory
-- RDP Level 1 blocks all AHB-AP reads; only blind writes possible
-- RDP disable requires physical power cycle (not software reset)
+- F4: RDP Level 1 blocks all AHB-AP reads; only blind writes possible
+- F4: RDP disable requires physical power cycle (no OBL_LAUNCH)
+- F1: Peripheral registers readable under RDP1; OB reload via SYSRESETREQ (no power cycle)
 - STM32 must be powered from 3.3V pin (5V causes voltage mismatch)
 
 **TC5: WiFi Dependencies**
@@ -252,52 +253,55 @@ App actions call these callbacks without knowing the display hardware.
 
 ## Implementation Status
 
-**Current Version:** 1.2.0
-**Updated:** 2026-02-16
-**Production Status:** Multi-MCU Flash Working
+**Current Version:** 1.3.0
+**Updated:** 2026-03-01
+**Production Status:** Multi-MCU Flash Working (ESP32 + STM32F1 + STM32F4)
 
 ### Implemented ✅
-- Core ESP32 UART flashing with esp-serial-flasher + brute-force boot combos
-- **STM32 SWD flashing with Adafruit_DAP + on-the-fly verify + retry**
-- **STM32 RDP detect/disable with blind writes + mass erase + power cycle verify**
-- **Streaming flash support for large firmware (32KB segments)**
-- SD card management and JSON parsing
-- OLED SH1106G tabs-based UI with OledUI library
+- ESP32 UART flashing (esp-serial-flasher) + brute-force boot combos
+- **STM32F4 SWD flash** (Adafruit_DAP, sector erase, on-the-fly verify + retry)
+- **STM32F1 SWD flash** (FPEC half-word, page erase, device whitelist)
+- **IDCODE auto-detect:** 0x1BA01477→F1, 0x2BA01477→F4
+- **RDP detect/disable** for both F1 and F4 (blind writes + mass erase)
+- **RDP auto-erase with retry** (3x retry + confirm dialog before flash)
+- Streaming flash for large firmware (32KB segments)
+- SD card management, JSON parsing, flash history (last 10)
+- OLED SH1106G 5-tab UI with OledUI library (FW, Tools, Desc, Hist, Info)
 - Callback-based UI abstraction (app_actions layer)
+- **UI state persistence** (tab + item restored after restart)
 - WiFi configuration portal
 - OTA downloader with AES-128-CBC decryption
 - Sync engine for index comparison
+- **NetFlash HTTP API** (remote flash via WiFi, mDNS discovery)
 - Monitor mode UART capture
 - Chip erase (ESP32 UART and STM32 SWD)
-- Auto-detect target type from metadata
 
 ### Pending
-- FlashPorter PC tool: STM32 firmware support (currently ESP32-only workflow)
-- State persistence (remember last action, last FW)
 - SD card logging for field debugging
 - Error recovery resume (mid-flash checkpoint)
+- RDP auto-lock after flash (production mode)
 - Production testing with diverse STM32 boards
 
-### Implemented Modules
-**ESP32 Firmware (main/):**
-- `main.cpp` — Application entry + OledUI tabs + callback wiring (~364 lines)
-- `app_actions/` — High-level action handlers, callback-based UI abstraction (~640 lines)
-- `flasher/flasher_common.h` — Shared pin definitions, dual-purpose GPIO mapping
-- `flasher/flasher_esp.*` — ESP32 UART flasher (esp-serial-flasher)
-- `flasher/flasher_esp_crypto.*` — AES-128-CBC decryption
-- `flasher/flasher_swd.*` — STM32 SWD flasher (Adafruit_DAP, ~810 lines)
-- `sd_card/` — SD card mount, metadata loading, firmware path resolution
-- `wifi_config/` — WiFiManager integration for captive portal
-- `sync_engine/` — Firmware synchronization orchestrator
-- `oled/` — Legacy menu module (superseded by OledUI tabs)
-- `firmware_types.h` — Firmware metadata structures
-- `metadata_parser/` — ArduinoJson-based firmware catalog parser
+### Source Files (main/, ~6700 lines)
+- `main.cpp` — 5-tab UI + callback wiring (535L)
+- `app_actions/` — Action dispatch + IDCODE routing (761L)
+- `flasher/flasher_common.*` — Shared pins, `swd_probe_idcode()` (86L)
+- `flasher/flasher_esp.*` — ESP32 UART engine (794L)
+- `flasher/flasher_esp_crypto.*` — AES decrypt for ESP segments (115L)
+- `flasher/flasher_swd_stm32f4.*` — F4 SWD engine (1226L)
+- `flasher/flasher_swd_stm32f1.*` — F1 SWD engine (808L)
+- `sd_card/` — SD card + metadata + history (368L)
+- `net_server/` — NetFlash HTTP API + mDNS (316L)
+- `ui_state/` — Tab/item state persistence (172L)
+- `wifi_config/` — WiFi captive portal (299L)
+- `sync_engine/` — Cloud sync orchestrator (371L)
+- `ota_downloader/` — HTTP download + AES (436L)
+- `metadata_parser/` — JSON parser (116L)
+- `file_utils/` — File utilities (313L)
 
-**PC Tool (toolAddFirmware/):**
-- FlashPorter.py — Python/Tkinter GUI for SD card preparation
-- esp_encryptor.py — AES-128-CBC encryption utility
-- FlashPorter.exe — Compiled Windows executable (dist/)
-- Features: Add firmware, copy to SD, encrypt for GitHub, push to cloud
+**PC Tool (toolAddFirmware/FlashPorter_Public/):**
+- Modular Python/Tkinter GUI (main.pyw + 9 modules)
+- Features: firmware library, SD export, AES encrypt, cloud push, NetFlash remote flash
 
 ### Build Configuration
 - Target: esp32c3 (set via CMakeLists.txt)
@@ -340,7 +344,7 @@ App actions call these callbacks without knowing the display hardware.
 | ESP32-C3 | UART | esp-serial-flasher | Done (v1.0) |
 | ESP32-S3 | UART | esp-serial-flasher | Done (v1.0) |
 | STM32F4xx | SWD | Adafruit_DAP | Done (v1.2) |
-| STM32F1xx | SWD | Adafruit_DAP | Planned |
+| STM32F1xx | SWD | Adafruit_DAP_STM32F1 | Done (v1.3) |
 
 ## Success Metrics
 
@@ -361,13 +365,11 @@ App actions call these callbacks without knowing the display hardware.
 
 ## Unresolved Questions
 
-1. ~~FlashPorter tool source code repository?~~ **RESOLVED**: `toolAddFirmware/FlashPorter.py`
+1. ~~FlashPorter tool source code repository?~~ **RESOLVED**: `toolAddFirmware/FlashPorter_Public/`
 2. ~~Error recovery if flash interrupted mid-process?~~ **PARTIAL**: SWD has chunk retry + full re-flash; no mid-flash checkpoint/resume yet
 3. Full support verification for ESP32-S3/ESP32 variants (GPIO mapping differences)?
 4. Maximum firmware library size constraints (menu item limit, RAM for JSON parsing)?
-5. GitHub private repository authentication method (bearer tokens, OAuth)?
-6. FlashPorter PC tool: STM32 firmware workflow? (currently only handles ESP32 3-partition layout)
-7. Field deployment feedback (reliability metrics, failure modes)?
-8. Battery-powered operation requirements (low-power mode, voltage monitoring)?
-9. STM32F1xx SWD compatibility (different flash controller registers)?
-10. Production testing with diverse STM32 boards (bluepill, nucleo, custom)?
+5. ~~STM32F1xx SWD compatibility?~~ **RESOLVED**: F1 engine done (v1.3), tested on STM32F103 HD 256KB
+6. Field deployment feedback (reliability metrics, failure modes)?
+7. Battery-powered operation requirements (low-power mode, voltage monitoring)?
+8. Production testing with diverse STM32 boards (bluepill, nucleo, custom)?
