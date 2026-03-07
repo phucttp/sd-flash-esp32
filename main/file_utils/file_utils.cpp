@@ -1,174 +1,161 @@
 /**
  * @file file_utils.cpp
- * @brief Các thao tác file tập trung trên SD card — đọc, ghi, kiểm tra tồn tại.
+ * @brief Thao tác file tập trung qua VFS /usb (phân vùng FAT nội bộ)
  *
- * Chức năng chính:
- *   - Đọc nội dung file văn bản từ SD card vào buffer hoặc String
- *   - Ghi chuỗi ký tự vào file (tạo mới hoặc ghi đè)
- *   - Kiểm tra sự tồn tại của file/thư mục
- *   - Tập trung xử lý lỗi I/O để tránh lặp lại logic kiểm tra ở các module khác
+ * Thay thế Arduino SD library bằng POSIX API (fopen/fclose/stat/opendir...)
+ * Mount point: /usb — tất cả path truyền vào dạng "/relative/path"
+ * Hàm fu_vfs_path() tự prepend "/usb" trước khi gọi syscall.
  */
 
 // ============================================================
 // INCLUDES
 // ============================================================
 #include "file_utils.h"
-#include "FS.h"
-#include "SD.h"
+#include "../usb_drive/usb_drive.h"
 #include "esp_log.h"
+#include <stdio.h>
+#include <sys/stat.h>
+#include <sys/types.h>
+#include <dirent.h>
+#include <unistd.h>
+#include <string.h>
 #include <vector>
 
 static const char* TAG = "FILE_UTILS";
 
 // ============================================================
-// FILE OPERATIONS
+// INTERNAL HELPER
 // ============================================================
 
 /**
- * @brief Kiểm tra file có tồn tại không
+ * Chuyển path tương đối "/file.txt" → "/usb/file.txt"
+ * Đảm bảo path bắt đầu bằng "/" trước khi ghép mount point
  */
-bool fu_file_exists(const char* path) {
-    std::string normalized = fu_normalize_path(path);
-    return SD.exists(normalized.c_str());
+static std::string fu_vfs_path(const char* rel_path) {
+    std::string p = fu_normalize_path(rel_path);  // đảm bảo leading "/"
+    return std::string(USB_DRIVE_MOUNT) + p;
 }
 
-/**
- * @brief Đọc toàn bộ nội dung file vào string
- */
+// ============================================================
+// FILE OPERATIONS
+// ============================================================
+
+bool fu_file_exists(const char* path) {
+    std::string full = fu_vfs_path(path);
+    struct stat st;
+    return (stat(full.c_str(), &st) == 0 && S_ISREG(st.st_mode));
+}
+
 esp_err_t fu_file_read(const char* path, std::string& out_content) {
-    std::string normalized = fu_normalize_path(path);
+    std::string full = fu_vfs_path(path);
     out_content.clear();
 
-    if (!SD.exists(normalized.c_str())) {
-        ESP_LOGW(TAG, "File not found: %s", normalized.c_str());
+    struct stat st;
+    if (stat(full.c_str(), &st) != 0) {
+        ESP_LOGW(TAG, "Not found: %s", full.c_str());
         return ESP_ERR_NOT_FOUND;
     }
 
-    File file = SD.open(normalized.c_str(), FILE_READ);
-    if (!file) {
-        ESP_LOGE(TAG, "Failed to open file: %s", normalized.c_str());
+    FILE* f = fopen(full.c_str(), "rb");
+    if (!f) {
+        ESP_LOGE(TAG, "Open fail: %s", full.c_str());
         return ESP_FAIL;
     }
 
-    out_content.reserve(file.size());
-    while (file.available()) {
-        out_content += (char)file.read();
-    }
-    file.close();
+    out_content.resize((size_t)st.st_size);
+    size_t read = fread(&out_content[0], 1, (size_t)st.st_size, f);
+    fclose(f);
+    out_content.resize(read);
 
-    ESP_LOGD(TAG, "Read %d bytes from %s", out_content.length(), normalized.c_str());
+    ESP_LOGD(TAG, "Read %d bytes: %s", (int)read, full.c_str());
     return ESP_OK;
 }
 
-/**
- * @brief Đọc file vào buffer với giá trị mặc định
- */
-esp_err_t fu_file_read_buf(const char* path, char* buffer, size_t buffer_size, const char* default_value) {
-    std::string normalized = fu_normalize_path(path);
-    bool has_valid_data = false;
+esp_err_t fu_file_read_buf(const char* path, char* buffer, size_t buffer_size,
+                            const char* default_value) {
+    std::string full = fu_vfs_path(path);
+    bool valid = false;
 
-    if (SD.exists(normalized.c_str())) {
-        File file = SD.open(normalized.c_str(), FILE_READ);
-        if (file) {
-            if (file.size() > 0) {
-                String s = file.readStringUntil('\n');
-                s.trim();
-                if (s.length() > 0) {
-                    strncpy(buffer, s.c_str(), buffer_size - 1);
-                    buffer[buffer_size - 1] = '\0';
-                    has_valid_data = true;
-                    ESP_LOGD(TAG, "Read from %s: %s", normalized.c_str(), buffer);
-                }
+    FILE* f = fopen(full.c_str(), "r");
+    if (f) {
+        if (fgets(buffer, (int)buffer_size, f)) {
+            // Trim newline
+            size_t len = strlen(buffer);
+            while (len > 0 && (buffer[len-1] == '\n' || buffer[len-1] == '\r')) {
+                buffer[--len] = '\0';
             }
-            file.close();
+            if (len > 0) {
+                valid = true;
+                ESP_LOGD(TAG, "Read buf: %s = %s", full.c_str(), buffer);
+            }
         }
+        fclose(f);
     }
 
-    if (!has_valid_data && default_value != NULL) {
-        ESP_LOGW(TAG, "Using default for %s", normalized.c_str());
+    if (!valid && default_value) {
+        ESP_LOGW(TAG, "Using default: %s", full.c_str());
         strncpy(buffer, default_value, buffer_size - 1);
         buffer[buffer_size - 1] = '\0';
     }
-
     return ESP_OK;
 }
 
-/**
- * @brief Ghi nội dung vào file (tự tạo thư mục cha nếu thiếu)
- */
 esp_err_t fu_file_write(const char* path, const char* content) {
-    std::string normalized = fu_normalize_path(path);
+    std::string full = fu_vfs_path(path);
 
     // Đảm bảo thư mục cha tồn tại
-    std::string parent = fu_get_parent_dir(normalized.c_str());
-    if (!parent.empty()) {
-        fu_dir_create(parent.c_str());
+    std::string parent = fu_get_parent_dir(full.c_str());
+    if (!parent.empty() && parent != USB_DRIVE_MOUNT) {
+        // Tạo thư mục bỏ qua lỗi nếu đã tồn tại
+        mkdir(parent.c_str(), 0755);
     }
 
-    // Remove existing file
-    if (SD.exists(normalized.c_str())) {
-        SD.remove(normalized.c_str());
-    }
-
-    File file = SD.open(normalized.c_str(), FILE_WRITE);
-    if (!file) {
-        ESP_LOGE(TAG, "Failed to create file: %s", normalized.c_str());
+    FILE* f = fopen(full.c_str(), "wb");
+    if (!f) {
+        ESP_LOGE(TAG, "Create fail: %s", full.c_str());
         return ESP_FAIL;
     }
 
-    file.print(content);
-    file.close();
-
-    ESP_LOGD(TAG, "Written to %s", normalized.c_str());
+    fputs(content, f);
+    fclose(f);
+    ESP_LOGD(TAG, "Written: %s", full.c_str());
     return ESP_OK;
 }
 
 esp_err_t fu_file_append(const char* path, const char* content) {
-    std::string normalized = fu_normalize_path(path);
+    std::string full = fu_vfs_path(path);
 
-    File file = SD.open(normalized.c_str(), FILE_APPEND);
-    if (!file) {
-        ESP_LOGE(TAG, "Failed to open for append: %s", normalized.c_str());
+    FILE* f = fopen(full.c_str(), "ab");
+    if (!f) {
+        ESP_LOGE(TAG, "Append open fail: %s", full.c_str());
         return ESP_FAIL;
     }
 
-    file.print(content);
-    file.close();
+    fputs(content, f);
+    fclose(f);
     return ESP_OK;
 }
 
 esp_err_t fu_file_delete(const char* path) {
-    std::string normalized = fu_normalize_path(path);
+    std::string full = fu_vfs_path(path);
 
-    if (!SD.exists(normalized.c_str())) {
-        ESP_LOGD(TAG, "File already gone: %s", normalized.c_str());
+    if (remove(full.c_str()) == 0) {
+        ESP_LOGI(TAG, "Deleted: %s", full.c_str());
         return ESP_OK;
     }
+    // Không có file cũng OK
+    struct stat st;
+    if (stat(full.c_str(), &st) != 0) return ESP_OK;
 
-    if (SD.remove(normalized.c_str())) {
-        ESP_LOGI(TAG, "Deleted: %s", normalized.c_str());
-        return ESP_OK;
-    } else {
-        ESP_LOGE(TAG, "Failed to delete: %s", normalized.c_str());
-        return ESP_FAIL;
-    }
+    ESP_LOGE(TAG, "Delete fail: %s", full.c_str());
+    return ESP_FAIL;
 }
 
 int32_t fu_file_size(const char* path) {
-    std::string normalized = fu_normalize_path(path);
-
-    if (!SD.exists(normalized.c_str())) {
-        return -1;
-    }
-
-    File file = SD.open(normalized.c_str(), FILE_READ);
-    if (!file) {
-        return -1;
-    }
-
-    int32_t size = file.size();
-    file.close();
-    return size;
+    std::string full = fu_vfs_path(path);
+    struct stat st;
+    if (stat(full.c_str(), &st) != 0 || !S_ISREG(st.st_mode)) return -1;
+    return (int32_t)st.st_size;
 }
 
 // ============================================================
@@ -176,93 +163,74 @@ int32_t fu_file_size(const char* path) {
 // ============================================================
 
 bool fu_dir_exists(const char* path) {
-    std::string normalized = fu_normalize_path(path);
-
-    File dir = SD.open(normalized.c_str());
-    if (!dir) {
-        return false;
-    }
-    bool isDir = dir.isDirectory();
-    dir.close();
-    return isDir;
+    std::string full = fu_vfs_path(path);
+    struct stat st;
+    return (stat(full.c_str(), &st) == 0 && S_ISDIR(st.st_mode));
 }
 
 esp_err_t fu_dir_create(const char* path) {
-    std::string normalized = fu_normalize_path(path);
+    std::string full = fu_vfs_path(path);
 
-    if (fu_dir_exists(normalized.c_str())) {
+    struct stat st;
+    if (stat(full.c_str(), &st) == 0 && S_ISDIR(st.st_mode)) return ESP_OK;
+
+    // Tạo parent trước (đệ quy, dùng full path)
+    std::string parent = fu_get_parent_dir(full.c_str());
+    if (!parent.empty() && parent != USB_DRIVE_MOUNT) {
+        // Kiểm tra cha chưa tồn tại thì tạo (bỏ qua lỗi)
+        struct stat pst;
+        if (stat(parent.c_str(), &pst) != 0) {
+            mkdir(parent.c_str(), 0755);
+        }
+    }
+
+    if (mkdir(full.c_str(), 0755) == 0) {
+        ESP_LOGI(TAG, "Created dir: %s", full.c_str());
         return ESP_OK;
     }
-
-    // Create parent directories first (recursive)
-    std::string parent = fu_get_parent_dir(normalized.c_str());
-    if (!parent.empty() && parent != "/") {
-        fu_dir_create(parent.c_str());
-    }
-
-    if (SD.mkdir(normalized.c_str())) {
-        ESP_LOGI(TAG, "Created dir: %s", normalized.c_str());
-        return ESP_OK;
-    } else {
-        ESP_LOGE(TAG, "Failed to create dir: %s", normalized.c_str());
-        return ESP_FAIL;
-    }
+    ESP_LOGE(TAG, "mkdir fail: %s", full.c_str());
+    return ESP_FAIL;
 }
 
 esp_err_t fu_dir_delete(const char* path) {
-    std::string normalized = fu_normalize_path(path);
+    std::string full = fu_vfs_path(path);
+    struct stat st;
+    if (stat(full.c_str(), &st) != 0) return ESP_OK;
 
-    if (!fu_dir_exists(normalized.c_str())) {
+    if (rmdir(full.c_str()) == 0) {
+        ESP_LOGI(TAG, "Removed dir: %s", full.c_str());
         return ESP_OK;
     }
-
-    if (SD.rmdir(normalized.c_str())) {
-        ESP_LOGI(TAG, "Removed dir: %s", normalized.c_str());
-        return ESP_OK;
-    } else {
-        // Might not be empty
-        ESP_LOGW(TAG, "Could not remove dir (not empty?): %s", normalized.c_str());
-        return ESP_FAIL;
-    }
+    ESP_LOGW(TAG, "rmdir fail (not empty?): %s", full.c_str());
+    return ESP_FAIL;
 }
 
 esp_err_t fu_dir_delete_recursive(const char* path) {
-    std::string normalized = fu_normalize_path(path);
+    std::string full = fu_vfs_path(path);
 
-    File dir = SD.open(normalized.c_str());
-    if (!dir || !dir.isDirectory()) {
-        dir.close();
-        return ESP_OK; // Nothing to delete
-    }
+    DIR* d = opendir(full.c_str());
+    if (!d) return ESP_OK;
 
-    // Collect all files and subdirs
     std::vector<std::string> files;
     std::vector<std::string> subdirs;
 
-    File entry;
-    while ((entry = dir.openNextFile())) {
-        String entryPath = String(normalized.c_str()) + "/" + entry.name();
-        if (entry.isDirectory()) {
-            subdirs.push_back(entryPath.c_str());
-        } else {
-            files.push_back(entryPath.c_str());
+    struct dirent* ent;
+    while ((ent = readdir(d)) != nullptr) {
+        if (strcmp(ent->d_name, ".") == 0 || strcmp(ent->d_name, "..") == 0) continue;
+        std::string child = full + "/" + ent->d_name;
+        struct stat cst;
+        if (stat(child.c_str(), &cst) == 0) {
+            if (S_ISDIR(cst.st_mode)) subdirs.push_back(child);
+            else                       files.push_back(child);
         }
-        entry.close();
     }
-    dir.close();
+    closedir(d);
 
-    // Delete all files first
-    for (const auto& f : files) {
-        fu_file_delete(f.c_str());
-    }
+    for (auto& f : files) remove(f.c_str());
+    for (auto& s : subdirs) fu_dir_delete_recursive(s.c_str());  // Đệ quy
 
-    // Recursively delete subdirs
-    for (const auto& d : subdirs) {
-        fu_dir_delete_recursive(d.c_str());
-    }
-
-    // Now delete the directory itself
-    return fu_dir_delete(normalized.c_str());
+    rmdir(full.c_str());
+    return ESP_OK;
 }
 
 // ============================================================
@@ -271,44 +239,23 @@ esp_err_t fu_dir_delete_recursive(const char* path) {
 
 std::string fu_get_parent_dir(const char* path) {
     std::string p(path);
-
-    // Remove trailing slash
-    while (p.length() > 1 && p.back() == '/') {
-        p.pop_back();
-    }
-
+    while (p.length() > 1 && p.back() == '/') p.pop_back();
     size_t pos = p.rfind('/');
-    if (pos == std::string::npos || pos == 0) {
-        return "";
-    }
+    if (pos == std::string::npos || pos == 0) return "";
     return p.substr(0, pos);
 }
 
 std::string fu_get_filename(const char* path) {
     std::string p(path);
     size_t pos = p.rfind('/');
-    if (pos == std::string::npos) {
-        return p;
-    }
+    if (pos == std::string::npos) return p;
     return p.substr(pos + 1);
 }
 
 std::string fu_normalize_path(const char* path) {
-    if (path == NULL || strlen(path) == 0) {
-        return "/";
-    }
-
+    if (!path || strlen(path) == 0) return "/";
     std::string p(path);
-
-    // Ensure leading slash
-    if (p[0] != '/') {
-        p = "/" + p;
-    }
-
-    // Remove trailing slash (except for root)
-    while (p.length() > 1 && p.back() == '/') {
-        p.pop_back();
-    }
-
+    if (p[0] != '/') p = "/" + p;
+    while (p.length() > 1 && p.back() == '/') p.pop_back();
     return p;
 }

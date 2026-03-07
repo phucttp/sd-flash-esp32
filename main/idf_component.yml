@@ -14,6 +14,7 @@ dependencies:
   #   # `public` flag doesn't have an effect dependencies of the `main` component.
   #   # All dependencies of `main` are public by default.
   #   public: true
-  espressif/esp-serial-flasher: '*'
+  espressif/esp-serial-flasher: '>=1.0.0,<1.11.0'  # v1.11.0 has long-path zip issue on Windows
   espressif/arduino-esp32: '*'
+  # esp_tinyusb: using LOCAL component in components/esp_tinyusb (Kconfig patched for Arduino compat)
   bblanchon/ArduinoJson: '*'

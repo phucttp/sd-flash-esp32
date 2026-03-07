@@ -34,42 +34,9 @@ esp_err_t flasher_begin_session(const std::string& fw_id);
 esp_err_t flasher_write_segment(const std::string& file_path, uint32_t offset, const std::string& md5 = "");
 
 /**
- * @brief Write an encrypted segment to target flash with real-time decryption.
- * @param file_path Path to .enc file on SD card
- * @param offset Flash offset address
- * @param md5 Expected MD5 hash of decrypted data (optional)
- * @return ESP_OK on success
- *
- * @note Reads AES key/IV from /config/aes_key.txt and /config/aes_iv.txt
- */
-esp_err_t flasher_write_segment_encrypted(const std::string& file_path, uint32_t offset, const std::string& md5 = "");
-
-/**
  * @brief Xóa toàn bộ flash của chip Target.
  */
 esp_err_t flasher_chip_erase(void);
-
-// ============================================================
-// AUTO-RETRY API - Quản lý phiên nạp với retry tự động
-// ============================================================
-
-/**
- * @brief Kiểm tra có đang nạp dở không (gọi trong setup sau SD mount).
- * @return true nếu có pending flash cần resume.
- */
-bool flasher_has_pending(void);
-
-/**
- * @brief Lấy fw_id đang nạp dở.
- * @return Pointer đến chuỗi fw_id, hoặc "" nếu không có.
- */
-const char* flasher_get_pending_fw_id(void);
-
-/**
- * @brief Bắt đầu phiên nạp mới (khởi tạo state từ đầu).
- * @param fw_id Firmware ID cần nạp.
- */
-void flasher_start_new_session(const char* fw_id);
 
 // ============================================================
 // SCAN BOOT API - Quét và lưu combo kết nối

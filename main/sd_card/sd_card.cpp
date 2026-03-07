@@ -1,281 +1,323 @@
 /**
  * @file sd_card.cpp
- * @brief Quản lý SD card — đọc/ghi metadata firmware, index, cấu hình và lịch sử nạp.
+ * @brief Quản lý firmware store — quét thư mục trên USB drive nội bộ
  *
  * Chức năng chính:
- *   - Khởi tạo và quản lý kết nối SD card qua SPI
- *   - Đọc và ghi file index.txt (danh sách firmware, thứ tự = thứ tự hiển thị trên OLED)
- *   - Load metadata từng firmware: device_type, version, description, md5, path
- *   - Lưu và nạp lịch sử nạp firmware (/flash_history.txt, tối đa 10 mục)
- *   - Cung cấp dữ liệu cho màn hình OLED: tên hiển thị, mô tả, danh sách ID
+ *   - Quét thư mục gốc /usb: prefix ST_ = STM32, prefix ES_ = ESP32
+ *   - Build metadata và menu từ tên thư mục (không cần index.json)
+ *   - Lưu/load lịch sử nạp firmware (/usb/history.txt)
+ *
+ * Quy ước thư mục trên USB drive:
+ *   ST_<tên>/FW.bin                 → STM32 target
+ *   ES_<tên>/app.bin + boot.bin + part.bin → ESP32 target
  */
 
 // ============================================================
 // INCLUDES
 // ============================================================
-#include "esp_log.h"
 #include "sd_card.h"
-#include "ArduinoJson.h"
-#include <SD.h>
+#include "../usb_drive/usb_drive.h"
+#include "esp_log.h"
+#include <stdio.h>
+#include <string.h>
+#include <sys/stat.h>
+#include <dirent.h>
 #include <vector>
 #include <map>
 
 // ============================================================
-// BIẾN TOÀN CỤC
+// CONSTANTS & GLOBALS
 // ============================================================
-static const char *TAG = "SD_CARD";
-static const char *TAG1 = "SD_METADATA";
-const char *METADATA_FILE_PATH = "/index.txt";
-bool g_is_sd_mounted = false;
+static const char* TAG             = "FW_STORE";
+static const char* HISTORY_PATH    = USB_DRIVE_MOUNT "/history.txt";
+static const int   HISTORY_MAX     = 10;
 
-// Bản đồ lưu trữ metadata firmware
+bool g_is_sd_mounted = false;
 std::map<std::string, firmware_metadata_t> g_firmware_map;
 
-// Vector tĩnh để lưu trữ mảng menu
-static std::vector<std::string> g_displayStrings;
-static std::vector<std::string> g_idStrings;
-static std::vector<const char*> g_menuDisplayItemsPtrs;
-static std::vector<const char*> g_menuFirmwareIDsPtrs;
+// Menu arrays
+static std::vector<std::string>   g_displayStrings;
+static std::vector<std::string>   g_idStrings;
+static std::vector<const char*>   g_menuDisplayPtrs;
+static std::vector<const char*>   g_menuIdPtrs;
 
-// Vector tĩnh cho flash history
-static std::vector<std::string> g_histIdStrings;
-static std::vector<std::string> g_histDisplayStrings;
-static std::vector<const char*> g_histIdPtrs;
-static std::vector<const char*> g_histDisplayPtrs;
-
-static const char* HISTORY_FILE_PATH = "/history.txt";
-static const int   HISTORY_MAX_ENTRIES = 10;
+// History arrays
+static std::vector<std::string>   g_histIdStrings;
+static std::vector<std::string>   g_histDisplayStrings;
+static std::vector<const char*>   g_histIdPtrs;
+static std::vector<const char*>   g_histDisplayPtrs;
 
 // ============================================================
-// HÀM CÔNG KHAI
+// INTERNAL HELPER
 // ============================================================
 
 /**
- * @brief Khởi tạo giao tiếp SD card
- * @param cs_pin Chân CS của SPI
- * @return ESP_OK nếu thành công
+ * Kiểm tra file tồn tại trong VFS (full path)
  */
-esp_err_t sd_mount(int cs_pin) {
-    if (!SD.begin(cs_pin, SPI, 40000000)) { // Thử 40MHz
-        ESP_LOGW(TAG, "Failed to mount at 40MHz, trying 20MHz...");
-        if (!SD.begin(cs_pin, SPI, 20000000)) { // Fallback về 20MHz nếu thất bại
-             ESP_LOGE(TAG, "Card Mount Failed at 20MHz too");
-             g_is_sd_mounted = false;
-             return ESP_FAIL;
+static bool file_exists_full(const char* full_path) {
+    struct stat st;
+    return (stat(full_path, &st) == 0 && S_ISREG(st.st_mode));
+}
+
+/**
+ * Auto-detect ESP32 firmware files bằng magic bytes + size.
+ *   Partition table: magic 0xAA50 ở offset 0
+ *   Bootloader:      magic 0xE9 + size < 64KB
+ *   Application:     magic 0xE9 + size >= 64KB
+ *
+ * @param dir_full  Full path tới folder (e.g., "/usb/ES_MyFW")
+ * @param rel_dir   Relative folder name (e.g., "ES_MyFW")
+ * @param meta      Output metadata — path, path_bootloader, path_partition
+ * @return true nếu tìm được ít nhất app file
+ */
+#define ESP_IMG_MAGIC   0xE9
+#define PART_MAGIC_0    0xAA
+#define PART_MAGIC_1    0x50
+#define BOOT_SIZE_LIMIT 65536  // 64KB — bootloader luôn < 40KB, app luôn > 100KB
+
+static bool detect_esp32_files(const char* dir_full, const char* rel_dir,
+                                firmware_metadata_t& meta) {
+    DIR* d = opendir(dir_full);
+    if (!d) return false;
+
+    meta.path.clear();
+    meta.path_bootloader.clear();
+    meta.path_partition.clear();
+
+    struct dirent* ent;
+    while ((ent = readdir(d)) != nullptr) {
+        if (ent->d_type == DT_DIR) continue;
+
+        // Chỉ xét file .bin
+        const char* name = ent->d_name;
+        size_t nlen = strlen(name);
+        if (nlen < 5 || strcasecmp(name + nlen - 4, ".bin") != 0) continue;
+
+        // Lấy size
+        char fpath[300];
+        snprintf(fpath, sizeof(fpath), "%s/%s", dir_full, name);
+        struct stat st;
+        if (stat(fpath, &st) != 0 || !S_ISREG(st.st_mode)) continue;
+        size_t fsize = (size_t)st.st_size;
+        if (fsize < 4) continue;  // Quá nhỏ
+
+        // Đọc 2 bytes đầu
+        FILE* f = fopen(fpath, "rb");
+        if (!f) continue;
+        uint8_t hdr[2] = {0};
+        fread(hdr, 1, 2, f);
+        fclose(f);
+
+        // Relative path cho metadata
+        char rel_path[300];
+        snprintf(rel_path, sizeof(rel_path), "/%s/%s", rel_dir, name);
+
+        if (hdr[0] == PART_MAGIC_0 && hdr[1] == PART_MAGIC_1) {
+            // Partition table
+            meta.path_partition = rel_path;
+            ESP_LOGI(TAG, "  [PART] %s (%zu bytes)", name, fsize);
+        } else if (hdr[0] == ESP_IMG_MAGIC) {
+            if (fsize < BOOT_SIZE_LIMIT) {
+                // Bootloader (ESP image nhỏ)
+                meta.path_bootloader = rel_path;
+                ESP_LOGI(TAG, "  [BOOT] %s (%zu bytes)", name, fsize);
+            } else {
+                // Application (ESP image lớn)
+                meta.path = rel_path;
+                ESP_LOGI(TAG, "  [APP]  %s (%zu bytes)", name, fsize);
+            }
+        } else {
+            ESP_LOGD(TAG, "  [SKIP] %s (magic=0x%02X%02X)", name, hdr[0], hdr[1]);
         }
     }
+    closedir(d);
 
-    ESP_LOGI(TAG, "SD initialized OK!");
-    g_is_sd_mounted = true;
-    return ESP_OK;
+    if (meta.path.empty()) {
+        ESP_LOGW(TAG, "No app binary found in %s", rel_dir);
+        return false;
+    }
+    if (meta.path_bootloader.empty()) {
+        ESP_LOGW(TAG, "No bootloader found in %s — app-only flash", rel_dir);
+    }
+    if (meta.path_partition.empty()) {
+        ESP_LOGW(TAG, "No partition table found in %s — app-only flash", rel_dir);
+    }
+
+    return true;
 }
 
+// ============================================================
+// PUBLIC API: MOUNT
+// ============================================================
+
 /**
- * @brief Giải phóng tài nguyên SD card
+ * sd_mount: không cần cs_pin nữa — USB drive đã được init bởi usb_drive_init().
+ * Hàm này chỉ xác nhận drive đã sẵn sàng.
  */
-esp_err_t sd_unmount() {
-    SD.end();
-    ESP_LOGI(TAG, "SD Unmounted");
+esp_err_t sd_mount(int cs_pin) {
+    (void)cs_pin;  // Không dùng — USB drive không có SPI CS
+    if (!usb_drive_is_ready()) {
+        ESP_LOGE(TAG, "USB drive not ready");
+        g_is_sd_mounted = false;
+        return ESP_FAIL;
+    }
+    g_is_sd_mounted = true;
+    ESP_LOGI(TAG, "Firmware store ready at %s", USB_DRIVE_MOUNT);
     return ESP_OK;
 }
 
+esp_err_t sd_unmount() {
+    g_is_sd_mounted = false;
+    return ESP_OK;
+}
+
+// ============================================================
+// PUBLIC API: LOAD METADATA (folder scan)
+// ============================================================
+
 /**
- * @brief Đọc metadata firmware từ index.txt trên SD card
+ * Quét thư mục gốc USB drive — mỗi subfolder là 1 firmware entry
+ *
+ * Prefix quy ước:
+ *   ST_ → STM32 (FW.bin bên trong)
+ *   ES_ → ESP32 (app.bin + boot.bin + part.bin)
  */
 esp_err_t sd_load_metadata() {
-    // Kiểm tra SD đã mount chưa
     if (!g_is_sd_mounted) {
-        ESP_LOGE(TAG1, "SD Card not mounted");
+        ESP_LOGE(TAG, "Drive not mounted");
         return ESP_FAIL;
     }
 
-    // [FIX] Xóa menu cũ ngay từ đầu
+    // Clear dữ liệu cũ
     g_firmware_map.clear();
     g_displayStrings.clear();
     g_idStrings.clear();
-    g_menuDisplayItemsPtrs.clear();
-    g_menuFirmwareIDsPtrs.clear();
+    g_menuDisplayPtrs.clear();
+    g_menuIdPtrs.clear();
 
-    //2. Mở file INDEX.JSON từ thẻ SD
-    File metadataFile = SD.open(METADATA_FILE_PATH, FILE_READ);
-
-    // [FIX] Nếu file không tồn tại -> Tạo file mới với JSON rỗng
-    if (!metadataFile) {
-        ESP_LOGW(TAG1, "Index file not found, creating empty one...");
-        File newFile = SD.open(METADATA_FILE_PATH, FILE_WRITE);
-        if (newFile) {
-            newFile.print("[]"); // JSON array rỗng
-            newFile.close();
-            ESP_LOGI(TAG1, "Created empty index file: %s", METADATA_FILE_PATH);
-        }
-        // Tiếp tục chạy với firmware_map rỗng
-        goto build_menu_pointers;
+    DIR* root = opendir(USB_DRIVE_MOUNT);
+    if (!root) {
+        ESP_LOGE(TAG, "Cannot open %s", USB_DRIVE_MOUNT);
+        goto build_menu;
     }
 
-    // 3. Phân tích cú pháp JSON
     {
-        // Cấp phát bộ nhớ động cho bộ đệm JSON
-        const size_t JSON_BUFFER_SIZE = 20 * 1024; // 20KB
-        DynamicJsonDocument doc(JSON_BUFFER_SIZE);
-        DeserializationError error = deserializeJson(doc, metadataFile);
-        metadataFile.close();
+        int idx = 1;
+        struct dirent* ent;
+        while ((ent = readdir(root)) != nullptr) {
+            if (ent->d_type != DT_DIR) continue;
 
-        if (error) {
-            ESP_LOGE(TAG1, "Failed to parse metadata JSON: %s", error.c_str());
-            // [FIX] Parse lỗi -> vẫn tiếp tục với menu rỗng
-            goto build_menu_pointers;
-        }
+            const char* name = ent->d_name;
+            if (name[0] == '.') continue;  // Bỏ qua . và ..
 
-        // 4. Lưu trữ metadata vào bản đồ trong RAM
-        JsonArray root = doc.as<JsonArray>();
+            bool is_stm32 = (strncmp(name, "ST_", 3) == 0);
+            bool is_esp32 = (strncmp(name, "ES_", 3) == 0);
 
-        int i = 1;
-        for (JsonObject firmware_obj : root) {
-            const char* fw_id = firmware_obj["fw_id"];
-            if(!fw_id){
-                ESP_LOGW(TAG1, "Firmware entry without fw_id, skipping");
+            if (!is_stm32 && !is_esp32) {
+                ESP_LOGD(TAG, "Skipping unknown prefix: %s", name);
                 continue;
             }
-            firmware_metadata_t metadata = {
-                .device_type = firmware_obj["device_type"] | "",
-                .version = firmware_obj["version"] | "",
-                .path = firmware_obj["path"] | "",
-                .md5 = firmware_obj["md5"] | "",
-                .path_bootloader = firmware_obj["path_bootloader"] | "",
-                .md5_bootloader = firmware_obj["md5_bootloader"] | "",
-                .path_partition = firmware_obj["path_partition"] | "",
-                .md5_partition = firmware_obj["md5_partition"] | "",
-                .encrypted = firmware_obj["encrypted"] | false
-            };
-            g_firmware_map[fw_id] = metadata;
-            // Đồng thời tạo menu
-            std::string displayName = std::to_string(i) + ". " + metadata.device_type + " " + metadata.version;
-            g_displayStrings.push_back(displayName); // Lưu chuỗi
-            g_idStrings.push_back(fw_id);            // Lưu ID
-            i++;
-            ESP_LOGD(TAG1, "Tải FW: %s (Path: %s)", fw_id, metadata.path.c_str());
+
+            // Build đường dẫn base
+            std::string base = std::string(USB_DRIVE_MOUNT) + "/" + name;
+            firmware_metadata_t meta = {};
+            meta.encrypted = false;
+
+            if (is_stm32) {
+                meta.device_type = "STM32";
+                // Scan folder tìm file .bin đầu tiên (đặt tên gì cũng được)
+                DIR* stdir = opendir(base.c_str());
+                bool found_bin = false;
+                if (stdir) {
+                    struct dirent* stent;
+                    while ((stent = readdir(stdir)) != NULL) {
+                        if (stent->d_type != DT_REG) continue;
+                        const char* dot = strrchr(stent->d_name, '.');
+                        if (dot && strcasecmp(dot, ".bin") == 0) {
+                            meta.path = std::string("/") + name + "/" + stent->d_name;
+                            ESP_LOGI(TAG, "ST_ found: %s", meta.path.c_str());
+                            found_bin = true;
+                            break;
+                        }
+                    }
+                    closedir(stdir);
+                }
+                if (!found_bin) {
+                    ESP_LOGW(TAG, "ST_ folder has no .bin file: %s", name);
+                    continue;
+                }
+            } else {
+                meta.device_type = "ESP32";
+                ESP_LOGI(TAG, "Scanning ESP32 folder: %s", name);
+                if (!detect_esp32_files(base.c_str(), name, meta)) {
+                    ESP_LOGW(TAG, "ES_ folder has no valid app binary: %s", name);
+                    continue;
+                }
+            }
+
+            // Tên folder = fw_id = display name
+            std::string fw_id      = name;
+            std::string displayName = std::to_string(idx++) + ". " + name;
+
+            g_firmware_map[fw_id]  = meta;
+            g_displayStrings.push_back(displayName);
+            g_idStrings.push_back(fw_id);
+
+            ESP_LOGI(TAG, "Found: %s [%s]", name, meta.device_type.c_str());
         }
+        closedir(root);
     }
 
-build_menu_pointers:
-    // Tạo mảng con trỏ cho menu UI
-    {
-        // Tạo mảng con trỏ từ firmware list
-        for (const auto& s : g_displayStrings) {
-            g_menuDisplayItemsPtrs.push_back(s.c_str());
-        }
-        for (const auto& s : g_idStrings) {
-            g_menuFirmwareIDsPtrs.push_back(s.c_str());
-        }
+build_menu:
+    for (const auto& s : g_displayStrings) g_menuDisplayPtrs.push_back(s.c_str());
+    for (const auto& s : g_idStrings)      g_menuIdPtrs.push_back(s.c_str());
 
-        // Nếu không có firmware nào, thêm placeholder
-        if (g_displayStrings.empty()) {
-            g_displayStrings.push_back("(No Firmware)");
-            g_idStrings.push_back("NO_FW");
-            g_menuDisplayItemsPtrs.push_back(g_displayStrings.back().c_str());
-            g_menuFirmwareIDsPtrs.push_back(g_idStrings.back().c_str());
-        }
+    if (g_displayStrings.empty()) {
+        g_displayStrings.push_back("(No Firmware)");
+        g_idStrings.push_back("NO_FW");
+        g_menuDisplayPtrs.push_back(g_displayStrings.back().c_str());
+        g_menuIdPtrs.push_back(g_idStrings.back().c_str());
     }
 
-    ESP_LOGI(TAG, "Tải Metadata hoàn tất. Tổng cộng %d firmware được tải.", g_firmware_map.size());
+    ESP_LOGI(TAG, "Metadata loaded: %d firmware entries", (int)g_firmware_map.size());
     return ESP_OK;
 }
 
-/**
- * @brief Lấy metadata của firmware theo fw_id
- * @param fw_id ID của firmware cần tìm
- * @param out_metadata Output metadata
- * @return ESP_OK nếu tìm thấy
- */
-esp_err_t sd_get_firmware_path(const std::string& fw_id, firmware_metadata_t& out_metadata) {
-    // Kiểm tra SD đã mount chưa
-    if (!g_is_sd_mounted) {
-        ESP_LOGE(TAG1, "SD Card not mounted");
-        return ESP_FAIL;
-    }
+// ============================================================
+// PUBLIC API: FIRMWARE INFO
+// ============================================================
 
-    // Tìm kiếm fw_id trong bản đồ metadata
+esp_err_t sd_get_firmware_path(const std::string& fw_id, firmware_metadata_t& out_meta) {
     auto it = g_firmware_map.find(fw_id);
     if (it == g_firmware_map.end()) {
-        ESP_LOGE(TAG1, "Firmware ID %s not found in metadata", fw_id.c_str());
+        ESP_LOGE(TAG, "FW not found: %s", fw_id.c_str());
         return ESP_ERR_NOT_FOUND;
     }
-
-    // Lấy path firmware
-    out_metadata = it->second;
-    ESP_LOGI(TAG1, "Firmware ID %s found: Path=%s, Version=%s",
-             fw_id.c_str(), out_metadata.path.c_str(), out_metadata.version.c_str());
+    out_meta = it->second;
     return ESP_OK;
 }
 
-// ============================================================
-// HÀM LẤY MENU
-// ============================================================
-
-/**
- * @brief Lấy danh sách hiển thị menu firmware
- * @param out_count Số lượng item
- * @return Mảng con trỏ đến tên hiển thị
- */
 const char** sd_get_menu_display_items(int& out_count) {
-    out_count = g_menuDisplayItemsPtrs.size();
-    return g_menuDisplayItemsPtrs.data();
+    out_count = (int)g_menuDisplayPtrs.size();
+    return g_menuDisplayPtrs.data();
 }
 
-/**
- * @brief Lấy danh sách fw_id tương ứng với menu
- * @return Mảng con trỏ đến fw_id
- */
 const char** sd_get_menu_id_items() {
-    return g_menuFirmwareIDsPtrs.data();
+    return g_menuIdPtrs.data();
 }
 
-// ============================================================
-// HÀM LẤY DESCRIPTION (LAZY LOAD)
-// ============================================================
-
 /**
- * @brief Đọc description của firmware từ file index.txt (không lưu RAM)
- * @param fw_id ID của firmware cần lấy description
- * @return String chứa description, rỗng nếu không tìm thấy
+ * Description: dùng device_type + fw_id (folder name) làm mô tả ngắn
  */
 String sd_get_description(const char* fw_id) {
-    if (!g_is_sd_mounted || !fw_id) return "";
-
-    File f = SD.open(METADATA_FILE_PATH, FILE_READ);
-    if (!f) {
-        ESP_LOGW(TAG1, "Cannot open index file for description");
-        return "";
-    }
-
-    // Buffer nhỏ, chỉ đủ parse 1 lần
-    DynamicJsonDocument doc(8 * 1024);
-    DeserializationError err = deserializeJson(doc, f);
-    f.close();
-
-    if (err) {
-        ESP_LOGE(TAG1, "JSON parse error: %s", err.c_str());
-        return "";
-    }
-
-    // Tìm firmware theo fw_id
-    for (JsonObject obj : doc.as<JsonArray>()) {
-        const char* id = obj["fw_id"];
-        if (id && strcmp(id, fw_id) == 0) {
-            // Ưu tiên root level, fallback sang cloud_source
-            const char* desc = obj["description"];
-            if (!desc || strlen(desc) == 0) {
-                desc = obj["cloud_source"]["description"];
-            }
-            return desc ? String(desc) : "";
-        }
-    }
-
-    return "";
+    if (!fw_id) return "";
+    auto it = g_firmware_map.find(fw_id);
+    if (it == g_firmware_map.end()) return String(fw_id);
+    return String(it->second.device_type.c_str()) + " — " + String(fw_id);
 }
 
 // ============================================================
-// FLASH HISTORY
+// PUBLIC API: FLASH HISTORY (POSIX)
 // ============================================================
 
 void sd_history_add(const char* fw_id) {
@@ -283,34 +325,36 @@ void sd_history_add(const char* fw_id) {
 
     // Đọc entries hiện có
     std::vector<std::string> entries;
-    File f = SD.open(HISTORY_FILE_PATH, FILE_READ);
+    FILE* f = fopen(HISTORY_PATH, "r");
     if (f) {
-        while (f.available()) {
-            String line = f.readStringUntil('\n');
-            line.trim();
-            if (line.length() > 0) entries.push_back(line.c_str());
+        char line[64];
+        while (fgets(line, sizeof(line), f)) {
+            // Trim newline
+            size_t len = strlen(line);
+            while (len > 0 && (line[len-1] == '\n' || line[len-1] == '\r')) line[--len] = '\0';
+            if (len > 0) entries.push_back(line);
         }
-        f.close();
+        fclose(f);
     }
 
-    // Append entry mới
     entries.push_back(fw_id);
 
-    // Giữ tối đa HISTORY_MAX_ENTRIES (trim cũ nhất)
-    if ((int)entries.size() > HISTORY_MAX_ENTRIES) {
+    // Giữ tối đa HISTORY_MAX entries (xóa cũ nhất)
+    if ((int)entries.size() > HISTORY_MAX) {
         entries.erase(entries.begin(),
-                      entries.begin() + (entries.size() - HISTORY_MAX_ENTRIES));
+                      entries.begin() + (int)(entries.size() - HISTORY_MAX));
     }
 
-    // Ghi lại file
-    SD.remove(HISTORY_FILE_PATH);
-    f = SD.open(HISTORY_FILE_PATH, FILE_WRITE);
+    f = fopen(HISTORY_PATH, "w");
     if (f) {
-        for (auto& e : entries) f.println(e.c_str());
-        f.close();
-        ESP_LOGI(TAG, "History: added '%s' (%d entries)", fw_id, (int)entries.size());
+        for (auto& e : entries) {
+            fputs(e.c_str(), f);
+            fputc('\n', f);
+        }
+        fclose(f);
+        ESP_LOGI(TAG, "History: saved '%s' (%d entries)", fw_id, (int)entries.size());
     } else {
-        ESP_LOGE(TAG, "History: cannot write %s", HISTORY_FILE_PATH);
+        ESP_LOGE(TAG, "History: write failed");
     }
 }
 
@@ -322,38 +366,36 @@ void sd_history_load() {
 
     if (!g_is_sd_mounted) return;
 
-    // Đọc tất cả entries từ file
     std::vector<std::string> entries;
-    File f = SD.open(HISTORY_FILE_PATH, FILE_READ);
+    FILE* f = fopen(HISTORY_PATH, "r");
     if (f) {
-        while (f.available()) {
-            String line = f.readStringUntil('\n');
-            line.trim();
-            if (line.length() > 0) entries.push_back(line.c_str());
+        char line[64];
+        while (fgets(line, sizeof(line), f)) {
+            size_t len = strlen(line);
+            while (len > 0 && (line[len-1] == '\n' || line[len-1] == '\r')) line[--len] = '\0';
+            if (len > 0) entries.push_back(line);
         }
-        f.close();
+        fclose(f);
     }
 
     if (entries.empty()) return;
 
-    // Build display strings, most recent (cuối file) = #1
     int count = (int)entries.size();
     for (int i = 0; i < count; i++) {
-        const std::string& fw_id = entries[count - 1 - i];  // Đảo ngược: mới nhất trước
+        const std::string& fw_id = entries[count - 1 - i];  // Mới nhất trước
         g_histIdStrings.push_back(fw_id);
 
-        char disp[24];
+        char disp[32];
         auto it = g_firmware_map.find(fw_id);
         if (it != g_firmware_map.end()) {
-            snprintf(disp, sizeof(disp), "#%d %s v%s",
-                     i + 1, it->second.device_type.c_str(), it->second.version.c_str());
+            snprintf(disp, sizeof(disp), "#%d %s", i + 1, fw_id.c_str());
         } else {
             snprintf(disp, sizeof(disp), "#%d %s", i + 1, fw_id.c_str());
         }
         g_histDisplayStrings.push_back(disp);
     }
 
-    for (auto& s : g_histIdStrings)     g_histIdPtrs.push_back(s.c_str());
+    for (auto& s : g_histIdStrings)      g_histIdPtrs.push_back(s.c_str());
     for (auto& s : g_histDisplayStrings) g_histDisplayPtrs.push_back(s.c_str());
 
     ESP_LOGI(TAG, "History loaded: %d entries", count);

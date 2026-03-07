@@ -9,34 +9,7 @@
 #define __FLASHER_COMMON_H__
 
 #include "esp_err.h"
-#include "driver/gpio.h"
-
-// ============================================================
-// SHARED PIN DEFINITIONS
-// ============================================================
-// Các chân này được dùng chung (dual-purpose) giữa 2 mode:
-//   - ESP32 UART mode: TX/RX + RESET/BOOT triggers
-//   - STM32 SWD mode:  SWDIO/SWCLK + nRESET
-
-#define FLASH_PIN_0     GPIO_NUM_0   // ESP: UART TX      | SWD: SWDIO
-#define FLASH_PIN_1     GPIO_NUM_1   // ESP: UART RX      | SWD: (free)
-#define FLASH_PIN_2     GPIO_NUM_2   // ESP: RESET trigger | SWD: (free)
-#define FLASH_PIN_3     GPIO_NUM_3   // ESP: BOOT trigger  | SWD: SWCLK
-
-// ============================================================
-// ESP32 UART MODE PIN ALIASES
-// ============================================================
-#define FLASH_UART_TX_PIN      FLASH_PIN_0
-#define FLASH_UART_RX_PIN      FLASH_PIN_1
-#define FLASH_RESET_PIN        FLASH_PIN_2
-#define FLASH_BOOT_PIN         FLASH_PIN_3
-
-// ============================================================
-// STM32 SWD MODE PIN ALIASES
-// ============================================================
-#define SWD_SWDIO_PIN          FLASH_PIN_0           // GPIO0 (avoid GPIO2 = FSPIQ default)
-#define SWD_SWCLK_PIN          FLASH_PIN_3
-#define SWD_NRESET_PIN         (-1)                  // Không nối, dùng nút reset vật lý trên mạch
+#include "../pin_config.h"   // All pin definitions centralized here
 
 // ============================================================
 // COMMON CONSTANTS

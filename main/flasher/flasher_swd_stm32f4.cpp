@@ -19,8 +19,9 @@
 #include "freertos/task.h"
 #include "Adafruit_DAP.h"
 #include "Arduino.h"
-#include "FS.h"
-#include "SD.h"
+#include <stdio.h>
+#include <sys/stat.h>
+#include "../usb_drive/usb_drive.h"
 
 static const char *TAG = "SWD";
 
@@ -113,47 +114,46 @@ static esp_err_t connect_target(uint32_t *idcode) {
  * Hàm này quan trọng để xác định xem chip là loại nào (F1/F4/G0) và có bị khóa RDP không.
  */
 static esp_err_t full_connect(uint32_t *idcode, uint32_t *chip_id) {
-    // 1. Thiết lập kết nối vật lý SWD (Physical Layer)
-    // Nếu fail ở đây -> Kiểm tra dây nối/nguồn.
-    esp_err_t ret = connect_target(idcode);
-    if (ret != ESP_OK) return ret;
+    #define SELECT_MAX_RETRIES 5
 
-    // 2. Halt Core ngay lập tức
-    // -> Ngăn CPU chạy code ứng dụng (có thể gây nhiễu hoặc sleep làm mất kết nối).
-    halt_core();
+    for (int attempt = 1; attempt <= SELECT_MAX_RETRIES; attempt++) {
+        // 1. Thiết lập kết nối vật lý SWD (Physical Layer)
+        esp_err_t ret = connect_target(idcode);
+        if (ret != ESP_OK) return ret;
 
-    // 3. Nhận diện dòng chip (Select Target)
-    // Đọc DBGMCU_IDCODE (VD: 0x410 cho F103) để xác định loại chip và Flash/RAM size.
-    *chip_id = 0;
-    if (!dap.select(chip_id)) {
-        ESP_LOGW(TAG, "select() failed (ID: 0x%03" PRIx32 "), retrying...", *chip_id);
+        // 2. Clear DP sticky errors (STKERR, WDERR, ORUNERR)
+        // Nguồn nhiễu có thể gây AHB-AP error → sticky bit chặn mọi transaction sau
+        dap.dap_write_reg(0x00, 0x0000001E);
 
-        // Retry strategy: Halt lại lần nữa rồi thử đọc lại.
-        // Hữu ích với các chip vừa thức dậy từ Sleep hoặc reset chưa ổn định.
+        // 3. Halt Core → chờ AHB-AP ổn định
         halt_core();
+        vTaskDelay(pdMS_TO_TICKS(50));
+
+        // 4. Nhận diện dòng chip (Select Target)
         *chip_id = 0;
-        if (!dap.select(chip_id)) {
-            ESP_LOGE(TAG, "Chip not recognized (ID: 0x%03" PRIx32 ")", *chip_id);
-            dap.dap_disconnect();
-            return ESP_FAIL;
+        if (dap.select(chip_id)) {
+            halt_core();
+            uint32_t flash_kb = dap.target_device.flash_size / 1024;
+            if (flash_kb == 0) {
+                ESP_LOGI(TAG, "Chip: %s | ID: 0x%03" PRIx32 " | Flash: unknown (RDP blocking reads?)",
+                         dap.target_device.name, *chip_id);
+            } else {
+                ESP_LOGI(TAG, "Chip: %s | ID: 0x%03" PRIx32 " | Flash: %" PRIu32 " KB",
+                         dap.target_device.name, *chip_id, flash_kb);
+            }
+            return ESP_OK;
         }
+
+        ESP_LOGW(TAG, "select() failed (ID: 0x%03" PRIx32 "), attempt %d/%d",
+                 *chip_id, attempt, SELECT_MAX_RETRIES);
+
+        // Full disconnect + delay → reconnect từ đầu (reset AHB-AP state)
+        dap.dap_disconnect();
+        vTaskDelay(pdMS_TO_TICKS(200));
     }
 
-    // Đảm bảo CPU vẫn đang dừng sau quá trình nhận diện
-    halt_core();
-
-    // 4. Phân tích trạng thái qua Flash Size (Insight quan trọng):
-    // - Flash Size đọc được: AHB-AP hoạt động tốt -> Chip KHÔNG bị khóa (RDP L0).
-    // - Flash Size == 0: AHB-AP bị chặn -> Khả năng cao là RDP Level 1 (Read Protected).
-    uint32_t flash_kb = dap.target_device.flash_size / 1024;
-    if (flash_kb == 0) {
-        ESP_LOGI(TAG, "Chip: %s | ID: 0x%03" PRIx32 " | Flash: unknown (RDP blocking reads?)",
-                 dap.target_device.name, *chip_id);
-    } else {
-        ESP_LOGI(TAG, "Chip: %s | ID: 0x%03" PRIx32 " | Flash: %" PRIu32 " KB",
-                 dap.target_device.name, *chip_id, flash_kb);
-    }
-    return ESP_OK;
+    ESP_LOGE(TAG, "Chip not recognized after %d attempts", SELECT_MAX_RETRIES);
+    return ESP_FAIL;
 }
 
 /**
@@ -698,21 +698,22 @@ esp_err_t flasher_swd_stm32f4_flash_firmware(const std::string& fw_path,
     progress("Reading SD...", 1);
     ESP_LOGI(TAG, "[1/5] Opening firmware file...");
 
-    // Mở file firmware từ SD card (read-only mode)
-    // FILE_READ = Arduino SD flag, tương đương O_RDONLY trong POSIX
-    File fwFile = SD.open(fw_path.c_str(), FILE_READ);
+    // Mở file firmware từ VFS POSIX (/usb mount point)
+    std::string fw_full_path = std::string(USB_DRIVE_MOUNT) + fw_path;
+    FILE* fwFile = fopen(fw_full_path.c_str(), "rb");
     if (!fwFile) {
-        ESP_LOGE(TAG, "FAIL: Cannot open %s", fw_path.c_str());
+        ESP_LOGE(TAG, "FAIL: Cannot open %s", fw_full_path.c_str());
         progress("File not found!", 0);
         return ESP_ERR_NOT_FOUND;
     }
 
-    // Đọc kích thước file từ SD card metadata (FAT table)
-    // Không cần đọc toàn bộ file → nhanh
-    size_t file_size = fwFile.size();
+    // Đọc kích thước file qua stat
+    struct stat fw_st;
+    stat(fw_full_path.c_str(), &fw_st);
+    size_t file_size = (size_t)fw_st.st_size;
     if (file_size == 0) {
         ESP_LOGE(TAG, "FAIL: File is empty!");
-        fwFile.close();
+        fclose(fwFile);
         progress("File empty!", 0);
         return ESP_FAIL;
     }
@@ -743,14 +744,14 @@ esp_err_t flasher_swd_stm32f4_flash_firmware(const std::string& fw_path,
         // SD.read() có thể trả về ít hơn số byte yêu cầu → cần loop đến hết
         size_t total_read = 0;
         while (total_read < file_size) {
-            size_t n = fwFile.read(fw_buf + total_read, file_size - total_read);
+            size_t n = fread(fw_buf + total_read, 1, file_size - total_read, fwFile);
             if (n == 0) break;  // EOF hoặc SD error
             total_read += n;
         }
 
         // Đóng file NGAY sau khi đọc xong → giải phóng SPI bus
         // Từ đây trở đi không cần SD card nữa → nạp từ RAM
-        fwFile.close();
+        fclose(fwFile);
 
         // Validate: Đảm bảo đọc đủ số byte
         // Nếu thiếu → có thể SD card lỗi, file corrupt, hoặc unmount giữa chừng
@@ -775,7 +776,7 @@ esp_err_t flasher_swd_stm32f4_flash_firmware(const std::string& fw_path,
             // Nếu thậm chí 32KB cũng không cấp phát được
             // → Hệ thống đang quá ít RAM (có thể memory leak)
             ESP_LOGE(TAG, "FAIL: Cannot allocate even %d bytes", SWD_SEGMENT_SIZE);
-            fwFile.close();
+            fclose(fwFile);
             progress("Out of memory!", 0);
             return ESP_ERR_NO_MEM;
         }
@@ -830,7 +831,7 @@ esp_err_t flasher_swd_stm32f4_flash_firmware(const std::string& fw_path,
         // Không kết nối được SWD → kiểm tra wiring, nguồn, target power
         ESP_LOGE(TAG, "FAIL: Cannot connect to STM32");
         progress("Connect fail!", 0);
-        if (streaming) fwFile.close();
+        if (streaming) fclose(fwFile);
         free(fw_buf);
         return ret;
     }
@@ -841,7 +842,7 @@ esp_err_t flasher_swd_stm32f4_flash_firmware(const std::string& fw_path,
         ESP_LOGE(TAG, "FAIL: RDP Level %d — chip is protected!", rdp_level);
         ESP_LOGE(TAG, "      Run 'Erase STM32' to unlock first.");
         progress("RDP locked!", 0);
-        if (streaming) fwFile.close();
+        if (streaming) fclose(fwFile);
         free(fw_buf);
         return ESP_ERR_INVALID_STATE;
     }
@@ -869,7 +870,7 @@ esp_err_t flasher_swd_stm32f4_flash_firmware(const std::string& fw_path,
     if (ret != ESP_OK) {
         // Init SWD interface fail → có thể GPIO conflict hoặc DAP object corrupt
         progress("SWD init fail!", 0);
-        if (streaming) fwFile.close();
+        if (streaming) fclose(fwFile);
         free(fw_buf);
         return ret;
     }
@@ -882,7 +883,7 @@ esp_err_t flasher_swd_stm32f4_flash_firmware(const std::string& fw_path,
         ESP_LOGE(TAG, "FAIL: Reconnect failed");
         progress("Connect fail!", 0);
         flasher_swd_stm32f4_deinit();
-        if (streaming) fwFile.close();
+        if (streaming) fclose(fwFile);
         free(fw_buf);
         return ret;
     }
@@ -903,7 +904,7 @@ esp_err_t flasher_swd_stm32f4_flash_firmware(const std::string& fw_path,
             progress("FW too large!", 0);
             full_disconnect();
             flasher_swd_stm32f4_deinit();
-            if (streaming) fwFile.close();
+            if (streaming) fclose(fwFile);
             free(fw_buf);
             return ESP_FAIL;
         }
@@ -924,7 +925,7 @@ esp_err_t flasher_swd_stm32f4_flash_firmware(const std::string& fw_path,
         ESP_LOGE(TAG, "FAIL: Cannot allocate verify buffer");
         full_disconnect();
         flasher_swd_stm32f4_deinit();
-        if (streaming) fwFile.close();
+        if (streaming) fclose(fwFile);
         free(fw_buf);
         return ESP_ERR_NO_MEM;
     }
@@ -1001,7 +1002,7 @@ esp_err_t flasher_swd_stm32f4_flash_firmware(const std::string& fw_path,
             if (ret != ESP_OK) {
                 // Init fail → không thể retry nữa, cleanup + return
                 free(verify_buf);
-                if (streaming) fwFile.close();
+                if (streaming) fclose(fwFile);
                 free(fw_buf);
                 return ret;
             }
@@ -1011,7 +1012,7 @@ esp_err_t flasher_swd_stm32f4_flash_firmware(const std::string& fw_path,
                 // Reconnect fail → không thể retry, cleanup + return
                 flasher_swd_stm32f4_deinit();
                 free(verify_buf);
-                if (streaming) fwFile.close();
+                if (streaming) fclose(fwFile);
                 free(fw_buf);
                 return ret;
             }
@@ -1022,8 +1023,8 @@ esp_err_t flasher_swd_stm32f4_flash_firmware(const std::string& fw_path,
             // - Đôi khi seek(0) OK nhưng read() tiếp theo return 0 (EOF sticky)
             // - Close + reopen đảm bảo file state reset hoàn toàn
             if (streaming) {
-                fwFile.close();
-                fwFile = SD.open(fw_path.c_str(), FILE_READ);
+                fclose(fwFile);
+                fwFile = fopen(fw_full_path.c_str(), "rb");
                 if (!fwFile) {
                     // Không mở lại được file → có thể SD unmount, file bị xóa
                     ESP_LOGE(TAG, "FAIL: Cannot reopen file for retry");
@@ -1101,7 +1102,7 @@ esp_err_t flasher_swd_stm32f4_flash_firmware(const std::string& fw_path,
                 }
                 size_t nread = 0;
                 while (nread < to_read) {
-                    size_t n = fwFile.read(fw_buf + nread, to_read - nread);
+                    size_t n = fread(fw_buf + nread, 1, to_read - nread, fwFile);
                     if (n == 0) break;
                     nread += n;
                 }
@@ -1199,7 +1200,7 @@ esp_err_t flasher_swd_stm32f4_flash_firmware(const std::string& fw_path,
     }
 
     free(verify_buf);
-    if (streaming) fwFile.close();
+    if (streaming) fclose(fwFile);
 
     if (!flash_ok) {
         ESP_LOGE(TAG, "========================================");

@@ -37,9 +37,7 @@
 #include "Arduino.h"
 
 #if defined(ARDUINO_ARCH_ESP32)
-#include "soc/gpio_struct.h"
-#include "soc/io_mux_reg.h"
-#include "soc/gpio_periph.h"
+#include "driver/gpio.h"
 #endif
 
 static inline void DAP_CONFIG_SWCLK_TCK_clr(void);
@@ -143,7 +141,7 @@ static inline int DAP_CONFIG_SWCLK_TCK_read(void) {
 #elif defined(TEENSYDUINO)
   return (*SWCLK_PORT_INPUT_REG & SWCLK_BITMASK) ? 1 : 0;
 #elif defined(ARDUINO_ARCH_ESP32)
-  return (GPIO.in.val >> DAP_CONFIG_SWCLK_PIN) & 1;
+  return gpio_get_level((gpio_num_t)DAP_CONFIG_SWCLK_PIN);
 #else
   return digitalRead(DAP_CONFIG_SWCLK_PIN);
 #endif
@@ -156,7 +154,7 @@ static inline int DAP_CONFIG_SWDIO_TMS_read(void) {
 #elif defined(TEENSYDUINO)
   return (*SWDIO_PORT_INPUT_REG & SWDIO_BITMASK) ? 1 : 0;
 #elif defined(ARDUINO_ARCH_ESP32)
-  return (GPIO.in.val >> DAP_CONFIG_SWDIO_PIN) & 1;
+  return gpio_get_level((gpio_num_t)DAP_CONFIG_SWDIO_PIN);
 #else
   return digitalRead(DAP_CONFIG_SWDIO_PIN);
 #endif
@@ -197,7 +195,7 @@ static inline void DAP_CONFIG_SWCLK_TCK_set(void) {
 #elif defined(TEENSYDUINO)
   *SWCLK_PORTSET = SWCLK_BITMASK;
 #elif defined(ARDUINO_ARCH_ESP32)
-  GPIO.out_w1ts.val = (1UL << DAP_CONFIG_SWCLK_PIN);
+  gpio_set_level((gpio_num_t)DAP_CONFIG_SWCLK_PIN, 1);
 #else
   digitalWrite(DAP_CONFIG_SWCLK_PIN, HIGH);
 #endif
@@ -210,7 +208,7 @@ static inline void DAP_CONFIG_SWCLK_TCK_clr(void) {
 #elif defined(TEENSYDUINO)
   *SWCLK_PORTCLEAR = SWCLK_BITMASK;
 #elif defined(ARDUINO_ARCH_ESP32)
-  GPIO.out_w1tc.val = (1UL << DAP_CONFIG_SWCLK_PIN);
+  gpio_set_level((gpio_num_t)DAP_CONFIG_SWCLK_PIN, 0);
 #else
   digitalWrite(DAP_CONFIG_SWCLK_PIN, LOW);
 #endif
@@ -223,7 +221,7 @@ static inline void DAP_CONFIG_SWDIO_TMS_set(void) {
 #elif defined(TEENSYDUINO)
   *SWDIO_PORTSET = SWDIO_BITMASK;
 #elif defined(ARDUINO_ARCH_ESP32)
-  GPIO.out_w1ts.val = (1UL << DAP_CONFIG_SWDIO_PIN);
+  gpio_set_level((gpio_num_t)DAP_CONFIG_SWDIO_PIN, 1);
 #else
   digitalWrite(DAP_CONFIG_SWDIO_PIN, HIGH);
 #endif
@@ -236,7 +234,7 @@ static inline void DAP_CONFIG_SWDIO_TMS_clr(void) {
 #elif defined(TEENSYDUINO)
   *SWDIO_PORTCLEAR = SWDIO_BITMASK;
 #elif defined(ARDUINO_ARCH_ESP32)
-  GPIO.out_w1tc.val = (1UL << DAP_CONFIG_SWDIO_PIN);
+  gpio_set_level((gpio_num_t)DAP_CONFIG_SWDIO_PIN, 0);
 #else
   digitalWrite(DAP_CONFIG_SWDIO_PIN, LOW);
 #endif
@@ -250,11 +248,7 @@ static inline void DAP_CONFIG_SWDIO_TMS_in(void) {
   *SWDIO_PORTMODE &= ~SWDIO_BITMASK;
   *SWDIO_PORTCONFIG = PORT_PCR_MUX(1);
 #elif defined(ARDUINO_ARCH_ESP32)
-  GPIO.enable_w1tc.val = (1UL << DAP_CONFIG_SWDIO_PIN);
-  // Ensure input path stays enabled (FUN_IE) after disabling output driver.
-  // On ESP32-C3, pinMode(OUTPUT) clears FUN_IE; we re-enable it in CONNECT_SWD
-  // but some code paths may clear it again. Belt-and-suspenders approach.
-  PIN_INPUT_ENABLE(GPIO_PIN_MUX_REG[DAP_CONFIG_SWDIO_PIN]);
+  gpio_set_direction((gpio_num_t)DAP_CONFIG_SWDIO_PIN, GPIO_MODE_INPUT);
 #else
   pinMode(DAP_CONFIG_SWDIO_PIN, INPUT);
 #endif
@@ -269,7 +263,7 @@ static inline void DAP_CONFIG_SWDIO_TMS_out(void) {
   *SWDIO_PORTCONFIG = PORT_PCR_SRE | PORT_PCR_DSE | PORT_PCR_MUX(1);
   *SWDIO_PORTCONFIG &= ~PORT_PCR_ODE;
 #elif defined(ARDUINO_ARCH_ESP32)
-  GPIO.enable_w1ts.val = (1UL << DAP_CONFIG_SWDIO_PIN);
+  gpio_set_direction((gpio_num_t)DAP_CONFIG_SWDIO_PIN, GPIO_MODE_INPUT_OUTPUT);
 #else
   pinMode(DAP_CONFIG_SWDIO_PIN, OUTPUT);
 #endif
@@ -281,7 +275,7 @@ static inline void DAP_CONFIG_SETUP() {
   pinMode(DAP_CONFIG_SWDIO_PIN, INPUT_PULLUP);
   if (DAP_CONFIG_nRESET_PIN >= 0)
     pinMode(DAP_CONFIG_nRESET_PIN, INPUT);
-  // NOTE: LED_BUILTIN disabled - conflicts with OLED I2C SDA on ESP32-C3
+  // NOTE: LED_BUILTIN disabled
 }
 
 //-----------------------------------------------------------------------------
@@ -301,10 +295,10 @@ static inline void DAP_CONFIG_CONNECT_SWD(void) {
   digitalWrite(DAP_CONFIG_SWCLK_PIN, HIGH);
 
 #if defined(ARDUINO_ARCH_ESP32)
-  // Enable input path so SWDIO can be read while in output mode
+  // Input+Output mode so pins can be read while driving output
   // (needed for SWD turnaround: output→input→read ACK→output)
-  PIN_INPUT_ENABLE(GPIO_PIN_MUX_REG[DAP_CONFIG_SWDIO_PIN]);
-  PIN_INPUT_ENABLE(GPIO_PIN_MUX_REG[DAP_CONFIG_SWCLK_PIN]);
+  gpio_set_direction((gpio_num_t)DAP_CONFIG_SWDIO_PIN, GPIO_MODE_INPUT_OUTPUT);
+  gpio_set_direction((gpio_num_t)DAP_CONFIG_SWCLK_PIN, GPIO_MODE_INPUT_OUTPUT);
 #endif
 
   if (DAP_CONFIG_nRESET_PIN >= 0) {
@@ -340,7 +334,7 @@ gpio_outset_bulk(PORTA, (1ul << CONFIG_DAP_nTRST));
 
 //-----------------------------------------------------------------------------
 static inline void DAP_CONFIG_LED(int index, int state) {
-  // NOTE: LED_BUILTIN disabled - conflicts with OLED I2C SDA on ESP32-C3
+  // NOTE: LED_BUILTIN disabled
   (void)index;
   (void)state;
 }

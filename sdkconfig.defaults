@@ -1,0 +1,35 @@
+# Arduino-ESP32 requires 1000Hz tick rate
+CONFIG_FREERTOS_HZ=1000
+
+# Arduino settings
+# CONFIG_AUTOSTART_ARDUINO is not set
+CONFIG_ARDUINO_LOOP_STACK_SIZE=8192
+
+# Flash: 16MB external, QIO mode
+CONFIG_ESPTOOLPY_FLASHSIZE_16MB=y
+CONFIG_ESPTOOLPY_FLASHSIZE="16MB"
+CONFIG_ESPTOOLPY_FLASHMODE_QIO=y
+
+# PSRAM: DISABLED (GPIO33-37 conflict with TFT pins)
+# CONFIG_ESP32S3_SPIRAM_SUPPORT is not set
+# CONFIG_SPIRAM is not set
+
+# Custom partition table (OTA-capable, large FATFS for USB drive)
+CONFIG_PARTITION_TABLE_CUSTOM=y
+CONFIG_PARTITION_TABLE_CUSTOM_FILENAME="partitions.csv"
+CONFIG_PARTITION_TABLE_FILENAME="partitions.csv"
+
+# USB PHY: disable USB-Serial-JTAG secondary console so TinyUSB OTG can
+# take full ownership of GPIO19/20 without conflict.
+# Primary console stays on UART0 (won't break ESP_LOGx if UART0 is wired).
+CONFIG_ESP_CONSOLE_SECONDARY_NONE=y
+# CONFIG_ESP_CONSOLE_SECONDARY_USB_SERIAL_JTAG is not set
+
+# TinyUSB DCD: Slave/IRQ mode (more reliable on ESP32-S3 Full-speed OTG)
+CONFIG_TINYUSB_MODE_SLAVE=y
+# CONFIG_TINYUSB_MODE_DMA is not set
+
+# CDC/MSC: hardcoded ON in local esp_tinyusb (NOT in sdkconfig to avoid Arduino conflict)
+
+# MSC buffer must be >= WL sector size (4096)
+CONFIG_TINYUSB_MSC_BUFSIZE=4096

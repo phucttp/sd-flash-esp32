@@ -7,14 +7,10 @@
 #pragma once // Bộ bảo vệ, đảm bảo file này chỉ được include 1 lần
 
 //===== CÁC THƯ VIỆN CẦN THIẾT =====
-#include "Arduino.h" // Thư viện lõi Arduino
-#include "FS.h"      // Thư viện File System (Hệ thống file)
-#include "SD.h"      // Thư viện giao tiếp thẻ SD
-#include <string>   // Thư viện C++ cho std::string
-#include <map>      // Thư viện C++ cho std::map (để lưu metadata)
-#include "../firmware_types.h" // Định nghĩa firmware_metadata_t và FirmwareMap
-// Lưu ý: Kiểu esp_err_t được định nghĩa bên trong các header của ESP-IDF,
-// thường đã được "Arduino.h" (cho ESP32) include sẵn.
+#include "Arduino.h"           // String type, esp_err_t
+#include <string>
+#include <map>
+#include "../firmware_types.h"
 
 //===== BIẾN TOÀN CỤC (KHAI BÁO) =====
 

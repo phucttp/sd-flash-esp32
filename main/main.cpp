@@ -1,10 +1,10 @@
 /**
  * @file main.cpp
- * @brief Điểm khởi động firmware ESP MultiFlasher — khởi tạo hệ thống và vòng lặp giao diện chính.
+ * @brief Điểm khởi động firmware CHIVI FlashPorter — TFT ST7735 + ESP32-S3
  *
  * Chức năng chính:
- *   - Khởi tạo SD card, màn hình OLED, WiFi và các module flasher khi boot
- *   - Điều phối giao diện dạng tab qua thư viện OledUI:
+ *   - Khởi tạo SD card, màn hình TFT ST7735, WiFi và các module flasher khi boot
+ *   - Điều phối giao diện dạng tab qua thư viện TftUI:
  *       Tab 0 (FW)    — danh sách firmware, chọn để nạp ngay
  *       Tab 1 (Tools) — đồng bộ git, monitor UART, xóa chip, quét thiết bị
  *       Tab 2 (Desc)  — xem mô tả firmware, chọn để nạp
@@ -15,7 +15,7 @@
  */
 
 #include "Arduino.h"
-#include <Wire.h>
+#include <SPI.h>
 
 // ============================================================
 // 1. ESP-IDF & SYSTEM HEADERS
@@ -27,105 +27,102 @@
 // ============================================================
 // 2. PROJECT MODULES
 // ============================================================
+#include "pin_config.h"
 #include "firmware_types.h"
+#include "usb_drive/usb_drive.h"       // USB MSC + CDC (replaces SD card)
 #include "sd_card/sd_card.h"
-#include "flasher/flasher_common.h"    // host_system_restart(), shared defines
-#include "oled_ui.h"                    // OledUI Library
-#include "app_actions/app_actions.h"   // High-level actions API
-#include "ui_state/ui_state.h"         // UI state persistence
-#include "wifi_config/wifi_config.h"   // wifi_config_connect() for NetFlash auto-reconnect
-#include "net_server/net_server.h"     // HTTP API server + mDNS for NetFlash
+#include "flasher/flasher_common.h"
+#include "tft_ui.h"
+#include "app_actions/app_actions.h"
+#include "ui_state/ui_state.h"
+#include "flash_log/flash_log.h"
 
 // ============================================================
 // 3. CONSTANTS & GLOBALS
 // ============================================================
 static const char *TAG = "MAIN_APP";
 
-#define SD_CS_PIN   GPIO_NUM_7
-#define SDA_PIN     GPIO_NUM_8
-#define SCL_PIN     GPIO_NUM_9
-#define BTN_UP      GPIO_NUM_21
-#define BTN_DOWN    GPIO_NUM_10
-#define BTN_OK      GPIO_NUM_20
-#define OLED_ADDR   0x3C
+// TFT Display (hardware SPI — 3-arg constructor)
+Adafruit_ST7735 tft(TFT_CS, TFT_DC, TFT_RST);
 
-// OLED Display
-Adafruit_SH1106G display(128, 64, &Wire, -1);
-
-// OledUI Instance
-OledUI ui;
+// TftUI Instance
+TftUI ui;
 
 // ============================================================
 // TAB CONFIGURATION
 // ============================================================
 #define TAB_FW      0
 #define TAB_TOOLS   1
-#define TAB_DESC    2
-#define TAB_HIST    3
-#define TAB_INFO    4
+// #define TAB_DESC    2  // Desc tab disabled
+// #define TAB_HIST    3  // History tab disabled
+#define TAB_INFO    2
 
-const char* tabNames[] = {"FW", "Tools", "Desc", "Hist", "Info"};
-const int TAB_COUNT = 5;
+const char* tabNames[] = {"FW", "Tools", /* "Desc", "Hist", */ "Info"};
+const int TAB_COUNT = 3;
 
 // Firmware items (loaded from SD)
 const char** fwDisplayItems = nullptr;
 const char** fwIdItems = nullptr;
 int fwCount = 0;
 
-// History items (loaded from SD after metadata)
-const char** histDisplayItems = nullptr;
-const char** histIdItems = nullptr;
-int histCount = 0;
+// // History items (loaded from SD after metadata)
+// const char** histDisplayItems = nullptr;
+// const char** histIdItems = nullptr;
+// int histCount = 0;
 
-// Tools items
-static char s_netflash_label[22] = "7. NetFlash: OFF";
+// UI state (pre-loaded before USB unlock)
+static int  s_saved_tab = -1;
+static char s_saved_item[64] = {0};
+
+// Tools items (offline mode — no WiFi/Sync)
 const char* toolsItems[] = {
-    "1. Sync Firmware",
-    "2. Config WiFi/URL",
-    "3. Monitor/Test",
-    "4. Erase Chip (ESP)",
-    "5. Scan Boot",
-    "6. Erase Chip (SWD)",
-    s_netflash_label
+    "1. Erase Chip (ESP)",
+    "2. Erase Chip (SWD)",
+    "3. Scan Boot",
+    "4. Monitor/Test",
+    "5. Re-scan USB",
 };
-const int TOOLS_COUNT = 7;
+const int TOOLS_COUNT = 5;
 
 // Tab item counts
-int tabItemCounts[5] = {0, 7, 0, 0, 0};  // FW:dynamic, Tools:7, Desc:dynamic, Hist:dynamic, Info:0
+int tabItemCounts[3] = {0, 5, 0};  // FW:dynamic, Tools:5, Info:0
 
 // ============================================================
 // UI CALLBACKS CHO APP_ACTIONS
 // ============================================================
 
-// Callback ve man hinh monitor
+// Callback ve man hinh monitor — dung TFT truc tiep voi mau sac
 static void ui_monitor_draw_cb(char log_buffer[APP_ACTIONS_LOG_LINES][APP_ACTIONS_LOG_LINE_WIDTH + 1],
                                 int log_write_index, bool has_activity) {
-    display.clearDisplay();
-    display.setTextSize(1);
-    display.setTextColor(SH110X_WHITE);
+    Adafruit_ST7735* d = ui.getDisplay();
+    d->fillScreen(UI_COL_BG);
+    d->setTextSize(1);
 
-    display.setCursor(0, 0);
+    // Header bar
+    d->fillRect(0, 0, UI_SCREEN_W, UI_HEADER_H, UI_COL_HEADER_BG);
+    d->setTextColor(UI_COL_HEADER_FG);
+    d->setCursor(4, 3);
     if (has_activity) {
-        display.setTextColor(SH110X_BLACK, SH110X_WHITE);
-        display.print(" MONITOR ");
-        display.setTextColor(SH110X_WHITE);
-        display.println(" [RX]");
+        d->print("MONITOR");
+        d->setTextColor(ST77XX_GREEN);
+        d->setCursor(UI_SCREEN_W - 30, 3);
+        d->print("[RX]");
     } else {
-        display.println("MONITOR [OK]=Exit");
-        
+        d->print("MONITOR [OK]=Exit");
     }
 
-    display.drawLine(0, 9, 128, 9, SH110X_WHITE);
+    // Log lines — TFT 160x128 landscape, ~9 lines
+    d->setTextColor(ST77XX_GREEN);
+    int yPos = UI_HEADER_H + 2;
+    int maxLines = (UI_SCREEN_H - UI_HEADER_H - 4) / 10;
+    if (maxLines > APP_ACTIONS_LOG_LINES - 1) maxLines = APP_ACTIONS_LOG_LINES - 1;
 
-    int yPos = 11;
-    for (int i = 0; i < APP_ACTIONS_LOG_LINES - 1; i++) {
+    for (int i = 0; i < maxLines; i++) {
         int idx = (log_write_index + i) % APP_ACTIONS_LOG_LINES;
-        display.setCursor(0, yPos);
-        display.println(log_buffer[idx]);
-        yPos += 9;
+        d->setCursor(0, yPos);
+        d->println(log_buffer[idx]);
+        yPos += 10;
     }
-
-    display.display();
 }
 
 // Callback progress
@@ -153,93 +150,43 @@ static void ui_spinner_cb(const char* text, int frame) {
 // TAB DRAW CALLBACK
 // ============================================================
 void drawTabContent(int tab, int itemIdx, int yStart) {
-    int maxVisible = (ui.tabsGetHeaderHeight() > 0) ? 5 : 6;
+    // Landscape 160x128: header 14px → ~8 items visible
+    int maxVisible = (ui.tabsGetHeaderHeight() > 0) ? 8 : 10;
 
     switch (tab) {
         case TAB_FW:  // Firmware list - OK to flash
             if (fwCount > 0 && fwDisplayItems) {
                 ui.drawList(fwDisplayItems, fwCount, itemIdx, yStart, maxVisible);
-                // ui.drawHint("OK:Flash");
             } else {
                 ui.drawText("No Firmware", 4, yStart);
                 ui.drawText("Please Sync first", 4, yStart + 12);
             }
             break;
 
-        case TAB_TOOLS:  // Tools
+        case TAB_TOOLS:
             ui.drawList(toolsItems, TOOLS_COUNT, itemIdx, yStart, maxVisible);
-            // ui.drawHint("OK:Run UP+DN:Tab");
             break;
 
-        case TAB_DESC: { // Description tab - OK to flash (same firmware list as FW tab)
-            if (fwCount == 0 || !fwIdItems) {
-                ui.drawText("No Firmware", 4, yStart);
-                ui.drawText("Please Sync first", 4, yStart + 12);
-                break;
-            }
+        // case TAB_DESC: { // Description tab (disabled)
+        //     ...
+        // }
 
-            // Get current FW metadata
-            const char* fw_id = fwIdItems[itemIdx];
-            auto it = g_firmware_map.find(fw_id);
-
-            if (it == g_firmware_map.end()) {
-                ui.drawText("FW not found", 4, yStart);
-                break;
-            }
-
-            firmware_metadata_t& meta = it->second;
-
-            // Line 1: Highlighted FW name (inverted style)
-            char header[22];
-            snprintf(header, sizeof(header), "%d.%s v%s",
-                     itemIdx + 1, meta.device_type.c_str(), meta.version.c_str());
-
-            // Draw inverted header bar
-            display.fillRect(0, yStart, 128, 10, SH110X_WHITE);
-            display.setTextColor(SH110X_BLACK);
-            display.setCursor(2, yStart + 1);
-            display.print(header);
-            display.setTextColor(SH110X_WHITE);
-
-            // Line separator
-            display.drawLine(0, yStart + 11, 128, yStart + 11, SH110X_WHITE);
-
-            // Lines 2-5: Description (lazy load từ SD - không lưu RAM)
-            int descY = yStart + 14;
-            String descStr = sd_get_description(fw_id);
-            if (descStr.length() > 0) {
-                const char* desc = descStr.c_str();
-                int len = descStr.length();
-                char line[22];
-
-                for (int i = 0; i < 4 && (i * 21) < len; i++) {
-                    snprintf(line, sizeof(line), "%.*s", 21, desc + (i * 21));
-                    ui.drawText(line, 0, descY + (i * 10));
-                }
-            } else {
-                ui.drawText("(No description)", 4, descY);
-            }
-
-            // Hint - different from TAB_FW
-            // ui.drawHint("UP/DN:Browse");
-            break;
-        }
-
-        case TAB_HIST:  // Flash history — #N DevType vVer, most recent first
-            if (histCount > 0 && histDisplayItems) {
-                ui.drawList(histDisplayItems, histCount, itemIdx, yStart, maxVisible);
-            } else {
-                ui.drawText("No history yet", 4, yStart);
-                ui.drawText("Flash to start", 4, yStart + 12);
-            }
-            break;
+        // case TAB_HIST:  // Flash history (disabled)
+        //     if (histCount > 0 && histDisplayItems) {
+        //         ui.drawList(histDisplayItems, histCount, itemIdx, yStart, maxVisible);
+        //     } else {
+        //         ui.drawText("No history yet", 4, yStart);
+        //         ui.drawText("Flash to start", 4, yStart + 12);
+        //     }
+        //     break;
 
         case TAB_INFO:  // Info
             ui.drawKeyValue("Version", "1.1.0", yStart);
-            ui.drawKeyValue("Author", "TTP27", yStart + 12);
-            ui.drawKeyValue("Build", "260216", yStart + 24);
-            ui.drawKeyValue("Chip", "ESP32-C3", yStart + 36);
-            // ui.drawHint("UP+DN:Tab OK:Exit");
+            ui.drawKeyValue("Author", "TTP27", yStart + 14);
+            ui.drawKeyValue("Build", "260301", yStart + 28);
+            ui.drawKeyValue("Chip", "ESP32-S3", yStart + 42);
+            ui.drawKeyValue("Display", "ST7735", yStart + 56);
+            ui.drawKeyValue("Screen", "160x128", yStart + 70);
             break;
     }
 }
@@ -248,10 +195,8 @@ void drawTabContent(int tab, int itemIdx, int yStart) {
 // HANDLE TAB SELECTION
 // ============================================================
 void handleTabSelection(int tab, int itemIdx) {
-    // Helper: Save UI state + restart with animation
-    // State save + animation được xử lý trong host_system_restart() (flasher_common.cpp)
     auto saveAndRestart = [&](const char* item_id) {
-        host_system_restart(tab, item_id);  // Save state, show animation, restart
+        host_system_restart(tab, item_id);
     };
 
     switch (tab) {
@@ -260,88 +205,91 @@ void handleTabSelection(int tab, int itemIdx) {
                 const char* fw_id = fwIdItems[itemIdx];
                 esp_err_t ret = action_flash_firmware(fw_id);
                 if (ret == ESP_OK) {
-                    sd_history_add(fw_id);
-                    saveAndRestart(fw_id);
+                    usb_drive_lock();  // Re-lock VFS cho state save
+                    // sd_history_add(fw_id);  // History disabled
+                    saveAndRestart(fw_id);  // → esp_restart(), no unlock needed
                 }
             }
             break;
 
         case TAB_TOOLS:
             switch (itemIdx) {
-                case 0: {  // Sync
-                    esp_err_t ret = action_sync_firmware();
+                case 0: {  // Erase Chip (ESP)
+                    esp_err_t ret = action_erase_chip();
                     if (ret == ESP_OK) {
+                        usb_drive_lock();
                         saveAndRestart("0");
                     }
                     break;
                 }
-                case 1: {  // Config WiFi/URL
-                    esp_err_t ret = action_config_wifi();
+                case 1: {  // Erase Chip (SWD)
+                    esp_err_t ret = action_erase_chip_swd();
                     if (ret == ESP_OK) {
+                        usb_drive_lock();
                         saveAndRestart("1");
                     }
                     break;
                 }
-                case 2:  // Monitor
-                    action_monitor();
+                case 2:  // Scan Boot
+                    action_scan_boot();
+                    usb_drive_lock();
                     saveAndRestart("2");
                     break;
+                case 3:  // Monitor/Test
+                    action_monitor();
+                    break;  // Return to tabs — no restart needed
+                case 4: {  // Re-scan USB
+                    ui.showMessage("Re-scan", "Switching to APP...");
+                    usb_drive_lock();
+                    vTaskDelay(pdMS_TO_TICKS(200));
 
-                case 3: {  // Erase Chip (ESP)
-                    esp_err_t ret = action_erase_chip();
-                    if (ret == ESP_OK) {
-                        saveAndRestart("3");
-                    }
-                    break;
-                }
-                case 4:  // Scan Boot
-                    action_scan_boot();
-                    saveAndRestart("4");
-                    break;
+                    ui.showMessage("Re-scan", "Reading USB drive...");
+                    sd_load_metadata();
+                    fwDisplayItems = sd_get_menu_display_items(fwCount);
+                    fwIdItems = sd_get_menu_id_items();
 
-                case 5: {  // Erase Chip (SWD)
-                    esp_err_t ret = action_erase_chip_swd();
-                    if (ret == ESP_OK) {
-                        saveAndRestart("5");
-                    }
-                    break;
-                }
-                case 6: {  // NetFlash toggle
-                    action_toggle_netflash();
-                    snprintf(s_netflash_label, sizeof(s_netflash_label),
-                             "7. NetFlash: %s", action_netflash_is_enabled() ? "ON " : "OFF");
-                    // Start or stop HTTP server along with WiFi state
-                    if (action_netflash_is_enabled()) {
-                        net_server_start();
-                    } else {
-                        net_server_stop();
-                    }
+                    // sd_history_load();  // History disabled
+                    // histDisplayItems = sd_history_get_display(histCount);
+                    // histIdItems = sd_history_get_ids();
+
+                    usb_drive_unlock();
+
+                    char msg[32];
+                    snprintf(msg, sizeof(msg), "Found %d firmware", fwCount);
+                    ui.showMessage("Re-scan Done", msg);
+                    vTaskDelay(pdMS_TO_TICKS(1500));
+
+                    // Update tab item counts
+                    tabItemCounts[TAB_FW]   = fwCount;
+                    // tabItemCounts[TAB_DESC] = fwCount;  // Desc tab disabled
+                    // tabItemCounts[TAB_HIST] = histCount;  // History disabled
                     break;
                 }
             }
             break;
 
-        case TAB_DESC:
-            if (fwCount > 0 && fwIdItems && itemIdx < fwCount) {
-                const char* fw_id = fwIdItems[itemIdx];
-                esp_err_t ret = action_flash_firmware(fw_id);
-                if (ret == ESP_OK) {
-                    sd_history_add(fw_id);
-                    saveAndRestart(fw_id);
-                }
-            }
-            break;
+        // case TAB_DESC:  // Desc tab disabled
+        //     if (fwCount > 0 && fwIdItems && itemIdx < fwCount) {
+        //         const char* fw_id = fwIdItems[itemIdx];
+        //         esp_err_t ret = action_flash_firmware(fw_id);
+        //         if (ret == ESP_OK) {
+        //             usb_drive_lock();
+        //             saveAndRestart(fw_id);
+        //         }
+        //     }
+        //     break;
 
-        case TAB_HIST:
-            if (histCount > 0 && histIdItems && itemIdx < histCount) {
-                const char* fw_id = histIdItems[itemIdx];
-                esp_err_t ret = action_flash_firmware(fw_id);
-                if (ret == ESP_OK) {
-                    sd_history_add(fw_id);
-                    saveAndRestart(fw_id);
-                }
-            }
-            break;
+        // case TAB_HIST:  // History tab disabled
+        //     if (histCount > 0 && histIdItems && itemIdx < histCount) {
+        //         const char* fw_id = histIdItems[itemIdx];
+        //         esp_err_t ret = action_flash_firmware(fw_id);
+        //         if (ret == ESP_OK) {
+        //             usb_drive_lock();
+        //             sd_history_add(fw_id);
+        //             saveAndRestart(fw_id);
+        //         }
+        //     }
+        //     break;
 
         case TAB_INFO:
             break;
@@ -352,96 +300,53 @@ void handleTabSelection(int tab, int itemIdx) {
 // MAIN TABS LOOP
 // ============================================================
 void runTabsUI() {
-    // Update item counts
     tabItemCounts[TAB_FW]    = fwCount;
     tabItemCounts[TAB_TOOLS] = TOOLS_COUNT;
-    tabItemCounts[TAB_DESC]  = fwCount;
-    tabItemCounts[TAB_HIST]  = histCount;
+    // tabItemCounts[TAB_DESC]  = fwCount;  // Desc tab disabled
+    // tabItemCounts[TAB_HIST]  = histCount;  // History tab disabled
     tabItemCounts[TAB_INFO]  = 0;
 
-    // Create tabs
     ui.tabsCreate(tabNames, TAB_COUNT, tabItemCounts);
     ui.tabsSetHeaderStyle(UI_HEADER_SINGLE);
     ui.tabsSetHeaderMode(UI_HEADER_ALWAYS);
-    // ui.tabsSetHeaderTimeout(2000);
     ui.tabsSetDrawCallback(drawTabContent);
 
-    // --- RESTORE UI STATE (sau khi restart) ---
-    // Nếu có state file → restore tab + item, xóa file sau đó
-    ESP_LOGI(TAG, "Checking for UI state...");
+    // --- RESTORE UI STATE (pre-loaded in setup, no file access needed) ---
+    if (s_saved_tab >= 0) {
+        ESP_LOGI(TAG, "Restoring UI state: tab=%d, item=%s", s_saved_tab, s_saved_item);
+        ui.tabsSetCurrent(s_saved_tab);
 
-    if (!ui_state_exists()) {
-        ESP_LOGI(TAG, "No state file found - starting fresh");
-    } else {
-        ESP_LOGI(TAG, "State file exists - attempting restore");
-
-        int saved_tab = -1;
-        char saved_item[UI_STATE_ITEM_ID_MAX_LEN];
-        esp_err_t load_ret = ui_state_load(&saved_tab, saved_item, sizeof(saved_item));
-
-        if (load_ret == ESP_OK) {
-            ESP_LOGI(TAG, "✓ State loaded: tab=%d, item=%s", saved_tab, saved_item);
-
-            // Set tab BEFORE calling tabsRun
-            ui.tabsSetCurrent(saved_tab);
-            ESP_LOGI(TAG, "✓ Tab set to %d", saved_tab);
-
-            // Set item index (tìm item ID trong list)
-            if (saved_tab == TAB_FW || saved_tab == TAB_DESC) {
-                // FW/Desc tabs: tìm item theo fw_id
-                bool found = false;
-                for (int i = 0; i < fwCount; i++) {
-                    if (fwIdItems && strcmp(fwIdItems[i], saved_item) == 0) {
-                        ui.tabsSetItemIndex(i);
-                        ESP_LOGI(TAG, "✓ FW item restored: %s (index %d)", saved_item, i);
-                        found = true;
-                        break;
-                    }
-                }
-                if (!found) {
-                    ESP_LOGW(TAG, "✗ FW item '%s' not found in list", saved_item);
-                }
-            } else if (saved_tab == TAB_HIST) {
-                // History tab: tìm fw_id trong histIdItems
-                bool found = false;
-                for (int i = 0; i < histCount; i++) {
-                    if (histIdItems && strcmp(histIdItems[i], saved_item) == 0) {
-                        ui.tabsSetItemIndex(i);
-                        ESP_LOGI(TAG, "✓ Hist item restored: %s (index %d)", saved_item, i);
-                        found = true;
-                        break;
-                    }
-                }
-                if (!found) {
-                    ESP_LOGW(TAG, "✗ Hist item '%s' not found", saved_item);
-                }
-            } else if (saved_tab == TAB_TOOLS) {
-                // Tools tab: item_id là số (0-5)
-                int tool_idx = atoi(saved_item);
-                if (tool_idx >= 0 && tool_idx < TOOLS_COUNT) {
-                    ui.tabsSetItemIndex(tool_idx);
-                    ESP_LOGI(TAG, "✓ Tools item restored: %d", tool_idx);
-                } else {
-                    ESP_LOGW(TAG, "✗ Invalid tool index: %d", tool_idx);
+        if (s_saved_tab == TAB_FW) {
+            for (int i = 0; i < fwCount; i++) {
+                if (fwIdItems && strcmp(fwIdItems[i], s_saved_item) == 0) {
+                    ui.tabsSetItemIndex(i);
+                    break;
                 }
             }
-
-            // Xóa state file (one-time restore)
-            ui_state_clear();
-            ESP_LOGI(TAG, "✓ State file cleared");
-        } else {
-            ESP_LOGE(TAG, "✗ State load failed: %d", load_ret);
+        // } else if (s_saved_tab == TAB_DESC) {  // Desc tab disabled
+        // } else if (s_saved_tab == TAB_HIST) {  // History tab disabled
+        //     for (int i = 0; i < histCount; i++) {
+        //         if (histIdItems && strcmp(histIdItems[i], s_saved_item) == 0) {
+        //             ui.tabsSetItemIndex(i);
+        //             break;
+        //         }
+        //     }
+        } else if (s_saved_tab == TAB_TOOLS) {
+            int tool_idx = atoi(s_saved_item);
+            if (tool_idx >= 0 && tool_idx < TOOLS_COUNT) {
+                ui.tabsSetItemIndex(tool_idx);
+            }
         }
+        s_saved_tab = -1;  // Used once, reset
+    } else {
+        ESP_LOGI(TAG, "No saved state - starting fresh");
     }
 
-    // Log final state before entering UI loop
     ESP_LOGI(TAG, "=== Starting UI with tab=%d, item=%d ===",
              ui.tabsGetCurrent(), ui.tabsGetItemIndex());
 
-    // Blocking loop - tu handle header animation
     ui.tabsRun();
 
-    // Khi OK duoc nhan, xu ly theo tab hien tai
     int tab = ui.tabsGetCurrent();
     int item = ui.tabsGetItemIndex();
     handleTabSelection(tab, item);
@@ -453,43 +358,92 @@ void runTabsUI() {
 void setup() {
     esp_log_level_set("*", ESP_LOG_INFO);
     esp_log_level_set("gpio", ESP_LOG_WARN);
-    ESP_LOGI(TAG, "--- SYSTEM START ---");
+    ESP_LOGI(TAG, "--- SYSTEM START (CHIVI-TFT, ESP32-S3) ---");
 
-    // Init I2C & OLED
-    Wire.begin(SDA_PIN, SCL_PIN);
-    if (!display.begin(OLED_ADDR, true)) {
-        ESP_LOGE(TAG, "OLED Init Failed");
-        for(;;);
-    }
+    // Init hardware SPI bus voi custom pins
+    SPI.begin(TFT_SCLK, -1, TFT_MOSI);  // SCK, MISO (ko dung), MOSI
 
-    // Init OledUI
-    ui.begin(&display, BTN_UP, BTN_DOWN, BTN_OK);
+    // Init TFT (hardware SPI — nhanh)
+    tft.setSPISpeed(40000000);      // 40MHz
+    tft.initR(INITR_BLACKTAB);     // hoac INITR_GREENTAB tuy module
+    tft.setRotation(3);             // Landscape 160x128 (flipped)
+    tft.fillScreen(ST77XX_BLACK);
+
+    // Init TftUI (them TFT_BL cho backlight)
+    ui.begin(&tft, BTN_UP, BTN_DOWN, BTN_OK, TFT_BL);
     ui.showMessage("Booting...", "Init Hardware");
 
-    // Init SD Card
-    if (sd_mount(SD_CS_PIN) != ESP_OK) {
-        ui.showMessage("Error", "No SD Card");
+    // Init USB drive (mount FAT partition + bật TinyUSB MSC/CDC)
+    // auto_mount_off=1: ESP32 giữ quyền đọc FAT (APP mode) cho đến khi chủ động unlock
+    ui.showMessage("Booting...", "Init USB Drive");
+    if (usb_drive_init() != ESP_OK) {
+        ui.showMessage("Error", "USB Drive Init Fail");
         for(;;);
     }
 
-    // Load Firmware Data
-    sd_load_metadata();
+    // Xác nhận firmware store sẵn sàng (drive đã mount ở APP mode)
+    if (sd_mount(-1) != ESP_OK) {
+        ui.showMessage("Error", "FW Store Not Ready");
+        for(;;);
+    }
 
-    // Get menu items
+    // Scan firmware folders (ESP32 đang ở APP mode → VFS active → opendir works)
+    sd_load_metadata();
     fwDisplayItems = sd_get_menu_display_items(fwCount);
     fwIdItems = sd_get_menu_id_items();
 
-    if (fwCount == 0) {
-        ESP_LOGW(TAG, "No firmware found on SD");
+    // Nếu không tìm thấy FW → cho user cắm USB copy, nhấn OK để re-scan
+    while (fwCount == 0) {
+        ESP_LOGW(TAG, "No firmware found — waiting for USB copy");
+        // Chuyển USB mode → PC thấy ổ đĩa
+        usb_drive_unlock();
+
+        Adafruit_ST7735* d = ui.getDisplay();
+        d->fillScreen(ST77XX_BLACK);
+        d->setTextSize(1);
+        d->setTextColor(ST77XX_YELLOW);
+        d->setCursor(4, 4);  d->print("No Firmware Found");
+        d->setTextColor(ST77XX_WHITE);
+        d->setCursor(4, 20); d->print("Copy FW to USB drive:");
+        d->setCursor(4, 34); d->print("  ST_<name>/FW.bin");
+        d->setCursor(4, 46); d->print("  ES_<name>/app.bin");
+        d->setTextColor(ST77XX_GREEN);
+        d->setCursor(4, 66); d->print("[OK] Re-scan");
+        d->setTextColor(UI_COL_HINT);
+        d->setCursor(4, 80); d->print("Eject drive on PC");
+        d->setCursor(4, 92); d->print("before pressing OK");
+
+        // Chờ nhấn OK
+        while (digitalRead(BTN_OK) == HIGH) vTaskDelay(pdMS_TO_TICKS(50));
+        while (digitalRead(BTN_OK) == LOW)  vTaskDelay(pdMS_TO_TICKS(50));
+
+        // Chuyển lại APP mode → ESP32 đọc FAT
+        usb_drive_lock();
+        ui.showMessage("Scanning...", "Reading USB drive");
+        vTaskDelay(pdMS_TO_TICKS(200));
+
+        sd_load_metadata();
+        fwDisplayItems = sd_get_menu_display_items(fwCount);
+        fwIdItems = sd_get_menu_id_items();
     }
 
-    // Load flash history (phải sau sd_load_metadata vì cần g_firmware_map)
-    sd_history_load();
-    histDisplayItems = sd_history_get_display(histCount);
-    histIdItems = sd_history_get_ids();
-    ESP_LOGI(TAG, "Flash history: %d entries", histCount);
+    // // Load flash history (disabled — History tab commented out)
+    // sd_history_load();
+    // histDisplayItems = sd_history_get_display(histCount);
+    // histIdItems = sd_history_get_ids();
+    // ESP_LOGI(TAG, "Flash history: %d entries", histCount);
 
-    // Init App Actions - 1 config gon gang
+    // Load + clear UI state (cần VFS → làm trước unlock)
+    if (ui_state_exists()) {
+        ui_state_load(&s_saved_tab, s_saved_item, sizeof(s_saved_item));
+        ui_state_clear();
+        ESP_LOGI(TAG, "UI state pre-loaded: tab=%d, item=%s", s_saved_tab, s_saved_item);
+    }
+
+    // Auto-unlock USB → PC thấy ổ đĩa + monitor hoạt động
+    usb_drive_unlock();
+
+    // Init App Actions
     app_actions_config_t actions_cfg = {
         .sd_cs_pin = SD_CS_PIN,
         .btn_ok_pin = BTN_OK,
@@ -503,18 +457,29 @@ void setup() {
     };
     app_actions_init(&actions_cfg);
 
-    // Sync netflash label + reconnect WiFi if NetFlash was ON before restart
-    if (action_netflash_is_enabled()) {
-        snprintf(s_netflash_label, sizeof(s_netflash_label), "7. NetFlash: ON ");
-        ui.showMessage("NetFlash", "Connecting WiFi...");
-        if (wifi_config_connect()) {
-            net_server_start();
-        }
-    }
+    // Splash screen — TFT voi mau sac
+    Adafruit_ST7735* d = ui.getDisplay();
+    d->fillScreen(ST77XX_BLACK);
+    d->setTextSize(2);
+    d->setTextColor(ST77XX_CYAN);
+    int tw = 11 * 12;  // "FlashPorter" = 11 chars * 12px
+    d->setCursor((UI_SCREEN_W - tw) / 2, 25);
+    d->print("FlashPorter");
 
-    // Splash screen
-    ui.showMessage("FlashPorter", "Universal Flasher");
-    vTaskDelay(pdMS_TO_TICKS(700));
+    d->setTextSize(1);
+    d->setTextColor(ST77XX_WHITE);
+    const char* sub = "CHIVI Universal Flasher";
+    int sw = strlen(sub) * 6;
+    d->setCursor((UI_SCREEN_W - sw) / 2, 55);
+    d->print(sub);
+
+    d->setTextColor(UI_COL_HINT);
+    const char* ver = "v2.0 - Offline USB";
+    int vw = strlen(ver) * 6;
+    d->setCursor((UI_SCREEN_W - vw) / 2, 75);
+    d->print(ver);
+
+    vTaskDelay(pdMS_TO_TICKS(1500));
 
     ESP_LOGI(TAG, "Ready! FW count: %d", fwCount);
 }

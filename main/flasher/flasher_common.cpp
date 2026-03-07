@@ -16,12 +16,12 @@
 #include "esp_system.h"
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
-#include "oled_ui.h"
+#include "tft_ui.h"
 #include "../ui_state/ui_state.h"
 #include "Adafruit_DAP.h"
 
 // Extern UI instance from main.cpp
-extern OledUI ui;
+extern TftUI ui;
 
 static const char *TAG = "FLASHER_COMMON";
 

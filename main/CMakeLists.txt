@@ -1,34 +1,19 @@
-# set(srcs main.c example_common.c)
 set(srcs "main.cpp"
+         "usb_drive/usb_drive.cpp"
          "sd_card/sd_card.cpp"
          "flasher/flasher_common.cpp"
          "flasher/flasher_esp.cpp"
-         "flasher/flasher_esp_crypto.cpp"
          "flasher/flasher_swd_stm32f4.cpp"
          "flasher/flasher_swd_stm32f1.cpp"
-         "wifi_config/wifi_config.cpp"
-         "ota_downloader/ota_downloader.cpp"
-         "metadata_parser/metadata_parser.cpp"
-         "sync_engine/sync_engine.cpp"
          "file_utils/file_utils.cpp"
          "app_actions/app_actions.cpp"
          "ui_state/ui_state.cpp"
-         "net_server/net_server.cpp"
+         "flash_log/flash_log.cpp"
          )
 
 idf_component_register(SRCS ${srcs}
                        INCLUDE_DIRS ${include_dirs}
-                       REQUIRES espressif__arduino-esp32 Adafruit_DAP Adafruit_GFX Adafruit_SH110X OledUI WiFiManager esp_http_client mbedtls nvs_flash mdns esp_http_server esp_netif)
+                       REQUIRES espressif__arduino-esp32 Adafruit_DAP Adafruit_GFX Adafruit_ST7735 Adafruit_BusIO TftUI
+                                wear_levelling fatfs nvs_flash driver esp_tinyusb)
 
-
-# ⚠️ Thêm dòng này ngay sau idf_component_register
 target_compile_options(${COMPONENT_LIB} PRIVATE -Wno-unused-parameter)
-set(target ${COMPONENT_LIB})
-
-# Embed binaries into the app.
-# In ESP-IDF this can also be done using EMBED_FILES option of idf_component_register.
-# Here an external tool is used to make file embedding similar with other ports.
-# include(${CMAKE_CURRENT_LIST_DIR}/bin2array.cmake)
-# # create_resources(${CMAKE_CURRENT_LIST_DIR}/Hello-world ${CMAKE_BINARY_DIR}/binaries.c)
-# set_property(SOURCE ${CMAKE_BINARY_DIR}/binaries.c PROPERTY GENERATED 1)
-# target_sources(${target} PRIVATE ${CMAKE_BINARY_DIR}/binaries.c)
