@@ -1,5 +1,5 @@
 /**
- * @file flasher_swd_stm32f4.cpp
+ * @file prog_stm32_f4.cpp
  * @brief Engine nạp firmware cho STM32F4 qua giao thức SWD (Serial Wire Debug).
  *
  * Chức năng chính:
@@ -11,7 +11,7 @@
  *   - Dùng SYSRESETREQ giữa các lần retry để reset trạng thái flash controller về sạch
  */
 
-#include "flasher_swd_stm32f4.h"
+#include "prog_stm32_f4.h"
 
 #include <inttypes.h>
 #include "esp_log.h"
@@ -21,7 +21,7 @@
 #include "Arduino.h"
 #include <stdio.h>
 #include <sys/stat.h>
-#include "../usb_drive/usb_drive.h"
+#include "../../storage/usb_drive/usb_drive.h"
 
 static const char *TAG = "SWD";
 

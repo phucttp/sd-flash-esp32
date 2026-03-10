@@ -10,7 +10,7 @@
  */
 
 #include "flash_log.h"
-#include "../usb_drive/usb_drive.h"  // usb_drive_lock/unlock (ref-counted)
+#include "../../storage/usb_drive/usb_drive.h"  // usb_drive_lock/unlock (ref-counted)
 #include "esp_log.h"
 #include "esp_timer.h"
 

@@ -29,13 +29,13 @@
 // ============================================================
 #include "pin_config.h"
 #include "firmware_types.h"
-#include "usb_drive/usb_drive.h"       // USB MSC + CDC (replaces SD card)
-#include "sd_card/sd_card.h"
-#include "flasher/flasher_common.h"
+#include "modules/storage/usb_drive/usb_drive.h"
+#include "modules/storage/sd_card/sd_card.h"
+#include "modules/prog/prog_common.h"
 #include "tft_ui.h"
-#include "app_actions/app_actions.h"
-#include "ui_state/ui_state.h"
-#include "flash_log/flash_log.h"
+#include "modules/ui/app_actions/app_actions.h"
+#include "modules/ui/ui_state/ui_state.h"
+#include "modules/utils/flash_log/flash_log.h"
 
 // ============================================================
 // 3. CONSTANTS & GLOBALS
@@ -207,7 +207,7 @@ void handleTabSelection(int tab, int itemIdx) {
                 if (ret == ESP_OK) {
                     usb_drive_lock();  // Re-lock VFS cho state save
                     // sd_history_add(fw_id);  // History disabled
-                    saveAndRestart(fw_id);  // → esp_restart(), no unlock needed
+                    // saveAndRestart(fw_id);  // → esp_restart(), no unlock needed
                 }
             }
             break;

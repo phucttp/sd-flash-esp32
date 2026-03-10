@@ -1,14 +1,14 @@
 /**
- * @file flasher_esp.h
+ * @file prog_esp32.h
  * @brief ESP32 UART flasher engine using esp-serial-flasher library.
  * @details Handles flashing ESP32 targets via UART (bootloader, partition, app).
  */
 
-#ifndef __FLASHER_ESP_H__
-#define __FLASHER_ESP_H__
+#ifndef __PROG_ESP32_H__
+#define __PROG_ESP32_H__
 
-#include "flasher_common.h"
-#include "../sd_card/sd_card.h"
+#include "../prog_common.h"
+#include "../../storage/sd_card/sd_card.h"
 #include <string>
 
 // === ĐỊA CHỈ NẠP CHUẨN CỦA ESP32 ===
@@ -39,24 +39,11 @@ esp_err_t flasher_write_segment(const std::string& file_path, uint32_t offset, c
 esp_err_t flasher_chip_erase(void);
 
 // ============================================================
-// SCAN BOOT API - Quét và lưu combo kết nối
+// SCAN BOOT API - Quét và lưu combo kết nối (RAM-only)
 // ============================================================
 
-/**
- * @brief Quét tất cả 12 combo reset và lưu combo working vào SD.
- * @return Index của combo thành công (0-11), hoặc -1 nếu thất bại.
- */
 int flasher_scan_and_save_combo(void);
-
-/**
- * @brief Load combo đã lưu từ SD card.
- * @return Index của combo đã lưu (0-11), hoặc -1 nếu chưa có.
- */
 int flasher_load_saved_combo(void);
-
-/**
- * @brief Xóa combo đã lưu (reset về brute-force mặc định).
- */
 void flasher_clear_saved_combo(void);
 
-#endif // __FLASHER_ESP_H__
+#endif // __PROG_ESP32_H__

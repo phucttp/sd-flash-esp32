@@ -10,7 +10,7 @@
 #include "Arduino.h"           // String type, esp_err_t
 #include <string>
 #include <map>
-#include "../firmware_types.h"
+#include "../../../firmware_types.h"
 
 //===== BIẾN TOÀN CỤC (KHAI BÁO) =====
 

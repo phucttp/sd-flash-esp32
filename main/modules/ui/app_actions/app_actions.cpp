@@ -18,14 +18,14 @@
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 
-#include "../sd_card/sd_card.h"
-#include "../flasher/flasher_common.h"
-#include "../flasher/flasher_esp.h"
-#include "../flasher/flasher_swd_stm32f4.h"
-#include "../flasher/flasher_swd_stm32f1.h"
-#include "../firmware_types.h"
-#include "../usb_drive/usb_drive.h"
-#include "../flash_log/flash_log.h"
+#include "../../storage/sd_card/sd_card.h"
+#include "../../prog/prog_common.h"
+#include "../../prog/esp32/prog_esp32.h"
+#include "../../prog/stm32/prog_stm32_f4.h"
+#include "../../prog/stm32/prog_stm32_f1.h"
+#include "../../../firmware_types.h"
+#include "../../storage/usb_drive/usb_drive.h"
+#include "../../utils/flash_log/flash_log.h"
 
 #include <string>
 #include <inttypes.h>

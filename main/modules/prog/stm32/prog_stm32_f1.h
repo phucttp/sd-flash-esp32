@@ -1,5 +1,5 @@
 /**
- * @file flasher_swd_stm32f1.h
+ * @file prog_stm32_f1.h
  * @brief STM32F1 SWD flasher engine using Adafruit_DAP_STM32F1.
  *
  * API mirrors flasher_swd_stm32f4.h for consistency.
@@ -10,10 +10,10 @@
  *   - Flash programming in half-words (CSW 16-bit)
  */
 
-#ifndef __FLASHER_SWD_STM32F1_H__
-#define __FLASHER_SWD_STM32F1_H__
+#ifndef __PROG_STM32_F1_H__
+#define __PROG_STM32_F1_H__
 
-#include "flasher_common.h"
+#include "../prog_common.h"
 #include <string>
 
 esp_err_t flasher_swd_stm32f1_init(void);
@@ -60,4 +60,4 @@ typedef void (*flasher_swd_stm32f1_progress_cb_t)(const char* text, int percent)
 esp_err_t flasher_swd_stm32f1_flash_firmware(const std::string& fw_path,
                                        flasher_swd_stm32f1_progress_cb_t on_progress);
 
-#endif // __FLASHER_SWD_STM32F1_H__
+#endif // __PROG_STM32_F1_H__

@@ -1,75 +1,79 @@
-# ESP MultiFlasher
+# CHIVI FlashPorter TFT
 
-ESP32-C3 portable firmware flasher. Flash ESP32 (UART) and STM32 (SWD) targets from SD card, no PC required.
+Standalone firmware flasher on ESP32-S3. Programs ESP32 (UART) and STM32 (SWD) targets from internal USB drive — no PC required during flashing.
+
+Firmware files are copied via USB drag-and-drop, then flashed autonomously using a 3-button TFT interface.
 
 ## Supported Targets
 
-| Target | Interface | Protocol |
-|--------|-----------|----------|
-| ESP32 (all variants) | UART | esp-serial-flasher |
-| STM32F1 (Cortex-M3) | SWD | FPEC half-word programming |
-| STM32F4 (Cortex-M4) | SWD | Flash CR sector programming |
-
-Auto-detection via SWD IDCODE: `0x1BA01477` = Cortex-M3 (F1), `0x2BA01477` = Cortex-M4 (F4).
+| Target | Interface | Protocol | Auto-detect |
+|--------|-----------|----------|-------------|
+| ESP32 (all variants) | UART | esp-serial-flasher | N/A |
+| STM32F1 (Cortex-M3) | SWD | FPEC half-word | IDCODE 0x1BA01477 |
+| STM32F4 (Cortex-M4) | SWD | Flash CR sector | IDCODE 0x2BA01477 |
 
 ## Hardware
 
-**Host:** ESP32-C3 (RISC-V), ESP-IDF v5.1.6 + Arduino component
+| Component | Spec |
+|-----------|------|
+| MCU | ESP32-S3 (Xtensa dual-core, 240MHz) |
+| Display | ST7735 TFT 160x128 (SPI, landscape) |
+| Storage | Internal FAT ~12.9MB via TinyUSB MSC |
+| Navigation | 3 buttons (UP/DOWN/OK) |
+| USB | MSC (drive) + CDC (debug COM) |
 
-### Pin Connections
+### Pin Map
 
 | Function | GPIO | Notes |
 |----------|------|-------|
-| OLED SDA | 8 | I2C, SH1106G 128x64, addr 0x3C |
-| OLED SCL | 9 | |
-| SD Card CS | 7 | SPI, FAT32 |
-| Button UP | 21 | Active low |
-| Button DOWN | 10 | Active low |
-| Button OK | 20 | Active low |
+| TFT MOSI | 34 | Hardware SPI |
+| TFT SCLK | 33 | |
+| TFT RST/DC/BL | 35/36/37 | BL via MOSFET |
+| BTN UP/DOWN/OK | 4/1/2 | Active low |
+| FLASH_PIN_0 | 13 | ESP TX / SWD SWDIO |
+| FLASH_PIN_1 | 14 | ESP RX |
+| FLASH_PIN_2 | 12 | ESP RESET trigger |
+| FLASH_PIN_3 | 11 | ESP BOOT / SWD SWCLK |
 
-### Target Wiring — ESP32 (UART)
-
-| Host GPIO | Target Pin | Function |
-|-----------|------------|----------|
-| 0 (TX) | RXD0 | Firmware data |
-| 1 (RX) | TXD0 | Response |
-| 2 | EN/RESET | Reset control |
-| 3 | GPIO0/BOOT | Boot mode |
-
-### Target Wiring — STM32 (SWD)
-
-| Host GPIO | Target Pin | Function |
-|-----------|------------|----------|
-| 0 | SWDIO | SWD data |
-| 3 | SWCLK | SWD clock |
-| 3.3V | VCC | Power target from 3.3V only |
-| GND | GND | Common ground |
-
-> **Warning:** Never power STM32 from 5V — causes SWD level mismatch and potential GPIO damage.
+> **Warning:** Power STM32 target from 3.3V only. 5V causes SWD level mismatch.
 
 ## Features
 
-- **OLED Tab UI:** 5 tabs — FW, Tools, Desc, History, Info
-- **SD Card firmware library:** JSON metadata (`index.txt`), auto-discovery
-- **WiFi Sync:** Download encrypted firmware from cloud, AES-128-CBC
-- **NetFlash:** Remote flash via HTTP API over WiFi
-- **RDP auto-erase:** Detects STM32 read protection, confirms with user, auto-erases before flashing
-- **Serial Monitor:** Real-time UART log viewer on OLED
-- **Flash History:** Tracks last 10 flash operations
+- **USB Drive** — PC copies firmware via drag-and-drop, ESP32 reads FAT VFS
+- **TFT Tab UI** — FW list, Tools, Info with color display
+- **Auto-detect STM32** — IDCODE routing: Cortex-M3 -> F1, Cortex-M4 -> F4
+- **RDP auto-erase** — detect read protection, confirm, mass-erase before flash
+- **Per-chunk verify** — 256B write + readback + retry (handles SWD bit-bang errors)
+- **Serial Monitor** — real-time UART log on TFT
+- **UI state restore** — saves position across reboots
+- **AES-128-CBC** — encrypted firmware support (optional)
 
-## SD Card Structure
+## USB Drive Structure
 
 ```
-SD_ROOT/
-├── index.txt           # Firmware metadata (JSON)
-├── config/
-│   ├── url.txt         # Remote server URL
-│   ├── aes_key.txt     # AES-128 key (16 bytes)
-│   └── aes_iv.txt      # AES-128 IV (16 bytes)
-└── FW_ID/
-    ├── FW.bin          # Main firmware (STM32) or app.bin (ESP32)
-    ├── boot.bin        # Bootloader (ESP32 only)
-    └── part.bin        # Partition table (ESP32 only)
+/usb/                           (internal FAT mount)
+├── ST_<name>/FW.bin            -> STM32 firmware
+└── ES_<name>/                  -> ESP32 firmware
+    ├── app.bin
+    ├── boot.bin
+    └── part.bin
+```
+
+## Project Structure
+
+```
+main/
+├── main.cpp                    Entry point + UI callbacks
+├── pin_config.h                GPIO definitions
+├── firmware_types.h            Shared types
+└── modules/
+    ├── prog/                   Flasher engines
+    │   ├── prog_common.*           Shared (IDCODE probe, pin init)
+    │   ├── esp32/                  ESP32 UART engine
+    │   └── stm32/                  STM32F1/F4 SWD engines
+    ├── storage/                USB drive + firmware store
+    ├── ui/                     App actions + UI state
+    └── utils/                  File utils + flash log
 ```
 
 ## Build
@@ -78,14 +82,26 @@ Requires ESP-IDF v5.1.6+.
 
 ```bash
 . $IDF_PATH/export.sh
-idf.py set-target esp32c3
+idf.py set-target esp32s3
 idf.py build
 idf.py -p COM3 flash monitor
 ```
 
+## Dependencies
+
+| Component | Purpose |
+|-----------|---------|
+| `espressif/arduino-esp32` | Arduino framework on ESP-IDF |
+| `espressif/esp-serial-flasher` | UART flash protocol |
+| `Adafruit_DAP` (modified) | SWD protocol for STM32 |
+| `Adafruit_ST7735` / `Adafruit_GFX` | TFT display driver |
+| `TftUI` | Tab-based UI framework |
+| `esp_tinyusb` | USB MSC + CDC |
+| `mbedtls` | AES encryption (ESP-IDF built-in) |
+
 ## FlashPorter (PC Tool)
 
-Python/Tkinter tool to manage firmware library and prepare SD cards.
+Python/Tkinter tool for firmware library management.
 
 ```bash
 cd toolAddFirmware/FlashPorter_Public
@@ -93,17 +109,13 @@ pip install -r requirements.txt
 python main.pyw
 ```
 
-Features: add firmware, export to SD, encrypt + push to cloud, NetFlash remote flashing.
+## Documentation
 
-## Dependencies
-
-- `espressif/esp-serial-flasher` — UART flash protocol
-- `espressif/arduino-esp32` — Arduino framework on ESP-IDF
-- `bblanchon/ArduinoJson` — JSON parsing
-- `Adafruit_SH110X` / `Adafruit_GFX` — OLED driver
-- `Adafruit_DAP` (modified) — SWD protocol for STM32
-- `WiFiManager` — WiFi captive portal
-- `mbedtls` — AES encryption
+Detailed docs in [`docs/`](docs/):
+- [Project Overview & PDR](docs/project-overview-pdr.md)
+- [Codebase Summary](docs/codebase-summary.md)
+- [Code Standards](docs/code-standards.md)
+- [System Architecture](docs/system-architecture.md)
 
 ## License
 

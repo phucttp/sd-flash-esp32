@@ -1,5 +1,5 @@
 /**
- * @file flasher_common.cpp
+ * @file prog_common.cpp
  * @brief Các tiện ích dùng chung cho tất cả engine nạp firmware.
  *
  * Chức năng chính:
@@ -8,7 +8,7 @@
  *   - Lưu trạng thái giao diện (tab + item đang chọn) và khởi động lại hệ thống
  */
 
-#include "flasher_common.h"
+#include "prog_common.h"
 
 #include <string>
 #include <inttypes.h>
@@ -17,7 +17,7 @@
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 #include "tft_ui.h"
-#include "../ui_state/ui_state.h"
+#include "../ui/ui_state/ui_state.h"
 #include "Adafruit_DAP.h"
 
 // Extern UI instance from main.cpp

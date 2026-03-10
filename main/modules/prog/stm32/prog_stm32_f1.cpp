@@ -1,5 +1,5 @@
 /**
- * @file flasher_swd_stm32f1.cpp
+ * @file prog_stm32_f1.cpp
  * @brief Engine nạp firmware cho STM32F1 qua SWD.
  *
  * Kiến trúc giống flasher_swd_stm32f4.cpp:
@@ -16,7 +16,7 @@
  * Xem docs/stm32f1-swd-engine-spec.md cho chi tiết kỹ thuật.
  */
 
-#include "flasher_swd_stm32f1.h"
+#include "prog_stm32_f1.h"
 
 #include <inttypes.h>
 #include "esp_log.h"
@@ -26,7 +26,7 @@
 #include "Arduino.h"
 #include <stdio.h>
 #include <sys/stat.h>
-#include "../usb_drive/usb_drive.h"
+#include "../../storage/usb_drive/usb_drive.h"
 
 static const char *TAG = "SWD_F1";
 

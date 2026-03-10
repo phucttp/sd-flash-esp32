@@ -18,3 +18,4 @@ dependencies:
   espressif/arduino-esp32: '*'
   # esp_tinyusb: using LOCAL component in components/esp_tinyusb (Kconfig patched for Arduino compat)
   bblanchon/ArduinoJson: '*'
+  espressif/usb_host_vcp: '*'

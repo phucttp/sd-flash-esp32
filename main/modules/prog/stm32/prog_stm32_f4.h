@@ -1,12 +1,12 @@
 /**
- * @file flasher_swd_stm32f4.h
+ * @file prog_stm32_f4.h
  * @brief STM32 SWD flasher engine using Adafruit_DAP library.
  */
 
-#ifndef __FLASHER_SWD_STM32F4_H__
-#define __FLASHER_SWD_STM32F4_H__
+#ifndef __PROG_STM32_F4_H__
+#define __PROG_STM32_F4_H__
 
-#include "flasher_common.h"
+#include "../prog_common.h"
 #include <string>
 
 esp_err_t flasher_swd_stm32f4_init(void);
@@ -54,4 +54,4 @@ typedef void (*flasher_swd_stm32f4_progress_cb_t)(const char* text, int percent)
 esp_err_t flasher_swd_stm32f4_flash_firmware(const std::string& fw_path,
                                       flasher_swd_stm32f4_progress_cb_t on_progress);
 
-#endif // __FLASHER_SWD_STM32F4_H__
+#endif // __PROG_STM32_F4_H__

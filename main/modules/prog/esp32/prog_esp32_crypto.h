@@ -1,12 +1,12 @@
 /**
- * @file flasher_esp_crypto.h
+ * @file prog_esp32_crypto.h
  * @brief AES-128-CBC decryption for ESP32 encrypted firmware flashing.
  * @details Provides streaming decryption for reading .enc files from SD card
  *          and flashing to target ESP32 via UART.
  */
 
-#ifndef FLASHER_ESP_CRYPTO_H
-#define FLASHER_ESP_CRYPTO_H
+#ifndef PROG_ESP32_CRYPTO_H
+#define PROG_ESP32_CRYPTO_H
 
 #include "esp_err.h"
 #include "mbedtls/aes.h"
@@ -53,4 +53,4 @@ esp_err_t flasher_crypto_decrypt(flasher_crypto_ctx_t* ctx,
  */
 void flasher_crypto_cleanup(flasher_crypto_ctx_t* ctx);
 
-#endif // FLASHER_ESP_CRYPTO_H
+#endif // PROG_ESP32_CRYPTO_H

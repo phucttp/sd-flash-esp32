@@ -1,5 +1,5 @@
 /**
- * @file flasher_esp_crypto.cpp
+ * @file prog_esp32_crypto.cpp
  * @brief Giải mã AES-128-CBC cho firmware ESP32 mã hóa trong quá trình nạp.
  *
  * Chức năng chính:
@@ -9,7 +9,7 @@
  *   - Key và IV được lưu trong NVS (không nằm trên SD card)
  */
 
-#include "flasher_esp_crypto.h"
+#include "prog_esp32_crypto.h"
 #include "../wifi_config/wifi_config.h"
 #include "esp_log.h"
 #include <string.h>

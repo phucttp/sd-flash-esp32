@@ -1,15 +1,15 @@
 /**
- * @file flasher_common.h
+ * @file prog_common.h
  * @brief Shared definitions for all flasher engines (ESP32 UART, STM32 SWD).
  * @details Pin definitions, mode enum, and shared utility declarations
  *          used by both esp_flasher and swd_flasher modules.
  */
 
-#ifndef __FLASHER_COMMON_H__
-#define __FLASHER_COMMON_H__
+#ifndef __PROG_COMMON_H__
+#define __PROG_COMMON_H__
 
 #include "esp_err.h"
-#include "../pin_config.h"   // All pin definitions centralized here
+#include "../../pin_config.h"   // All pin definitions centralized here
 
 // ============================================================
 // COMMON CONSTANTS
@@ -53,4 +53,4 @@ uint32_t swd_probe_idcode(void);
 #define SWD_IDCODE_CORTEX_M3    0x1BA01477   // STM32F1xx
 #define SWD_IDCODE_CORTEX_M4    0x2BA01477   // STM32F4xx
 
-#endif // __FLASHER_COMMON_H__
+#endif // __PROG_COMMON_H__
