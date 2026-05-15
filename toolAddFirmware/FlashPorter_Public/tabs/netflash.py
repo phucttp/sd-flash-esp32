@@ -41,7 +41,8 @@ class NetFlashTab(ttk.Frame):
     def __init__(self, parent, app, master_client: MasterClient):
         super().__init__(parent, padding=10)
         self.app = app
-        self.master = master_client
+        # NOTE: do NOT use `self.master` — that name is reserved by Tk for parent widget.
+        self.master_client = master_client
 
         self._cards: dict[int, dict] = {}    # addr → {widgets, vars, state}
         self._poll_id: Optional[str] = None
@@ -194,7 +195,7 @@ class NetFlashTab(ttk.Frame):
 
     def _do_connect(self, host: str):
         try:
-            result = self.master.connect(host)
+            result = self.master_client.connect(host)
             self.after(0, self._on_connected, host, result, None)
         except Exception as e:
             self.after(0, self._on_connected, host, None, str(e))
@@ -221,7 +222,7 @@ class NetFlashTab(ttk.Frame):
         self.btn_reboot_all.config(state="normal")
 
         # Render slaves
-        slaves = self.master.get_slaves()
+        slaves = self.master_client.get_slaves()
         self._render_cards(slaves)
         self._start_polling()
 
@@ -313,7 +314,7 @@ class NetFlashTab(ttk.Frame):
                  anchor="w").grid(row=2, column=0, columnspan=3, sticky="ew")
 
         # Row 3: FW dropdown
-        fw_list = self.master.get_slave_fw_list(slave.addr)
+        fw_list = self.master_client.get_slave_fw_list(slave.addr)
         fw_values = [f["display"] for f in fw_list]
         fw_combo = ttk.Combobox(ct, values=fw_values, state="readonly",
                                 font=Fonts.mono_small())
@@ -445,7 +446,7 @@ class NetFlashTab(ttk.Frame):
 
     def _tick_poll(self):
         try:
-            statuses = self.master.get_status()
+            statuses = self.master_client.get_status()
         except Exception as e:
             self.app._log(f"NetFlash: poll error — {e}")
             statuses = []
@@ -459,7 +460,7 @@ class NetFlashTab(ttk.Frame):
 
         # Pick up finalized slave info (current_fw, last_result) when flash finishes
         if self._flash_in_progress:
-            for slave in self.master.get_slaves():
+            for slave in self.master_client.get_slaves():
                 if slave.addr in self._cards:
                     c = self._cards[slave.addr]
                     if c["last_result"] != slave.last_result:
@@ -515,7 +516,7 @@ class NetFlashTab(ttk.Frame):
             return
         c = self._cards[addr]
         self._card_log(addr, f"Flashing {fw_id}...")
-        result = self.master.flash_slave(addr, fw_id)
+        result = self.master_client.flash_slave(addr, fw_id)
         if not result.get("ok"):
             self._card_log(addr, f"✗ {result.get('error', 'flash rejected')}")
             return
@@ -548,7 +549,7 @@ class NetFlashTab(ttk.Frame):
         self._flash_in_progress = True
         for addr, fw_id in targets.items():
             self._card_log(addr, f"Flashing {fw_id}...")
-        result = self.master.flash_all(targets)
+        result = self.master_client.flash_all(targets)
         rej = result.get("rejected", [])
         if rej:
             for a in rej:
@@ -566,7 +567,7 @@ class NetFlashTab(ttk.Frame):
             return
         for addr in online:
             self._card_log(addr, "Erasing...")
-        self.master.erase_all()
+        self.master_client.erase_all()
 
     def _reboot_all(self):
         online = [a for a, c in self._cards.items() if c["online"]]
@@ -580,15 +581,15 @@ class NetFlashTab(ttk.Frame):
             return
         for addr in online:
             self._card_log(addr, "Rebooting...")
-        self.master.reboot_all()
+        self.master_client.reboot_all()
 
     def _reboot_slave(self, addr: int):
         self._card_log(addr, "Rebooting...")
-        self.master.reboot_slave(addr)
+        self.master_client.reboot_slave(addr)
 
     def _ping_slave(self, addr: int):
         # Re-fetch fresh slave info for this addr
-        slaves = self.master.get_slaves()
+        slaves = self.master_client.get_slaves()
         for slave in slaves:
             if slave.addr == addr:
                 c = self._cards[addr]
