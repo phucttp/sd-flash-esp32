@@ -150,6 +150,22 @@ class NetFlashTab(ttk.Frame):
                  bg=Colors.BG_CARD, fg=Colors.TEXT,
                  font=Fonts.bold()).grid(row=0, column=3, sticky="e")
 
+        # Row 1: Global FW dropdown — applies to all online cards whose
+        # per-slave FW pool contains the selected FW id.
+        tk.Label(hero, text="Apply FW to all online:",
+                 bg=Colors.BG_CARD, fg=Colors.TEXT_MUTED,
+                 font=Fonts.normal()).grid(row=1, column=0, columnspan=2,
+                                            sticky="w", pady=(10, 0))
+
+        self.global_fw_combo = ttk.Combobox(hero, state="disabled",
+                                             font=Fonts.mono_small())
+        self.global_fw_combo.grid(row=1, column=2, columnspan=2, sticky="ew",
+                                   padx=(8, 0), pady=(10, 0))
+        self.global_fw_combo.bind("<<ComboboxSelected>>",
+                                   self._on_global_fw_selected)
+        self.global_fw_combo.set("(connect master to load FW list)")
+        self._global_fw_ids: list[str] = []  # parallel to combobox values
+
     def _build_cards_area(self):
         container = ttk.Frame(self)
         container.grid(row=2, column=0, sticky="nsew")
@@ -230,6 +246,7 @@ class NetFlashTab(ttk.Frame):
         # Render slaves
         slaves = self.master_client.get_slaves()
         self._render_cards(slaves)
+        self._build_global_fw_list(slaves)
         self._start_polling()
 
     def _find_master(self):
@@ -505,6 +522,61 @@ class NetFlashTab(ttk.Frame):
         self.summary_var.set("  ·  ".join(parts))
 
     # ─────────────────────────── Actions ───────────────────────────
+
+    def _build_global_fw_list(self, slaves: list[SlaveInfo]):
+        """Compute union of FW ids across all slave pools and populate the
+        global FW dropdown. Each entry shows the FW display plus a count of
+        how many slaves can flash it: 'EMC32 v1.2  (3/4)'."""
+        from collections import OrderedDict
+        union: OrderedDict[str, dict] = OrderedDict()
+        for slave in slaves:
+            for fw in self.master_client.get_slave_fw_list(slave.addr):
+                fid = fw["id"]
+                if fid not in union:
+                    union[fid] = {"id": fid, "display": fw["display"], "count": 0}
+                union[fid]["count"] += 1
+
+        total = len(slaves)
+        self._global_fw_ids = list(union.keys())
+        values = [
+            f"{f['display']}  ({f['count']}/{total})"
+            for f in union.values()
+        ]
+
+        if values:
+            self.global_fw_combo.config(state="readonly", values=values)
+            self.global_fw_combo.set("(select FW to apply to all)")
+        else:
+            self.global_fw_combo.config(state="disabled", values=[])
+            self.global_fw_combo.set("(no FW available on any slave)")
+
+    def _on_global_fw_selected(self, event=None):
+        """Propagate the selected global FW down to each card's per-slave
+        dropdown — but ONLY if that card's local FW pool contains the same id.
+        Cards lacking the FW keep their existing selection."""
+        idx = self.global_fw_combo.current()
+        if idx < 0 or idx >= len(self._global_fw_ids):
+            return
+        fw_id = self._global_fw_ids[idx]
+
+        applied = 0
+        skipped = 0
+        for addr, c in self._cards.items():
+            if not c["online"]:
+                continue
+            pool_ids = [f["id"] for f in c["fw_list"]]
+            if fw_id in pool_ids:
+                pool_idx = pool_ids.index(fw_id)
+                c["fw_combo"].current(pool_idx)
+                applied += 1
+                self._card_log(addr, f"FW set: {fw_id}")
+            else:
+                skipped += 1
+
+        self.app._log(
+            f"NetFlash: global FW '{fw_id}' applied to {applied} slave(s)"
+            + (f", {skipped} skipped (FW not in pool)" if skipped else "")
+        )
 
     def _selected_fw_for(self, addr: int) -> Optional[str]:
         c = self._cards.get(addr)
