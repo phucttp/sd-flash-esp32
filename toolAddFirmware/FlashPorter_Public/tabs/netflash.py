@@ -69,11 +69,21 @@ class NetFlashTab(ttk.Frame):
 
     def _build(self):
         self.columnconfigure(0, weight=1)
-        self.rowconfigure(2, weight=1)
+        self.rowconfigure(1, weight=1)
 
-        self._build_master_bar()
-        self._build_hero_actions()
-        self._build_cards_area()
+        self._build_master_bar()  # row 0 — full width
+
+        # Row 1: horizontal split (Master Control on left, Cards Grid on right)
+        pw = ttk.PanedWindow(self, orient="horizontal")
+        pw.grid(row=1, column=0, sticky="nsew")
+
+        left_wrap = ttk.Frame(pw)
+        pw.add(left_wrap, weight=30)
+        self._build_master_control(left_wrap)
+
+        right_wrap = ttk.Frame(pw)
+        pw.add(right_wrap, weight=70)
+        self._build_cards_area(right_wrap)
 
     def _build_master_bar(self):
         bar = ttk.Frame(self)
@@ -102,73 +112,101 @@ class NetFlashTab(ttk.Frame):
                                           font=Fonts.bold())
         self.lbl_conn_status.grid(row=0, column=4, sticky="e")
 
-    def _build_hero_actions(self):
-        hero = tk.Frame(self, bg=Colors.BG_CARD, padx=14, pady=12)
-        hero.grid(row=1, column=0, sticky="ew", pady=(0, 8))
-        hero.columnconfigure(3, weight=1)
+    def _build_master_control(self, parent):
+        """Left column: dropdown FW + big FLASH ALL + Erase/Reboot + status."""
+        panel = tk.Frame(parent, bg=Colors.BG_CARD, padx=18, pady=18)
+        panel.pack(fill=tk.BOTH, expand=True)
+        panel.columnconfigure(0, weight=1)
+        panel.columnconfigure(1, weight=1)
 
+        # --- Apply FW to all (header + dropdown) ---
+        tk.Label(panel, text="Apply FW to all online:",
+                 bg=Colors.BG_CARD, fg=Colors.TEXT_MUTED,
+                 font=Fonts.normal()).grid(row=0, column=0, columnspan=2,
+                                            sticky="w")
+
+        self.global_fw_combo = ttk.Combobox(panel, state="disabled",
+                                             font=Fonts.mono_small())
+        self.global_fw_combo.grid(row=1, column=0, columnspan=2,
+                                   sticky="ew", pady=(2, 16))
+        self.global_fw_combo.bind("<<ComboboxSelected>>",
+                                   self._on_global_fw_selected)
+        self.global_fw_combo.set("(connect master to load FW list)")
+        self._global_fw_ids: list[str] = []
+
+        # --- FLASH ALL — biggest, primary focus ---
         self.btn_flash_all = tk.Button(
-            hero, text="⚡ FLASH ALL",
-            font=(Fonts.FAMILY, 14, "bold"),
+            panel, text="⚡ FLASH ALL",
+            font=(Fonts.FAMILY, 18, "bold"),
             bg=Colors.PRIMARY, fg=Colors.TEXT,
-            activebackground=Colors.PRIMARY_DARK if hasattr(Colors, "PRIMARY_DARK") else Colors.PRIMARY,
             activeforeground=Colors.TEXT,
             relief="flat", borderwidth=0,
-            padx=24, pady=10,
+            pady=22,
             cursor="hand2",
             command=self._flash_all,
             state="disabled",
         )
-        self.btn_flash_all.grid(row=0, column=0, padx=(0, 10))
+        self.btn_flash_all.grid(row=2, column=0, columnspan=2,
+                                 sticky="ew", pady=(0, 8))
 
+        # --- Erase / Reboot — side-by-side secondary buttons ---
         self.btn_erase_all = tk.Button(
-            hero, text="✖ Erase All",
+            panel, text="✖ Erase All",
             font=Fonts.bold(),
             bg=Colors.ERROR, fg=Colors.TEXT,
             relief="flat", borderwidth=0,
-            padx=14, pady=10,
+            pady=10,
             cursor="hand2",
             command=self._erase_all,
             state="disabled",
         )
-        self.btn_erase_all.grid(row=0, column=1, padx=(0, 8))
+        self.btn_erase_all.grid(row=3, column=0, sticky="ew", padx=(0, 4))
 
         self.btn_reboot_all = tk.Button(
-            hero, text="↻ Reboot All",
+            panel, text="↻ Reboot All",
             font=Fonts.bold(),
             bg=Colors.BG_DARK, fg=Colors.TEXT,
             relief="flat", borderwidth=1,
-            padx=14, pady=10,
+            pady=10,
             cursor="hand2",
             command=self._reboot_all,
             state="disabled",
         )
-        self.btn_reboot_all.grid(row=0, column=2, padx=(0, 14))
+        self.btn_reboot_all.grid(row=3, column=1, sticky="ew", padx=(4, 0))
 
-        self.summary_var = tk.StringVar(value="No master connected")
-        tk.Label(hero, textvariable=self.summary_var,
-                 bg=Colors.BG_CARD, fg=Colors.TEXT,
-                 font=Fonts.bold()).grid(row=0, column=3, sticky="e")
+        # --- Divider ---
+        tk.Frame(panel, height=1, bg=Colors.BORDER).grid(
+            row=4, column=0, columnspan=2, sticky="ew", pady=(18, 12))
 
-        # Row 1: Global FW dropdown — applies to all online cards whose
-        # per-slave FW pool contains the selected FW id.
-        tk.Label(hero, text="Apply FW to all online:",
-                 bg=Colors.BG_CARD, fg=Colors.TEXT_MUTED,
-                 font=Fonts.normal()).grid(row=1, column=0, columnspan=2,
-                                            sticky="w", pady=(10, 0))
+        # --- Status summary — multi-line, big numbers on right ---
+        tk.Label(panel, text="Status", bg=Colors.BG_CARD,
+                 fg=Colors.PRIMARY, font=Fonts.bold()).grid(
+            row=5, column=0, columnspan=2, sticky="w", pady=(0, 4))
 
-        self.global_fw_combo = ttk.Combobox(hero, state="disabled",
-                                             font=Fonts.mono_small())
-        self.global_fw_combo.grid(row=1, column=2, columnspan=2, sticky="ew",
-                                   padx=(8, 0), pady=(10, 0))
-        self.global_fw_combo.bind("<<ComboboxSelected>>",
-                                   self._on_global_fw_selected)
-        self.global_fw_combo.set("(connect master to load FW list)")
-        self._global_fw_ids: list[str] = []  # parallel to combobox values
+        self.status_online_var = tk.StringVar(value="—")
+        self.status_ok_var = tk.StringVar(value="—")
+        self.status_fail_var = tk.StringVar(value="—")
 
-    def _build_cards_area(self):
-        container = ttk.Frame(self)
-        container.grid(row=2, column=0, sticky="nsew")
+        def stat_row(r, lbl_text, var, value_color):
+            tk.Label(panel, text=lbl_text, bg=Colors.BG_CARD,
+                     fg=Colors.TEXT_MUTED, font=Fonts.normal()).grid(
+                row=r, column=0, sticky="w", pady=2)
+            tk.Label(panel, textvariable=var, bg=Colors.BG_CARD,
+                     fg=value_color,
+                     font=(Fonts.FAMILY, 13, "bold"), anchor="e").grid(
+                row=r, column=1, sticky="e", pady=2)
+
+        stat_row(6, "Online", self.status_online_var, Colors.TEXT)
+        stat_row(7, "Success", self.status_ok_var, Colors.SUCCESS)
+        stat_row(8, "Failed", self.status_fail_var, Colors.ERROR)
+
+        # Legacy compatibility — kept so _update_summary() can still set it
+        # if anything reads it. Not displayed in the new layout.
+        self.summary_var = tk.StringVar(value="")
+
+    def _build_cards_area(self, parent):
+        container = ttk.Frame(parent)
+        container.pack(fill=tk.BOTH, expand=True)
         container.columnconfigure(0, weight=1)
         container.rowconfigure(0, weight=1)
 
@@ -515,11 +553,9 @@ class NetFlashTab(ttk.Frame):
     def _update_summary(self):
         total = len(self._cards)
         online = sum(1 for c in self._cards.values() if c["online"])
-        parts = [f"{online}/{total} online"]
-        if self._session_ok or self._session_fail:
-            parts.append(f"{self._session_ok} OK")
-            parts.append(f"{self._session_fail} ✗")
-        self.summary_var.set("  ·  ".join(parts))
+        self.status_online_var.set(f"{online}/{total}" if total else "—")
+        self.status_ok_var.set(str(self._session_ok) if (self._session_ok or self._session_fail) else "—")
+        self.status_fail_var.set(str(self._session_fail) if (self._session_ok or self._session_fail) else "—")
 
     # ─────────────────────────── Actions ───────────────────────────
 
