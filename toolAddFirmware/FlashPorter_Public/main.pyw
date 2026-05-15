@@ -36,9 +36,12 @@ from modules.firmware_lib import FirmwareLibrary
 from modules.sd_card import SDCardManager
 from modules.git_sync import GitManager
 from modules.oled_preview import OLEDPreviewFrame
-from modules.utils import safe_name, FileNames
+from modules.utils import safe_name, FileNames, generate_short_fw_id
 from modules.theme import Colors, Fonts, apply_theme, GradientFrame, StatusBadge
 from modules.net_flash import NodeClient, discover_nodes
+
+# Tab classes (Phase 1+: split from monolith main.pyw)
+from tabs.settings_tab import SettingsTab
 
 # Constants
 APP_TITLE = "FlashPorter Public Edition v2.0"
@@ -320,10 +323,10 @@ class MainApp(tk.Tk):
         nb.add(frm_manage, text="  Library & SD Card  ")
         self._build_manage_tab(frm_manage)
 
-        # Tab 3: Settings
+        # Tab 3: Settings (split into tabs/settings_tab.py, Phase 1)
         frm_settings = ttk.Frame(nb)
         nb.add(frm_settings, text="  Settings  ")
-        self._build_settings_tab(frm_settings)
+        self.settings_tab = SettingsTab(frm_settings, self, CONFIG_FILE)
 
         # Tab 4: NetFlash
         frm_netflash = ttk.Frame(nb)
@@ -367,11 +370,16 @@ class MainApp(tk.Tk):
         grp_info.pack(fill=tk.X, pady=(0, 15))
         grp_info.columnconfigure(1, weight=1)
 
-        # FW ID
+        # FW ID with "New" button
         ttk.Label(grp_info, text="Firmware ID:").grid(row=0, column=0, sticky="w", pady=8)
         self.combo_id = ttk.Combobox(grp_info, textvariable=self.add_fw_id_var, values=ids_hint)
         self.combo_id.grid(row=0, column=1, padx=10, sticky="ew")
         self.combo_id.bind("<<ComboboxSelected>>", self._on_id_selected)
+        ttk.Button(grp_info, text="New", style="Success.TButton",
+                   command=self._new_fw_id, width=6).grid(row=0, column=2, pady=8)
+
+        # Realtime duplicate detection
+        self.add_fw_id_var.trace_add("write", self._on_fw_id_changed)
 
         # Device Type
         ttk.Label(grp_info, text="Device Type:").grid(row=1, column=0, sticky="w", pady=8)
@@ -716,54 +724,6 @@ class MainApp(tk.Tk):
 
         # Keep compatibility with old listbox-based code
         self.fw_listbox = self.fw_tree  # Alias for compatibility
-
-    def _build_settings_tab(self, parent):
-        """Build Settings tab."""
-        frm = ttk.Frame(parent, padding=20)
-        frm.pack(fill=tk.BOTH, expand=True)
-
-        # Library Path Settings
-        grp_lib = ttk.LabelFrame(frm, text="Firmware Library Location", padding=15)
-        grp_lib.pack(fill=tk.X, pady=(0, 15))
-        grp_lib.columnconfigure(1, weight=1)
-
-        ttk.Label(grp_lib, text="Library Path:").grid(row=0, column=0, sticky="w", pady=8)
-        ttk.Entry(grp_lib, textvariable=self.lib_path_var, font=Fonts.mono_small()).grid(row=0, column=1, padx=10, sticky="ew")
-        ttk.Button(grp_lib, text="...", width=3, style="Icon.TButton",
-                   command=self._choose_lib_path).grid(row=0, column=2)
-
-        ttk.Label(grp_lib, text="(Restart app after changing)",
-                  style="Muted.TLabel").grid(row=1, column=1, sticky="w", padx=10)
-
-        # Encryption Settings
-        grp_enc = ttk.LabelFrame(frm, text="Encryption Settings (AES-128-CBC)", padding=15)
-        grp_enc.pack(fill=tk.X, pady=(0, 15))
-        grp_enc.columnconfigure(1, weight=1)
-
-        ttk.Label(grp_enc, text="AES Key (16 chars):").grid(row=0, column=0, sticky="w", pady=8)
-        ttk.Entry(grp_enc, textvariable=self.enc_key, font=Fonts.mono()).grid(row=0, column=1, padx=10, sticky="ew")
-
-        ttk.Label(grp_enc, text="AES IV (16 chars):").grid(row=1, column=0, sticky="w", pady=8)
-        ttk.Entry(grp_enc, textvariable=self.enc_iv, font=Fonts.mono()).grid(row=1, column=1, padx=10, sticky="ew")
-
-        # Git Settings
-        grp_git = ttk.LabelFrame(frm, text="Git Repository", padding=15)
-        grp_git.pack(fill=tk.X, pady=(0, 15))
-        grp_git.columnconfigure(1, weight=1)
-
-        ttk.Label(grp_git, text="Repository URL:").grid(row=0, column=0, sticky="w", pady=8)
-        ttk.Entry(grp_git, textvariable=self.git_url_var, font=Fonts.mono()).grid(row=0, column=1, padx=10, sticky="ew")
-
-        # Account Settings
-        grp_acc = ttk.LabelFrame(frm, text="Account", padding=15)
-        grp_acc.pack(fill=tk.X, pady=(0, 15))
-
-        ttk.Label(grp_acc, text=f"Logged in as: {self.auth.get_username()}").pack(anchor="w")
-        ttk.Button(grp_acc, text="Change Password", style="Secondary.TButton",
-                   command=self._change_password).pack(anchor="w", pady=5)
-
-        # Save button
-        ttk.Button(frm, text="SAVE SETTINGS", style="Primary.TButton", command=self._save_settings).pack(pady=20)
 
     # ==================== NetFlash Tab ====================
 
@@ -1492,77 +1452,6 @@ class MainApp(tk.Tk):
                 pass
         return {}
 
-    def _choose_lib_path(self):
-        """Choose firmware library path."""
-        path = filedialog.askdirectory(title="Select Firmware Library Folder")
-        if path:
-            self.lib_path_var.set(path)
-
-    def _save_settings(self):
-        """Save settings to file."""
-        settings = {
-            "key": self.enc_key.get(),
-            "iv": self.enc_iv.get(),
-            "sd_path": self.sd_path_var.get(),
-            "git_url": self.git_url_var.get(),
-            "lib_path": self.lib_path_var.get()
-        }
-        try:
-            with open(CONFIG_FILE, "w") as f:
-                json.dump(settings, f, indent=2)
-            self._log("Settings saved.")
-            messagebox.showinfo("Saved", "Settings saved successfully.")
-        except Exception as e:
-            messagebox.showerror("Error", f"Failed to save: {e}")
-
-    def _change_password(self):
-        """Show change password dialog with dark theme."""
-        dialog = tk.Toplevel(self)
-        dialog.title("Change Password")
-        dialog.geometry("350x250")
-        dialog.configure(bg=Colors.BG_DARK)
-        dialog.transient(self)
-        dialog.grab_set()
-
-        # Center dialog
-        dialog.update_idletasks()
-        x = (dialog.winfo_screenwidth() - 350) // 2
-        y = (dialog.winfo_screenheight() - 250) // 2
-        dialog.geometry(f"+{x}+{y}")
-
-        frm = ttk.Frame(dialog, padding=25)
-        frm.pack(fill=tk.BOTH, expand=True)
-
-        # Title
-        tk.Label(
-            frm,
-            text="Change Password",
-            font=Fonts.heading(),
-            fg=Colors.PRIMARY,
-            bg=Colors.BG_DARK
-        ).pack(pady=(0, 20))
-
-        ttk.Label(frm, text="Current Password:").pack(anchor="w")
-        current_var = tk.StringVar()
-        ttk.Entry(frm, textvariable=current_var, show="*", font=Fonts.normal()).pack(fill=tk.X, pady=(0, 12))
-
-        ttk.Label(frm, text="New Password:").pack(anchor="w")
-        new_var = tk.StringVar()
-        ttk.Entry(frm, textvariable=new_var, show="*", font=Fonts.normal()).pack(fill=tk.X, pady=(0, 12))
-
-        status = ttk.Label(frm, text="", foreground=Colors.ERROR)
-        status.pack(pady=5)
-
-        def submit():
-            success, msg = self.auth.change_password(current_var.get(), new_var.get())
-            if success:
-                messagebox.showinfo("Success", msg)
-                dialog.destroy()
-            else:
-                status.config(text=msg)
-
-        ttk.Button(frm, text="Change Password", style="Primary.TButton", command=submit).pack(pady=10, fill=tk.X)
-
     # ==================== Add Tab Methods ====================
 
     def _choose_app(self):
@@ -1611,7 +1500,7 @@ class MainApp(tk.Tk):
         self.add_app_path.set("")
         self.add_boot_path.set("")
         self.add_part_path.set("")
-        self.btn_add.config(text="ADD FIRMWARE")
+        self.btn_add.config(text="ADD FIRMWARE", style="Primary.TButton")
 
     def _on_id_selected(self, event=None):
         """When existing ID is selected, fill in details."""
@@ -1620,9 +1509,27 @@ class MainApp(tk.Tk):
             self.add_device_type_var.set(fw.get("device_type", ""))
             self.add_version_var.set(fw.get("version", ""))
             self.add_description_var.set(fw.get("description", ""))
-            self.btn_add.config(text="UPDATE FIRMWARE")
+            self.btn_add.config(text="UPDATE FIRMWARE", style="Accent.TButton")
         else:
-            self.btn_add.config(text="ADD FIRMWARE")
+            self.btn_add.config(text="ADD FIRMWARE", style="Primary.TButton")
+
+    def _new_fw_id(self):
+        """Generate next available FW ID and clear form."""
+        new_id = generate_short_fw_id(self.lib.lib_root)
+        self._clear_add_form()
+        self.add_fw_id_var.set(new_id)
+
+    def _on_fw_id_changed(self, *args):
+        """Realtime duplicate detection — switch button text ADD/UPDATE."""
+        fw_id = safe_name(self.add_fw_id_var.get())
+        if not fw_id:
+            self.btn_add.config(text="ADD FIRMWARE", style="Primary.TButton")
+            return
+        existing = self.lib.get_firmware(fw_id)
+        if existing:
+            self.btn_add.config(text="UPDATE FIRMWARE", style="Accent.TButton")
+        else:
+            self.btn_add.config(text="ADD FIRMWARE", style="Primary.TButton")
 
     def _add_firmware(self):
         """Add firmware to library."""
