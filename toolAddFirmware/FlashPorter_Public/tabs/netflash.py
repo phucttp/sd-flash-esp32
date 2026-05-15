@@ -53,8 +53,14 @@ class NetFlashTab(ttk.Frame):
         self.pack(fill=tk.BOTH, expand=True)
         self._build()
 
-        master_ip = app.settings.get("master_ip", "")
-        if master_ip:
+        master_ip = app.settings.get("master_ip", "").strip()
+        backend = app.settings.get("netflash_backend", "mock")
+        if backend == "mock":
+            # Mock backend: auto-connect on launch so demo slaves render
+            # without requiring LAN discovery.
+            demo_ip = master_ip or "mock://demo"
+            self.after(300, lambda: self._connect(demo_ip))
+        elif master_ip:
             self.after(300, lambda: self._connect(master_ip))
         else:
             self.after(800, self._find_master)
