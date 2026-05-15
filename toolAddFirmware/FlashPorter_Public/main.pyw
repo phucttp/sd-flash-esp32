@@ -37,11 +37,13 @@ from modules.git_sync import GitManager
 from modules.theme import Colors, Fonts, apply_theme, GradientFrame, StatusBadge
 # net_flash module is now used only by tabs/netflash.py (NetFlashTab)
 from modules.master_client import make_master_client
+from modules.phost_provisioner import make_phost_provisioner
 
 # Tab classes (Phase 1+: split from monolith main.pyw)
 from tabs.settings_tab import SettingsTab
 from tabs.netflash import NetFlashTab
 from tabs.firmware_manager import FirmwareManagerTab
+from tabs.phost_setup import PhostSetupTab
 
 # Constants
 APP_TITLE = "FlashPorter Public Edition v2.0"
@@ -248,6 +250,10 @@ class MainApp(tk.Tk):
         self.master_client = make_master_client(
             self.settings.get("netflash_backend", "mock")
         )
+        # Phost provisioner backend — mock until esptool integration is wired
+        self.phost_provisioner = make_phost_provisioner(
+            self.settings.get("phost_setup_backend", "mock")
+        )
 
         # Variables
         self.enc_key = tk.StringVar(value=self.settings.get("key", ""))
@@ -321,6 +327,11 @@ class MainApp(tk.Tk):
         frm_netflash = ttk.Frame(nb)
         nb.add(frm_netflash, text="  NetFlash  ")
         self.netflash_tab = NetFlashTab(frm_netflash, self, self.master_client)
+
+        # Tab 5: Phost Setup (one-time slave provisioning)
+        frm_phost = ttk.Frame(nb)
+        nb.add(frm_phost, text="  Phost Setup  ")
+        self.phost_setup_tab = PhostSetupTab(frm_phost, self, self.phost_provisioner)
 
         # Log area with dark theme
         log_frame = ttk.Frame(self)
