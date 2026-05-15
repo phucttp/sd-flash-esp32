@@ -1,25 +1,24 @@
 """
 firmware_manager.py
 ===================
-Merged Firmware Manager tab — combines Add Firmware + Library & SD Card
-into a single workflow:
+Firmware Manager tab — Git-only workflow (no SD card UI).
 
     [search _____________]              [+ New FW] [⟳ Refresh]
     ┌────────────────────┬──────────────────────────────────────────┐
-    │ FW Tree (35%)      │ Notebook (65%)                           │
-    │   group by device  │   • Info & SD Ops                        │
-    │   columns: dev/ver │       FW info card + OLED preview        │
-    │ ┌── Delete ──┐     │       SD path + Copy plain/enc + Remove  │
-    │ ├── Refresh ─┤     │       Sync to Git                        │
-    │                    │       SD card listbox                    │
-    │ Flash History      │   • Edit / Add                           │
-    │   (recent first)   │       form fields, file pickers,         │
-    │                    │       Save/Update button                 │
+    │ FW Tree (35%)      │ Notebook (65%):                          │
+    │   Device + Version │   • Info & Git: FW details + SYNC TO GIT │
+    │   (FW ID hidden;   │   • Edit / Add: form (device_type,       │
+    │    iid = internal) │     version, description, file pickers)  │
+    │ ┌Delete┐┌Edit Sel┐ │   • OLED Order: drag preview, apply      │
+    │                    │     order on next git push               │
+    │ Flash History      │                                          │
+    │   (recent first)   │                                          │
     └────────────────────┴──────────────────────────────────────────┘
 
-User workflow: pick FW from list on left → review/copy on right Info tab,
-OR click [+ New FW] → fill form on Edit tab → Save → list refreshes.
-No more bouncing between two top-level tabs.
+User workflow: pick FW row on left → review on Info, or click [+ New FW]
+→ fill form on Edit → Save → list refreshes. Device Type doubles as the
+OLED display name; internal FW ID is auto-generated and never shown.
+SD-card operations were removed; firmware is distributed via git push.
 """
 
 from __future__ import annotations
@@ -49,15 +48,18 @@ class FirmwareManagerTab(ttk.Frame):
             os.path.dirname(app._config_file), "flash_history.json"
         )
 
-        # State vars (moved from MainApp.__init__)
-        self.add_fw_id_var = tk.StringVar()
+        # Edit form state (FW ID is auto-generated/internal — user manages
+        # firmware by device_type + version, which double as the OLED display)
         self.add_device_type_var = tk.StringVar()
         self.add_version_var = tk.StringVar()
         self.add_description_var = tk.StringVar()
         self.add_app_path = tk.StringVar()
         self.add_boot_path = tk.StringVar()
         self.add_part_path = tk.StringVar()
-        self.sd_path_var = tk.StringVar(value=app.settings.get("sd_path", ""))
+
+        # None → add new (auto-generate FW ID on save).
+        # str  → editing existing FW with this internal id (UPDATE on save).
+        self.fm_edit_id: Optional[str] = None
 
         self.pack(fill=tk.BOTH, expand=True)
         self._build()
@@ -110,7 +112,7 @@ class FirmwareManagerTab(ttk.Frame):
         nb.pack(fill=tk.BOTH, expand=True)
 
         info_sd_frame = ttk.Frame(nb)
-        nb.add(info_sd_frame, text="  Info & SD Ops  ")
+        nb.add(info_sd_frame, text="  Info & Git  ")
         self._build_info_sd_pane(info_sd_frame)
 
         edit_frame = ttk.Frame(nb)
@@ -135,15 +137,16 @@ class FirmwareManagerTab(ttk.Frame):
         lib_grp.rowconfigure(0, weight=1)
         lib_grp.columnconfigure(0, weight=1)
 
-        columns = ("device", "version")
+        # FW ID is internal — tree displays Device Type as primary identity
+        # (matches OLED display name) and Version as secondary column.
+        # `iid` keeps the internal FW ID so selection logic still works.
+        columns = ("version",)
         self.fw_tree = ttk.Treeview(lib_grp, columns=columns,
                                      show="tree headings", selectmode="extended")
-        self.fw_tree.heading("#0", text="Firmware ID")
-        self.fw_tree.heading("device", text="Device")
+        self.fw_tree.heading("#0", text="Device")
         self.fw_tree.heading("version", text="Version")
-        self.fw_tree.column("#0", width=120)
-        self.fw_tree.column("device", width=90)
-        self.fw_tree.column("version", width=70)
+        self.fw_tree.column("#0", width=180)
+        self.fw_tree.column("version", width=90)
         self.fw_tree.grid(row=0, column=0, sticky="nsew")
         self.fw_tree.bind("<<TreeviewSelect>>", self._on_fw_select)
 
@@ -221,47 +224,35 @@ class FirmwareManagerTab(ttk.Frame):
         self._build_detail_fields(self._det_frame)
         self._det_clear_with_placeholder()
 
-        # ---- SD Ops ----
-        sd_grp = ttk.LabelFrame(parent, text="SD Card Operations", padding=8)
-        sd_grp.grid(row=1, column=0, sticky="nsew")
-        sd_grp.columnconfigure(0, weight=1)
-        sd_grp.columnconfigure(1, weight=1)
-        sd_grp.rowconfigure(4, weight=1)
+        # ---- Git Ops ----
+        git_grp = ttk.LabelFrame(parent, text="Git Sync", padding=12)
+        git_grp.grid(row=1, column=0, sticky="nsew")
+        git_grp.columnconfigure(0, weight=1)
+        git_grp.columnconfigure(1, weight=1)
 
-        # SD path row
-        path_row = ttk.Frame(sd_grp)
-        path_row.grid(row=0, column=0, columnspan=2, sticky="ew", pady=(0, 4))
-        path_row.columnconfigure(1, weight=1)
-        ttk.Label(path_row, text="SD:").grid(row=0, column=0, padx=(0, 6))
-        ttk.Entry(path_row, textvariable=self.sd_path_var,
-                  font=Fonts.mono_small()).grid(row=0, column=1, sticky="ew")
-        ttk.Button(path_row, text="...", width=3, style="Icon.TButton",
-                   command=self._choose_sd_path).grid(row=0, column=2, padx=(4, 2))
-        ttk.Button(path_row, text="Load", width=6, style="Secondary.TButton",
-                   command=self._load_sd_card).grid(row=0, column=3)
+        ttk.Label(
+            git_grp,
+            text="Push the entire firmware library to the configured Git repo.\n"
+                 "ESP32 binaries are encrypted with the AES key set in Settings.",
+            style="Muted.TLabel", justify="left", wraplength=520,
+        ).grid(row=0, column=0, columnspan=2, sticky="w", pady=(0, 10))
 
-        # Action buttons
-        ttk.Button(sd_grp, text="Copy Plain", style="Success.TButton",
-                   command=self._copy_to_sd_plain).grid(row=1, column=0, sticky="ew", padx=2, pady=2)
-        ttk.Button(sd_grp, text="Copy Encrypted", style="Accent.TButton",
-                   command=self._copy_to_sd_enc).grid(row=1, column=1, sticky="ew", padx=2, pady=2)
-        ttk.Button(sd_grp, text="Remove from SD", style="Danger.TButton",
-                   command=self._remove_from_sd).grid(row=2, column=0, sticky="ew", padx=2, pady=2)
-        ttk.Button(sd_grp, text="⟶ Sync to Git", style="Primary.TButton",
-                   command=self._sync_to_git).grid(row=2, column=1, sticky="ew", padx=2, pady=2)
-
-        # SD listbox
-        ttk.Label(sd_grp, text="SD card contents:").grid(
-            row=3, column=0, columnspan=2, sticky="w", pady=(8, 2)
+        self.btn_sync_git = tk.Button(
+            git_grp, text="⟶ SYNC TO GIT",
+            font=(Fonts.FAMILY, 13, "bold"),
+            bg=Colors.PRIMARY, fg=Colors.TEXT,
+            relief="flat", borderwidth=0,
+            pady=14, cursor="hand2",
+            command=self._sync_to_git,
         )
-        self.sd_listbox = tk.Listbox(
-            sd_grp, height=4, font=Fonts.mono_small(),
-            bg=Colors.BG_CARD, fg=Colors.TEXT,
-            selectbackground=Colors.PRIMARY, selectforeground=Colors.TEXT_DARK,
-            highlightthickness=0, borderwidth=0, relief="flat",
-        )
-        self.sd_listbox.grid(row=4, column=0, columnspan=2, sticky="nsew", padx=2)
-        self.sd_listbox.bind("<<ListboxSelect>>", self._on_sd_select)
+        self.btn_sync_git.grid(row=1, column=0, columnspan=2,
+                                sticky="ew", pady=(0, 8))
+
+        # Secondary: delete selected entry
+        ttk.Button(git_grp, text="🗑 Delete Selected from Library",
+                   style="Danger.TButton",
+                   command=self._delete_firmware).grid(
+            row=2, column=0, columnspan=2, sticky="ew", pady=2)
 
     def _build_oled_pane(self, parent):
         """OLED Order sub-tab — display order on host device's OLED FW menu."""
@@ -327,22 +318,17 @@ class FirmwareManagerTab(ttk.Frame):
         tk.Frame(df, height=1, bg=Colors.BORDER).grid(
             row=4, column=0, columnspan=2, sticky="ew", padx=8, pady=4)
 
+        # _det_id_var retained as no-op StringVar so existing setters
+        # (e.g. _on_hist_select) still write to it without raising; it's
+        # never displayed.
         self._det_id_var = tk.StringVar(value="")
         self._det_path_var = tk.StringVar(value="")
         self._det_size_var = tk.StringVar(value="")
         self._det_date_var = tk.StringVar(value="")
         self._det_md5_var = tk.StringVar(value="")
 
-        # ID
-        r = 5
-        tk.Label(df, text="ID:", bg=Colors.BG_CARD, fg=Colors.TEXT_MUTED,
-                 font=Fonts.small(), anchor="w").grid(row=r, column=0, sticky="w", padx=(8, 4))
-        tk.Label(df, textvariable=self._det_id_var, bg=Colors.BG_CARD,
-                 fg=Colors.TEXT, font=Fonts.mono_small(),
-                 anchor="w").grid(row=r, column=1, sticky="ew", padx=(0, 8))
-
         # Path with copy
-        r += 1
+        r = 5
         tk.Label(df, text="Local File Path", bg=Colors.BG_CARD, fg=Colors.TEXT_MUTED,
                  font=Fonts.small(), anchor="w").grid(
             row=r, column=0, columnspan=2, sticky="w", padx=8, pady=(8, 2))
@@ -390,34 +376,33 @@ class FirmwareManagerTab(ttk.Frame):
         frm = ttk.Frame(parent, padding=18)
         frm.pack(fill=tk.BOTH, expand=True)
 
-        ids_hint, types_hint = self.app.lib.get_suggestions()
+        _, types_hint = self.app.lib.get_suggestions()
 
-        # Info group
+        # Info group — Device Type doubles as the OLED display name, so
+        # there's no separate FW ID field shown to the user. Internal ID
+        # auto-generated on save via generate_short_fw_id.
         grp_info = ttk.LabelFrame(frm, text="1. Firmware Info", padding=12)
         grp_info.pack(fill=tk.X, pady=(0, 12))
         grp_info.columnconfigure(1, weight=1)
 
-        ttk.Label(grp_info, text="Firmware ID:").grid(row=0, column=0, sticky="w", pady=6)
-        self.combo_id = ttk.Combobox(grp_info, textvariable=self.add_fw_id_var,
-                                      values=ids_hint)
-        self.combo_id.grid(row=0, column=1, padx=10, sticky="ew")
-        self.combo_id.bind("<<ComboboxSelected>>", self._on_id_selected)
-        ttk.Button(grp_info, text="New", style="Success.TButton",
-                   command=self._new_fw_id, width=6).grid(row=0, column=2, pady=6)
-        self.add_fw_id_var.trace_add("write", self._on_fw_id_changed)
-
-        ttk.Label(grp_info, text="Device Type:").grid(row=1, column=0, sticky="w", pady=6)
+        ttk.Label(grp_info, text="Device Type:").grid(row=0, column=0, sticky="w", pady=6)
         self.combo_type = ttk.Combobox(grp_info, textvariable=self.add_device_type_var,
                                         values=types_hint)
-        self.combo_type.grid(row=1, column=1, padx=10, sticky="ew")
+        self.combo_type.grid(row=0, column=1, padx=10, sticky="ew")
 
-        ttk.Label(grp_info, text="Version:").grid(row=2, column=0, sticky="w", pady=6)
+        ttk.Label(grp_info, text="Version:").grid(row=1, column=0, sticky="w", pady=6)
         ttk.Entry(grp_info, textvariable=self.add_version_var).grid(
+            row=1, column=1, padx=10, sticky="ew")
+
+        ttk.Label(grp_info, text="Description:").grid(row=2, column=0, sticky="w", pady=6)
+        ttk.Entry(grp_info, textvariable=self.add_description_var).grid(
             row=2, column=1, padx=10, sticky="ew")
 
-        ttk.Label(grp_info, text="Description:").grid(row=3, column=0, sticky="w", pady=6)
-        ttk.Entry(grp_info, textvariable=self.add_description_var).grid(
-            row=3, column=1, padx=10, sticky="ew")
+        # Edit-mode indicator: shows internal FW ID only when editing existing.
+        self._edit_mode_var = tk.StringVar(value="")
+        tk.Label(grp_info, textvariable=self._edit_mode_var,
+                 fg=Colors.TEXT_MUTED, font=Fonts.small()).grid(
+            row=3, column=0, columnspan=2, sticky="w", pady=(4, 0))
 
         # Files group
         grp_files = ttk.LabelFrame(frm, text="2. Binary Files", padding=12)
@@ -506,64 +491,46 @@ class FirmwareManagerTab(ttk.Frame):
             self._stm32_hint.grid_remove()
 
     def _clear_add_form(self):
-        self.add_fw_id_var.set("")
         self.add_device_type_var.set("")
         self.add_version_var.set("")
         self.add_description_var.set("")
         self.add_app_path.set("")
         self.add_boot_path.set("")
         self.add_part_path.set("")
+        self.fm_edit_id = None
+        self._edit_mode_var.set("")
         self.btn_add.config(text="ADD FIRMWARE", style="Primary.TButton")
-
-    def _on_id_selected(self, event=None):
-        fw = self.app.lib.get_firmware(self.add_fw_id_var.get())
-        if fw:
-            self.add_device_type_var.set(fw.get("device_type", ""))
-            self.add_version_var.set(fw.get("version", ""))
-            self.add_description_var.set(fw.get("description", ""))
-            self.btn_add.config(text="UPDATE FIRMWARE", style="Accent.TButton")
-        else:
-            self.btn_add.config(text="ADD FIRMWARE", style="Primary.TButton")
-
-    def _new_fw_id(self):
-        new_id = generate_short_fw_id(self.app.lib.lib_root)
-        self._clear_add_form()
-        self.add_fw_id_var.set(new_id)
 
     def _new_fw(self):
         """Top-toolbar [+ New FW] — switch to Edit tab and clear form."""
-        self._new_fw_id()
+        self._clear_add_form()
         self._notebook_right.select(self._edit_frame_idx)
 
-    def _on_fw_id_changed(self, *args):
-        fw_id = safe_name(self.add_fw_id_var.get())
-        if not fw_id:
-            self.btn_add.config(text="ADD FIRMWARE", style="Primary.TButton")
-            return
-        existing = self.app.lib.get_firmware(fw_id)
-        if existing:
-            self.btn_add.config(text="UPDATE FIRMWARE", style="Accent.TButton")
-        else:
-            self.btn_add.config(text="ADD FIRMWARE", style="Primary.TButton")
-
     def _add_firmware(self):
-        fw_id = safe_name(self.add_fw_id_var.get())
-        device_type = self.add_device_type_var.get()
-        version = self.add_version_var.get()
+        device_type = self.add_device_type_var.get().strip()
+        version = self.add_version_var.get().strip()
         description = self.add_description_var.get()
         app_path = self.add_app_path.get()
         boot_path = self.add_boot_path.get()
         part_path = self.add_part_path.get()
 
-        if not fw_id:
-            return messagebox.showerror("Error", "Firmware ID is required")
+        if not device_type:
+            return messagebox.showerror("Error", "Device Type is required")
+        if not version:
+            return messagebox.showerror("Error", "Version is required")
 
-        existing = self.app.lib.get_firmware(fw_id)
-        overwrite = existing is not None
-        if overwrite and not messagebox.askyesno(
-            "Confirm", f"Update existing firmware '{fw_id}'?"
-        ):
-            return
+        if self.fm_edit_id:
+            # Updating existing FW — keep internal id
+            fw_id = self.fm_edit_id
+            overwrite = True
+            if not messagebox.askyesno(
+                "Confirm", f"Update {device_type} v{version}?"
+            ):
+                return
+        else:
+            # New FW — auto-generate internal id (user never sees it)
+            fw_id = generate_short_fw_id(self.app.lib.lib_root)
+            overwrite = False
 
         success, msg = self.app.lib.add_firmware(
             fw_id, device_type, version,
@@ -575,12 +542,13 @@ class FirmwareManagerTab(ttk.Frame):
             self._clear_add_form()
             self._refresh_firmware_list()
             messagebox.showinfo("Success", msg)
-            self._notebook_right.select(0)  # back to Info & SD Ops
+            self._notebook_right.select(0)  # back to Info & Git
         else:
             messagebox.showerror("Error", msg)
 
     def _edit_selected(self):
-        """Move the first selected FW into the edit form + switch tab."""
+        """Move the first selected FW into the edit form + switch tab.
+        Internal FW ID is captured in self.fm_edit_id but not shown to user."""
         fw_ids = self._get_selected_fw_ids()
         if not fw_ids:
             return messagebox.showinfo("Edit", "Select a firmware from the list first.")
@@ -588,7 +556,8 @@ class FirmwareManagerTab(ttk.Frame):
         fw = self.app.lib.get_firmware(fw_id)
         if not fw:
             return
-        self.add_fw_id_var.set(fw_id)
+        self.fm_edit_id = fw_id
+        self._edit_mode_var.set(f"Editing existing entry (internal id: {fw_id})")
         self.add_device_type_var.set(fw.get("device_type", ""))
         self.add_version_var.set(fw.get("version", ""))
         self.add_description_var.set(fw.get("description", ""))
@@ -598,6 +567,9 @@ class FirmwareManagerTab(ttk.Frame):
     # ─────────────────────────── Helpers — Library ───────────────────────────
 
     def _refresh_firmware_list(self):
+        """Flat list view: each row = one firmware shown as 'Device' + 'Version'.
+        Tree iid stays as internal FW ID so selection / edit / delete still work,
+        but the FW ID is never displayed to the user."""
         if hasattr(self, "fw_tree"):
             for item in self.fw_tree.get_children():
                 self.fw_tree.delete(item)
@@ -614,23 +586,15 @@ class FirmwareManagerTab(ttk.Frame):
             if fw_id not in ordered_ids:
                 ordered_ids.append(fw_id)
 
-        device_groups = {}
-        for fw_id in ordered_ids:
-            fw = all_fw.get(fw_id, {})
-            device = fw.get("device_type", "Unknown")
-            device_groups.setdefault(device, []).append((fw_id, fw))
-
         if hasattr(self, "fw_tree"):
-            for device, items in device_groups.items():
-                group_id = self.fw_tree.insert(
-                    "", "end", text=f"[{device}]", open=True,
-                    values=("", f"{len(items)} items"),
+            for fw_id in ordered_ids:
+                fw = all_fw.get(fw_id, {})
+                device = fw.get("device_type", "Unknown")
+                version = fw.get("version", "")
+                self.fw_tree.insert(
+                    "", "end", iid=fw_id,
+                    text=device, values=(version,),
                 )
-                for fw_id, fw in items:
-                    self.fw_tree.insert(
-                        group_id, "end", text=fw_id, iid=fw_id,
-                        values=(fw.get("device_type", ""), fw.get("version", "")),
-                    )
 
         # OLED preview display
         oled_items = []
@@ -643,13 +607,14 @@ class FirmwareManagerTab(ttk.Frame):
         if hasattr(self, "oled_preview"):
             self.oled_preview.set_items(oled_items, "FIRMWARE")
 
-        # Refresh suggestions
-        ids, types = self.app.lib.get_suggestions()
-        if hasattr(self, "combo_id"):
-            self.combo_id["values"] = ids
+        # Refresh Device Type combobox suggestions (FW ID combo removed)
+        _, types = self.app.lib.get_suggestions()
+        if hasattr(self, "combo_type"):
             self.combo_type["values"] = types
 
     def _on_oled_order_apply(self, new_order: list):
+        """Save OLED display order to settings + git index. SD path was
+        dropped — order is now applied to the next git push only."""
         fw_ids = self.oled_preview.get_fw_ids()
         self.app.settings["oled_config"] = {"order": fw_ids}
         try:
@@ -657,34 +622,12 @@ class FirmwareManagerTab(ttk.Frame):
                 json.dump(self.app.settings, f, indent=2, ensure_ascii=False)
         except Exception:
             pass
-
-        sd_path = self.sd_path_var.get()
-        sd_updated = False
-        if sd_path and self.app.sd.set_path(sd_path):
-            success, _ = self.app.sd.load_index()
-            if success and self.app.sd.index_data:
-                self.app.sd.reorder_index(fw_ids)
-                self.app.sd.save_index()
-                sd_updated = True
-                self.app._log(
-                    f"SD index.txt rewritten: "
-                    f"{[i.get('fw_id', '?') for i in self.app.sd.index_data]}"
-                )
-                self._load_sd_card()
-
         self._refresh_firmware_list()
-        if sd_updated:
-            messagebox.showinfo(
-                "Applied",
-                "Order updated!\n\nindex.txt on SD card rewritten.\n"
-                "OLED will show new order after reboot."
-            )
-        else:
-            messagebox.showinfo(
-                "Applied",
-                "Order saved to settings.\n\nSet SD card path and Load SD first\n"
-                "to update index.txt on the card."
-            )
+        self.app._log(f"OLED order saved: {fw_ids}")
+        messagebox.showinfo(
+            "Applied",
+            "Order saved.\n\nWill be applied on the next 'Sync to Git'."
+        )
 
     def _on_oled_rename(self, fw_id: str, device_type: str, version: str):
         success, msg = self.app.lib.update_metadata(fw_id, {
@@ -716,23 +659,17 @@ class FirmwareManagerTab(ttk.Frame):
             self.app.clipboard_append(path)
 
     def _filter_fw_tree(self, query: str):
+        """Flat-tree filter: hide rows that don't match Device or Version."""
         if query == "Search firmware..." or not query.strip():
             self._refresh_firmware_list()
             return
         q = query.lower()
-        for group in list(self.fw_tree.get_children()):
-            children = list(self.fw_tree.get_children(group))
-            visible = 0
-            for child in children:
-                vals = self.fw_tree.item(child, "values")
-                text = self.fw_tree.item(child, "text")
-                match = q in text.lower() or any(q in str(v).lower() for v in vals)
-                if match:
-                    visible += 1
-                else:
-                    self.fw_tree.detach(child)
-            if visible == 0:
-                self.fw_tree.detach(group)
+        for item in list(self.fw_tree.get_children()):
+            vals = self.fw_tree.item(item, "values")
+            text = self.fw_tree.item(item, "text")
+            match = q in text.lower() or any(q in str(v).lower() for v in vals)
+            if not match:
+                self.fw_tree.detach(item)
 
     def _on_fw_select(self, event=None):
         if not hasattr(self, "fw_tree"):
@@ -741,8 +678,6 @@ class FirmwareManagerTab(ttk.Frame):
         if not selection:
             return
         fw_id = selection[0]
-        if fw_id.startswith("I"):
-            return
         fw = self.app.lib.get_firmware(fw_id)
         if not fw:
             self._det_clear()
@@ -755,7 +690,6 @@ class FirmwareManagerTab(ttk.Frame):
         self._det_ver_badge.set_status("info")
         self._det_type_var.set(f"Device: {device}")
         self._det_desc_var.set(fw.get("description", "") or "No description")
-        self._det_id_var.set(fw.get("fw_id", fw_id))
         self._det_path_var.set(fw.get("_path", ""))
         self._det_md5_var.set(fw.get("md5", ""))
 
@@ -774,13 +708,11 @@ class FirmwareManagerTab(ttk.Frame):
             self._det_date_var.set("—")
 
     def _get_selected_fw_ids(self) -> list:
+        """All selections are firmware iids since the tree is now flat
+        (no group headers to skip)."""
         if not hasattr(self, "fw_tree"):
             return []
-        fw_ids = []
-        for item_id in self.fw_tree.selection():
-            if not item_id.startswith("I"):
-                fw_ids.append(item_id)
-        return fw_ids
+        return list(self.fw_tree.selection())
 
     def _delete_firmware(self):
         fw_ids = self._get_selected_fw_ids()
@@ -794,54 +726,7 @@ class FirmwareManagerTab(ttk.Frame):
             self.app.git.remove_from_index([fw_id])
         self._refresh_firmware_list()
 
-    # ─────────────────────────── Helpers — SD Ops ───────────────────────────
-
-    def _choose_sd_path(self):
-        path = filedialog.askdirectory(title="Select SD Card")
-        if path:
-            self.sd_path_var.set(path)
-            self.app.sd.set_path(path)
-            self._load_sd_card()
-
-    def _load_sd_card(self):
-        self.sd_listbox.delete(0, tk.END)
-        if not self.app.sd.set_path(self.sd_path_var.get()):
-            messagebox.showerror("Error", "Invalid SD card path")
-            return
-        success, msg = self.app.sd.load_index()
-        self.app._log(msg)
-        for fw_id in self.app.sd.get_firmware_list():
-            self.sd_listbox.insert(tk.END, fw_id)
-
-    def _on_sd_select(self, event=None):
-        sel = self.sd_listbox.curselection()
-        if not sel:
-            return
-        fw_id = self.sd_listbox.get(sel[0])
-        meta = self.app.sd.get_firmware_meta(fw_id)
-        if not meta:
-            self._det_clear()
-            return
-        device = meta.get("device_type", "")
-        version = meta.get("version", "")
-        self._det_name_var.set(f"{device} {version}".strip() or fw_id)
-        self._det_ver_badge.set_text(version)
-        self._det_ver_badge.set_status("info")
-        self._det_type_var.set(f"Device: {device}" if device else "SD Card")
-        self._det_desc_var.set(meta.get("description", "") or "SD Card firmware")
-        self._det_id_var.set(fw_id)
-        self._det_path_var.set(f"{self.sd_path_var.get()}/{fw_id}")
-        self._det_md5_var.set(meta.get("md5", ""))
-        self._det_size_var.set("—")
-        self._det_date_var.set("—")
-
-    def _sd_save_ordered(self):
-        """Apply OLED order to SD index, then save (no-op if no order saved)."""
-        oled_order = self.app.settings.get("oled_config", {}).get("order", [])
-        if oled_order:
-            self.app.sd.reorder_index(oled_order)
-        # Persist whatever order is current
-        self.app.sd.save_index()
+    # ─────────────────────────── Helpers — Git/crypto ───────────────────────────
 
     def _get_encryptor(self) -> Optional[FWEncryptor]:
         key = self.app.enc_key.get()
@@ -861,75 +746,6 @@ class FirmwareManagerTab(ttk.Frame):
         except Exception as e:
             messagebox.showerror("Error", str(e))
             return None
-
-    def _copy_to_sd_plain(self):
-        fw_ids = self._get_selected_fw_ids()
-        if not fw_ids:
-            return messagebox.showinfo("Info", "Select firmware(s) in tree to copy")
-        if not self.app.sd.set_path(self.sd_path_var.get()):
-            return messagebox.showerror("Error", "Invalid SD card path")
-        if not messagebox.askyesno(
-            "Confirm", f"Copy {len(fw_ids)} firmware(s) to SD card (plain)?"
-        ):
-            return
-        count = 0
-        for fw_id in fw_ids:
-            fw = self.app.lib.get_firmware(fw_id)
-            if not fw:
-                continue
-            success, msg = self.app.sd.copy_plain(
-                fw_id, fw["_path"], fw, progress_callback=self.app._log
-            )
-            if success:
-                count += 1
-                self._history_add(fw_id, fw, self.sd_path_var.get(), "plain")
-            self.app._log(msg)
-        self._sd_save_ordered()
-        self._load_sd_card()
-        messagebox.showinfo("Done", f"Copied {count} firmware(s) to SD card")
-
-    def _copy_to_sd_enc(self):
-        fw_ids = self._get_selected_fw_ids()
-        if not fw_ids:
-            return messagebox.showinfo("Info", "Select firmware(s) in tree to copy")
-        if not self.app.sd.set_path(self.sd_path_var.get()):
-            return messagebox.showerror("Error", "Invalid SD card path")
-        encryptor = self._get_encryptor()
-        if not encryptor:
-            return
-        if not messagebox.askyesno(
-            "Confirm", f"Copy {len(fw_ids)} firmware(s) to SD card (encrypted)?"
-        ):
-            return
-        count = 0
-        for fw_id in fw_ids:
-            fw = self.app.lib.get_firmware(fw_id)
-            if not fw:
-                continue
-            success, msg = self.app.sd.copy_encrypted(
-                fw_id, fw["_path"], fw, encryptor,
-                progress_callback=self.app._log,
-            )
-            if success:
-                count += 1
-                self._history_add(fw_id, fw, self.sd_path_var.get(), "encrypted")
-            self.app._log(msg)
-        self._sd_save_ordered()
-        self._load_sd_card()
-        messagebox.showinfo("Done", f"Copied {count} firmware(s) to SD card (encrypted)")
-
-    def _remove_from_sd(self):
-        sel = self.sd_listbox.curselection()
-        if not sel:
-            return messagebox.showinfo("Info", "Select firmware from SD card list")
-        fw_id = self.sd_listbox.get(sel[0])
-        if not messagebox.askyesno("Confirm", f"Remove '{fw_id}' from SD card?"):
-            return
-        success, msg = self.app.sd.remove_firmware(fw_id)
-        self.app._log(msg)
-        if success:
-            self._sd_save_ordered()
-            self._load_sd_card()
 
     def _sync_to_git(self):
         if not self.app.git.is_git_installed():
