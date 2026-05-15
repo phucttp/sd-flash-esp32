@@ -117,6 +117,10 @@ class FirmwareManagerTab(ttk.Frame):
         nb.add(edit_frame, text="  Edit / Add  ")
         self._build_edit_pane(edit_frame)
 
+        oled_frame = ttk.Frame(nb)
+        nb.add(oled_frame, text="  OLED Order  ")
+        self._build_oled_pane(oled_frame)
+
         self._notebook_right = nb
         self._edit_frame_idx = 1  # index of edit/add tab
 
@@ -177,10 +181,11 @@ class FirmwareManagerTab(ttk.Frame):
         self._hist_listbox.bind("<<ListboxSelect>>", self._on_hist_select)
 
     def _build_info_sd_pane(self, parent):
-        # Outer split: detail card on top, SD ops on bottom
-        parent.rowconfigure(0, weight=2)
-        parent.rowconfigure(1, weight=0)
-        parent.rowconfigure(2, weight=1)
+        # Vertical split: detail card on top, SD ops on bottom.
+        # Detail card weight=1 (compact when empty), SD ops weight=1 (room for listbox).
+        # OLED preview moved to its own sub-tab so it doesn't crowd this view.
+        parent.rowconfigure(0, weight=1)
+        parent.rowconfigure(1, weight=1)
         parent.columnconfigure(0, weight=1)
 
         # ---- Detail card (scrollable) ----
@@ -190,7 +195,8 @@ class FirmwareManagerTab(ttk.Frame):
         det_wrap.columnconfigure(0, weight=1)
 
         det_canvas = tk.Canvas(det_wrap, bg=Colors.BG_CARD,
-                                highlightthickness=0, borderwidth=0)
+                                highlightthickness=0, borderwidth=0,
+                                height=160)
         det_canvas.grid(row=0, column=0, sticky="nsew")
         det_vscroll = ttk.Scrollbar(det_wrap, orient="vertical",
                                      command=det_canvas.yview)
@@ -213,16 +219,11 @@ class FirmwareManagerTab(ttk.Frame):
         det_canvas.bind("<Leave>", lambda e: det_canvas.unbind_all("<MouseWheel>"))
 
         self._build_detail_fields(self._det_frame)
-
-        # ---- OLED preview ----
-        self.oled_preview = OLEDPreviewFrame(parent)
-        self.oled_preview.grid(row=1, column=0, sticky="ew", pady=(0, 6))
-        self.oled_preview.set_apply_callback(self._on_oled_order_apply)
-        self.oled_preview.set_rename_callback(self._on_oled_rename)
+        self._det_clear_with_placeholder()
 
         # ---- SD Ops ----
         sd_grp = ttk.LabelFrame(parent, text="SD Card Operations", padding=8)
-        sd_grp.grid(row=2, column=0, sticky="nsew")
+        sd_grp.grid(row=1, column=0, sticky="nsew")
         sd_grp.columnconfigure(0, weight=1)
         sd_grp.columnconfigure(1, weight=1)
         sd_grp.rowconfigure(4, weight=1)
@@ -254,13 +255,39 @@ class FirmwareManagerTab(ttk.Frame):
             row=3, column=0, columnspan=2, sticky="w", pady=(8, 2)
         )
         self.sd_listbox = tk.Listbox(
-            sd_grp, height=5, font=Fonts.mono_small(),
+            sd_grp, height=4, font=Fonts.mono_small(),
             bg=Colors.BG_CARD, fg=Colors.TEXT,
             selectbackground=Colors.PRIMARY, selectforeground=Colors.TEXT_DARK,
             highlightthickness=0, borderwidth=0, relief="flat",
         )
         self.sd_listbox.grid(row=4, column=0, columnspan=2, sticky="nsew", padx=2)
         self.sd_listbox.bind("<<ListboxSelect>>", self._on_sd_select)
+
+    def _build_oled_pane(self, parent):
+        """OLED Order sub-tab — display order on host device's OLED FW menu."""
+        wrap = ttk.Frame(parent, padding=16)
+        wrap.pack(fill=tk.BOTH, expand=True)
+
+        ttk.Label(wrap, text="OLED Display Order",
+                  font=(Fonts.FAMILY, 12, "bold")).pack(anchor="w")
+        ttk.Label(
+            wrap,
+            text="Reorder how firmware appears on the host's OLED FW menu. "
+                 "Apply Order rewrites index.txt on the SD card.",
+            style="Muted.TLabel", wraplength=500, justify="left",
+        ).pack(anchor="w", pady=(2, 10))
+
+        self.oled_preview = OLEDPreviewFrame(wrap)
+        self.oled_preview.pack(fill=tk.BOTH, expand=True)
+        self.oled_preview.set_apply_callback(self._on_oled_order_apply)
+        self.oled_preview.set_rename_callback(self._on_oled_rename)
+
+    def _det_clear_with_placeholder(self):
+        """Show an empty-state hint instead of blank fields."""
+        self._det_clear()
+        self._det_name_var.set("(no firmware selected)")
+        self._det_desc_var.set("Click a firmware in the list on the left "
+                               "to see its details here.")
 
     def _build_detail_fields(self, df):
         df.columnconfigure(0, weight=0)
