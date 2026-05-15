@@ -133,6 +133,11 @@ class NetFlashTab(ttk.Frame):
                                    self._on_global_fw_selected)
         self.global_fw_combo.set("(connect master to load FW list)")
         self._global_fw_ids: list[str] = []
+        # None = per-card mode (Flash All uses each card's own dropdown).
+        # Any FW id = global mode (Flash All targets only slaves with that FW;
+        # others SKIPPED so the user never gets surprised by a stale per-card
+        # selection silently re-flashing.
+        self._global_fw_selected_id: Optional[str] = None
 
         # --- FLASH ALL — biggest, primary focus ---
         self.btn_flash_all = tk.Button(
@@ -573,27 +578,44 @@ class NetFlashTab(ttk.Frame):
                 union[fid]["count"] += 1
 
         total = len(slaves)
-        self._global_fw_ids = list(union.keys())
-        values = [
+        # First entry is a sentinel: clears global mode so Flash All falls
+        # back to each card's own per-card selection.
+        self.PER_CARD_SENTINEL = "(per-card selection)"
+        self._global_fw_ids = [None] + list(union.keys())
+        values = [self.PER_CARD_SENTINEL] + [
             f"{f['display']}  ({f['count']}/{total})"
             for f in union.values()
         ]
 
-        if values:
+        if len(values) > 1:
             self.global_fw_combo.config(state="readonly", values=values)
-            self.global_fw_combo.set("(select FW to apply to all)")
+            self.global_fw_combo.current(0)
+            self._global_fw_selected_id = None
         else:
             self.global_fw_combo.config(state="disabled", values=[])
             self.global_fw_combo.set("(no FW available on any slave)")
+            self._global_fw_selected_id = None
 
     def _on_global_fw_selected(self, event=None):
-        """Propagate the selected global FW down to each card's per-slave
-        dropdown — but ONLY if that card's local FW pool contains the same id.
-        Cards lacking the FW keep their existing selection."""
+        """Set / clear global FW mode.
+
+        - First entry ('(per-card selection)') → clear global mode; Flash All
+          falls back to each card's own dropdown.
+        - Any FW entry → enter global mode; Flash All ONLY targets slaves
+          whose pool contains this FW (others SKIPPED, not silently flashed
+          with a stale per-card selection).
+        Also propagates the selection visually to matching cards' dropdowns
+        so the user can see at a glance which slaves will fire.
+        """
         idx = self.global_fw_combo.current()
         if idx < 0 or idx >= len(self._global_fw_ids):
             return
         fw_id = self._global_fw_ids[idx]
+        self._global_fw_selected_id = fw_id
+
+        if fw_id is None:
+            self.app._log("NetFlash: per-card FW mode — Flash All uses each card's dropdown")
+            return
 
         applied = 0
         skipped = 0
@@ -610,8 +632,8 @@ class NetFlashTab(ttk.Frame):
                 skipped += 1
 
         self.app._log(
-            f"NetFlash: global FW '{fw_id}' applied to {applied} slave(s)"
-            + (f", {skipped} skipped (FW not in pool)" if skipped else "")
+            f"NetFlash: global FW '{fw_id}' — will flash {applied} slave(s)"
+            + (f", skip {skipped} (FW not in pool)" if skipped else "")
         )
 
     def _selected_fw_for(self, addr: int) -> Optional[str]:
@@ -637,24 +659,48 @@ class NetFlashTab(ttk.Frame):
         self._flash_in_progress = True
 
     def _flash_all(self):
-        targets = {}
+        global_fw = self._global_fw_selected_id
+        targets: dict[int, str] = {}
+        skipped_no_match: list[int] = []   # online, but global FW not in pool
+
         for addr, c in self._cards.items():
             if not c["online"] or c["target_type"] == "no-target":
                 continue
-            fw_id = self._selected_fw_for(addr)
-            if fw_id:
-                targets[addr] = fw_id
+            if global_fw is not None:
+                # Global mode: only flash slaves whose pool has this FW.
+                pool_ids = [f["id"] for f in c["fw_list"]]
+                if global_fw in pool_ids:
+                    targets[addr] = global_fw
+                else:
+                    skipped_no_match.append(addr)
+            else:
+                fw_id = self._selected_fw_for(addr)
+                if fw_id:
+                    targets[addr] = fw_id
 
         if not targets:
+            mode_hint = ("Selected global FW doesn't exist on any online slave."
+                         if global_fw else
+                         "Check online status + FW selection per card.")
             messagebox.showinfo("Flash All",
-                                 "No slaves ready to flash.\n"
-                                 "(check online status + FW selection)")
+                                 f"No slaves ready to flash.\n\n{mode_hint}")
             return
 
-        msg = f"Flash {len(targets)} slave(s)?\n\n" + "\n".join(
-            f"  • {self._cards[a]['label_var'].get()} ← {fw}"
+        # Compose confirm dialog with target + skipped breakdown
+        lines = [
+            f"  ✓ {self._cards[a]['label_var'].get()} ← {fw}"
             for a, fw in targets.items()
-        )
+        ]
+        if skipped_no_match:
+            lines.append("")
+            lines.append(f"Skipped ({len(skipped_no_match)} — FW not in pool):")
+            lines.extend(
+                f"  ⊘ {self._cards[a]['label_var'].get()}"
+                for a in skipped_no_match
+            )
+
+        mode_tag = f" (global FW: {global_fw})" if global_fw else " (per-card FW)"
+        msg = f"Flash {len(targets)} slave(s){mode_tag}?\n\n" + "\n".join(lines)
         if not messagebox.askyesno("Confirm Flash All", msg):
             return
 
