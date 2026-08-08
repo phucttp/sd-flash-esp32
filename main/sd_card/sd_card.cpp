@@ -367,3 +367,65 @@ const char** sd_history_get_display(int& out_count) {
 const char** sd_history_get_ids() {
     return g_histIdPtrs.empty() ? nullptr : g_histIdPtrs.data();
 }
+
+// ============================================================
+// METADATA UPDATE (REMOTE FIX)
+// ============================================================
+
+esp_err_t sd_update_fw_md5(const char* fw_id,
+                             const char* md5,
+                             const char* md5_bootloader,
+                             const char* md5_partition) {
+    if (!g_is_sd_mounted || !fw_id) return ESP_FAIL;
+
+    // 1. Read existing index.txt into JSON document
+    File f = SD.open(METADATA_FILE_PATH, FILE_READ);
+    if (!f) {
+        ESP_LOGE(TAG1, "sd_update_fw_md5: cannot open index");
+        return ESP_FAIL;
+    }
+    DynamicJsonDocument doc(20 * 1024);
+    DeserializationError err = deserializeJson(doc, f);
+    f.close();
+    if (err) {
+        ESP_LOGE(TAG1, "sd_update_fw_md5: JSON parse error: %s", err.c_str());
+        return ESP_FAIL;
+    }
+
+    // 2. Find the entry and patch only the non-null fields
+    bool found = false;
+    for (JsonObject obj : doc.as<JsonArray>()) {
+        const char* id = obj["fw_id"];
+        if (!id || strcmp(id, fw_id) != 0) continue;
+        if (md5            && strlen(md5)            == 32) obj["md5"]            = md5;
+        if (md5_bootloader && strlen(md5_bootloader) == 32) obj["md5_bootloader"] = md5_bootloader;
+        if (md5_partition  && strlen(md5_partition)  == 32) obj["md5_partition"]  = md5_partition;
+        found = true;
+        break;
+    }
+    if (!found) {
+        ESP_LOGE(TAG1, "sd_update_fw_md5: fw_id '%s' not in index", fw_id);
+        return ESP_ERR_NOT_FOUND;
+    }
+
+    // 3. Write patched JSON back to SD
+    SD.remove(METADATA_FILE_PATH);
+    File wf = SD.open(METADATA_FILE_PATH, FILE_WRITE);
+    if (!wf) {
+        ESP_LOGE(TAG1, "sd_update_fw_md5: cannot write index");
+        return ESP_FAIL;
+    }
+    serializeJson(doc, wf);
+    wf.close();
+
+    // 4. Patch in-memory map so the next flash call uses the new values
+    auto it = g_firmware_map.find(fw_id);
+    if (it != g_firmware_map.end()) {
+        if (md5            && strlen(md5)            == 32) it->second.md5            = md5;
+        if (md5_bootloader && strlen(md5_bootloader) == 32) it->second.md5_bootloader = md5_bootloader;
+        if (md5_partition  && strlen(md5_partition)  == 32) it->second.md5_partition  = md5_partition;
+    }
+
+    ESP_LOGI(TAG1, "sd_update_fw_md5: updated '%s' OK", fw_id);
+    return ESP_OK;
+}

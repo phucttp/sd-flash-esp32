@@ -218,6 +218,38 @@ static esp_err_t handle_reboot(httpd_req_t* req) {
     return ESP_OK;
 }
 
+// POST /api/update_meta  body: {"fw_id":"f001","md5":"...","md5_bootloader":"...","md5_partition":"..."}
+// Allows PC to push corrected MD5 values to SD card without a physical card reader.
+static esp_err_t handle_update_meta(httpd_req_t* req) {
+    int content_len = req->content_len;
+    if (content_len <= 0 || content_len >= 512) {
+        return send_json(req, "{\"error\":\"bad_request\"}", 400);
+    }
+    char body[512] = {0};
+    int received = httpd_req_recv(req, body, content_len);
+    if (received <= 0) return send_json(req, "{\"error\":\"recv_fail\"}", 400);
+    body[received] = '\0';
+
+    char fw_id[64] = {0};
+    char md5[64]   = {0};
+    char md5_bl[64] = {0};
+    char md5_pt[64] = {0};
+
+    if (!json_get_string(body, "fw_id", fw_id, sizeof(fw_id)))
+        return send_json(req, "{\"error\":\"missing_fw_id\"}", 400);
+    json_get_string(body, "md5",            md5,    sizeof(md5));
+    json_get_string(body, "md5_bootloader", md5_bl, sizeof(md5_bl));
+    json_get_string(body, "md5_partition",  md5_pt, sizeof(md5_pt));
+
+    esp_err_t ret = sd_update_fw_md5(fw_id,
+                                      strlen(md5)    == 32 ? md5    : nullptr,
+                                      strlen(md5_bl) == 32 ? md5_bl : nullptr,
+                                      strlen(md5_pt) == 32 ? md5_pt : nullptr);
+    if (ret == ESP_OK)              return send_json(req, "{\"ok\":true}", 200);
+    if (ret == ESP_ERR_NOT_FOUND)   return send_json(req, "{\"error\":\"fw_not_found\"}", 404);
+    return send_json(req, "{\"error\":\"sd_fail\"}", 500);
+}
+
 // ============================================================
 // NODE ID (NVS → generate from MAC if not found)
 // ============================================================
@@ -279,17 +311,19 @@ esp_err_t net_server_start(void) {
     }
 
     // Register URI handlers
-    httpd_uri_t uri_ping     = { "/ping",        HTTP_GET,  handle_ping,    NULL };
-    httpd_uri_t uri_status   = { "/api/status",  HTTP_GET,  handle_status,  NULL };
-    httpd_uri_t uri_fw_list  = { "/api/fw_list", HTTP_GET,  handle_fw_list, NULL };
-    httpd_uri_t uri_flash    = { "/api/flash",   HTTP_POST, handle_flash,   NULL };
-    httpd_uri_t uri_reboot   = { "/api/reboot",  HTTP_POST, handle_reboot,  NULL };
+    httpd_uri_t uri_ping        = { "/ping",             HTTP_GET,  handle_ping,        NULL };
+    httpd_uri_t uri_status      = { "/api/status",       HTTP_GET,  handle_status,      NULL };
+    httpd_uri_t uri_fw_list     = { "/api/fw_list",      HTTP_GET,  handle_fw_list,     NULL };
+    httpd_uri_t uri_flash       = { "/api/flash",        HTTP_POST, handle_flash,       NULL };
+    httpd_uri_t uri_reboot      = { "/api/reboot",       HTTP_POST, handle_reboot,      NULL };
+    httpd_uri_t uri_update_meta = { "/api/update_meta",  HTTP_POST, handle_update_meta, NULL };
 
     httpd_register_uri_handler(s_server, &uri_ping);
     httpd_register_uri_handler(s_server, &uri_status);
     httpd_register_uri_handler(s_server, &uri_fw_list);
     httpd_register_uri_handler(s_server, &uri_flash);
     httpd_register_uri_handler(s_server, &uri_reboot);
+    httpd_register_uri_handler(s_server, &uri_update_meta);
 
     s_running = true;
     ESP_LOGI(TAG, "HTTP server started, node: %s", s_node_id);

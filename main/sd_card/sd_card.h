@@ -144,3 +144,18 @@ const char** sd_history_get_display(int& out_count);
  * @return Con trỏ tới mảng fw_id strings.
  */
 const char** sd_history_get_ids();
+
+// ============================================================
+// METADATA UPDATE (REMOTE FIX)
+// ============================================================
+
+/**
+ * @brief Cập nhật trường md5/md5_bootloader/md5_partition cho một fw_id
+ *        trong /index.txt trên SD card VÀ trong g_firmware_map bộ nhớ.
+ *        Truyền nullptr để bỏ qua trường đó.
+ * @return ESP_OK nếu thành công, ESP_ERR_NOT_FOUND nếu fw_id không tồn tại.
+ */
+esp_err_t sd_update_fw_md5(const char* fw_id,
+                             const char* md5,
+                             const char* md5_bootloader,
+                             const char* md5_partition);
