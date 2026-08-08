@@ -136,33 +136,38 @@ bool Adafruit_SH1106G::begin(uint8_t addr, bool reset) {
 
   Adafruit_GrayOLED::_init(addr, reset);
 
-  _page_start_offset =
-      2; // the SH1106 display we have found requires a small offset into memory
+  // NOTE: the physical panel on this board is an SSD1306, NOT an SH1106.
+  // SSD1306 maps its 128 columns starting at column 0 (no 132-col RAM), so it
+  // needs NO offset — the old value 2 was pushing the whole image 2px to the
+  // right. See the SSD1306-style init sequence below (charge pump 0x8D,0x14)
+  // which also fixes the dim/low-brightness look.
+  _page_start_offset = 0;
 
 #ifndef SH110X_NO_SPLASH
   drawBitmap((WIDTH - splash2_width) / 2, (HEIGHT - splash2_height) / 2,
              splash2_data, splash2_width, splash2_height, 1);
 #endif
 
-  // Init sequence, make sure its under 32 bytes, or split into multiples!
+  // SSD1306 128x64 init (this panel is an SSD1306). PAGE addressing mode is
+  // used so the base-class display() — which writes each page with the page +
+  // column-set commands — keeps working unchanged. Must stay under 32 bytes.
   // clang-format off
   static const uint8_t init[] = {
-      SH110X_DISPLAYOFF,               // 0xAE
-      SH110X_SETDISPLAYCLOCKDIV, 0x80, // 0xD5, 0x80,
-      SH110X_SETMULTIPLEX, 0x3F,       // 0xA8, 0x3F,
-      SH110X_SETDISPLAYOFFSET, 0x00,   // 0xD3, 0x00,
-      SH110X_SETSTARTLINE,             // 0x40
-      SH110X_DCDC, 0x8B,               // DC/DC on
-      SH110X_SEGREMAP + 1,             // 0xA1
-      SH110X_COMSCANDEC,               // 0xC8
-      SH110X_SETCOMPINS, 0x12,         // 0xDA, 0x12,
-      SH110X_SETCONTRAST, 0xFF,        // 0x81, 0xFF
-      SH110X_SETPRECHARGE, 0x1F,       // 0xD9, 0x1F,
-      SH110X_SETVCOMDETECT, 0x40,      // 0xDB, 0x40,
-      0x33,                            // Set VPP to 9V
-      SH110X_NORMALDISPLAY,
-      SH110X_MEMORYMODE, 0x10,         // 0x20, 0x00
-      SH110X_DISPLAYALLON_RESUME,
+      0xAE,        // display OFF
+      0xD5, 0x80,  // clock divide / osc freq
+      0xA8, 0x3F,  // multiplex ratio = 64
+      0xD3, 0x00,  // display offset = 0
+      0x40,        // start line = 0
+      0x8D, 0x14,  // charge pump ON (internal VCC) — this is what fixes brightness
+      0x20, 0x02,  // memory addressing mode = PAGE
+      0xA1,        // segment remap (col 127 -> SEG0)
+      0xC8,        // COM scan direction = remapped (flip vertical)
+      0xDA, 0x12,  // COM pins hardware config
+      0x81, 0xFF,  // contrast = max (brightest)
+      0xD9, 0xF1,  // pre-charge period (internal VCC)
+      0xDB, 0x40,  // VCOMH deselect level
+      0xA4,        // resume to RAM content
+      0xA6,        // normal (non-inverted) display
   };
   // clang-format on
 
