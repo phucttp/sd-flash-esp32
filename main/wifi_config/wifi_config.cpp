@@ -73,7 +73,18 @@ void wifi_config_get_params(char* out_url, char* out_key, char* out_iv) {
  */
 bool wifi_config_connect() {
     WiFiManager wm;
-    wm.setConfigPortalTimeout(180); 
+    wm.setConfigPortalTimeout(180);
+
+    /* Phones probe captive portals with routes like /generate_204, /hotspot-detect.html.
+     * WiFiManager has no handler for these → default 404 path → WebServer.send() blocks
+     * on full WiFi TX queue → main task WDT in ~5s.
+     * Registering a notFound handler that returns 204 (no body) avoids that blocking path. */
+    wm.setWebServerCallback([&wm]() {
+        wm.server->onNotFound([&wm]() {
+            wm.server->send(204, "text/plain", "");
+        });
+    });
+
     ui.showMessage("Connecting to", "WiFi...");
     return wm.autoConnect("Universal-Flasher-Config");
 }
@@ -113,6 +124,11 @@ void wifi_config_force_portal() {
 
     // --- B3: Mở Portal ---
     wm.setCaptivePortalEnable(true);
+    wm.setWebServerCallback([&wm]() {
+        wm.server->onNotFound([&wm]() {
+            wm.server->send(204, "text/plain", "");
+        });
+    });
     if (!wm.startConfigPortal("Universal-Flasher-Setup")) {
         ESP_LOGW(TAG, "Timeout/Exit");
         ui.showMessage("Setup", "Cancelled");
