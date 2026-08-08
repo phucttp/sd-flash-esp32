@@ -222,7 +222,19 @@ void sync_engine_run(bool force_clean) {
         return;
     }
 
-    FirmwareMap& local_map = g_firmware_map;
+    // 3b. ƯU TIÊN: Cập nhật index.txt từ server ngay (source of truth)
+    // Snapshot local map trước để dùng so sánh firmware bên dưới
+    FirmwareMap old_local_map = g_firmware_map;
+    ui.showMessage("Syncing...", "Save Index");
+    if (update_index_file()) {
+        sd_load_metadata(); // g_firmware_map giờ khớp server
+        ESP_LOGI(TAG, "Index.txt updated from server early");
+    } else {
+        ESP_LOGW(TAG, "Early index update failed, continuing with old local");
+    }
+
+    // Dùng snapshot cũ để quyết định firmware nào cần tải lại
+    FirmwareMap& local_map = old_local_map;
     bool data_changed = false;
 
     // 4. VÒNG LẶP QUYẾT ĐỊNH
@@ -355,17 +367,13 @@ void sync_engine_run(bool force_clean) {
         data_changed = true;
     }
 
-    // 6. KẾT THÚC - LUÔN cập nhật index.txt từ server (source of truth)
-    // Dù không tải file mới, metadata (device_type, version, order...) vẫn cần sync
-    if (update_index_file()) {
-        sd_load_metadata(); // Reload RAM
-        if (data_changed) {
-            ui.showMessage("Sync Done", "Files Updated!");
-        } else {
-            ui.showMessage("Sync Done", "Up-to-date");
-        }
+    // 6. KẾT THÚC - index.txt đã được cập nhật từ server ở bước 3b
+    // Chỉ cần reload lại để đảm bảo RAM đồng bộ với các file mới tải (nếu có)
+    if (data_changed) {
+        sd_load_metadata();
+        ui.showMessage("Sync Done", "Files Updated!");
     } else {
-        ui.showMessage("Sync Error", "Save Fail");
+        ui.showMessage("Sync Done", "Up-to-date");
     }
     
     vTaskDelay(2000);
