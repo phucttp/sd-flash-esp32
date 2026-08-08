@@ -26,7 +26,12 @@
 #include "../flasher/flasher_swd_stm32f1.h"
 #include "../firmware_types.h"
 #include "../wifi_config/wifi_config.h"
+#include "../ble_provision/ble_provision.h"
 #include "../sync_engine/sync_engine.h"
+#include "oled_ui.h"
+
+// OLED UI toàn cục (khai báo ở main.cpp) — dùng cho submenu chọn cách cấu hình.
+extern OledUI ui;
 
 #include <string>
 #include <inttypes.h>
@@ -181,11 +186,26 @@ esp_err_t action_sync_firmware(void) {
 // ACTION: CONFIG WIFI
 // ============================================================
 esp_err_t action_config_wifi(void) {
-    ESP_LOGI(TAG, ">>> OPEN WIFI CONFIG PORTAL");
+    ESP_LOGI(TAG, ">>> OPEN WIFI CONFIG");
+
+    // Chọn cách nạp WiFi:
+    //   0 = BLE (gửi SSID/password từ app "ESP BLE Provisioning") — mặc định,
+    //       vì SoftAP portal phát lệch băng tần nên điện thoại không thấy AP.
+    //   1 = Portal SoftAP (WiFiManager) — fallback, đồng thời nhập URL/Key/IV.
+    const char* opts[] = { "WiFi qua BLE", "Portal (WiFi+URL)" };
+    int sel = ui.inputSelect("Cau hinh WiFi", opts, 2, 0);
+    if (sel < 0) {
+        return ESP_ERR_INVALID_STATE;   // hủy
+    }
+
     s_is_busy = true;
     s_status_text = "Config WiFi...";
 
-    wifi_config_force_portal();
+    if (sel == 0) {
+        ble_provision_run(s_config.btn_ok_pin);   // module độc lập, chỉ lo BLE
+    } else {
+        wifi_config_force_portal();               // SoftAP portal (WiFi + URL/Key/IV)
+    }
 
     s_is_busy = false;
     s_status_text = "Ready";

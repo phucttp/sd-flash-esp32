@@ -1,0 +1,27 @@
+# sdkconfig.defaults — applied when sdkconfig is (re)generated from a clean tree.
+#
+# NOTE: values already present in an existing `sdkconfig` win over these, so the
+# lines below also had to be applied directly to `sdkconfig`. After pulling this
+# file, run `idf.py reconfigure` (or `idf.py fullclean` + build) so the Bluetooth
+# sub-options get their defaults filled in by kconfig.
+
+# ── Flash / partitions ──────────────────────────────────────────────────────
+# Board has 4MB flash. Bluedroid BLE (for WiFi-over-BLE provisioning) bloats the
+# app past the 2MB single-app-large preset, so use a custom 3MB factory table.
+CONFIG_ESPTOOLPY_FLASHSIZE_4MB=y
+CONFIG_ESPTOOLPY_FLASHSIZE="4MB"
+CONFIG_PARTITION_TABLE_CUSTOM=y
+CONFIG_PARTITION_TABLE_CUSTOM_FILENAME="partitions.csv"
+
+# ── Bluetooth (BLE) ─────────────────────────────────────────────────────────
+# arduino-esp32's WiFiProv only exposes NETWORK_PROV_SCHEME_BLE when Bluedroid
+# is enabled. BLE runs only during WiFi provisioning; the controller memory is
+# freed afterwards (NETWORK_PROV_SCHEME_HANDLER_FREE_BTDM) and the device reboots
+# into normal WiFi-only operation.
+CONFIG_BT_ENABLED=y
+CONFIG_BT_BLUEDROID_ENABLED=y
+CONFIG_BT_BLE_ENABLED=y
+# protocomm/simple_ble (WiFiProv BLE) dùng API quảng bá BLE 4.2 legacy
+# (esp_ble_gap_start_advertising/config_adv_data). Trên C3 mặc định chỉ bật
+# BLE 5.0 extended-adv → phải bật thêm 4.2 features nếu không sẽ lỗi link.
+CONFIG_BT_BLE_42_FEATURES_SUPPORTED=y

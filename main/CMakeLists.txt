@@ -7,6 +7,7 @@ set(srcs "main.cpp"
          "flasher/flasher_swd_stm32f4.cpp"
          "flasher/flasher_swd_stm32f1.cpp"
          "wifi_config/wifi_config.cpp"
+         "ble_provision/ble_provision.cpp"
          "ota_downloader/ota_downloader.cpp"
          "metadata_parser/metadata_parser.cpp"
          "sync_engine/sync_engine.cpp"
@@ -18,7 +19,8 @@ set(srcs "main.cpp"
 
 idf_component_register(SRCS ${srcs}
                        INCLUDE_DIRS ${include_dirs}
-                       REQUIRES espressif__arduino-esp32 Adafruit_DAP Adafruit_GFX Adafruit_SH110X OledUI WiFiManager esp_http_client mbedtls nvs_flash mdns esp_http_server esp_netif)
+                       REQUIRES espressif__arduino-esp32 Adafruit_DAP Adafruit_GFX Adafruit_SH110X OledUI WiFiManager esp_http_client mbedtls nvs_flash mdns esp_http_server esp_netif
+                                bt espressif__network_provisioning)
 
 
 # ⚠️ Thêm dòng này ngay sau idf_component_register
