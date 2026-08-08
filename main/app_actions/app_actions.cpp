@@ -189,9 +189,14 @@ esp_err_t action_config_wifi(void) {
     ESP_LOGI(TAG, ">>> OPEN WIFI CONFIG");
 
     // Chọn cách nạp WiFi:
-    //   0 = BLE (gửi SSID/password từ app "ESP BLE Provisioning") — mặc định,
-    //       vì SoftAP portal phát lệch băng tần nên điện thoại không thấy AP.
-    //   1 = Portal SoftAP (WiFiManager) — fallback, đồng thời nhập URL/Key/IV.
+    //   0 = BLE (gửi SSID/password từ app "ESP BLE Provisioning") — mặc định
+    //   1 = Portal SoftAP (WiFiManager) — đồng thời nhập URL/Key/IV
+    //
+    // LƯU Ý: ghi chú cũ ở đây nói BLE là mặc định "vì SoftAP phát lệch băng tần
+    // nên điện thoại không thấy AP". Đó là lỗi của một bản phần cứng cũ và
+    // KHÔNG còn đúng — AP hiện lên bình thường trên board hiện tại. Giữ BLE
+    // trước vì nó nhanh hơn cho người cầm điện thoại, không phải vì portal hỏng.
+    // Portal vẫn là đường duy nhất nhập được URL/Key/IV.
     const char* opts[] = { "WiFi qua BLE", "Portal (WiFi+URL)" };
     int sel = ui.inputSelect("Cau hinh WiFi", opts, 2, 0);
     if (sel < 0) {

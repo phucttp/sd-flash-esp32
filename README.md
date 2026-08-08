@@ -133,13 +133,18 @@ Tools → WiFi Config offers two paths, BLE first:
   1  Portal (WiFi+URL)     ← fallback, also sets URL / AES key / IV
 ```
 
-**BLE is the default because the SoftAP portal was unreachable on this board** —
-the AP comes up off-channel and phones never list it. BLE provisioning skips the
-scan entirely: pair from the standard *ESP BLE Provisioning* app and send
-credentials directly.
+BLE provisioning pairs from the standard *ESP BLE Provisioning* app and sends
+credentials directly, with no AP scan involved.
 
-The portal is kept, not replaced, because it is still the only way to enter the
-sync URL and the AES key/IV — BLE provisioning has no field for those.
+It is the default for historical reasons that **no longer apply**: an older
+board revision advertised the SoftAP off-channel, so phones never listed it and
+the portal was effectively unreachable. Current hardware shows the AP normally.
+The ordering is kept because BLE is still the quicker path for someone holding a
+phone, not because the portal is broken — don't re-derive anything from the old
+symptom.
+
+The portal is the only way to enter the sync URL and the AES key/IV; BLE
+provisioning has no field for those.
 
 ## NetFlash — HTTP API over WiFi
 
