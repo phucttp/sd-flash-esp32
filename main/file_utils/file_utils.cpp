@@ -62,6 +62,7 @@ esp_err_t fu_file_read(const char* path, std::string& out_content) {
 
 /**
  * @brief Đọc file vào buffer với giá trị mặc định
+ * Hàm này có bug là chưa giải quyết dùng buffer nhỏ hơn nội dung file, nhưng tạm thời chấp nhận để tránh phức tạp hơn. Cần xem xét sau khi có cơ chế log lỗi tốt hơn.
  */
 esp_err_t fu_file_read_buf(const char* path, char* buffer, size_t buffer_size, const char* default_value) {
     std::string normalized = fu_normalize_path(path);
@@ -72,7 +73,7 @@ esp_err_t fu_file_read_buf(const char* path, char* buffer, size_t buffer_size, c
         if (file) {
             if (file.size() > 0) {
                 String s = file.readStringUntil('\n');
-                s.trim();
+                s.trim(); // lượt bỏ khoản trắng dư thừa
                 if (s.length() > 0) {
                     strncpy(buffer, s.c_str(), buffer_size - 1);
                     buffer[buffer_size - 1] = '\0';
@@ -123,6 +124,9 @@ esp_err_t fu_file_write(const char* path, const char* content) {
     return ESP_OK;
 }
 
+/**
+ * @brief Thêm nội dung vào cuối file (tự tạo nếu chưa tồn tại)
+ */
 esp_err_t fu_file_append(const char* path, const char* content) {
     std::string normalized = fu_normalize_path(path);
 
@@ -154,6 +158,9 @@ esp_err_t fu_file_delete(const char* path) {
     }
 }
 
+/**
+ * @brief Lấy kích thước file, trả về -1 nếu file không tồn tại hoặc lỗi
+ */
 int32_t fu_file_size(const char* path) {
     std::string normalized = fu_normalize_path(path);
 
@@ -187,6 +194,10 @@ bool fu_dir_exists(const char* path) {
     return isDir;
 }
 
+/**
+ * @brief Tạo thư mục (tự tạo đệ quy nếu thiếu thư mục cha)
+ */
+
 esp_err_t fu_dir_create(const char* path) {
     std::string normalized = fu_normalize_path(path);
 
@@ -209,6 +220,9 @@ esp_err_t fu_dir_create(const char* path) {
     }
 }
 
+/**
+ * @brief Xóa thư mục (chỉ xóa nếu rỗng)
+ */
 esp_err_t fu_dir_delete(const char* path) {
     std::string normalized = fu_normalize_path(path);
 
@@ -226,6 +240,9 @@ esp_err_t fu_dir_delete(const char* path) {
     }
 }
 
+/**
+ * @brief Xóa thư mục và tất cả nội dung bên trong (đệ quy)
+ */
 esp_err_t fu_dir_delete_recursive(const char* path) {
     std::string normalized = fu_normalize_path(path);
 
