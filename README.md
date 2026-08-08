@@ -195,29 +195,12 @@ git clone -c core.longpaths=true -b muti-oled \
     https://github.com/phucttp/sd-flash-esp32.git
 ```
 
-> **A fresh clone does not build — an existing working tree does.**
->
-> `components/Adafruit_BusIO`, `Adafruit_GFX` and `Adafruit_SSD1306` are
-> recorded as gitlinks (mode `160000`), and the repository has no
-> `.gitmodules`. A gitlink stores a commit SHA, not file contents, and with no
-> `.gitmodules` there is nothing telling git where to fetch that commit from.
-> So those three arrive as **empty directories** and the build stops at a
-> missing `Adafruit_GFX.h`, which `OledUI` requires.
->
-> If you are building right now without trouble, that is because those files
-> have always been on your disk — they were never part of what got pushed. The
-> breakage only shows up on a machine that has never had them. Verified against
-> a clean clone of `muti-oled`:
->
-> ```
-> 0 file  Adafruit_BusIO          69 file  Adafruit_DAP
-> 0 file  Adafruit_GFX            17 file  Adafruit_SH110X
-> 0 file  Adafruit_SSD1306        44 file  WiFiManager
-> ```
->
-> Fix by copying the three directories in from a working tree and committing
-> them as ordinary files (`Adafruit_SSD1306` is unused by this build and can be
-> dropped instead). Unresolved — see [Known gaps](#known-gaps).
+`components/` is vendored — every dependency is a plain tracked file, so a
+clone builds with nothing else to fetch. `Adafruit_BusIO` and `Adafruit_GFX`
+were previously gitlinks with no `.gitmodules`, which meant they cloned as
+empty directories on any machine that had not already had them; see
+[Vendored components](#vendored-components) for what they are and where they
+came from.
 
 ## Three bugs worth knowing about
 
@@ -256,6 +239,26 @@ hardware attached, which is how the UI is developed.
 > `tool_setting.json` holds the AES key and IV. It is gitignored at both the
 > repo root and under `toolAddFirmware/`. Keep it that way.
 
+## Vendored components
+
+Upstream libraries live in `components/` as ordinary tracked files rather than
+submodules, because each one carries a local edit that upstream will never
+take: its `CMakeLists.txt` is rewritten to register as an ESP-IDF component
+(`REQUIRES espressif__arduino-esp32`, no top-level `project()`). A submodule
+pinned at an upstream SHA cannot carry that edit.
+
+| Component | Upstream | Pinned at |
+|---|---|---|
+| `Adafruit_BusIO` | [adafruit/Adafruit_BusIO](https://github.com/adafruit/Adafruit_BusIO) | `3b83642` |
+| `Adafruit_GFX` | [adafruit/Adafruit-GFX-Library](https://github.com/adafruit/Adafruit-GFX-Library) | `a969a70` (v1.12.3) |
+| `Adafruit_SH110X` | adafruit/Adafruit_SH110X | modified — see [About the display](#about-the-display) |
+| `Adafruit_DAP` | adafruit/Adafruit_DAP | modified — SWD physical layer |
+| `WiFiManager` | tzapu/WiFiManager | — |
+| `OledUI` | in-house | — |
+
+To take an upstream update, diff against that SHA rather than replacing the
+directory wholesale, or the ESP-IDF `CMakeLists.txt` goes with it.
+
 ## Related projects
 
 | | |
@@ -265,10 +268,6 @@ hardware attached, which is how the UI is developed.
 
 ## Known gaps
 
-- **Fresh clone does not build** — three components are orphaned gitlinks with
-  no `.gitmodules`, so they clone as empty directories (see [Build](#build)).
-  Existing working trees are unaffected, which is exactly why this went
-  unnoticed. First thing to fix.
 - **SWD runs at roughly a third of the speed it could.** `targetConnect()` is
   called with no argument, so the DAP delay loop uses the header default of 50
   NOPs per half-cycle. GangF's programmer node passes 10 and measured 20 s → 6.6 s
