@@ -187,12 +187,37 @@ BLE provisioning pushes the image past the stock 2 MB single-app-large preset.
 `sdkconfig.defaults` is committed alongside it so a clean checkout does not
 silently fall back to the default table and then fail to link.
 
-> **Fresh clones do not build yet.** `components/Adafruit_BusIO`,
-> `Adafruit_GFX` and `Adafruit_SSD1306` are recorded as gitlinks (mode
-> `160000`) but the repository has no `.gitmodules`, so `git clone` leaves
-> three empty directories and the build fails on a missing `Adafruit_GFX`.
-> Copy those three from a working tree, or convert them to plain tracked
-> files. Unresolved — see [Known gaps](#known-gaps).
+On Windows, clone with long paths enabled or checkout fails partway through
+`managed_components/`:
+
+```bash
+git clone -c core.longpaths=true -b muti-oled \
+    https://github.com/phucttp/sd-flash-esp32.git
+```
+
+> **A fresh clone does not build — an existing working tree does.**
+>
+> `components/Adafruit_BusIO`, `Adafruit_GFX` and `Adafruit_SSD1306` are
+> recorded as gitlinks (mode `160000`), and the repository has no
+> `.gitmodules`. A gitlink stores a commit SHA, not file contents, and with no
+> `.gitmodules` there is nothing telling git where to fetch that commit from.
+> So those three arrive as **empty directories** and the build stops at a
+> missing `Adafruit_GFX.h`, which `OledUI` requires.
+>
+> If you are building right now without trouble, that is because those files
+> have always been on your disk — they were never part of what got pushed. The
+> breakage only shows up on a machine that has never had them. Verified against
+> a clean clone of `muti-oled`:
+>
+> ```
+> 0 file  Adafruit_BusIO          69 file  Adafruit_DAP
+> 0 file  Adafruit_GFX            17 file  Adafruit_SH110X
+> 0 file  Adafruit_SSD1306        44 file  WiFiManager
+> ```
+>
+> Fix by copying the three directories in from a working tree and committing
+> them as ordinary files (`Adafruit_SSD1306` is unused by this build and can be
+> dropped instead). Unresolved — see [Known gaps](#known-gaps).
 
 ## Three bugs worth knowing about
 
@@ -241,7 +266,9 @@ hardware attached, which is how the UI is developed.
 ## Known gaps
 
 - **Fresh clone does not build** — three components are orphaned gitlinks with
-  no `.gitmodules` (see [Build](#build)). This is the first thing to fix.
+  no `.gitmodules`, so they clone as empty directories (see [Build](#build)).
+  Existing working trees are unaffected, which is exactly why this went
+  unnoticed. First thing to fix.
 - **SWD runs at roughly a third of the speed it could.** `targetConnect()` is
   called with no argument, so the DAP delay loop uses the header default of 50
   NOPs per half-cycle. GangF's programmer node passes 10 and measured 20 s → 6.6 s
