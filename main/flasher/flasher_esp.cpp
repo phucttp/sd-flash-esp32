@@ -258,6 +258,7 @@ esp_err_t flasher_write_segment_encrypted(const std::string& file_path, uint32_t
 
 	size_t bytes_written = 0;
 	size_t bytes_read = 0;
+	uint8_t pkcs7_last_byte = 0;   /* last byte of last decrypted chunk → PKCS7 pad length */
 
 	// Đọc từng khối dữ liệu mã hóa, giải mã và ghi vào flash của Target
 	while ((bytes_read = fwFile.read(buffer_enc, FLASHER_BUFFER_SIZE)) > 0) {
@@ -276,6 +277,7 @@ esp_err_t flasher_write_segment_encrypted(const std::string& file_path, uint32_t
 				break;
 			}
 			bytes_written += dec_len;
+			pkcs7_last_byte = buffer_dec[dec_len - 1];   /* track for padding strip */
 		}
 
 		// Tính toán và hiển thị tiến trình nạp
@@ -292,6 +294,16 @@ esp_err_t flasher_write_segment_encrypted(const std::string& file_path, uint32_t
 		}
 	}
 
+	// Strip PKCS7 padding: last byte of final chunk = padding length.
+	// MD5 verify must use the original binary size (without padding).
+	if (pkcs7_last_byte >= 1 && pkcs7_last_byte <= 16 && pkcs7_last_byte <= bytes_written) {
+		bytes_written -= pkcs7_last_byte;
+		ESP_LOGI(TAG, "PKCS7 stripped %u bytes → actual binary: %zu bytes",
+		         (unsigned)pkcs7_last_byte, bytes_written);
+	} else if (pkcs7_last_byte != 0) {
+		ESP_LOGW(TAG, "Unexpected PKCS7 last byte=%u, skipping strip", (unsigned)pkcs7_last_byte);
+	}
+
 	// Dọn dẹp
 	free(buffer_enc);
 	free(buffer_dec);
@@ -301,7 +313,7 @@ esp_err_t flasher_write_segment_encrypted(const std::string& file_path, uint32_t
 	ESP_LOGI(TAG, "Encrypted segment written %zu bytes OK", bytes_written);
 
 	// --- KIỂM TRA MD5 (NẾU CÓ) ---
-	// Lưu ý: MD5 phải là hash của dữ liệu đã giải mã (plaintext)
+	// MD5 phải là hash của binary gốc (raw, không có PKCS7 padding)
 	if (md5.length() == 32) {
 		char md5_ascii[33];
 		strncpy(md5_ascii, md5.c_str(), 32);
@@ -760,6 +772,51 @@ int flasher_scan_and_save_combo(void) {
 	return -1;
 }
 
+/**
+ * @brief Special connect: nhả BOOT trước EN — hardware-verified.
+ *
+ * Khác với brute-force: cả BOOT và EN bị kéo xuống cùng lúc, sau đó BOOT
+ * được nhả lên TRƯỚC khi EN đi lên. ROM ESP32 sample chân BOOT ngay cạnh
+ * sườn lên của EN, nên sequence này đảm bảo target vào bootloader mode.
+ */
+static esp_err_t try_connect_special(void)
+{
+	gpio_set_direction((gpio_num_t)config.gpio0_trigger_pin, GPIO_MODE_OUTPUT);
+	gpio_set_direction((gpio_num_t)config.reset_trigger_pin, GPIO_MODE_OUTPUT);
+
+	ESP_LOGI(TAG, "=== SPECIAL CONNECT (Early BOOT release) ===");
+	ui.showMessage("Connecting...", "Special mode...");
+
+	// 1. Kéo cả BOOT và EN (Reset) xuống mức 0 cùng lúc
+	gpio_set_level((gpio_num_t)config.gpio0_trigger_pin, 1);
+	gpio_set_level((gpio_num_t)config.reset_trigger_pin, 0);
+
+	// 2. Chờ 100ms để điện áp tụt hẳn, xả sạch tụ trên mạch
+	vTaskDelay(pdMS_TO_TICKS(100));
+
+	// 3. ĐIỂM ĂN TIỀN: Nhả chân BOOT lên 1 TRƯỚC
+	gpio_set_level((gpio_num_t)config.gpio0_trigger_pin, 0);
+
+	// 4. Nhả chân EN lên 1 NGAY LẬP TỨC sát nút
+	gpio_set_level((gpio_num_t)config.reset_trigger_pin, 1);
+
+	// 5. Chờ 100ms cho chip khởi động và yên vị trong Bootloader
+	vTaskDelay(pdMS_TO_TICKS(100));
+
+	uart_flush(config.uart_port);
+	uart_flush_input(config.uart_port);
+
+	esp_loader_connect_args_t connect_config = ESP_LOADER_CONNECT_DEFAULT();
+	if (esp_loader_connect(&connect_config) == ESP_LOADER_SUCCESS) {
+		ESP_LOGI(TAG, "SPECIAL CONNECT success!");
+		ui.showMessage("Connected!", "Special mode");
+		return ESP_OK;
+	}
+
+	ESP_LOGW(TAG, "Special connect failed.");
+	return ESP_FAIL;
+}
+
 static esp_err_t try_connect(void) {
 	// --- ƯU TIÊN: Thử saved combo trước ---
 	int saved = flasher_load_saved_combo();
@@ -773,9 +830,15 @@ static esp_err_t try_connect(void) {
 			return ESP_OK;
 		}
 
-		// Saved combo failed -> clear và thử brute force
-		ESP_LOGW(TAG, "Saved combo failed, clearing and trying brute force...");
+		// Saved combo failed -> clear và thử special + brute force
+		ESP_LOGW(TAG, "Saved combo failed, clearing...");
 		flasher_clear_saved_combo();
+	}
+
+	// --- SPECIAL: Early BOOT release sequence ---
+	if (try_connect_special() == ESP_OK) {
+		vTaskDelay(pdMS_TO_TICKS(300));
+		return ESP_OK;
 	}
 
 	// --- BRUTE FORCE: Thử tất cả GPIO logic combinations ---
