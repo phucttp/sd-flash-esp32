@@ -20,7 +20,7 @@ from __future__ import annotations
 
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, asdict
-from typing import Optional
+from typing import Callable, Optional
 
 
 # ─────────────────────────── Data types ───────────────────────────
@@ -49,6 +49,37 @@ class SlaveStatus:
     status_text: str                # "Ready" / "Flashing" / "Erasing" / "✗ no target"
 
 
+@dataclass
+class ProvisionResult:
+    """Outcome of provisioning a freshly-plugged phost via master's UART slot."""
+    ok: bool
+    error: Optional[str] = None
+    duration_s: Optional[float] = None
+
+
+@dataclass
+class SyncStatus:
+    """Live per-slave library-sync snapshot for status polling.
+
+    A slave mirrors the WHOLE server FW library into its external memory.
+    Sync is manifest-driven + incremental: only missing / md5-mismatched
+    files are downloaded, so a re-sync of an up-to-date slave is a no-op.
+    """
+    addr: int
+    phase: str                      # idle/connecting/downloading/verifying/storing/done/failed
+    files_done: int                 # files already up-to-date or downloaded
+    files_total: int                # files in the manifest
+    bytes_done: int
+    bytes_total: int
+    current_file: str               # e.g. "EMC32/v1.3" — "" when idle/done
+    error: Optional[str] = None
+
+
+# Provisioning callbacks fire on worker thread; UI must dispatch via after(0, ...).
+ProgressCallback = Callable[[int, str], None]   # (percent 0..100, status)
+LogCallback = Callable[[str], None]             # (one log line)
+
+
 # ─────────────────────────── Interface ───────────────────────────
 
 class MasterClient(ABC):
@@ -69,7 +100,25 @@ class MasterClient(ABC):
 
     @abstractmethod
     def get_slave_fw_list(self, addr: int) -> list[dict]:
-        """Per-slave firmware list. Returns [{id, display}, ...]."""
+        """Firmware versions currently stored in this slave's external memory.
+
+        Returns [{id, display}, ...]. Populated by sync_library() — empty
+        until the slave has synced at least once.
+        """
+
+    @abstractmethod
+    def sync_library(self, addrs: list[int], manifest_url: str) -> dict:
+        """Tell the listed slaves to mirror the full FW library.
+
+        Each slave fetches the manifest from `manifest_url`, diffs it against
+        its external memory, and downloads any missing / changed files over
+        its own WiFi. Non-blocking — returns {ok, job_id} immediately; poll
+        get_sync_status() for progress.
+        """
+
+    @abstractmethod
+    def get_sync_status(self) -> list[SyncStatus]:
+        """Aggregate 1-shot library-sync status of every slave (poll-friendly)."""
 
     @abstractmethod
     def get_status(self) -> list[SlaveStatus]:
@@ -94,15 +143,41 @@ class MasterClient(ABC):
     @abstractmethod
     def reboot_all(self) -> dict: ...
 
+    @abstractmethod
+    def provision_slave(
+        self,
+        addr: int,
+        label: str,
+        progress_cb: ProgressCallback,
+        log_cb: LogCallback,
+    ) -> ProvisionResult:
+        """Provision a freshly-plugged phost via master's dedicated UART slot.
+
+        Master uses its pre-flashed phost_main partition (no FW upload from PC).
+        Blocks the calling thread — caller must run on a worker thread and
+        dispatch callbacks back to UI via after(0, ...).
+
+        Adds new slave to internal state on success so subsequent get_slaves()
+        and get_status() reflect it.
+        """
+
 
 # ─────────────────────────── Factory ───────────────────────────
 
-def make_master_client(backend: str = "mock") -> MasterClient:
-    """Pick implementation based on settings.json `netflash_backend`."""
+def make_master_client(backend: str = "mock", token: str = "") -> MasterClient:
+    """Pick implementation based on settings.json `netflash_backend`.
+
+    - "mock" — MockMasterClient, fake slaves for UI development.
+    - "ws"   — WsMasterClient, real WebSocket backend (see docs/master-api.md).
+               Needs the `websocket-client` package; `token` is the shared
+               auth token sent in the WS handshake.
+    """
     if backend == "mock":
         from .master_client_mock import MockMasterClient
         return MockMasterClient()
+    if backend == "ws":
+        from .master_client_ws import WsMasterClient
+        return WsMasterClient(token=token)
     raise NotImplementedError(
-        f"backend {backend!r} not implemented yet — use 'mock' until "
-        "ESP32-C3 master firmware is ready"
+        f"backend {backend!r} not recognised — use 'mock' or 'ws'"
     )

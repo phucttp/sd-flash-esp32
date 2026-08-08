@@ -686,12 +686,8 @@ class App(tk.Tk):
         if not os.path.isdir(sd_root): 
             return messagebox.showerror("Lỗi", "Đường dẫn SD sai.")
 
-        if not messagebox.askyesno("Xác nhận", f"Bạn muốn copy {len(selections)} firmware?\n(Sẽ tính toán và lưu thêm MD5 Padding vào metadata)"):
+        if not messagebox.askyesno("Xác nhận", f"Bạn muốn copy {len(selections)} firmware xuống thẻ?\n(Ghi file .bin gốc + MD5 raw — khớp đường plain của mạch)"):
             return
-
-        # Load thư viện Crypto (lazy load)
-        if not _load_crypto():
-            return messagebox.showerror("Lỗi", "Thiếu thư viện Crypto.")
 
         success_count = 0
         
@@ -726,50 +722,36 @@ class App(tk.Tk):
                 ("PART.bin", "path_partition",  "md5_partition")
             ]
 
-            has_change = False # Cờ kiểm tra xem có cần lưu lại file json local không
 
             for fname, key_path, key_md5 in files_map:
                 src_file = os.path.join(src_dir, fname)
                 dest_file = os.path.join(dest_dir, fname)
                 
                 if os.path.exists(src_file):
-                    # --- PADDING & COPY ---
+                    # --- COPY RAW (KHÔNG PADDING) ---
+                    # Đường plain của mạch (flasher_write_segment) verify MD5 trên
+                    # TOÀN BỘ file, KHÔNG strip padding. Nên file trên thẻ và MD5
+                    # trong index phải CÙNG là bản RAW, nếu không sẽ lệch checksum.
                     with open(src_file, "rb") as f_in: raw_data = f_in.read()
-                    
-                    # 1. Tạo Padding
-                    padded_data = pad(raw_data, AES.block_size)
-                    
-                    # 2. Ghi xuống thẻ nhớ (File đã độn)
-                    with open(dest_file, "wb") as f_out: f_out.write(padded_data)
-                    
-                    # 3. Tính MD5 Padded
-                    final_md5 = hashlib.md5(padded_data).hexdigest()
-                    
-                    # 4. Cập nhật cho SD Index (Bắt buộc phải là MD5 Padded để ESP32 check)
+
+                    # Ghi nguyên bản .bin xuống thẻ
+                    with open(dest_file, "wb") as f_out: f_out.write(raw_data)
+
+                    # MD5 của đúng bytes vừa ghi (raw)
+                    final_md5 = hashlib.md5(raw_data).hexdigest()
+
                     sd_meta[key_path] = f"/{fw_name}/{fname}"
-                    sd_meta[key_md5]  = final_md5 
-                    
-                    # 5. [QUAN TRỌNG] Cập nhật vào Local Metadata dưới dạng GHI CHÚ (Field mới)
-                    # Tên trường ví dụ: "md5_padded", "md5_bootloader_padded"
-                    key_padded = key_md5 + "_padded"
-                    if local_meta.get(key_padded) != final_md5:
-                        local_meta[key_padded] = final_md5
-                        has_change = True
-                    
-                    self.log_msg(f"  -> {fname}: OK (Padded)")
+                    sd_meta[key_md5]  = final_md5
+
+                    self.log_msg(f"  -> {fname}: OK (Raw)")
                 else:
                     # Dọn dẹp thông tin nếu file thiếu
                     sd_meta[key_path] = ""
                     sd_meta[key_md5] = ""
 
-            # --- LƯU NGƯỢC LẠI FILE LOCAL (NẾU CÓ TRƯỜNG MỚI) ---
-            if has_change:
-                try:
-                    with open(local_meta_path, "w", encoding="utf-8") as f:
-                        json.dump(local_meta, f, indent=2, ensure_ascii=False)
-                    self.log_msg(f"  Note: Đã thêm info '_padded' vào file json gốc.")
-                except Exception as e:
-                    self.log_msg(f"  Warn: Không lưu được json gốc ({e})")
+            # Firmware plain: ép cờ encrypted=false để mạch đi đúng đường plain
+            # (không thử giải mã file .bin thô).
+            sd_meta["encrypted"] = False
 
             # Cập nhật vào danh sách Index của thẻ nhớ
             self.sd_index_data = [i for i in self.sd_index_data if i.get("fw_id") != fw_name]
@@ -889,9 +871,9 @@ class App(tk.Tk):
                     # 1. Tạo dữ liệu đã Padding (Đây là dữ liệu thực tế sẽ nằm trên thẻ SD)
                     padded_data = pad(raw, AES.block_size)
                     
-                    # 2. Tính MD5 của dữ liệu ĐÃ PADDING
-                    final_md5 = hashlib.md5(padded_data).hexdigest()
-                    
+                    # 2. Tính MD5 raw binary (device strip PKCS7 xong mới verify)
+                    final_md5 = hashlib.md5(raw).hexdigest()
+
                     # 3. Mã hóa và ghi file .enc ra đĩa
                     # (Hàm encrypt_data bên trong cũng tự pad giống hệt bước 1)
                     enc_data = tool.encrypt_data(raw)

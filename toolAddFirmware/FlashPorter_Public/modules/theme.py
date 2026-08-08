@@ -1,48 +1,51 @@
 """
 FlashPorter Theme Module
-Design based on FlashPod landing page
-Dark theme with cyan/green accents
+Light theme — violet primary with pink + mint accents, soft pastel palette.
 """
 
 import tkinter as tk
 from tkinter import ttk
 
 # ============================================================
-# COLOR PALETTE (from landing page)
+# COLOR PALETTE — light theme (violet / pink / mint)
 # ============================================================
 class Colors:
-    # Primary colors
-    PRIMARY = "#00D9FF"         # Cyan
-    PRIMARY_DARK = "#00A8CC"    # Dark cyan
-    PRIMARY_LIGHT = "#33E1FF"   # Light cyan
+    # Primary — violet
+    PRIMARY = "#7C5CFC"         # Violet
+    PRIMARY_DARK = "#6442E0"    # Deep violet
+    PRIMARY_LIGHT = "#9B82FF"   # Light violet
 
-    # Accent colors
-    ACCENT = "#FF6B35"          # Orange
-    ACCENT_LIGHT = "#FFB347"    # Light orange
+    # Accent — rose / pink
+    ACCENT = "#EC4899"          # Rose
+    ACCENT_LIGHT = "#F472B6"    # Light pink
 
-    # Success/Error
-    SUCCESS = "#00FF88"         # Green
-    ERROR = "#FF4757"           # Red
-    WARNING = "#FFD93D"         # Yellow
+    # Success / Error / Warning
+    # Picked so each reads as text on white AND takes white text as a button
+    # fill (a pale mint or pure yellow would fail one of those).
+    SUCCESS = "#10B981"         # Emerald
+    ERROR = "#EF4444"           # Red
+    WARNING = "#F59E0B"         # Amber (yellow vanishes on white)
 
-    # Background colors (softer, less harsh)
-    BG_DARK = "#121620"         # Main background (lighter than before)
-    BG_CARD = "#1A202C"         # Card background
-    BG_CARD_HOVER = "#242D3D"   # Card hover
-    BG_INPUT = "#1E2530"        # Input field background
-    BG_BUTTON = "#2A3445"       # Button background
+    # Background colors — light
+    BG_DARK = "#F4F4F9"         # Page background (light lavender-grey)
+    BG_CARD = "#FFFFFF"         # Card / panel background
+    BG_CARD_HOVER = "#EFEFF5"   # Card hover
+    BG_INPUT = "#F1F1F7"        # Input field background
+    BG_BUTTON = "#E9E9F1"       # Default / secondary button fill
 
-    # Text colors (softer contrast - less eye strain)
-    TEXT = "#C8CDD8"            # Primary text (softer white)
-    TEXT_MUTED = "#7A849A"      # Secondary text
-    TEXT_DARK = "#121620"       # Text on light bg
+    # Text colors
+    TEXT = "#2D2D3A"            # Primary text (dark navy on light)
+    TEXT_MUTED = "#8A8A9C"      # Secondary text
+    # Historical name — now means "text drawn ON an accent-colored fill".
+    # All accent fills (violet/emerald/red/rose/amber) take white text.
+    TEXT_DARK = "#FFFFFF"
 
     # Border colors
-    BORDER = "#2A3445"          # Default border
-    BORDER_LIGHT = "#3A4455"    # Lighter border
-    BORDER_PRIMARY = "#00D9FF"  # Cyan border (focused)
+    BORDER = "#E3E3EC"          # Default border (light grey)
+    BORDER_LIGHT = "#EDEDF3"    # Lighter border
+    BORDER_PRIMARY = "#7C5CFC"  # Violet border (focused)
 
-    # OLED Preview colors (keep original for accuracy)
+    # OLED Preview colors (physical screen — keep black/cyan for accuracy)
     OLED_BG = "#000000"
     OLED_FG = "#00FFFF"
     OLED_HIGHLIGHT = "#FFFF00"
@@ -95,7 +98,7 @@ class Fonts:
 # TTK STYLE CONFIGURATION
 # ============================================================
 def apply_theme(root: tk.Tk):
-    """Apply FlashPorter dark theme to the application."""
+    """Apply the FlashPorter light theme to the application."""
 
     style = ttk.Style()
 
@@ -219,12 +222,12 @@ def apply_theme(root: tk.Tk):
     )
     style.map("Primary.TButton",
         background=[
-            ("disabled", Colors.PRIMARY_DARK),
+            ("disabled", Colors.BG_BUTTON),
             ("active", Colors.PRIMARY_LIGHT),
             ("pressed", Colors.PRIMARY_DARK)
         ],
         foreground=[
-            ("disabled", Colors.BG_CARD),
+            ("disabled", Colors.TEXT_MUTED),
             ("active", Colors.TEXT_DARK),
             ("pressed", Colors.TEXT_DARK)
         ]
@@ -261,12 +264,12 @@ def apply_theme(root: tk.Tk):
     )
     style.map("Success.TButton",
         background=[
-            ("disabled", "#006644"),
-            ("active", "#33FF99"),
-            ("pressed", "#00CC66")
+            ("disabled", Colors.BG_BUTTON),
+            ("active", "#34D399"),
+            ("pressed", "#059669")
         ],
         foreground=[
-            ("disabled", Colors.BG_CARD)
+            ("disabled", Colors.TEXT_MUTED)
         ]
     )
 
@@ -280,9 +283,12 @@ def apply_theme(root: tk.Tk):
     )
     style.map("Accent.TButton",
         background=[
-            ("disabled", "#994422"),
+            ("disabled", Colors.BG_BUTTON),
             ("active", Colors.ACCENT_LIGHT),
-            ("pressed", "#E55A2B")
+            ("pressed", "#DB2777")
+        ],
+        foreground=[
+            ("disabled", Colors.TEXT_MUTED)
         ]
     )
 
@@ -296,12 +302,12 @@ def apply_theme(root: tk.Tk):
     )
     style.map("Danger.TButton",
         background=[
-            ("disabled", "#992233"),
-            ("active", "#FF6B7A"),
-            ("pressed", "#E53E4D")
+            ("disabled", Colors.BG_BUTTON),
+            ("active", "#F87171"),
+            ("pressed", "#DC2626")
         ],
         foreground=[
-            ("disabled", Colors.BG_CARD)
+            ("disabled", Colors.TEXT_MUTED)
         ]
     )
 
@@ -335,11 +341,11 @@ def apply_theme(root: tk.Tk):
     )
     style.map("IconDanger.TButton",
         background=[
-            ("active", "#3A2030"),
+            ("active", "#FCE4E4"),
             ("pressed", Colors.BG_CARD)
         ],
         foreground=[
-            ("active", "#FF6B7A")
+            ("active", "#DC2626")
         ]
     )
 

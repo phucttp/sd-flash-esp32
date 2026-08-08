@@ -18,7 +18,9 @@ Firmware Manager tab — Git-only workflow (no SD card UI).
 User workflow: pick FW row on left → review on Info, or click [+ New FW]
 → fill form on Edit → Save → list refreshes. Device Type doubles as the
 OLED display name; internal FW ID is auto-generated and never shown.
-SD-card operations were removed; firmware is distributed via git push.
+Firmware is distributed via git push OR straight onto an SD card (the
+"SD Card" sub-tab) — the latter bypasses WiFi/git entirely for devices whose
+WiFi radio is dead.
 """
 
 from __future__ import annotations
@@ -27,11 +29,15 @@ import json
 import os
 import tkinter as tk
 from datetime import datetime
-from tkinter import filedialog, messagebox, ttk
+import threading
+import urllib.request as _urllib_req
+
+from tkinter import filedialog, messagebox, simpledialog, ttk
 from typing import Optional
 
 from modules.crypto import FWEncryptor, load_crypto, validate_key_iv
 from modules.oled_preview import OLEDPreviewFrame
+from modules.sd_card import SDCardManager
 from modules.theme import Colors, Fonts, StatusBadge
 from modules.utils import generate_short_fw_id, safe_name
 
@@ -118,6 +124,10 @@ class FirmwareManagerTab(ttk.Frame):
         edit_frame = ttk.Frame(nb)
         nb.add(edit_frame, text="  Edit / Add  ")
         self._build_edit_pane(edit_frame)
+
+        sd_frame = ttk.Frame(nb)
+        nb.add(sd_frame, text="  SD Card  ")
+        self._build_sd_pane(sd_frame)
 
         oled_frame = ttk.Frame(nb)
         nb.add(oled_frame, text="  OLED Order  ")
@@ -248,11 +258,21 @@ class FirmwareManagerTab(ttk.Frame):
         self.btn_sync_git.grid(row=1, column=0, columnspan=2,
                                 sticky="ew", pady=(0, 8))
 
+        # Push corrected MD5 values to a connected device (no SD reader needed)
+        tk.Button(
+            git_grp, text="→ Push Meta to Device",
+            font=Fonts.normal(),
+            bg=Colors.WARNING, fg=Colors.TEXT_DARK,
+            relief="flat", borderwidth=0,
+            pady=8, cursor="hand2",
+            command=self._push_meta_to_device,
+        ).grid(row=2, column=0, columnspan=2, sticky="ew", pady=(0, 6))
+
         # Secondary: delete selected entry
         ttk.Button(git_grp, text="🗑 Delete Selected from Library",
                    style="Danger.TButton",
                    command=self._delete_firmware).grid(
-            row=2, column=0, columnspan=2, sticky="ew", pady=2)
+            row=3, column=0, columnspan=2, sticky="ew", pady=2)
 
     def _build_oled_pane(self, parent):
         """OLED Order sub-tab — display order on host device's OLED FW menu."""
@@ -272,6 +292,265 @@ class FirmwareManagerTab(ttk.Frame):
         self.oled_preview.pack(fill=tk.BOTH, expand=True)
         self.oled_preview.set_apply_callback(self._on_oled_order_apply)
         self.oled_preview.set_rename_callback(self._on_oled_rename)
+
+    # ─────────────────────────── SD Card ───────────────────────────
+
+    def _build_sd_pane(self, parent):
+        """Fill firmware straight onto an SD card (bypasses git/WiFi).
+
+        Writes {SD}/{fw_id}/FW.bin|FW.enc + /index.txt exactly as the Muti
+        firmware reads it, so a card reader replaces the dead WiFi sync path.
+        """
+        wrap = ttk.Frame(parent, padding=12)
+        wrap.pack(fill=tk.BOTH, expand=True)
+        wrap.columnconfigure(0, weight=1)
+
+        ttk.Label(wrap, text="Fill firmware to SD card",
+                  font=(Fonts.FAMILY, 12, "bold")).grid(row=0, column=0, sticky="w")
+        ttk.Label(
+            wrap,
+            text="Ghi firmware thang ra the nho (khong can WiFi/git). Cam the vao "
+                 "dau doc, chon o dia, roi Copy. Tao /index.txt + thu muc {fw_id}/ "
+                 "dung dinh dang firmware Muti doc tu the.",
+            style="Muted.TLabel", justify="left", wraplength=520,
+        ).grid(row=1, column=0, sticky="w", pady=(2, 10))
+
+        # SD path row
+        path_grp = ttk.LabelFrame(wrap, text="SD Card Path", padding=8)
+        path_grp.grid(row=2, column=0, sticky="ew", pady=(0, 8))
+        path_grp.columnconfigure(0, weight=1)
+
+        self._sd_path_var = tk.StringVar(value=self.app.settings.get("sd_path", ""))
+        drive_row = ttk.Frame(path_grp)
+        drive_row.grid(row=0, column=0, sticky="ew")
+        ttk.Label(drive_row, text="Drive:").grid(row=0, column=0, padx=(0, 6))
+        self._sd_drive_combo = ttk.Combobox(drive_row, state="readonly", width=10,
+                                            values=self._sd_list_drives())
+        self._sd_drive_combo.grid(row=0, column=1, sticky="w")
+        self._sd_drive_combo.bind(
+            "<<ComboboxSelected>>",
+            lambda e: self._sd_set_path(self._sd_drive_combo.get()))
+        ttk.Button(drive_row, text="⟳", width=3, style="Icon.TButton",
+                   command=self._sd_refresh_drives).grid(row=0, column=2, padx=4)
+        ttk.Button(drive_row, text="Browse…", style="Secondary.TButton",
+                   command=self._sd_browse).grid(row=0, column=3, padx=(4, 0))
+
+        pth_row = ttk.Frame(path_grp)
+        pth_row.grid(row=1, column=0, sticky="ew", pady=(6, 0))
+        pth_row.columnconfigure(0, weight=1)
+        ent = ttk.Entry(pth_row, textvariable=self._sd_path_var,
+                        font=Fonts.mono_small())
+        ent.grid(row=0, column=0, sticky="ew")
+        ent.bind("<FocusOut>", lambda e: self._sd_set_path(self._sd_path_var.get()))
+
+        # Encrypt option — default ON: the device's encrypted flash path strips
+        # PKCS7 padding and verifies MD5 over the raw size, matching what the
+        # tool stores. Plain .bin is fine too but STM32 forces plain (no crypto).
+        self._sd_encrypt_var = tk.BooleanVar(value=True)
+        ttk.Checkbutton(
+            wrap,
+            text="Ma hoa .enc (khuyen nghi — dung AES key/IV o tab Settings; "
+                 "STM32 tu dong ghi .bin thuong)",
+            variable=self._sd_encrypt_var).grid(row=3, column=0, sticky="w", pady=(0, 8))
+
+        # Action buttons — copy selected / copy all
+        btns = ttk.Frame(wrap)
+        btns.grid(row=4, column=0, sticky="ew", pady=(0, 8))
+        btns.columnconfigure(0, weight=1)
+        btns.columnconfigure(1, weight=1)
+        tk.Button(btns, text="⤓ Copy FW dang chon → The",
+                  font=(Fonts.FAMILY, 12, "bold"),
+                  bg=Colors.PRIMARY, fg=Colors.TEXT, relief="flat", borderwidth=0,
+                  pady=12, cursor="hand2",
+                  command=self._sd_copy_selected).grid(
+            row=0, column=0, sticky="ew", padx=(0, 4))
+        tk.Button(btns, text="⤓⤓ Copy TAT CA → The",
+                  font=(Fonts.FAMILY, 12, "bold"),
+                  bg=Colors.SUCCESS, fg=Colors.TEXT, relief="flat", borderwidth=0,
+                  pady=12, cursor="hand2",
+                  command=self._sd_copy_all).grid(
+            row=0, column=1, sticky="ew", padx=(4, 0))
+
+        # SD contents listing
+        sd_grp = ttk.LabelFrame(wrap, text="Firmware tren the (index.txt)", padding=6)
+        sd_grp.grid(row=5, column=0, sticky="nsew", pady=(4, 0))
+        wrap.rowconfigure(5, weight=1)
+        sd_grp.rowconfigure(0, weight=1)
+        sd_grp.columnconfigure(0, weight=1)
+        self._sd_listbox = tk.Listbox(
+            sd_grp, height=6, font=Fonts.mono_small(),
+            bg=Colors.BG_CARD, fg=Colors.TEXT,
+            selectbackground=Colors.PRIMARY, selectforeground=Colors.TEXT_DARK,
+            highlightthickness=0, borderwidth=0, relief="flat", selectmode="extended")
+        self._sd_listbox.grid(row=0, column=0, sticky="nsew")
+
+        sd_btns = ttk.Frame(sd_grp)
+        sd_btns.grid(row=1, column=0, sticky="ew", pady=(4, 0))
+        ttk.Button(sd_btns, text="⟳ Refresh", style="Secondary.TButton",
+                   command=self._sd_refresh_list).pack(side=tk.LEFT)
+        ttk.Button(sd_btns, text="🗑 Xoa khoi the", style="Danger.TButton",
+                   command=self._sd_remove_selected).pack(side=tk.LEFT, padx=6)
+
+        # Initial populate
+        self._sd_refresh_drives()
+        self._sd_refresh_list()
+
+    def _sd_list_drives(self) -> list:
+        """Available drive letters on Windows (removable + fixed)."""
+        import string
+        return [f"{c}:\\" for c in string.ascii_uppercase if os.path.exists(f"{c}:\\")]
+
+    def _sd_refresh_drives(self):
+        if hasattr(self, "_sd_drive_combo"):
+            self._sd_drive_combo["values"] = self._sd_list_drives()
+
+    def _sd_set_path(self, path: str):
+        path = (path or "").strip()
+        self._sd_path_var.set(path)
+        self._sd_save_path(path)
+        self._sd_refresh_list()
+
+    def _sd_browse(self):
+        path = filedialog.askdirectory(title="Chon o dia / thu muc the SD")
+        if path:
+            self._sd_set_path(path)
+
+    def _sd_save_path(self, path: str):
+        self.app.settings["sd_path"] = path
+        # Keep the shared app var (Settings tab reads/writes it) in sync.
+        if hasattr(self.app, "sd_path_var"):
+            self.app.sd_path_var.set(path)
+        try:
+            with open(self.app._config_file, "w", encoding="utf-8") as f:
+                json.dump(self.app.settings, f, indent=2, ensure_ascii=False)
+        except Exception as e:
+            self.app._log(f"[SD] Khong luu duoc sd_path: {e}")
+
+    def _sd_manager(self) -> Optional[SDCardManager]:
+        """Build a manager for the current SD path, with the existing index loaded."""
+        path = self._sd_path_var.get().strip()
+        if not path or not os.path.isdir(path):
+            messagebox.showerror(
+                "SD Card", "Duong dan the SD khong hop le.\nChon o dia truoc.")
+            return None
+        mgr = SDCardManager(path)
+        mgr.load_index()
+        return mgr
+
+    def _sd_copy_selected(self):
+        fw_ids = self._get_selected_fw_ids()
+        if not fw_ids:
+            messagebox.showwarning("SD Card", "Chon firmware o cay ben trai truoc.")
+            return
+        self._sd_do_copy(fw_ids)
+
+    def _sd_copy_all(self):
+        all_fw = self.app.lib.list_firmwares()
+        if not all_fw:
+            messagebox.showinfo("SD Card", "Thu vien firmware trong.")
+            return
+        if not messagebox.askyesno(
+                "SD Card", f"Copy toan bo {len(all_fw)} firmware xuong the?"):
+            return
+        self._sd_do_copy([fw.get("fw_id") for fw in all_fw])
+
+    def _sd_do_copy(self, fw_ids: list):
+        mgr = self._sd_manager()
+        if not mgr:
+            return
+
+        encrypt = self._sd_encrypt_var.get()
+        encryptor = None
+        if encrypt:
+            encryptor = self._get_encryptor()   # shows dialog on bad key/IV
+            if not encryptor:
+                return
+
+        ok_count = 0
+        for fw_id in fw_ids:
+            fw = self.app.lib.get_firmware(fw_id)
+            if not fw:
+                self.app._log(f"[SD] {fw_id}: khong tim thay metadata, bo qua")
+                continue
+            src_dir = fw.get("_path")
+            # Strip internal keys (_path/_folder_name) so index.txt stays clean.
+            meta = {k: v for k, v in fw.items() if not k.startswith("_")}
+            # STM32 can't be encrypted → fall back to plain per-firmware so a
+            # mixed library still fills in one click.
+            is_stm32 = "STM32" in (fw.get("device_type", "") or "").upper()
+            use_enc = encrypt and not is_stm32
+            mode = "encrypted" if use_enc else "plain"
+            self.app._log(f"[SD] Copy {fw_id} ({mode}) ...")
+            if use_enc:
+                success, msg = mgr.copy_encrypted(
+                    fw_id, src_dir, meta, encryptor, progress_callback=self.app._log)
+            else:
+                success, msg = mgr.copy_plain(
+                    fw_id, src_dir, meta, progress_callback=self.app._log)
+            self.app._log(f"[SD] {msg}")
+            if success:
+                ok_count += 1
+                self._history_add(fw_id, fw, self._sd_path_var.get(), mode)
+
+        # Keep OLED display order in index.txt if the user configured one.
+        oled_order = self.app.settings.get("oled_config", {}).get("order", [])
+        if oled_order:
+            mgr.reorder_index(oled_order)
+        _, smsg = mgr.save_index()
+        self.app._log(f"[SD] index.txt: {smsg}")
+
+        self._sd_refresh_list()
+        if ok_count:
+            kind = "ma hoa .enc" if encrypt else "plain .bin"
+            messagebox.showinfo(
+                "SD Card",
+                f"Da ghi {ok_count} firmware xuong the ({kind}).\n"
+                "Rut the an toan roi cam vao mach.")
+        else:
+            messagebox.showerror("SD Card", "Khong ghi duoc firmware nao. Xem log.")
+
+    def _sd_remove_selected(self):
+        sel = self._sd_listbox.curselection()
+        if not sel:
+            messagebox.showwarning("SD Card", "Chon firmware trong danh sach the de xoa.")
+            return
+        mgr = self._sd_manager()
+        if not mgr:
+            return
+        fw_list = mgr.get_firmware_list()
+        to_remove = [fw_list[i] for i in sel if 0 <= i < len(fw_list)]
+        if not to_remove:
+            return
+        if not messagebox.askyesno("SD Card", f"Xoa {len(to_remove)} firmware khoi the?"):
+            return
+        for fw_id in to_remove:
+            _, msg = mgr.remove_firmware(fw_id)
+            self.app._log(f"[SD] {msg}")
+        mgr.save_index()
+        self._sd_refresh_list()
+
+    def _sd_refresh_list(self):
+        if not hasattr(self, "_sd_listbox"):
+            return
+        self._sd_listbox.delete(0, tk.END)
+        path = self._sd_path_var.get().strip()
+        if not path or not os.path.isdir(path):
+            self._sd_listbox.insert(tk.END, "(chua chon the SD)")
+            return
+        mgr = SDCardManager(path)
+        ok, msg = mgr.load_index()
+        if not ok:
+            self._sd_listbox.insert(tk.END, f"(loi: {msg})")
+            return
+        if not mgr.index_data:
+            self._sd_listbox.insert(tk.END, "(the trong — chua co firmware)")
+            return
+        for item in mgr.index_data:
+            fw_id = item.get("fw_id", "?")
+            dev = item.get("device_type", "")
+            ver = item.get("version", "")
+            tag = "E" if item.get("encrypted") else "P"
+            self._sd_listbox.insert(tk.END, f"[{tag}] {fw_id}  {dev} v{ver}")
 
     def _det_clear_with_placeholder(self):
         """Show an empty-state hint instead of blank fields."""
@@ -720,31 +999,42 @@ class FirmwareManagerTab(ttk.Frame):
             return messagebox.showwarning("Warning", "Select firmware(s) to delete")
         if not messagebox.askyesno("Confirm", f"Delete {len(fw_ids)} firmware(s)?"):
             return
+        # Quiet encryptor — needed to rewrite the encrypted index; if no key
+        # is set the folder is still deleted and the next sync rebuilds it.
+        encryptor = self._get_encryptor(quiet=True)
         for fw_id in fw_ids:
             success, msg = self.app.lib.delete_firmware(fw_id)
             self.app._log(msg)
-            self.app.git.remove_from_index([fw_id])
+            self.app.git.remove_from_index([fw_id], encryptor)
         self._refresh_firmware_list()
 
     # ─────────────────────────── Helpers — Git/crypto ───────────────────────────
 
-    def _get_encryptor(self) -> Optional[FWEncryptor]:
+    def _get_encryptor(self, quiet: bool = False) -> Optional[FWEncryptor]:
+        """Build an FWEncryptor from the Settings key/IV.
+
+        quiet=True suppresses error dialogs — used where a missing key is
+        non-fatal (e.g. delete, which only best-effort updates the index).
+        """
         key = self.app.enc_key.get()
         iv = self.app.enc_iv.get()
         valid, msg = validate_key_iv(key, iv)
         if not valid:
-            messagebox.showerror("Invalid Key/IV", msg)
+            if not quiet:
+                messagebox.showerror("Invalid Key/IV", msg)
             return None
         if not load_crypto():
-            messagebox.showerror(
-                "Error",
-                "Crypto library not available.\nInstall: pip install pycryptodome"
-            )
+            if not quiet:
+                messagebox.showerror(
+                    "Error",
+                    "Crypto library not available.\nInstall: pip install pycryptodome"
+                )
             return None
         try:
             return FWEncryptor(key, iv)
         except Exception as e:
-            messagebox.showerror("Error", str(e))
+            if not quiet:
+                messagebox.showerror("Error", str(e))
             return None
 
     def _sync_to_git(self):
@@ -763,14 +1053,11 @@ class FirmwareManagerTab(ttk.Frame):
             f"Export and push {len(all_fw)} firmware(s) to Git?\n\nRepo: {url}"
         ):
             return
-        has_esp32 = any(
-            "STM32" not in fw.get("device_type", "").upper() for fw in all_fw
-        )
-        encryptor = None
-        if has_esp32:
-            encryptor = self._get_encryptor()
-            if not encryptor:
-                return
+        # The index is always encrypted, so a valid key/IV is required for
+        # every sync — even an all-STM32 library (whose .bin files stay raw).
+        encryptor = self._get_encryptor()
+        if not encryptor:
+            return
         self.app.git.set_repo_url(url)
 
         exported = []
@@ -799,7 +1086,7 @@ class FirmwareManagerTab(ttk.Frame):
                         ordered.append(m)
                         seen.add(fid)
                 exported = ordered
-            self.app.git.update_index(exported)
+            self.app.git.update_index(exported, encryptor)
             self.app._log(f"Exported {len(exported)} firmware(s)")
 
         try:
@@ -808,6 +1095,62 @@ class FirmwareManagerTab(ttk.Frame):
             self.app._log("Git sync started...")
         except Exception as e:
             messagebox.showerror("Error", str(e))
+
+    def _push_meta_to_device(self):
+        """Push corrected MD5 values from local library to device SD card via HTTP.
+        Fixes stale SD metadata without requiring a physical card reader."""
+        fw_ids = self._get_selected_fw_ids()
+        if not fw_ids:
+            messagebox.showwarning("Push Meta", "Select a firmware from the list first.")
+            return
+        fw_id = fw_ids[0]
+        fw = self.app.lib.get_firmware(fw_id)
+        if not fw:
+            messagebox.showwarning("Push Meta", "Firmware metadata not found.")
+            return
+
+        ip = simpledialog.askstring(
+            "Device IP",
+            "Enter Muti device IP address\n(e.g. 192.168.1.100):",
+            parent=self,
+        )
+        if not ip or not ip.strip():
+            return
+        ip = ip.strip()
+
+        body = {
+            "fw_id": fw_id,
+            "md5":            fw.get("md5", ""),
+            "md5_bootloader": fw.get("md5_bootloader", ""),
+            "md5_partition":  fw.get("md5_partition", ""),
+        }
+        self.app._log(f"[PushMeta] {fw_id} → {ip} ...")
+
+        def do_push():
+            import json as _json
+            try:
+                data = _json.dumps(body).encode()
+                req = _urllib_req.Request(
+                    f"http://{ip}/api/update_meta",
+                    data=data, method="POST",
+                    headers={"Content-Type": "application/json"},
+                )
+                with _urllib_req.urlopen(req, timeout=8) as resp:
+                    result = _json.loads(resp.read())
+                if result.get("ok"):
+                    self.after(0, lambda: self.app._log(f"[PushMeta] {fw_id} OK"))
+                    self.after(0, lambda: messagebox.showinfo(
+                        "Push Meta", f"Metadata for '{fw_id}' updated on {ip}.\nTry flashing again."))
+                else:
+                    msg = result.get("error", str(result))
+                    self.after(0, lambda: self.app._log(f"[PushMeta] Error: {msg}"))
+                    self.after(0, lambda: messagebox.showerror("Push Meta", f"Device error: {msg}"))
+            except Exception as exc:
+                msg = str(exc)
+                self.after(0, lambda: self.app._log(f"[PushMeta] Error: {msg}"))
+                self.after(0, lambda: messagebox.showerror("Push Meta", f"Error: {msg}"))
+
+        threading.Thread(target=do_push, daemon=True).start()
 
     # ─────────────────────────── Helpers — History ───────────────────────────
 

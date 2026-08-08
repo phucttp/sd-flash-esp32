@@ -24,9 +24,12 @@ from collections import deque
 from tkinter import messagebox, simpledialog, ttk
 from typing import Optional
 
-from modules.master_client import MasterClient, SlaveInfo, SlaveStatus
+from modules.master_client import MasterClient, SlaveInfo, SlaveStatus, SyncStatus
 from modules.net_flash import discover_nodes
 from modules.theme import Colors, Fonts
+
+
+SYNC_ACTIVE_PHASES = ("connecting", "downloading", "verifying", "storing")
 
 
 CARD_MIN_W = 320
@@ -49,6 +52,7 @@ class NetFlashTab(ttk.Frame):
         self._session_ok = 0
         self._session_fail = 0
         self._flash_in_progress = False
+        self._sync_in_progress = False
 
         self.pack(fill=tk.BOTH, expand=True)
         self._build()
@@ -113,21 +117,54 @@ class NetFlashTab(ttk.Frame):
         self.lbl_conn_status.grid(row=0, column=4, sticky="e")
 
     def _build_master_control(self, parent):
-        """Left column: dropdown FW + big FLASH ALL + Erase/Reboot + status."""
+        """Left column: Sync Library → Apply FW + FLASH ALL → Erase/Reboot → status."""
         panel = tk.Frame(parent, bg=Colors.BG_CARD, padx=18, pady=18)
         panel.pack(fill=tk.BOTH, expand=True)
         panel.columnconfigure(0, weight=1)
         panel.columnconfigure(1, weight=1)
 
-        # --- Apply FW to all (header + dropdown) ---
+        # ── Library Sync — slaves mirror the full server FW library ──
+        tk.Label(panel, text="Library Sync", bg=Colors.BG_CARD,
+                 fg=Colors.PRIMARY, font=Fonts.bold()).grid(
+            row=0, column=0, columnspan=2, sticky="w")
+        tk.Label(panel,
+                 text="Each slave pulls the full FW library over its own WiFi.",
+                 bg=Colors.BG_CARD, fg=Colors.TEXT_MUTED,
+                 font=Fonts.small()).grid(row=1, column=0, columnspan=2,
+                                           sticky="w", pady=(0, 6))
+
+        # Emerald fill + white text — clearly secondary to the violet
+        # FLASH ALL hero below.
+        self.btn_sync_all = tk.Button(
+            panel, text="⟲ Sync Library to All",
+            font=Fonts.bold(),
+            bg=Colors.SUCCESS, fg=Colors.TEXT_DARK,
+            activebackground="#34D399", activeforeground=Colors.TEXT_DARK,
+            relief="flat", borderwidth=0, pady=12,
+            cursor="hand2",
+            command=self._sync_all,
+            state="disabled",
+        )
+        self.btn_sync_all.grid(row=2, column=0, columnspan=2, sticky="ew")
+
+        self.sync_summary_var = tk.StringVar(value="—")
+        tk.Label(panel, textvariable=self.sync_summary_var,
+                 bg=Colors.BG_CARD, fg=Colors.TEXT_MUTED,
+                 font=Fonts.small()).grid(row=3, column=0, columnspan=2,
+                                           sticky="w", pady=(4, 0))
+
+        tk.Frame(panel, height=1, bg=Colors.BORDER).grid(
+            row=4, column=0, columnspan=2, sticky="ew", pady=(14, 12))
+
+        # ── Apply FW to all (header + dropdown) ──
         tk.Label(panel, text="Apply FW to all online:",
                  bg=Colors.BG_CARD, fg=Colors.TEXT_MUTED,
-                 font=Fonts.normal()).grid(row=0, column=0, columnspan=2,
+                 font=Fonts.normal()).grid(row=5, column=0, columnspan=2,
                                             sticky="w")
 
         self.global_fw_combo = ttk.Combobox(panel, state="disabled",
                                              font=Fonts.mono_small())
-        self.global_fw_combo.grid(row=1, column=0, columnspan=2,
+        self.global_fw_combo.grid(row=6, column=0, columnspan=2,
                                    sticky="ew", pady=(2, 16))
         self.global_fw_combo.bind("<<ComboboxSelected>>",
                                    self._on_global_fw_selected)
@@ -143,29 +180,29 @@ class NetFlashTab(ttk.Frame):
         self.btn_flash_all = tk.Button(
             panel, text="⚡ FLASH ALL",
             font=(Fonts.FAMILY, 18, "bold"),
-            bg=Colors.PRIMARY, fg=Colors.TEXT,
-            activeforeground=Colors.TEXT,
+            bg=Colors.PRIMARY, fg=Colors.TEXT_DARK,
+            activeforeground=Colors.TEXT_DARK,
             relief="flat", borderwidth=0,
             pady=22,
             cursor="hand2",
             command=self._flash_all,
             state="disabled",
         )
-        self.btn_flash_all.grid(row=2, column=0, columnspan=2,
+        self.btn_flash_all.grid(row=7, column=0, columnspan=2,
                                  sticky="ew", pady=(0, 8))
 
         # --- Erase / Reboot — side-by-side secondary buttons ---
         self.btn_erase_all = tk.Button(
             panel, text="✖ Erase All",
             font=Fonts.bold(),
-            bg=Colors.ERROR, fg=Colors.TEXT,
+            bg=Colors.ERROR, fg=Colors.TEXT_DARK,
             relief="flat", borderwidth=0,
             pady=10,
             cursor="hand2",
             command=self._erase_all,
             state="disabled",
         )
-        self.btn_erase_all.grid(row=3, column=0, sticky="ew", padx=(0, 4))
+        self.btn_erase_all.grid(row=8, column=0, sticky="ew", padx=(0, 4))
 
         self.btn_reboot_all = tk.Button(
             panel, text="↻ Reboot All",
@@ -177,16 +214,16 @@ class NetFlashTab(ttk.Frame):
             command=self._reboot_all,
             state="disabled",
         )
-        self.btn_reboot_all.grid(row=3, column=1, sticky="ew", padx=(4, 0))
+        self.btn_reboot_all.grid(row=8, column=1, sticky="ew", padx=(4, 0))
 
         # --- Divider ---
         tk.Frame(panel, height=1, bg=Colors.BORDER).grid(
-            row=4, column=0, columnspan=2, sticky="ew", pady=(18, 12))
+            row=9, column=0, columnspan=2, sticky="ew", pady=(18, 12))
 
         # --- Status summary — multi-line, big numbers on right ---
         tk.Label(panel, text="Status", bg=Colors.BG_CARD,
                  fg=Colors.PRIMARY, font=Fonts.bold()).grid(
-            row=5, column=0, columnspan=2, sticky="w", pady=(0, 4))
+            row=10, column=0, columnspan=2, sticky="w", pady=(0, 4))
 
         self.status_online_var = tk.StringVar(value="—")
         self.status_ok_var = tk.StringVar(value="—")
@@ -201,9 +238,9 @@ class NetFlashTab(ttk.Frame):
                      font=(Fonts.FAMILY, 13, "bold"), anchor="e").grid(
                 row=r, column=1, sticky="e", pady=2)
 
-        stat_row(6, "Online", self.status_online_var, Colors.TEXT)
-        stat_row(7, "Success", self.status_ok_var, Colors.SUCCESS)
-        stat_row(8, "Failed", self.status_fail_var, Colors.ERROR)
+        stat_row(11, "Online", self.status_online_var, Colors.TEXT)
+        stat_row(12, "Success", self.status_ok_var, Colors.SUCCESS)
+        stat_row(13, "Failed", self.status_fail_var, Colors.ERROR)
 
         # Legacy compatibility — kept so _update_summary() can still set it
         # if anything reads it. Not displayed in the new layout.
@@ -282,6 +319,7 @@ class NetFlashTab(ttk.Frame):
         self._persist_settings()
 
         # Enable hero actions
+        self.btn_sync_all.config(state="normal")
         self.btn_flash_all.config(state="normal")
         self.btn_erase_all.config(state="normal")
         self.btn_reboot_all.config(state="normal")
@@ -290,6 +328,7 @@ class NetFlashTab(ttk.Frame):
         slaves = self.master_client.get_slaves()
         self._render_cards(slaves)
         self._build_global_fw_list(slaves)
+        self._refresh_sync_indicators()
         self._start_polling()
 
     def _find_master(self):
@@ -379,25 +418,32 @@ class NetFlashTab(ttk.Frame):
                  fg=Colors.TEXT, font=Fonts.bold(),
                  anchor="w").grid(row=2, column=0, columnspan=3, sticky="ew")
 
-        # Row 3: FW dropdown
+        # Row 3: library sync indicator
+        sync_var = tk.StringVar(value="Library: —")
+        sync_label = tk.Label(ct, textvariable=sync_var, bg=Colors.BG_CARD,
+                              fg=Colors.TEXT_MUTED, font=Fonts.small(),
+                              anchor="w")
+        sync_label.grid(row=3, column=0, columnspan=3, sticky="ew", pady=(2, 0))
+
+        # Row 4: FW dropdown (FW versions stored on this slave)
         fw_list = self.master_client.get_slave_fw_list(slave.addr)
         fw_values = [f["display"] for f in fw_list]
         fw_combo = ttk.Combobox(ct, values=fw_values, state="readonly",
                                 font=Fonts.mono_small())
-        fw_combo.grid(row=3, column=0, columnspan=3, sticky="ew", pady=(6, 4))
+        fw_combo.grid(row=4, column=0, columnspan=3, sticky="ew", pady=(6, 4))
         if fw_values:
             fw_combo.current(0)
         else:
-            fw_combo.set("(no FW available)")
+            fw_combo.set("(sync library first)")
             fw_combo.config(state="disabled")
 
-        # Row 4: progress
+        # Row 5: progress
         progress = ttk.Progressbar(ct, mode="determinate", maximum=100, length=200)
-        progress.grid(row=4, column=0, columnspan=3, sticky="ew", pady=4)
+        progress.grid(row=5, column=0, columnspan=3, sticky="ew", pady=4)
 
-        # Row 5: action buttons
+        # Row 6: action buttons
         actions = tk.Frame(ct, bg=Colors.BG_CARD)
-        actions.grid(row=5, column=0, columnspan=3, sticky="ew", pady=(4, 6))
+        actions.grid(row=6, column=0, columnspan=3, sticky="ew", pady=(4, 6))
         flash_btn = ttk.Button(actions, text="⚡ Flash", style="Primary.TButton",
                                command=lambda a=slave.addr: self._flash_slave(a))
         flash_btn.pack(side=tk.LEFT, fill=tk.X, expand=True, padx=(0, 4))
@@ -405,13 +451,13 @@ class NetFlashTab(ttk.Frame):
                                 command=lambda a=slave.addr: self._reboot_slave(a))
         reboot_btn.pack(side=tk.LEFT, fill=tk.X, expand=True)
 
-        # Row 6: mini log
+        # Row 7: mini log
         mini_log = tk.Text(ct, height=MINI_LOG_LINES,
-                           bg=Colors.BG_DARK, fg=Colors.TEXT_MUTED,
+                           bg=Colors.BG_INPUT, fg=Colors.TEXT,
                            font=Fonts.mono_small(),
                            wrap="word", relief="flat", borderwidth=0,
                            state="disabled")
-        mini_log.grid(row=6, column=0, columnspan=3, sticky="ew", pady=(2, 0))
+        mini_log.grid(row=7, column=0, columnspan=3, sticky="ew", pady=(2, 0))
 
         self._cards[slave.addr] = {
             "card_frame": cf,
@@ -419,6 +465,9 @@ class NetFlashTab(ttk.Frame):
             "label_var": label_var,
             "meta_var": meta_var,
             "status_var": status_var,
+            "sync_var": sync_var,
+            "sync_label": sync_label,
+            "sync_phase": "idle",
             "fw_combo": fw_combo,
             "fw_list": fw_list,
             "progress": progress,
@@ -446,22 +495,18 @@ class NetFlashTab(ttk.Frame):
             c["flash_btn"].config(state="disabled")
             c["reboot_btn"].config(state="disabled")
             c["fw_combo"].config(state="disabled")
-        elif c["last_result"] == "fail":
-            cf.configure(highlightbackground=Colors.ERROR, highlightthickness=2)
-            c["dot"].configure(fg=Colors.ERROR)
-            c["flash_btn"].config(state="normal")
-            c["reboot_btn"].config(state="normal")
-            if c["fw_list"]:
-                c["fw_combo"].config(state="readonly")
         else:
-            cf.configure(highlightbackground=Colors.SUCCESS, highlightthickness=2)
-            c["dot"].configure(fg=Colors.SUCCESS)
-            c["flash_btn"].config(state="normal")
+            failed = c["last_result"] == "fail"
+            cf.configure(
+                highlightbackground=Colors.ERROR if failed else Colors.SUCCESS,
+                highlightthickness=2)
+            c["dot"].configure(fg=Colors.ERROR if failed else Colors.SUCCESS)
             c["reboot_btn"].config(state="normal")
-            if c["fw_list"]:
-                c["fw_combo"].config(state="readonly")
-            elif c["target_type"] == "no-target":
-                c["flash_btn"].config(state="disabled")
+            # Flash needs a stored FW (post-sync) and a real target.
+            can_flash = bool(c["fw_list"]) and c["target_type"] != "no-target"
+            c["flash_btn"].config(state="normal" if can_flash else "disabled")
+            c["fw_combo"].config(
+                state="readonly" if c["fw_list"] else "disabled")
 
     def _on_canvas_configure(self, event):
         self.canvas.itemconfig(self.canvas_window, width=event.width)
@@ -517,12 +562,53 @@ class NetFlashTab(ttk.Frame):
             self.app._log(f"NetFlash: poll error — {e}")
             statuses = []
 
+        # Detect slaves that appeared after the initial render — e.g. a board
+        # freshly provisioned via the Phost Setup tab — and re-render so they
+        # show up without forcing a reconnect.
+        new_addrs = {st.addr for st in statuses} - set(self._cards)
+        if new_addrs and not self._flash_in_progress and not self._sync_in_progress:
+            slaves = self.master_client.get_slaves()
+            self._render_cards(slaves)
+            self._build_global_fw_list(slaves)
+            self._refresh_sync_indicators()
+            self.app._log(f"NetFlash: {len(new_addrs)} new slave(s) detected")
+
         any_busy = False
         for st in statuses:
             if st.addr in self._cards:
                 self._apply_status(st)
                 if st.busy:
                     any_busy = True
+
+        # Library-sync polling — only while a sync job is running
+        sync_active = False
+        if self._sync_in_progress:
+            try:
+                sync_statuses = self.master_client.get_sync_status()
+            except Exception as e:
+                self.app._log(f"NetFlash: sync poll error — {e}")
+                sync_statuses = []
+            for sst in sync_statuses:
+                if sst.addr not in self._cards:
+                    continue
+                prev_phase = self._cards[sst.addr]["sync_phase"]
+                self._apply_sync_status(sst)
+                if sst.phase in SYNC_ACTIVE_PHASES:
+                    sync_active = True
+                # On transition into a finished state, refresh the FW dropdown
+                # so newly-downloaded versions become selectable.
+                if prev_phase != sst.phase and sst.phase in ("done", "failed"):
+                    self._refresh_card_fw(sst.addr)
+                    if sst.phase == "done":
+                        self._card_log(sst.addr,
+                                       f"✓ Library synced ({sst.files_done}/{sst.files_total})")
+                    else:
+                        self._card_log(sst.addr, f"✗ Sync: {sst.error or 'failed'}")
+            self._update_sync_summary()
+            if not sync_active:
+                self._sync_in_progress = False
+                # Rebuild global FW union now that pools may have grown
+                self._build_global_fw_list(self.master_client.get_slaves())
 
         # Pick up finalized slave info (current_fw, last_result) when flash finishes
         if self._flash_in_progress:
@@ -547,7 +633,8 @@ class NetFlashTab(ttk.Frame):
                 self._show_flash_all_toast()
 
         self._update_summary()
-        interval = POLL_INTERVAL_BUSY_MS if any_busy else POLL_INTERVAL_IDLE_MS
+        interval = (POLL_INTERVAL_BUSY_MS if (any_busy or sync_active)
+                    else POLL_INTERVAL_IDLE_MS)
         self._poll_id = self.after(interval, self._tick_poll)
 
     def _apply_status(self, st: SlaveStatus):
@@ -561,6 +648,104 @@ class NetFlashTab(ttk.Frame):
         self.status_online_var.set(f"{online}/{total}" if total else "—")
         self.status_ok_var.set(str(self._session_ok) if (self._session_ok or self._session_fail) else "—")
         self.status_fail_var.set(str(self._session_fail) if (self._session_ok or self._session_fail) else "—")
+
+    # ─────────────────────────── Library Sync ───────────────────────────
+
+    def _sync_all(self):
+        online = [a for a, c in self._cards.items() if c["online"]]
+        if not online:
+            messagebox.showinfo("Sync Library", "No online slaves to sync.")
+            return
+        # Real backend pulls from a Git raw URL; mock ignores it.
+        manifest_url = (self.app.settings.get("manifest_url", "").strip()
+                        or "mock://manifest.json")
+        if not messagebox.askyesno(
+            "Confirm Library Sync",
+            f"Sync the full FW library to {len(online)} online slave(s)?\n\n"
+            "Each slave downloads any missing firmware over its own WiFi. "
+            "Already up-to-date slaves are a no-op."
+        ):
+            return
+        self._sync_in_progress = True
+        for addr in online:
+            self._card_log(addr, "Library sync started...")
+        result = self.master_client.sync_library(online, manifest_url)
+        for addr in result.get("skipped", []):
+            if addr in self._cards:
+                self._card_log(addr, "⊘ sync skipped (offline/busy)")
+        self._update_sync_summary()
+
+    def _apply_sync_status(self, st: SyncStatus):
+        c = self._cards.get(st.addr)
+        if c is None:
+            return
+        c["sync_phase"] = st.phase
+        var, lbl = c["sync_var"], c["sync_label"]
+        n = f"{st.files_done}/{st.files_total}"
+        if st.phase in SYNC_ACTIVE_PHASES:
+            cur = st.current_file or "..."
+            var.set(f"⟳ {st.phase}: {cur}  ({n})")
+            lbl.configure(fg=Colors.WARNING)
+        elif st.phase == "failed":
+            var.set(f"✗ Sync failed: {st.error or 'error'}")
+            lbl.configure(fg=Colors.ERROR)
+        elif st.files_done >= st.files_total and st.files_total > 0:
+            var.set(f"Library: {n} ✓")
+            lbl.configure(fg=Colors.SUCCESS)
+        else:
+            var.set(f"Library: {n}")
+            lbl.configure(fg=Colors.TEXT_MUTED)
+
+    def _refresh_sync_indicators(self):
+        """One-shot pull of sync status to paint card library badges + summary."""
+        try:
+            for st in self.master_client.get_sync_status():
+                self._apply_sync_status(st)
+        except Exception as e:
+            self.app._log(f"NetFlash: sync status error — {e}")
+        self._update_sync_summary()
+
+    def _update_sync_summary(self):
+        try:
+            statuses = self.master_client.get_sync_status()
+        except Exception:
+            statuses = []
+        online = {a for a, c in self._cards.items() if c["online"]}
+        rel = [s for s in statuses if s.addr in online]
+        if not rel:
+            self.sync_summary_var.set("—")
+            return
+        synced = sum(1 for s in rel
+                     if s.files_total > 0 and s.files_done >= s.files_total
+                     and s.phase not in ("failed",) + SYNC_ACTIVE_PHASES)
+        syncing = sum(1 for s in rel if s.phase in SYNC_ACTIVE_PHASES)
+        failed = sum(1 for s in rel if s.phase == "failed")
+        parts = [f"{synced}/{len(rel)} fully synced"]
+        if syncing:
+            parts.append(f"{syncing} syncing")
+        if failed:
+            parts.append(f"{failed} failed")
+        self.sync_summary_var.set(" · ".join(parts))
+
+    def _refresh_card_fw(self, addr: int):
+        """Re-pull a slave's stored FW list into its dropdown (post-sync)."""
+        c = self._cards.get(addr)
+        if c is None:
+            return
+        fw_list = self.master_client.get_slave_fw_list(addr)
+        c["fw_list"] = fw_list
+        values = [f["display"] for f in fw_list]
+        if values:
+            keep = c["fw_combo"].get()
+            c["fw_combo"].config(values=values, state="readonly")
+            if keep in values:
+                c["fw_combo"].set(keep)
+            elif c["fw_combo"].current() < 0:
+                c["fw_combo"].current(0)
+        else:
+            c["fw_combo"].set("(sync library first)")
+            c["fw_combo"].config(state="disabled")
+        self._apply_card_visual(addr)
 
     # ─────────────────────────── Actions ───────────────────────────
 

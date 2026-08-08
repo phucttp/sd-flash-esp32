@@ -37,7 +37,6 @@ from modules.git_sync import GitManager
 from modules.theme import Colors, Fonts, apply_theme, GradientFrame, StatusBadge
 # net_flash module is now used only by tabs/netflash.py (NetFlashTab)
 from modules.master_client import make_master_client
-from modules.phost_provisioner import make_phost_provisioner
 
 # Tab classes (Phase 1+: split from monolith main.pyw)
 from tabs.settings_tab import SettingsTab
@@ -61,14 +60,16 @@ class LoginWindow(tk.Toplevel):
         self.parent = parent
 
         self.title("FlashPorter - Login")
-        self.geometry("440x480")
+        # 560 tall fits both login (Login + Reset buttons) and registration
+        # (extra confirm-password field) without clipping the bottom button.
+        self.geometry("440x560")
         self.resizable(False, False)
         self.configure(bg=Colors.BG_DARK)
 
         # Center window
         self.update_idletasks()
         x = (self.winfo_screenwidth() - 440) // 2
-        y = (self.winfo_screenheight() - 480) // 2
+        y = (self.winfo_screenheight() - 560) // 2
         self.geometry(f"+{x}+{y}")
 
         # Don't use transient() - parent is hidden
@@ -246,13 +247,13 @@ class MainApp(tk.Tk):
         self.lib = FirmwareLibrary(lib_path if lib_path else None)
         self.sd = SDCardManager()
         self.git = GitManager()
-        # NetFlash backend — mock by default until ESP32-C3 master firmware ready
+        # NetFlash + Phost Setup share the same master client.
+        # Master is autonomous: PC sends commands, master pulls FW from server
+        # and dispatches via I2C / UART. Backend: "mock" (default, fake slaves)
+        # or "ws" (real WebSocket — see docs/master-api.md).
         self.master_client = make_master_client(
-            self.settings.get("netflash_backend", "mock")
-        )
-        # Phost provisioner backend — mock until esptool integration is wired
-        self.phost_provisioner = make_phost_provisioner(
-            self.settings.get("phost_setup_backend", "mock")
+            self.settings.get("netflash_backend", "mock"),
+            token=self.settings.get("master_token", ""),
         )
 
         # Variables
@@ -331,7 +332,7 @@ class MainApp(tk.Tk):
         # Tab 5: Phost Setup (one-time slave provisioning)
         frm_phost = ttk.Frame(nb)
         nb.add(frm_phost, text="  Phost Setup  ")
-        self.phost_setup_tab = PhostSetupTab(frm_phost, self, self.phost_provisioner)
+        self.phost_setup_tab = PhostSetupTab(frm_phost, self, self.master_client)
 
         # Log area with dark theme
         log_frame = ttk.Frame(self)

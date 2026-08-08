@@ -155,11 +155,6 @@ class SDCardManager:
 
         is_stm32 = self._is_stm32(local_meta)
 
-        # ESP32 needs crypto for padding, STM32 does not
-        if not is_stm32:
-            if not load_crypto():
-                return False, "Crypto library not available (needed for padding)"
-
         dest_dir = os.path.join(self.sd_path, fw_id)
 
         # Remove existing and create new
@@ -190,9 +185,13 @@ class SDCardManager:
             else:
                 return False, f"App binary not found: {src_file}"
         else:
-            # ESP32: pad all files to AES block size
-            from .crypto import pad, AES
-
+            # ESP32 plain: write each raw .bin as-is + MD5 of the RAW bytes.
+            # The device's plain path (flasher_write_segment) verifies MD5 over
+            # the full file size with NO padding strip — so padding the file and
+            # storing MD5(padded) would still be self-consistent, BUT the device
+            # also chooses plain vs encrypted from the `encrypted` flag, and the
+            # raw bootloader/app is what actually boots. Writing raw + MD5(raw)
+            # keeps the file, the stored MD5 and the device's check all aligned.
             files_map = [
                 (FileNames.APP_BIN, FileNames.APP_BIN, "path", "md5"),
                 (FileNames.BOOTLOADER_BIN, FileNames.BOOTLOADER_BIN, "path_bootloader", "md5_bootloader"),
@@ -207,20 +206,22 @@ class SDCardManager:
                     with open(src_file, "rb") as f:
                         raw_data = f.read()
 
-                    padded_data = pad(raw_data, AES.block_size)
-
                     with open(dest_file, "wb") as f:
-                        f.write(padded_data)
+                        f.write(raw_data)
 
-                    final_md5 = calculate_md5_bytes(padded_data)
+                    final_md5 = calculate_md5_bytes(raw_data)
                     sd_meta[path_key] = f"/{fw_id}/{dest_name}"
                     sd_meta[md5_key] = final_md5
 
                     if progress_callback:
-                        progress_callback(f"  -> {dest_name}: OK (Padded)")
+                        progress_callback(f"  -> {dest_name}: OK (Raw)")
                 else:
                     sd_meta[path_key] = ""
                     sd_meta[md5_key] = ""
+
+        # Plain firmware must never carry a stale encrypted=True flag, or the
+        # device would try the .enc/decrypt path on a raw .bin.
+        sd_meta["encrypted"] = False
 
         # Update index
         self.index_data = [i for i in self.index_data if i.get("fw_id") != fw_id]
@@ -287,9 +288,11 @@ class SDCardManager:
                 with open(src_file, "rb") as f:
                     raw_data = f.read()
 
-                # Calculate MD5 of padded data (for ESP32 verification after decrypt)
-                padded_data = pad(raw_data, AES.block_size)
-                final_md5 = calculate_md5_bytes(padded_data)
+                # MD5 of original binary — matches what device verifies after
+                # stripping PKCS7 padding (padding is written to flash but
+                # excluded from the MD5 window via bytes_written adjustment).
+                final_md5 = calculate_md5_bytes(raw_data)
+                padded_data = pad(raw_data, AES.block_size)  # still needed for encryption
 
                 # Encrypt and write
                 enc_data = encryptor.encrypt_data(raw_data)

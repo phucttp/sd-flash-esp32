@@ -261,10 +261,10 @@ pause
                     with open(src_path, "rb") as f:
                         raw_data = f.read()
 
-                    padded_data = pad(raw_data, AES.block_size)
-                    final_md5 = calculate_md5_bytes(padded_data)
-
-                    enc_data = encryptor.encrypt_data(raw_data)
+                    # MD5 of original binary — matches device verification after
+                    # PKCS7 strip (same contract as sd_card.py).
+                    final_md5 = calculate_md5_bytes(raw_data)
+                    enc_data = encryptor.encrypt_data(raw_data)  # encrypt handles padding internally
                     with open(dest_path, "wb") as f:
                         f.write(enc_data)
 
@@ -279,13 +279,41 @@ pause
 
         return True, export_meta
 
-    def update_index(self, firmwares: List[Dict[str, Any]], clean_old: bool = True) -> Tuple[bool, str]:
+    @staticmethod
+    def _read_index(index_path: str, encryptor: Optional[FWEncryptor] = None
+                    ) -> List[Dict[str, Any]]:
+        """Load index.txt, auto-detecting plaintext (legacy) vs AES-encrypted."""
+        if not os.path.isfile(index_path):
+            return []
+        try:
+            with open(index_path, "rb") as f:
+                raw = f.read()
+        except Exception:
+            return []
+        # Plaintext JSON (legacy index)?
+        try:
+            return json.loads(raw.decode("utf-8"))
+        except Exception:
+            pass
+        # Encrypted index?
+        if encryptor is not None:
+            try:
+                return json.loads(encryptor.decrypt_data(raw).decode("utf-8"))
+            except Exception:
+                pass
+        return []
+
+    def update_index(self, firmwares: List[Dict[str, Any]],
+                     encryptor: Optional[FWEncryptor] = None,
+                     clean_old: bool = True) -> Tuple[bool, str]:
         """
         Update index.txt in release directory.
         PC is source of truth - replaces index entirely.
 
         Args:
             firmwares: List of firmware metadata (this becomes the new index)
+            encryptor: if given, the index is AES-encrypted before writing so
+                the firmware catalog is unreadable to anyone browsing the repo
             clean_old: If True, delete old folders not in the new list
 
         Returns:
@@ -311,37 +339,43 @@ pause
                     except:
                         pass
 
-        # Save new index (replace entirely)
+        # Save new index (replace entirely). Encrypt when an encryptor is
+        # given so the catalog is unreadable to anyone browsing the repo.
         try:
-            with open(index_path, "w", encoding="utf-8") as f:
-                json.dump(firmwares, f, indent=2, ensure_ascii=False)
-            return True, f"Index updated ({len(firmwares)} entries)"
+            payload = json.dumps(firmwares, indent=2,
+                                 ensure_ascii=False).encode("utf-8")
+            if encryptor is not None:
+                payload = encryptor.encrypt_data(payload)
+            with open(index_path, "wb") as f:
+                f.write(payload)
+            note = " (encrypted)" if encryptor is not None else ""
+            return True, f"Index updated ({len(firmwares)} entries){note}"
         except Exception as e:
             return False, f"Failed to save index: {e}"
 
-    def remove_from_index(self, fw_ids: List[str]) -> Tuple[bool, str]:
+    def remove_from_index(self, fw_ids: List[str],
+                          encryptor: Optional[FWEncryptor] = None
+                          ) -> Tuple[bool, str]:
         """
         Remove firmwares from index.txt and delete their folders.
 
         Args:
             fw_ids: List of firmware IDs to remove
+            encryptor: needed to read/rewrite an encrypted index. The folder
+                deletion still happens even without it; the index is then
+                left for the next full sync to rebuild.
 
         Returns:
             Tuple of (success, message)
         """
         index_path = os.path.join(self.release_dir, FileNames.INDEX)
 
-        # Load existing index
-        existing_index = []
-        if os.path.isfile(index_path):
-            try:
-                with open(index_path, "r", encoding="utf-8") as f:
-                    existing_index = json.load(f)
-            except:
-                existing_index = []
+        # Load existing index (plaintext or encrypted, auto-detected)
+        existing_index = self._read_index(index_path, encryptor)
 
         # Remove from index
-        new_index = [item for item in existing_index if item.get("fw_id") not in fw_ids]
+        new_index = [item for item in existing_index
+                     if item.get("fw_id") not in fw_ids]
 
         # Remove folders
         for fw_id in fw_ids:
@@ -349,10 +383,14 @@ pause
             if os.path.isdir(fw_dir):
                 shutil.rmtree(fw_dir)
 
-        # Save updated index
+        # Save updated index in the same (encrypted) format
         try:
-            with open(index_path, "w", encoding="utf-8") as f:
-                json.dump(new_index, f, indent=2, ensure_ascii=False)
+            payload = json.dumps(new_index, indent=2,
+                                 ensure_ascii=False).encode("utf-8")
+            if encryptor is not None:
+                payload = encryptor.encrypt_data(payload)
+            with open(index_path, "wb") as f:
+                f.write(payload)
             return True, f"Removed {len(fw_ids)} firmwares from index"
         except Exception as e:
             return False, f"Failed to update index: {e}"
@@ -458,7 +496,12 @@ pause
 
     def create_push_script(self) -> str:
         """
-        Create a batch script for manual pushing (opens terminal).
+        Create a batch script for a fresh-history push (opens terminal).
+
+        Wipes the local .git dir and re-inits so remote history is replaced
+        with exactly one commit reflecting current local state.  This makes
+        the PC the definitive source of truth and removes stale firmware blobs
+        from remote history without needing BFG / filter-branch.
 
         Returns:
             Path to the created script
@@ -483,33 +526,44 @@ pause
 title Push Firmware to Git
 color 0A
 echo ==========================================
-echo      PUSHING FIRMWARE TO GIT
+echo  SYNC FIRMWARE TO GIT  (fresh push)
 echo ==========================================
 echo Repo: {final_url}
 echo.
 cd /d "{self.release_dir}"
 
-if not exist .git (
-    echo [Init Git]...
-    git init
-    git branch -M main
-)
+echo [Clean history - PC is source of truth]...
+if exist .git rmdir /s /q .git
 
-echo [Add Files]...
+echo [Init fresh repo]...
+git init
+git branch -M main
+
+echo [Git identity (required for commit)]...
+git config user.email "flashporter@local"
+git config user.name "FlashPorter"
+
+echo [Stage all files]...
 git add -A
 
 echo [Commit]...
-git commit -m "Update firmware via FlashPorter"
+git commit -m "Firmware release - FlashPorter"
 
-echo [Remote Config]...
-git remote remove origin >nul 2>&1
+echo [Set remote]...
 git remote add origin {final_url}
 
-echo [Pushing]... (force push like original FlashPorter)
+echo [Push - force overwrite remote history]...
 git push -u origin main --force
 
 echo.
-echo DONE!
+if %ERRORLEVEL% EQU 0 (
+    color 0A
+    echo SUCCESS - Remote now matches local library exactly.
+) else (
+    color 0C
+    echo FAILED - Check credentials or network, then re-run this script.
+)
+echo.
 pause
 '''
 
